@@ -1,0 +1,8 @@
+[submodule "components/volmemlyzer"]
+	path = components/volmemlyzer
+	url = https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool.git
+	branch = main
+[submodule "components/vadvit"]
+	path = components/vadvit
+	url = https://github.com/YaCnDehfuli/VADViT.git
+	branch = main
