@@ -1,0 +1,51 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# --- Node / frontend ---
+node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+
+# --- MemTriage runtime data (never commit dumps, artifacts, models) ---
+/data/
+data/
+*.raw
+*.mem
+*.vmem
+*.lime
+*.dmp
+*.core
+*.elf
+*.bin
+*.img
+grids/
+artifacts/
+
+# --- Model weights (large, licensed, brought-your-own) ---
+models/*.pt
+models/*.pth
+models/*.safetensors
+labels.json
+
+# --- Security scan outputs ---
+security/reports/*.json
+security/reports/*.sarif
+security/reports/*.html
+zap-report.*
+
+# --- OS / editor ---
+.DS_Store
+.idea/
+.vscode/
