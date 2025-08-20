@@ -1,0 +1,35 @@
+# --- Web / API ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+pydantic==2.10.4
+pydantic-settings==2.7.1
+sse-starlette==2.1.3
+
+# --- Async jobs ---
+celery==5.4.0
+redis==5.2.1
+
+# --- Persistence ---
+SQLAlchemy==2.0.36
+psycopg[binary]==3.2.3
+
+# --- Forensics component (wrapped, installed from local path in Docker) ---
+# volmemlyzer is installed via `pip install -e ../VolMemLyzer3-CLI_forensic_tool`
+# in the worker image; it pulls in volatility3 as a transitive dependency.
+
+# --- Rendering / numerics (VADViT preprocessing reproduction) ---
+numpy==1.26.4
+Pillow==10.4.0
+opencv-python-headless==4.10.0.84
+
+# --- ML inference (worker image only; kept here for a single source of truth) ---
+# torch/torchvision/timm are heavy and CPU-only for the demo; pinned in the
+# worker Dockerfile to match VADViT (torch 2.x, timm 0.6.12).
+
+# --- Reporting ---
+jinja2==3.1.5
+
+# --- Dev / test ---
+pytest==8.3.4
+httpx==0.28.1
