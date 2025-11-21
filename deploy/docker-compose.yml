@@ -1,0 +1,95 @@
+# MemTriage local stack. Self-hostable, no paid cloud dependency.
+#
+#   docker compose -f deploy/docker-compose.yml up --build
+#
+# Build context is the repo root so the images can COPY backend/ and the
+# components/ submodules. Networks are split so the worker — which parses
+# untrusted memory images — has NO internet egress: it sits on an internal
+# network with only redis/postgres, never the edge.
+
+name: memtriage
+
+x-common-env: &common-env
+  MEMTRIAGE_DATABASE_URL: postgresql+psycopg://memtriage:memtriage@postgres:5432/memtriage
+  MEMTRIAGE_REDIS_URL: redis://redis:6379/0
+  MEMTRIAGE_DATA_DIR: /data
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: memtriage
+      POSTGRES_PASSWORD: memtriage
+      POSTGRES_DB: memtriage
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [internal]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U memtriage"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    networks: [internal]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    environment:
+      <<: *common-env
+      MEMTRIAGE_CORS_ORIGINS: '["http://localhost:5173","http://localhost:8000"]'
+    volumes:
+      - data:/data
+    ports:
+      - "8000:8000"
+    networks: [edge, internal]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    security_opt: ["no-new-privileges:true"]
+
+  worker:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.worker
+    environment:
+      <<: *common-env
+      MEMTRIAGE_MODEL_CHECKPOINT_PATH: /models/Multi_32_224_6f_3u.pt
+      MEMTRIAGE_LABELS_PATH: /models/labels.json
+    volumes:
+      - data:/data
+      # Drop the VADViT checkpoint + labels.json here to enable real verdicts.
+      - ../models:/models:ro
+    # Untrusted-input isolation: internal network only (no egress), dropped
+    # capabilities, no privilege escalation, bounded memory.
+    networks: [internal]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+    mem_limit: 8g
+
+  # TODO(M6): frontend service (React drag-and-drop upload + dashboard).
+  # frontend:
+  #   build: { context: .., dockerfile: deploy/Dockerfile.frontend }
+  #   ports: ["5173:80"]
+  #   networks: [edge]
+  #   depends_on: [api]
+
+networks:
+  edge:
+  internal:
+    internal: true
+
+volumes:
+  pgdata:
+  data:

@@ -1,0 +1,44 @@
+# --- MemTriage worker image (forensics + ML) ---
+# Runs the analysis pipeline out-of-band: Volatility 3 (via the VolMemLyzer
+# submodule) for extraction, and VADViT (PyTorch/timm) for classification. This
+# image parses UNTRUSTED memory images, so at runtime it is confined to an
+# internal Docker network with no internet egress (see docker-compose.yml).
+FROM python:3.11-slim AS base
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# CPU-only torch/torchvision + timm pinned to match VADViT exactly (state_dict
+# key fidelity depends on timm 0.6.12). Installed first for layer caching.
+RUN pip install --no-cache-dir \
+        torch==2.0.0 torchvision==0.15.1 \
+        --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --no-cache-dir timm==0.6.12
+
+COPY backend/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Wrapped components (NOT rewritten). VolMemLyzer is installed as a package
+# (pulls volatility3 + the `vol` console script); VADViT is made importable via
+# PYTHONPATH so its model class + preprocessing can be reused for inference.
+COPY components/volmemlyzer /opt/components/volmemlyzer
+COPY components/vadvit /opt/components/vadvit
+RUN pip install --no-cache-dir -e /opt/components/volmemlyzer
+ENV PYTHONPATH=/opt/components/vadvit
+
+COPY backend/ /app/
+RUN pip install --no-cache-dir -e .
+
+RUN groupadd --system app && useradd --system --gid app --home /app app \
+    && chown -R app:app /app /opt/components
+USER app
+
+CMD ["celery", "-A", "memtriage.workers.celery_app.celery_app", "worker", \
+     "--loglevel=INFO", "--concurrency=1"]
