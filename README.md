@@ -20,6 +20,26 @@ Both are vendored as git submodules under [`components/`](components/) and are
 > **Status:** work in progress. This repository is being built milestone by
 > milestone; see the architecture and roadmap in the project plan.
 
+## How it works
+
+MemTriage runs **VolMemLyzer first, then VADViT on demand** — the analyst stays
+in the loop:
+
+1. **Ingest** — upload a single atomic memory dump, *or* up to five
+   interval-collected snapshots of the same host. Each snapshot streams to disk;
+   4GB+ dumps are a first-class case.
+2. **Triage (VolMemLyzer)** — extract the IoC/artifact dashboard and build the
+   **process/PID inventory**. This runs automatically once and needs no input.
+3. **Select** — the analyst picks a process of interest from the inventory.
+4. **Deep-dive (VADViT)** — for that PID, MemTriage assembles its VAD regions
+   from every snapshot, **consolidates** by choosing the snapshot with the most
+   regions (a single dump is trivially chosen), renders the VADViT grid image,
+   classifies it, and produces an **attention overlay** mapped back to specific
+   VAD regions. The verdict + explanation enrich the VolMemLyzer output.
+
+Steps 3–4 can be repeated for as many processes as the analyst wants; every
+result folds into one consolidated, exportable investigation report.
+
 ## Non-goals (v1)
 
 MemTriage is a security-engineering demonstration, not a product. It is **not**
