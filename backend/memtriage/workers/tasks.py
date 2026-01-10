@@ -26,7 +26,7 @@ from ..config import get_settings
 from ..db import SessionLocal
 from ..models import AnalysisStatus, Dump, Investigation, InvestigationStatus, ProcessAnalysis
 from ..pipeline.progress import set_state
-from ..security.sanitize import sanitize_text
+from ..security.sanitize import sanitize_obj, sanitize_text
 from ..storage import InvestigationPaths, ProcessPaths
 from .celery_app import celery_app
 
@@ -83,40 +83,42 @@ def run_triage(self, investigation_id: str) -> str:  # noqa: ANN001
             d.sha256 = _sha256_streaming(paths.dump_path(d.ordinal))
         session.commit()
 
-        # TODO(M2): VolMemLyzer extract + analyze on the primary snapshot ->
-        # dashboard + per-object suspicion; build the process inventory from
-        # pslist/psscan. For now the inventory is empty scaffolding.
+        # VolMemLyzer runs on the primary (first) snapshot: aggregate IoC
+        # features + per-object injections/network + the process/PID inventory.
         set_state(session, inv, stage="analyzing",
-                  message="Analyzing processes, injections, network, persistence")
+                  message="Extracting IoC features and per-object artifacts")
+        from ..pipeline import volmemlyzer_adapter as vml
+
+        primary = paths.dump_path(dumps[0].ordinal)
+        view = vml.run_triage(str(primary), str(paths.volmemlyzer),
+                              vol_path=settings.vol_path, timeout_s=settings.vol_timeout_s)
 
         set_state(session, inv, stage="inventorying",
                   message="Building process/PID inventory")
-        triage = {
+        # Every field here is dump-derived and attacker-controlled — sanitize the
+        # whole structure before it is persisted or rendered.
+        triage = sanitize_obj({
             "dumps": [
                 {"ordinal": d.ordinal, "filename": d.original_filename,
                  "size_bytes": d.size_bytes, "sha256": d.sha256}
                 for d in dumps
             ],
-            "vol_version": None,
-            "dashboard": {
-                "features": {},
-                "suspicious_processes": [],
-                "injections": [],
-                "network": [],
-                "persistence": [],
-                "attack_techniques": [],
-            },
-            "processes": [],  # inventory of {pid,name,ppid,risk,flags,analyzable}
-            "notes": [
-                "Milestone 1 scaffold: VolMemLyzer triage not yet wired. Report "
-                "shape is canonical and stable."
-            ],
-        }
+            "primary_dump_ordinal": dumps[0].ordinal,
+            "vol_version": view.get("vol_version"),
+            "dashboard": view["dashboard"],
+            "processes": view["processes"],
+        })
         paths.triage.write_text(json.dumps(triage, indent=2))
 
         inv.triage_path = str(paths.triage)
-        inv.process_count = len(triage["processes"])
-        inv.summary = {"process_count": inv.process_count, "dumps": len(dumps)}
+        inv.vol_version = (str(view.get("vol_version")) or "")[:128] or None
+        inv.process_count = len(view["processes"])
+        inv.summary = {
+            "process_count": inv.process_count,
+            "dumps": len(dumps),
+            "flagged": len(view["dashboard"]["suspicious_processes"]),
+            "attack_techniques": len(view["dashboard"]["attack_techniques"]),
+        }
         _write_consolidated(inv, session)
         set_state(session, inv, status=InvestigationStatus.TRIAGED, stage="triaged",
                   progress=100, message="Triage complete — select a process to analyze")

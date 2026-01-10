@@ -58,8 +58,16 @@ def test_dump_cap_per_investigation(client, monkeypatch):
     assert _add_dump(client, inv_id, name="s2.raw").status_code == 409
 
 
-def test_full_two_phase_lifecycle(client):
+def test_full_two_phase_lifecycle(client, monkeypatch):
+    from memtriage.pipeline import volmemlyzer_adapter as vml
     from memtriage.workers.tasks import run_process_analysis, run_triage
+
+    # Mock the Volatility boundary (no volmemlyzer/memory image in unit tests).
+    monkeypatch.setattr(vml, "run_triage", lambda *a, **k: {
+        "features": {}, "vol_version": None, "processes": [],
+        "dashboard": {"features": {}, "suspicious_processes": [], "injections": [],
+                      "network": [], "persistence": [], "attack_techniques": []},
+    })
 
     # Phase 0: create + upload two interval snapshots.
     inv_id = _new_investigation(client)
