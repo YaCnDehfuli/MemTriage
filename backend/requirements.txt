@@ -22,6 +22,10 @@ psycopg[binary]==3.2.3
 numpy==1.26.4
 Pillow==10.4.0
 opencv-python-headless==4.10.0.84
+# pandas/tqdm are pulled in transitively by VolMemLyzer; declared here because
+# the VADViT grid-rendering fidelity test imports VADViT's ProcessVisulaizer.
+pandas==2.2.3
+tqdm==4.67.1
 
 # --- ML inference (worker image only; kept here for a single source of truth) ---
 # torch/torchvision/timm are heavy and CPU-only for the demo; pinned in the
