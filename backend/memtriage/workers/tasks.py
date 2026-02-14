@@ -148,19 +148,39 @@ def run_process_analysis(self, analysis_id: str) -> str:  # noqa: ANN001
 
         inv = session.get(Investigation, a.investigation_id)
         ppaths = ProcessPaths(a.investigation_id, a.pid).ensure()
-        set_state(session, a, status=AnalysisStatus.ANALYZING, stage="dumping",
-                  message=f"Dumping VAD regions for PID {a.pid} across snapshots")
 
-        # TODO(M3): for each snapshot, `vol vadinfo --dump --pid <pid>`, then
-        # categorize regions (exe/dll) by protection.
+        from ..pipeline import grid_render as gr
+        from ..pipeline import region_dump as rd
+
+        inv_paths = InvestigationPaths(a.investigation_id)
+        dumps = sorted(inv.dumps, key=lambda d: d.ordinal) if inv else []
+
+        # Dump the selected PID's VAD regions from every snapshot.
+        set_state(session, a, status=AnalysisStatus.ANALYZING, stage="dumping",
+                  message=f"Dumping VAD regions for PID {a.pid} across {len(dumps)} snapshot(s)")
+        snapshots = []
+        for d in dumps:
+            snap_dir = ppaths.regions / f"snap_{d.ordinal}"
+            regions = rd.dump_snapshot(
+                str(inv_paths.dump_path(d.ordinal)), a.pid, str(snap_dir),
+                vol_path=settings.vol_path, timeout_s=settings.vol_timeout_s)
+            if len(regions) > settings.max_regions_per_process:
+                regions = regions[:settings.max_regions_per_process]
+            snapshots.append(rd.SnapshotRegions(ordinal=d.ordinal, regions=regions))
+
+        # Consolidate: keep the snapshot with the most regions.
         set_state(session, a, stage="consolidating",
                   message="Selecting the snapshot with the most regions")
-        # TODO(M3): consolidate — choose snapshot with max (exe+dll) region count.
-        a.chosen_dump_ordinal = 0
-        a.region_count = 0
+        chosen = rd.select_consolidated(snapshots) if snapshots else rd.SnapshotRegions(0, [])
+        a.chosen_dump_ordinal = chosen.ordinal
+        a.region_count = chosen.count
 
-        # TODO(M3): reproduce VADViT grid rendering (R/G/B channels).
+        # Render the VADViT grid image from the consolidated regions.
         set_state(session, a, stage="rendering", message="Rendering VADViT grid image")
+        grid_available = bool(chosen.regions)
+        if grid_available:
+            gr.render_grid_png(chosen.regions, settings.patch_size, settings.grid_size,
+                               str(ppaths.grid))
 
         # TODO(M4): VADViT inference. Absent checkpoint => model_loaded False and
         # NO fabricated verdict.
@@ -183,8 +203,13 @@ def run_process_analysis(self, analysis_id: str) -> str:  # noqa: ANN001
                 "confidence": None,
                 "note": "VADViT checkpoint not mounted — verdict disabled.",
             },
-            "explainability": {"grid_png": None, "attention_png": None, "attributions": []},
-            "notes": ["Milestone 1 scaffold: dump/render/inference not yet wired."],
+            "explainability": {
+                "grid_png": "grid" if grid_available else None,
+                "attention_png": None,
+                "attributions": [],
+            },
+            "notes": ["VADViT classification + attention land in M4/M5; region "
+                      "dump, consolidation and grid rendering are wired."],
         }
         ppaths.result.write_text(json.dumps(analysis, indent=2))
         a.result_path = str(ppaths.result)

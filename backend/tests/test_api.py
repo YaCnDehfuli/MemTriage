@@ -90,6 +90,10 @@ def test_full_two_phase_lifecycle(client, monkeypatch):
     assert procs.json() == []
 
     # Phase 2: select a process and run its analysis synchronously.
+    # Mock the Volatility vadinfo --dump boundary (no vol/memory image in tests).
+    from memtriage.pipeline import region_dump as rd
+    monkeypatch.setattr(rd, "dump_snapshot", lambda *a, **k: [])
+
     sel = client.post(
         f"/api/investigations/{inv_id}/processes/analyze", json={"pid": 1337}
     )
