@@ -5,7 +5,12 @@ memtriage module is imported, so the app's cached settings pick these up and the
 suite needs no Postgres/Redis to run.
 """
 import os
+import sys
 import tempfile
+
+# The grid-render fidelity test imports VADViT's module from the submodule;
+# don't let Python drop a .pyc there and dirty the pinned submodule tree.
+sys.dont_write_bytecode = True
 
 _TMP = tempfile.mkdtemp(prefix="memtriage-test-")
 os.environ.setdefault("MEMTRIAGE_DATA_DIR", _TMP)
