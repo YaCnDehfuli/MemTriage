@@ -18,11 +18,21 @@ import json
 from pathlib import Path
 from typing import Any
 
+from ..scoring import CONTEXT_PLUGINS, normalize_plugin_key, score_records
 from .attack import map_techniques
 
 # Names with no analyzable user VADs — excluded from VADViT selection.
 _NON_ANALYZABLE = {"system", "registry", "memory compression", "secure system"}
 _NON_ANALYZABLE_PIDS = {0, 4}
+
+# Plugins the triage extractor caches raw JSON for, so the scoring engine can
+# re-score from cache on every tuning change without re-running Volatility. Uses
+# VolMemLyzer/Volatility plugin names (mapped to context keys on load).
+TRIAGE_PLUGINS: tuple[str, ...] = (
+    "pslist", "pstree", "psscan", "psxview", "cmdline", "malfind", "ldrmodules",
+    "handles", "privileges", "threads", "netscan", "svcscan", "scheduled_tasks",
+    "registry.userassist", "registry.hivelist", "registry.hivescan",
+)
 
 
 def _is_available() -> bool:
@@ -132,6 +142,83 @@ def dashboard_from(features_flat: dict, injections: list[dict],
     return dashboard
 
 
+def _apply_scoring(dashboard: dict, processes: list[dict], scoring: dict) -> None:
+    """Fold a scoring-engine result into the dashboard + process inventory.
+
+    Pure transform, shared by first-pass triage and live re-scoring: it enriches
+    each inventory row with the engine's per-PID verdict and rebuilds the
+    engine-derived dashboard sections (scored objects, ATT&CK, risk summary).
+    """
+    process_risk = scoring["process_risk"]
+    for item in processes:
+        pr = process_risk.get(item["pid"])
+        if pr:
+            item["risk"] = pr["risk"]
+            item["flags"] = list(pr["flags"])
+            item["score"] = pr["score"]
+            item["confidence"] = pr["confidence"]
+            item["techniques"] = list(pr["techniques"])
+        else:
+            # Clear stale enrichment when a PID drops out on re-score.
+            item["risk"] = None
+            item["flags"] = []
+            for k in ("score", "confidence", "techniques"):
+                item.pop(k, None)
+
+    scored = scoring["scored_objects"]
+    name_by_pid = {p["pid"]: p.get("name", "") for p in processes}
+    dashboard["scored_objects"] = scored
+    dashboard["risk_summary"] = scoring["risk_summary"]
+    dashboard["attack_techniques"] = scoring["attack_techniques"]
+    dashboard["profile"] = scoring["profile"]
+    dashboard["suspicious_processes"] = [
+        {
+            "pid": o["pid"],
+            "name": name_by_pid.get(o["pid"], ""),
+            "risk": o["risk"],
+            "score": o["score"],
+            "confidence": o["confidence"],
+            "flags": [c["rule_id"] for c in o["contributions"]],
+            "techniques": o["techniques"],
+        }
+        for o in scored if o["object_type"] == "process" and o["pid"] is not None
+    ]
+    dashboard["persistence"] = [o for o in scored if o["object_type"] == "persistence"]
+
+
+def assemble_triage(features_flat: dict, records: dict[str, list[dict]], *,
+                    vol_version: Any = None, profile: dict | None = None) -> dict:
+    """Shape parsed plugin records into the triage view (pure, engine-scored).
+
+    This is the whole non-Volatility half of triage — unit-testable with canned
+    records and reused by ``/rescore``.
+    """
+    scoring = score_records(records, profile)
+    injections = injections_from_malfind(records.get("malfind") or [])
+    network = network_from_netscan(records.get("netscan") or [])
+    inventory = inventory_from_pslist(records.get("pslist") or [],
+                                      set(scoring["process_risk"].keys()))
+    dashboard: dict = {
+        "features": features_flat or {},
+        "injections": injections,
+        "network": network,
+        "suspicious_processes": [],
+        "persistence": [],
+        "scored_objects": [],
+        "risk_summary": {},
+        "attack_techniques": [],
+        "profile": {},
+    }
+    _apply_scoring(dashboard, inventory, scoring)
+    return {
+        "features": features_flat or {},
+        "dashboard": dashboard,
+        "processes": inventory,
+        "profile": scoring["profile"],
+        "vol_version": vol_version,
+    }
+
+
 # --------------------------------------------------------------------------
 # Volatility-touching orchestration (thin)
 # --------------------------------------------------------------------------
@@ -146,11 +233,40 @@ def build_pipeline(vol_path: str | None, timeout_s: int):
     return Pipeline(runner, build_registry())
 
 
-def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
-               timeout_s: int) -> dict:
-    """Run VolMemLyzer on one snapshot and return the triage view.
+def _registry_has(pipe, name: str) -> bool:
+    try:
+        return bool(pipe.registry.has(name))
+    except Exception:  # noqa: BLE001 - be permissive about registry surface drift
+        return True
 
-    Returns a dict with keys: features, dashboard, processes, vol_version.
+
+def collect_records(pipe, image_path: str, artifacts_dir: str) -> tuple[dict, dict]:
+    """Run the triage plugin set once and return (records_by_key, manifest).
+
+    ``records_by_key`` is keyed by canonical context key; ``manifest`` maps that
+    key to the cached artifact's filename so ``/rescore`` can reload it without
+    touching Volatility.
+    """
+    requested = {p for p in TRIAGE_PLUGINS if _registry_has(pipe, p)}
+    res = pipe.run_plugin_raw(image_path=image_path, enable=requested,
+                              outdir=artifacts_dir, use_cache=True)
+    plugins = res.artifacts.get("plugins", {}) if res and res.artifacts else {}
+
+    records: dict[str, list[dict]] = {}
+    manifest: dict[str, str] = {}
+    for vml_name, path in plugins.items():
+        key = normalize_plugin_key(vml_name)
+        records[key] = _load_records(path)
+        if path:
+            manifest[key] = Path(path).name
+    return records, manifest
+
+
+def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
+               timeout_s: int, profile: dict | None = None) -> dict:
+    """Run VolMemLyzer on one snapshot and return the scored triage view.
+
+    Returns keys: features, dashboard, processes, profile, manifest, vol_version.
     """
     from dataclasses import asdict
 
@@ -164,22 +280,16 @@ def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
     features_flat = _flatten_dict(asdict(row).get("features") or {})
     vol_version = getattr(row, "vol_version", None)
 
-    # Per-object detail from raw plugin JSON.
-    res = pipe.run_plugin_raw(image_path=image_path,
-                              enable={"pslist", "malfind", "netscan"},
-                              outdir=artifacts_dir, use_cache=True)
-    plugins = res.artifacts.get("plugins", {}) if res and res.artifacts else {}
-    injections = injections_from_malfind(_load_records(plugins.get("malfind")))
-    network = network_from_netscan(_load_records(plugins.get("netscan")))
-    pslist = _load_records(plugins.get("pslist"))
+    # Cache the full triage plugin set once; the scoring engine works off it.
+    records, manifest = collect_records(pipe, image_path, artifacts_dir)
 
-    suspicious_pids = {i["pid"] for i in injections if i.get("pid") is not None}
-    inventory = inventory_from_pslist(pslist, suspicious_pids)
-    suspicious_processes = [p for p in inventory if p["pid"] in suspicious_pids]
+    view = assemble_triage(features_flat, records, vol_version=vol_version, profile=profile)
+    view["manifest"] = manifest
+    return view
 
-    return {
-        "features": features_flat,
-        "dashboard": dashboard_from(features_flat, injections, network, suspicious_processes),
-        "processes": inventory,
-        "vol_version": vol_version,
-    }
+
+def rescore_from_records(records: dict[str, list[dict]], features_flat: dict | None,
+                         *, vol_version: Any = None, profile: dict | None = None) -> dict:
+    """Re-score cached records under a new profile (no Volatility). Used by /rescore."""
+    return assemble_triage(features_flat or {}, records, vol_version=vol_version,
+                           profile=profile)

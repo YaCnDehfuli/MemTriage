@@ -59,9 +59,12 @@ class ProcessListItem(BaseModel):
     pid: int
     name: str
     ppid: int | None = None
-    risk: str | None = None       # VolMemLyzer suspicion hint, if any
-    flags: list[str] = []
+    risk: str | None = None       # engine risk band (Critical/High/Medium/Low), if any
+    flags: list[str] = []         # ids of the rules that fired on this PID
     analyzable: bool = True       # false e.g. for System/Idle with no user VADs
+    score: float | None = None    # engine score
+    confidence: float | None = None
+    techniques: list[str] = []    # aligned MITRE technique ids
 
 
 class AnalyzeProcessRequest(BaseModel):

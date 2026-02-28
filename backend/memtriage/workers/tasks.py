@@ -107,6 +107,10 @@ def run_triage(self, investigation_id: str) -> str:  # noqa: ANN001
             "vol_version": view.get("vol_version"),
             "dashboard": view["dashboard"],
             "processes": view["processes"],
+            # Cached raw-artifact manifest + last profile → live re-scoring can
+            # re-run the engine from disk without re-running Volatility.
+            "artifacts": view.get("manifest", {}),
+            "profile": view.get("profile") or view["dashboard"].get("profile"),
         })
         paths.triage.write_text(json.dumps(triage, indent=2))
 
@@ -118,6 +122,7 @@ def run_triage(self, investigation_id: str) -> str:  # noqa: ANN001
             "dumps": len(dumps),
             "flagged": len(view["dashboard"]["suspicious_processes"]),
             "attack_techniques": len(view["dashboard"]["attack_techniques"]),
+            "risk_summary": view["dashboard"].get("risk_summary", {}),
         }
         _write_consolidated(inv, session)
         set_state(session, inv, status=InvestigationStatus.TRIAGED, stage="triaged",
