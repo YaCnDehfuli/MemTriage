@@ -8,7 +8,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from . import __version__
-from .api import routes_events, routes_investigations, routes_processes, routes_results
+from .api import (
+    routes_events,
+    routes_investigations,
+    routes_processes,
+    routes_results,
+    routes_scoring,
+)
 from .config import get_settings
 from .db import init_db
 from .storage import ensure_base_dirs
@@ -65,3 +71,4 @@ app.include_router(routes_investigations.router)
 app.include_router(routes_processes.router)
 app.include_router(routes_events.router)
 app.include_router(routes_results.router)
+app.include_router(routes_scoring.router)
