@@ -187,10 +187,18 @@ def run_process_analysis(self, analysis_id: str) -> str:  # noqa: ANN001
             gr.render_grid_png(chosen.regions, settings.patch_size, settings.grid_size,
                                str(ppaths.grid))
 
-        # TODO(M4): VADViT inference. Absent checkpoint => model_loaded False and
-        # NO fabricated verdict.
+        # VADViT inference. Absent checkpoint / torch => model_loaded False and
+        # NO fabricated verdict (the classifier degrades honestly).
+        from ..pipeline import vadvit_model as vm
+
         set_state(session, a, stage="classifying", message="Classifying process")
-        a.model_loaded = False
+        if grid_available:
+            verdict = vm.get_classifier().classify(str(ppaths.grid))
+        else:
+            verdict = vm.Verdict.unavailable("No VAD regions to render/classify.")
+        a.model_loaded = verdict.model_loaded
+        a.verdict_family = verdict.family
+        a.verdict_confidence = verdict.confidence
 
         # TODO(M5): attention overlay + patch->VAD attribution.
         set_state(session, a, stage="explaining", message="Generating explanation")
@@ -202,19 +210,14 @@ def run_process_analysis(self, analysis_id: str) -> str:  # noqa: ANN001
             "process_name": a.process_name,
             "chosen_dump_ordinal": a.chosen_dump_ordinal,
             "region_count": a.region_count,
-            "verdict": {
-                "model_loaded": False,
-                "family": None,
-                "confidence": None,
-                "note": "VADViT checkpoint not mounted — verdict disabled.",
-            },
+            "verdict": verdict.to_dict(),
             "explainability": {
                 "grid_png": "grid" if grid_available else None,
                 "attention_png": None,
                 "attributions": [],
             },
-            "notes": ["VADViT classification + attention land in M4/M5; region "
-                      "dump, consolidation and grid rendering are wired."],
+            "notes": ["Region dump, consolidation, grid rendering and VADViT "
+                      "classification are wired; attention overlay lands in M5."],
         }
         ppaths.result.write_text(json.dumps(analysis, indent=2))
         a.result_path = str(ppaths.result)
