@@ -223,6 +223,50 @@ class VADViTClassifier:
             note=note,
         )
 
+    def attention_map(self, grid_png_path) -> list[float] | None:
+        """Flat CLS→patch attention from the last block (``grid_size**2`` values).
+
+        Reproduces VADViT's hook (``blocks[-1].attn``: q·kᵀ/√d → softmax, take the
+        CLS row's attention to patches). Returns ``None`` when unavailable — the
+        overlay is architectural, so it works with the placeholder weights too.
+        """
+        if not self.checkpoint_present or not torch_available():
+            return None
+        from pathlib import Path as _Path
+        if not _Path(grid_png_path).exists():
+            return None
+        try:
+            import torch
+            from PIL import Image
+
+            model = self._ensure_model()
+            captured: dict = {}
+
+            def _hook(module, inp, output):  # noqa: ANN001
+                qkv = module.qkv(inp[0])
+                q, k, _ = qkv.chunk(3, dim=-1)
+                scores = (q @ k.transpose(-2, -1)) / (q.shape[-1] ** 0.5)
+                captured["attn"] = scores.softmax(dim=-1).detach().cpu()
+                return output
+
+            handle = model.vit.blocks[-1].attn.register_forward_hook(_hook)
+            try:
+                transform = val_transform(self.image_size)
+                image = Image.open(str(grid_png_path)).convert("RGB")
+                tensor = transform(image).unsqueeze(0).to(self.device)
+                with torch.no_grad():
+                    model(tensor)
+            finally:
+                handle.remove()
+
+            attn = captured.get("attn")
+            if attn is None:
+                return None
+            cls_attention = attn[:, 0, 1:].mean(dim=0)  # CLS → patches
+            return [float(v) for v in cls_attention.tolist()]
+        except Exception:  # noqa: BLE001 - explainability is best-effort
+            return None
+
 
 @lru_cache
 def get_classifier() -> VADViTClassifier:

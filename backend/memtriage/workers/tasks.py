@@ -200,8 +200,25 @@ def run_process_analysis(self, analysis_id: str) -> str:  # noqa: ANN001
         a.verdict_family = verdict.family
         a.verdict_confidence = verdict.confidence
 
-        # TODO(M5): attention overlay + patch->VAD attribution.
+        # Attention overlay + patch->VAD attribution (architectural — works with
+        # the placeholder weights too). Best-effort: degrades to no overlay.
         set_state(session, a, stage="explaining", message="Generating explanation")
+        attention_png_ref = None
+        attributions: list = []
+        if grid_available and verdict.model_loaded:
+            try:
+                attention = vm.get_classifier().attention_map(str(ppaths.grid))
+            except Exception:  # noqa: BLE001
+                attention = None
+            if attention:
+                from ..pipeline import explain as ex
+
+                ordered = gr.order_regions(chosen.regions)
+                ex.render_attention_overlay(str(ppaths.grid), attention,
+                                            settings.grid_size, str(ppaths.attention))
+                attributions = sanitize_obj(
+                    ex.attribution_table(attention, ordered, settings.grid_size))
+                attention_png_ref = "attention"
 
         analysis = {
             "analysis_id": a.id,
@@ -213,11 +230,11 @@ def run_process_analysis(self, analysis_id: str) -> str:  # noqa: ANN001
             "verdict": verdict.to_dict(),
             "explainability": {
                 "grid_png": "grid" if grid_available else None,
-                "attention_png": None,
-                "attributions": [],
+                "attention_png": attention_png_ref,
+                "attributions": attributions,
             },
-            "notes": ["Region dump, consolidation, grid rendering and VADViT "
-                      "classification are wired; attention overlay lands in M5."],
+            "notes": ["Region dump, consolidation, grid rendering, VADViT "
+                      "classification and attention attribution are wired."],
         }
         ppaths.result.write_text(json.dumps(analysis, indent=2))
         a.result_path = str(ppaths.result)
