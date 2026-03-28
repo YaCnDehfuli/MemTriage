@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-ink-950 text-mist-200 font-sans antialiased;
+  background-image:
+    radial-gradient(1200px 600px at 78% -10%, rgba(56, 198, 217, 0.06), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(91, 141, 239, 0.05), transparent 55%);
+}
+
+@layer components {
+  .panel {
+    @apply rounded-lg border border-ink-700/70 bg-ink-850/80 shadow-panel;
+  }
+  .panel-head {
+    @apply flex items-center justify-between border-b border-ink-700/60 px-4 py-3;
+  }
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-mist-400;
+  }
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium
+      transition-colors disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-accent {
+    @apply btn bg-accent/15 text-accent ring-1 ring-inset ring-accent/30 hover:bg-accent/25;
+  }
+  .btn-ghost {
+    @apply btn text-mist-300 ring-1 ring-inset ring-ink-600 hover:bg-ink-800;
+  }
+  .mono {
+    @apply font-mono text-[13px] tabular-nums;
+  }
+}
+
+/* Thin, unobtrusive scrollbars that suit a dense analyst UI. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #293648 transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #293648;
+  border-radius: 6px;
+}
