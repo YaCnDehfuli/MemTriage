@@ -78,12 +78,15 @@ services:
     cap_drop: ["ALL"]
     mem_limit: 8g
 
-  # TODO(M6): frontend service (React drag-and-drop upload + dashboard).
-  # frontend:
-  #   build: { context: .., dockerfile: deploy/Dockerfile.frontend }
-  #   ports: ["5173:80"]
-  #   networks: [edge]
-  #   depends_on: [api]
+  frontend:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.frontend
+    ports:
+      - "5173:80"
+    networks: [edge]
+    depends_on: [api]
+    security_opt: ["no-new-privileges:true"]
 
 networks:
   edge:

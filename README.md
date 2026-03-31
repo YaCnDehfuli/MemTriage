@@ -52,8 +52,28 @@ against commercial detection products.
 
 ```
 backend/       FastAPI API + Celery worker (the MemTriage service)
+frontend/      React + TypeScript analyst workspace (Vite + Tailwind)
 components/    VolMemLyzer3 and VADViT (git submodules; wrapped, not forked)
 deploy/        Dockerfiles + docker-compose stack
+```
+
+## Frontend & demo mode
+
+The analyst workspace walks one investigation through **Ingest → Triage overview
+→ Process inventory → VADViT deep-dive → Report**. The triage overview drives the
+scoring engine live: moving the sensitivity preset (or the advanced controls)
+re-scores from cache via `POST /rescore` and highlights what changed.
+
+A built-in **Demo** mode ships realistic canned data, so the whole flow — the
+scored IoC table with per-rule evidence, live tuning, the VADViT grid + attention
+overlay, and the placeholder verdict — is clickable with no backend, Volatility,
+or PyTorch. Toggle **Demo/Live** in the header; demo fixtures are isolated in
+`frontend/src/demo/` and removable without touching production code.
+
+```bash
+cd frontend && npm install && npm run dev      # http://localhost:5173 (opens in Demo)
+# full stack (API + worker + frontend):
+docker compose -f deploy/docker-compose.yml up --build
 ```
 
 ## Getting the code
