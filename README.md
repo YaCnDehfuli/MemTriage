@@ -1,89 +1,166 @@
 # MemTriage
 
-**Upload a memory image → get one consolidated investigation report.** MemTriage
-triages a raw memory capture end-to-end: it inventories the forensic
-artifacts/IoCs in the image, flags processes that look malicious, and shows an
-analyst *why* — with an explainability heatmap tied back to a named process and
-its memory regions.
+MemTriage is an analyst-centered memory-forensics workspace that turns one raw
+memory image, or a short sequence of snapshots from the same host, into a
+traceable investigation. It combines broad Volatility-based artifact extraction,
+tunable ATT&CK-aligned scoring, process inventory review, and targeted VADViT
+process-memory analysis in one exportable workflow.
 
-It does this by combining two independently published components:
+The project is intended for DFIR research, repeatable security engineering, and
+portfolio-grade demonstration of a full-stack forensic pipeline. It is not an
+EDR replacement, an AV product, or a live endpoint-monitoring system.
 
-- **[VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool)**
-  — Volatility 3-based extraction of 500+ memory artifacts/IoCs.
-- **[VADViT](https://github.com/YaCnDehfuli/VADViT)** — an explainable Vision
-  Transformer that classifies process memory (VAD) regions as benign or one of
-  eight malware families.
+![MemTriage triage overview](docs/assets/memtriage-triage-overview.png)
 
-Both are vendored as git submodules under [`components/`](components/) and are
-**wrapped, not forked** — they remain independently citable.
+## What it does
 
-> **Status:** work in progress. This repository is being built milestone by
-> milestone; see the architecture and roadmap in the project plan.
+- Ingests a single memory dump or up to five interval snapshots from the same
+  host.
+- Runs VolMemLyzer-backed extraction to build artifact summaries, IoC evidence,
+  ATT&CK alignment, and a process/PID inventory.
+- Scores evidence with transparent rules that retain severity, confidence,
+  source artifacts, and the reason each rule fired.
+- Lets the analyst tune sensitivity and rescore cached evidence without
+  re-running Volatility.
+- Runs VADViT only for selected processes, preserving analyst control over
+  expensive model analysis.
+- Renders process VAD regions into the model grid and maps attention back to
+  concrete memory regions when a compatible model result is available.
+- Produces a consolidated report suitable for review, export, and follow-up.
 
-## How it works
+## Investigation workflow
 
-MemTriage runs **VolMemLyzer first, then VADViT on demand** — the analyst stays
-in the loop:
+MemTriage follows a two-phase workflow so automated triage does not bury the
+analyst in opaque verdicts.
 
-1. **Ingest** — upload a single atomic memory dump, *or* up to five
-   interval-collected snapshots of the same host. Each snapshot streams to disk;
-   4GB+ dumps are a first-class case.
-2. **Triage (VolMemLyzer)** — extract the IoC/artifact dashboard and build the
-   **process/PID inventory**. This runs automatically once and needs no input.
-3. **Select** — the analyst picks a process of interest from the inventory.
-4. **Deep-dive (VADViT)** — for that PID, MemTriage assembles its VAD regions
-   from every snapshot, **consolidates** by choosing the snapshot with the most
-   regions (a single dump is trivially chosen), renders the VADViT grid image,
-   classifies it, and produces an **attention overlay** mapped back to specific
-   VAD regions. The verdict + explanation enrich the VolMemLyzer output.
+1. **Ingest:** upload one atomic dump or a small interval sequence. Files stream
+   to disk with size, count, extension, and magic-byte checks.
+2. **Triage:** run Volatility-backed extraction once, normalize the evidence, and
+   score the surfaced objects.
+3. **Inventory:** review the ranked process list and select the PID that needs a
+   deeper explanation.
+4. **Deep-dive:** assemble VAD regions for that process, choose the snapshot with
+   the richest region set, render the VADViT grid, classify, and attribute model
+   attention back to regions.
+5. **Report:** fold every selected process analysis into one investigation
+   record.
 
-Steps 3–4 can be repeated for as many processes as the analyst wants; every
-result folds into one consolidated, exportable investigation report.
+![Process inventory](docs/assets/memtriage-process-inventory.png)
 
-## Non-goals (v1)
+## Architecture
 
-MemTriage is a security-engineering demonstration, not a product. It is **not**
-an EDR/AV replacement, **not** a live/continuous monitoring tool, and **not** a
-general interactive forensics GUI. v1 is a single-shot
-*upload-a-memory-image → consolidated-report* tool, and is never benchmarked
-against commercial detection products.
+MemTriage wraps two independently published components rather than forking them:
 
-## Repository layout
+- [VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool)
+  for Volatility 3-based extraction of memory artifacts and IoCs.
+- [VADViT](https://github.com/YaCnDehfuli/VADViT) for explainable Vision
+  Transformer analysis of process VAD regions.
 
+The application layer connects those components through a service-oriented local
+stack:
+
+```text
+frontend/      React + TypeScript analyst workspace
+backend/       FastAPI API, SQLAlchemy models, and evidence/scoring services
+deploy/        Dockerfiles, nginx config, and docker-compose stack
+components/    Wrapped VolMemLyzer3 and VADViT source trees
+models/        Optional VADViT checkpoint placement and model notes
 ```
-backend/       FastAPI API + Celery worker (the MemTriage service)
-frontend/      React + TypeScript analyst workspace (Vite + Tailwind)
-components/    VolMemLyzer3 and VADViT (git submodules; wrapped, not forked)
-deploy/        Dockerfiles + docker-compose stack
-```
 
-## Frontend & demo mode
+FastAPI exposes investigation, upload, process, result, scoring, artifact, and
+event routes. Celery and Redis coordinate long-running forensic jobs, PostgreSQL
+stores investigation state, and the frontend presents the investigation as a
+guided workspace rather than a collection of raw plugin outputs.
 
-The analyst workspace walks one investigation through **Ingest → Triage overview
-→ Process inventory → VADViT deep-dive → Report**. The triage overview drives the
-scoring engine live: moving the sensitivity preset (or the advanced controls)
-re-scores from cache via `POST /rescore` and highlights what changed.
+## Security boundaries
 
-A built-in **Demo** mode ships realistic canned data, so the whole flow — the
-scored IoC table with per-rule evidence, live tuning, the VADViT grid + attention
-overlay, and the placeholder verdict — is clickable with no backend, Volatility,
-or PyTorch. Toggle **Demo/Live** in the header; demo fixtures are isolated in
-`frontend/src/demo/` and removable without touching production code.
+Memory images are treated as untrusted input. Uploads are constrained by file
+count, size, extension, and denied executable/container magic bytes. Dump-derived
+strings are sanitized before persistence and rendering. The worker container is
+designed for isolated parsing work with no internet egress, dropped Linux
+capabilities, no privilege escalation, and bounded memory.
+
+Model output is also handled conservatively. If the VADViT checkpoint or runtime
+is unavailable, MemTriage returns an explicit unavailable result instead of
+fabricating a family label or attention map.
+
+## Screenshots
+
+### Triage Scoring
+
+The triage view surfaces scored objects, risk bands, confidence, and ATT&CK
+alignment while keeping the rule evidence expandable and auditable.
+
+![Triage scoring workspace](docs/assets/memtriage-triage-overview.png)
+
+### VADViT Deep-Dive
+
+The deep-dive view shows the selected process grid, attention overlay, model
+confidence distribution, and patch-to-region attribution.
+
+![VADViT deep-dive](docs/assets/memtriage-vadvit-deep-dive.png)
+
+## Demo mode
+
+The frontend includes a self-contained demo dataset so the workspace can be
+reviewed without a backend, Volatility installation, memory image, or PyTorch
+runtime. Demo fixtures live in `frontend/src/demo/` and are isolated from the
+production API path.
 
 ```bash
-cd frontend && npm install && npm run dev      # http://localhost:5173 (opens in Demo)
-# full stack (API + worker + frontend):
-docker compose -f deploy/docker-compose.yml up --build
+cd frontend
+npm install
+npm run dev
 ```
 
-## Getting the code
+Open `http://localhost:5173`. The app starts in demo mode; use the Demo/Live
+toggle in the header when testing against the API stack.
+
+## Full stack
+
+Clone with submodules so the wrapped forensic components are present:
 
 ```bash
 git clone --recurse-submodules https://github.com/YaCnDehfuli/memory_triage_app.git
-# or, after a plain clone:
+cd memory_triage_app
+```
+
+If the repository was cloned without submodules:
+
+```bash
 git submodule update --init --recursive
 ```
 
+Run the local stack:
+
+```bash
+docker compose -f deploy/docker-compose.yml up --build
+```
+
+## Quality checks
+
+Backend checks:
+
+```bash
+cd backend
+python -m pytest
+```
+
+Frontend checks:
+
+```bash
+cd frontend
+npm run typecheck
+npm run build
+```
+
+## Current status
+
+MemTriage is a work-in-progress security-engineering project. The repository
+contains the API, worker workflow, scoring layer, React analyst workspace, demo
+mode, Docker stack, and tests. Real VADViT classification requires compatible
+weights mounted through the documented model path.
+
 ## License
 
-[MIT](LICENSE). The wrapped components retain their own licenses and citations.
+[MIT](LICENSE). Wrapped components retain their own licenses and citations.
