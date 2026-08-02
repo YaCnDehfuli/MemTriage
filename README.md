@@ -1,5 +1,12 @@
 # MemTriage
 
+[![Python](https://img.shields.io/badge/Python-FastAPI-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![React](https://img.shields.io/badge/UI-React-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Docker](https://img.shields.io/badge/Deploy-Docker-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
+
+**Technical focus:** DFIR · memory forensics · Volatility 3 · ATT&CK-aligned triage · analyst workflow · explainable ML
+
 MemTriage is an analyst-centered memory-forensics workspace that turns one raw
 memory image, or a short sequence of snapshots from the same host, into a
 traceable investigation. It combines broad Volatility-based artifact extraction,
