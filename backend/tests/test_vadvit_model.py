@@ -177,3 +177,96 @@ def test_placeholder_generation_and_inference(tmp_path):
     assert 0.0 <= v.confidence <= 1.0
     assert v.placeholder is True
     assert v.probabilities and abs(sum(v.probabilities.values()) - 1.0) < 1e-3
+
+
+# --------------------------------------------------------------------------
+# placeholder resolution (the trained checkpoint is not distributed)
+# --------------------------------------------------------------------------
+
+def _auto_clf(tmp_path, *, auto=True):
+    return vm.VADViTClassifier(
+        tmp_path / "models" / "Multi_32_224_6f_3u.pt",
+        tmp_path / "models" / "labels.json",
+        "vit_base_patch32_224", 2, 224, "cpu",
+        cache_dir=tmp_path / "cache", auto_placeholder=auto, placeholder_seed=7,
+    )
+
+
+def test_trained_weights_win_over_the_cache(tmp_path):
+    clf = _auto_clf(tmp_path)
+    clf.checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+    clf.checkpoint_path.write_bytes(b"trained")
+    cached = clf.cached_placeholder_path
+    cached.parent.mkdir(parents=True, exist_ok=True)
+    cached.write_bytes(b"placeholder")
+    assert clf.resolve_checkpoint() == clf.checkpoint_path
+    assert clf.trained_checkpoint_present is True
+
+
+def test_cached_placeholder_is_reused_without_regenerating(tmp_path):
+    clf = _auto_clf(tmp_path)
+    cached = clf.cached_placeholder_path
+    cached.parent.mkdir(parents=True, exist_ok=True)
+    cached.write_bytes(b"placeholder")
+    assert clf.resolve_checkpoint() == cached
+    assert clf.trained_checkpoint_present is False
+
+
+def test_labels_fall_back_to_the_cache_directory(tmp_path):
+    clf = _auto_clf(tmp_path)
+    cached = clf.cached_placeholder_path
+    cached.parent.mkdir(parents=True, exist_ok=True)
+    (cached.parent / "labels.json").write_text(json.dumps(["Benign", "Placeholder_Trojan"]))
+    assert clf.labels == ["Benign", "Placeholder_Trojan"]
+
+
+def test_auto_placeholder_disabled_leaves_no_checkpoint(tmp_path):
+    clf = _auto_clf(tmp_path, auto=False)
+    assert clf.resolve_checkpoint() is None
+    assert "checkpoint" in clf.classify(tmp_path / "grid.png").note.lower()
+
+
+def test_generation_failure_degrades_instead_of_raising(tmp_path, monkeypatch):
+    clf = _auto_clf(tmp_path)
+    monkeypatch.setattr(vm, "torch_available", lambda: True)
+    monkeypatch.setattr(
+        "memtriage.pipeline.placeholder_model.generate_placeholder",
+        lambda *a, **k: (_ for _ in ()).throw(RuntimeError("no torch")),
+    )
+    assert clf.resolve_checkpoint() is None
+
+
+def test_placeholder_checkpoints_are_detected_by_their_marker(tmp_path):
+    clf = _auto_clf(tmp_path)
+    cached = clf.cached_placeholder_path
+    cached.parent.mkdir(parents=True, exist_ok=True)
+    cached.write_bytes(b"placeholder")
+    assert clf._is_placeholder(cached) is False
+    (cached.parent / vm.META_FILENAME).write_text(json.dumps({"placeholder": True}))
+    assert clf._is_placeholder(cached) is True
+    (cached.parent / vm.META_FILENAME).write_text("{ not json")
+    assert clf._is_placeholder(cached) is False
+
+
+def test_placeholder_note_states_it_is_not_a_detection():
+    assert "not a detection" in vm.PLACEHOLDER_VERDICT_NOTE.lower()
+    verdict = vm.Verdict(model_loaded=True, family="Placeholder_Trojan", confidence=0.5,
+                         placeholder=True, note=vm.PLACEHOLDER_VERDICT_NOTE,
+                         model_source="placeholder")
+    assert verdict.to_dict()["model_source"] == "placeholder"
+
+
+def test_model_status_reports_the_contact_when_untrained(monkeypatch, tmp_path):
+    monkeypatch.setattr(vm, "get_classifier", lambda: _auto_clf(tmp_path))
+    status = vm.model_status()
+    assert status["trained_weights_present"] is False
+    assert status["placeholder_active"] is True
+    assert "@" in status["contact"]
+
+
+def test_placeholder_labels_cover_every_class():
+    from memtriage.pipeline.placeholder_model import PLACEHOLDER_LABELS
+
+    assert PLACEHOLDER_LABELS[0] == "Benign"
+    assert len(PLACEHOLDER_LABELS) == 9
+    assert all(name.startswith("Placeholder_") for name in PLACEHOLDER_LABELS[1:])

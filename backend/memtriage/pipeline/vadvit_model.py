@@ -13,6 +13,11 @@ Design goals:
 * **Honest about placeholders.** A structural placeholder checkpoint carries a
   ``model_meta.json`` marker; the verdict is flagged ``placeholder`` so the UI can
   make clear the class is not a real detection.
+* **Always something to explain.** The trained weights are not distributed with
+  the project. When they are absent, a seeded placeholder is generated once into
+  ``model_cache_dir`` so rendering, classification, the attention map and the
+  region deep-dive that hangs off it all still run — labelled, throughout, as a
+  non-detection.
 
 Preprocessing matches VADViT's evaluation path (``dataset_loader`` → ``val_transform``):
 Resize(224) → ToTensor → Normalize(ImageNet). torch/timm/torchvision are imported
@@ -21,15 +26,24 @@ lazily so the API, worker and test processes import this module without them.
 from __future__ import annotations
 
 import json
+import logging
+import threading
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
 
 from ..config import get_settings
 
+logger = logging.getLogger(__name__)
+
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
 META_FILENAME = "model_meta.json"
+PLACEHOLDER_VERDICT_NOTE = (
+    "Untrained structural placeholder — this family label is NOT a detection. "
+    "The attention map and region analysis below are architectural and still "
+    "describe real memory; the class name is not evidence of anything."
+)
 
 
 @dataclass
@@ -42,6 +56,7 @@ class Verdict:
     probabilities: dict[str, float] = field(default_factory=dict)
     placeholder: bool = False
     note: str = ""
+    model_source: str = "none"  # trained | placeholder | none
 
     def to_dict(self) -> dict:
         return {
@@ -51,6 +66,7 @@ class Verdict:
             "probabilities": self.probabilities,
             "placeholder": self.placeholder,
             "note": self.note,
+            "model_source": self.model_source,
         }
 
     @classmethod
@@ -130,19 +146,50 @@ class VADViTClassifier:
     """Lazily-loaded VADViT classifier with a clean ``classify(png) -> Verdict``."""
 
     def __init__(self, checkpoint_path, labels_path, model_name: str,
-                 num_classes: int, image_size: int, device: str = "cpu") -> None:
+                 num_classes: int, image_size: int, device: str = "cpu",
+                 *, cache_dir=None, auto_placeholder: bool = False,
+                 placeholder_seed: int = 0) -> None:
         self.checkpoint_path = Path(checkpoint_path)
-        self.labels_path = labels_path
+        self.labels_path = Path(labels_path)
         self.model_name = model_name
         self.num_classes = num_classes
         self.image_size = image_size
         self.device = device
+        self.cache_dir = Path(cache_dir) if cache_dir else None
+        self.auto_placeholder = auto_placeholder
+        self.placeholder_seed = placeholder_seed
         self._model = None
         self._labels: list[str] | None = None
+        self._resolved: Path | None = None
+        self._lock = threading.Lock()
+
+    @property
+    def trained_checkpoint_present(self) -> bool:
+        return self.checkpoint_path.exists()
+
+    @property
+    def cached_placeholder_path(self) -> Path | None:
+        if self.cache_dir is None:
+            return None
+        return self.cache_dir / self.checkpoint_path.name
+
+    def _checkpoint_obtainable(self) -> bool:
+        """A checkpoint exists, or one can be generated once torch is importable."""
+        if self.trained_checkpoint_present:
+            return True
+        cached = self.cached_placeholder_path
+        if cached is not None and cached.exists():
+            return True
+        return bool(self.auto_placeholder and self.cache_dir is not None)
 
     @property
     def checkpoint_present(self) -> bool:
-        return self.checkpoint_path.exists()
+        """True when a checkpoint is loadable right now."""
+        return self._checkpoint_obtainable() and (
+            self.trained_checkpoint_present
+            or (self.cached_placeholder_path or Path()).exists()
+            or torch_available()
+        )
 
     def available(self) -> bool:
         return self.checkpoint_present and torch_available()
@@ -150,11 +197,53 @@ class VADViTClassifier:
     @property
     def labels(self) -> list[str]:
         if self._labels is None:
-            self._labels = load_labels(self.labels_path, self.num_classes)
+            path = self.labels_path
+            if not path.exists() and self.cache_dir is not None:
+                cached_labels = self.cache_dir / self.labels_path.name
+                if cached_labels.exists():
+                    path = cached_labels
+            self._labels = load_labels(path, self.num_classes)
         return self._labels
 
-    def _is_placeholder(self) -> bool:
-        meta = self.checkpoint_path.parent / META_FILENAME
+    def resolve_checkpoint(self) -> Path | None:
+        """Trained weights if mounted, else a cached placeholder, else generate one."""
+        if self._resolved is not None and self._resolved.exists():
+            return self._resolved
+        if self.trained_checkpoint_present:
+            self._resolved = self.checkpoint_path
+            return self._resolved
+
+        cached = self.cached_placeholder_path
+        if cached is None:
+            return None
+        if cached.exists():
+            self._resolved = cached
+            return cached
+        if not self.auto_placeholder or not torch_available():
+            return None
+
+        with self._lock:
+            if cached.exists():
+                self._resolved = cached
+                return cached
+            try:
+                from .placeholder_model import generate_placeholder
+
+                cached.parent.mkdir(parents=True, exist_ok=True)
+                generate_placeholder(
+                    cached, cached.parent / self.labels_path.name,
+                    model_name=self.model_name, num_classes=self.num_classes,
+                    seed=self.placeholder_seed,
+                )
+            except Exception:
+                logger.exception("could not generate the placeholder checkpoint")
+                return None
+        self._labels = None
+        self._resolved = cached
+        return cached
+
+    def _is_placeholder(self, checkpoint: Path) -> bool:
+        meta = checkpoint.parent / META_FILENAME
         if not meta.exists():
             return False
         try:
@@ -162,13 +251,13 @@ class VADViTClassifier:
         except (ValueError, OSError):
             return False
 
-    def _ensure_model(self):
+    def _ensure_model(self, checkpoint: Path):
         if self._model is not None:
             return self._model
         import torch
 
         model = build_model(self.model_name, self.num_classes, pretrained=False)
-        state = torch.load(str(self.checkpoint_path), map_location=self.device)
+        state = torch.load(str(checkpoint), map_location=self.device)
         if isinstance(state, dict) and "state_dict" in state \
                 and not any(str(k).startswith("vit.") for k in state):
             state = state["state_dict"]
@@ -179,11 +268,16 @@ class VADViTClassifier:
 
     def classify(self, grid_png_path) -> Verdict:
         """Classify a rendered grid PNG. Degrades honestly, never fabricates."""
-        if not self.checkpoint_present:
+        if not self._checkpoint_obtainable():
             return Verdict.unavailable("VADViT checkpoint not mounted — verdict disabled.")
         if not torch_available():
             return Verdict.unavailable(
                 "PyTorch/timm unavailable in this environment — verdict disabled."
+            )
+        checkpoint = self.resolve_checkpoint()
+        if checkpoint is None:
+            return Verdict.unavailable(
+                "VADViT checkpoint could not be prepared — verdict disabled."
             )
         png = Path(grid_png_path)
         if not png.exists():
@@ -192,7 +286,7 @@ class VADViTClassifier:
             import torch
             from PIL import Image
 
-            model = self._ensure_model()
+            model = self._ensure_model(checkpoint)
             transform = val_transform(self.image_size)
             image = Image.open(str(png)).convert("RGB")
             tensor = transform(image).unsqueeze(0).to(self.device)
@@ -211,9 +305,8 @@ class VADViTClassifier:
             (labels[i] if i < len(labels) else f"class_{i}"): round(probs_list[i], 6)
             for i in range(len(probs_list))
         }
-        placeholder = self._is_placeholder()
-        note = ("Structural placeholder model — the family label is NOT a real "
-                "detection." if placeholder else "VADViT classification.")
+        placeholder = self._is_placeholder(checkpoint)
+        note = (PLACEHOLDER_VERDICT_NOTE if placeholder else "VADViT classification.")
         return Verdict(
             model_loaded=True,
             family=labels[idx] if idx < len(labels) else f"class_{idx}",
@@ -221,6 +314,7 @@ class VADViTClassifier:
             probabilities=prob_map,
             placeholder=placeholder,
             note=note,
+            model_source="placeholder" if placeholder else "trained",
         )
 
     def attention_map(self, grid_png_path) -> list[float] | None:
@@ -230,16 +324,16 @@ class VADViTClassifier:
         CLS row's attention to patches). Returns ``None`` when unavailable — the
         overlay is architectural, so it works with the placeholder weights too.
         """
-        if not self.checkpoint_present or not torch_available():
+        if not self._checkpoint_obtainable() or not torch_available():
             return None
-        from pathlib import Path as _Path
-        if not _Path(grid_png_path).exists():
+        checkpoint = self.resolve_checkpoint()
+        if checkpoint is None or not Path(grid_png_path).exists():
             return None
         try:
             import torch
             from PIL import Image
 
-            model = self._ensure_model()
+            model = self._ensure_model(checkpoint)
             captured: dict = {}
 
             def _hook(module, inp, output):  # noqa: ANN001
@@ -279,4 +373,24 @@ def get_classifier() -> VADViTClassifier:
         num_classes=s.num_classes,
         image_size=s.image_size,
         device=s.device,
+        cache_dir=s.model_cache_dir,
+        auto_placeholder=s.model_auto_placeholder,
+        placeholder_seed=s.placeholder_seed,
     )
+
+
+def model_status() -> dict:
+    """What the UI needs to explain which weights produced a verdict."""
+    s = get_settings()
+    clf = get_classifier()
+    trained = clf.trained_checkpoint_present
+    cached = clf.cached_placeholder_path
+    return {
+        "trained_weights_present": trained,
+        "placeholder_active": not trained,
+        "placeholder_cached": bool(cached and cached.exists()),
+        "auto_placeholder": s.model_auto_placeholder,
+        "runtime_available": torch_available(),
+        "contact": s.model_contact,
+        "note": PLACEHOLDER_VERDICT_NOTE if not trained else "Trained VADViT weights in use.",
+    }
