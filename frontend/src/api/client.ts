@@ -27,16 +27,38 @@ export interface ApiClient {
   artifactUrl(id: string, pid: number, kind: "grid" | "attention"): string;
 }
 
-async function json<T>(res: Response): Promise<T> {
-  if (!res.ok) {
-    let detail = res.statusText;
-    try {
-      detail = (await res.json()).detail ?? detail;
-    } catch {
-      /* keep statusText */
-    }
-    throw new Error(`${res.status}: ${detail}`);
+export class ApiError extends Error {
+  constructor(
+    readonly status: number,
+    message: string,
+    readonly code = "http_error",
+    readonly requestId = "",
+  ) {
+    super(message);
+    this.name = "ApiError";
   }
+}
+
+async function failure(res: Response): Promise<ApiError> {
+  let message = res.statusText || "Request failed";
+  let code = "http_error";
+  try {
+    const body = await res.json();
+    const envelope = body?.error;
+    if (envelope) {
+      message = envelope.message ?? message;
+      code = envelope.code ?? code;
+    } else if (body?.detail) {
+      message = typeof body.detail === "string" ? body.detail : message;
+    }
+  } catch {
+    /* non-JSON body: keep the status text */
+  }
+  return new ApiError(res.status, message, code, res.headers.get("X-Request-ID") ?? "");
+}
+
+async function json<T>(res: Response): Promise<T> {
+  if (!res.ok) throw await failure(res);
   return (await res.json()) as T;
 }
 

@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 
 from sqlalchemy import (
     JSON,
+    BigInteger,
     DateTime,
     Enum,
     Float,
@@ -62,7 +63,7 @@ class Investigation(Base):
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     dump_count: Mapped[int] = mapped_column(Integer, default=0)
-    total_bytes: Mapped[int] = mapped_column(Integer, default=0)
+    total_bytes: Mapped[int] = mapped_column(BigInteger, default=0)
 
     # Triage outputs.
     process_count: Mapped[int] = mapped_column(Integer, default=0)
@@ -94,7 +95,7 @@ class Dump(Base):
     )
     ordinal: Mapped[int] = mapped_column(Integer, default=0)  # snapshot order
     original_filename: Mapped[str] = mapped_column(String(512))
-    size_bytes: Mapped[int] = mapped_column(Integer, default=0)
+    size_bytes: Mapped[int] = mapped_column(BigInteger, default=0)
     sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
     investigation: Mapped["Investigation"] = relationship(back_populates="dumps")

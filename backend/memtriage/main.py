@@ -17,6 +17,8 @@ from .api import (
 )
 from .config import get_settings
 from .db import init_db
+from .diagnostics import run_all
+from .errors import REQUEST_ID_HEADER, register_error_handlers, request_id
 from .storage import ensure_base_dirs
 
 settings = get_settings()
@@ -49,10 +51,15 @@ app.add_middleware(
 )
 
 
+register_error_handlers(app)
+
+
 @app.middleware("http")
 async def security_headers(request: Request, call_next):  # noqa: ANN001
     """Baseline hardening headers on every response."""
+    rid = request_id(request)
     response = await call_next(request)
+    response.headers.setdefault(REQUEST_ID_HEADER, rid)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "no-referrer"
@@ -65,6 +72,14 @@ async def security_headers(request: Request, call_next):  # noqa: ANN001
 @app.get("/api/health")
 def health() -> JSONResponse:
     return JSONResponse({"status": "ok", "service": settings.app_name, "version": __version__})
+
+
+@app.get("/api/health/deep")
+def health_deep() -> JSONResponse:
+    """Capability report. Always 200: a missing optional is information, not an outage."""
+    report = run_all()
+    report.update(service=settings.app_name, version=__version__)
+    return JSONResponse(report)
 
 
 app.include_router(routes_investigations.router)

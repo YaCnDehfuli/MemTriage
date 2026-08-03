@@ -7,9 +7,14 @@ oversized image cannot pin a worker forever.
 """
 from __future__ import annotations
 
+import logging
+
 from celery import Celery
+from celery.signals import worker_process_init
 
 from ..config import get_settings
+
+logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
@@ -31,3 +36,16 @@ celery_app.conf.update(
     result_expires=60 * 60 * 24,
     broker_transport_options={"visibility_timeout": 90 * 60},
 )
+
+
+@worker_process_init.connect
+def _prepare_worker(**_kwargs) -> None:
+    """The worker may boot before (or without) the API, so it owns its schema too."""
+    try:
+        from ..db import init_db
+        from ..storage import ensure_base_dirs
+
+        ensure_base_dirs()
+        init_db()
+    except Exception:
+        logger.exception("worker startup: could not prepare storage/schema")

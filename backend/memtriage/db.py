@@ -6,12 +6,16 @@ stores only job/result *metadata* — the dumps and artifacts live on disk.
 """
 from __future__ import annotations
 
+import logging
 from collections.abc import Iterator
 
 from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from .config import get_settings
+
+logger = logging.getLogger(__name__)
 
 _settings = get_settings()
 
@@ -40,6 +44,9 @@ def get_session() -> Iterator[Session]:
     session = SessionLocal()
     try:
         yield session
+    except Exception:
+        session.rollback()
+        raise
     finally:
         session.close()
 
@@ -49,3 +56,29 @@ def init_db() -> None:
     from . import models  # noqa: F401  (register mappers)
 
     Base.metadata.create_all(bind=engine)
+    ensure_schema()
+
+
+# Columns whose declared type widened after the first release. ``create_all``
+# never alters an existing table, so a volume created before the change keeps a
+# 32-bit size column and overflows on any dump above 2 GiB.
+_WIDENED_TO_BIGINT = (
+    ("investigations", "total_bytes"),
+    ("dumps", "size_bytes"),
+)
+
+
+def ensure_schema() -> None:
+    """Apply the few idempotent widenings ``create_all`` cannot do itself."""
+    if engine.dialect.name != "postgresql":
+        return
+    from sqlalchemy import text
+
+    with engine.begin() as conn:
+        for table, column in _WIDENED_TO_BIGINT:
+            try:
+                conn.execute(text(
+                    f"ALTER TABLE {table} ALTER COLUMN {column} TYPE BIGINT"
+                ))
+            except SQLAlchemyError:
+                logger.warning("could not widen %s.%s to BIGINT", table, column)

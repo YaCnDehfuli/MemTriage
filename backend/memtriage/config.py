@@ -68,6 +68,15 @@ class Settings(BaseSettings):
     num_classes: int = 9  # Benign + 8 families
     device: str = "cpu"  # demo runs CPU-only; set "cuda" if a GPU is present
 
+    # The trained checkpoint is not distributed with the project. When it is
+    # absent an architecturally identical, untrained model is generated once
+    # into model_cache_dir (/models is a read-only mount) from a fixed seed, so
+    # the render -> classify -> attention -> region chain always runs and every
+    # verdict is labelled as a non-detection.
+    model_auto_placeholder: bool = True
+    placeholder_seed: int = 20250817
+    model_contact: str = "yasindeh@yorku.ca"
+
     # --- grid geometry (VADViT preprocessing; see pipeline/grid_render.py) ---
     # Default matches the vit_base_patch32_224 model + the "32_224" dataset.
     # Parameterizable to 384/16 pending confirmation against real training PNGs.
@@ -87,6 +96,11 @@ class Settings(BaseSettings):
     @property
     def investigations_dir(self) -> Path:
         return self.data_dir / "investigations"
+
+    @property
+    def model_cache_dir(self) -> Path:
+        """Writable home for a generated placeholder checkpoint."""
+        return self.data_dir / "model_cache"
 
 
 @lru_cache

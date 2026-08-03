@@ -28,13 +28,26 @@ from ..workers.celery_app import celery_app
 router = APIRouter(prefix="/api", tags=["processes"])
 
 
+def _as_pid(value: object) -> int:
+    try:
+        return int(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        return -1
+
+
 def _load_inventory(investigation_id: str) -> list[dict]:
     paths = InvestigationPaths(investigation_id)
     if not paths.triage.exists():
         return []
-    triage = json.loads(paths.triage.read_text())
+    try:
+        triage = json.loads(paths.triage.read_text())
+    except (OSError, ValueError):
+        return []
+    rows = triage.get("processes", [])
+    if not isinstance(rows, list):
+        return []
     # Sanitize on read too: process names come from an untrusted memory image.
-    return sanitize_obj(triage.get("processes", []))
+    return sanitize_obj(rows)
 
 
 @router.get("/investigations/{investigation_id}/processes", response_model=list[ProcessListItem])
@@ -61,13 +74,31 @@ def analyze_process(
     if inv.status != InvestigationStatus.TRIAGED:
         raise HTTPException(status_code=409, detail="Triage not complete")
 
+    if body.pid < 0:
+        raise HTTPException(status_code=422, detail="PID must be non-negative")
+
     inventory = _load_inventory(investigation_id)
     name = ""
     if inventory:
-        match = next((p for p in inventory if int(p.get("pid", -1)) == body.pid), None)
+        match = next((p for p in inventory if _as_pid(p.get("pid")) == body.pid), None)
         if match is None:
             raise HTTPException(status_code=404, detail=f"PID {body.pid} not in inventory")
+        if not match.get("analyzable", True):
+            raise HTTPException(
+                status_code=409,
+                detail=f"PID {body.pid} has no analyzable user-space VAD regions",
+            )
         name = str(match.get("name", ""))
+
+    inflight = session.scalars(
+        select(ProcessAnalysis)
+        .where(ProcessAnalysis.investigation_id == investigation_id)
+        .where(ProcessAnalysis.pid == body.pid)
+        .where(ProcessAnalysis.status.in_([AnalysisStatus.QUEUED, AnalysisStatus.ANALYZING]))
+        .order_by(ProcessAnalysis.created_at.desc())
+    ).first()
+    if inflight is not None:
+        return AnalysisState.from_orm_obj(inflight)
 
     analysis = ProcessAnalysis(
         id=str(uuid.uuid4()),
