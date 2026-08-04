@@ -11,6 +11,7 @@ from . import __version__
 from .api import (
     routes_events,
     routes_investigations,
+    routes_model_access,
     routes_processes,
     routes_results,
     routes_scoring,
@@ -87,3 +88,4 @@ app.include_router(routes_processes.router)
 app.include_router(routes_events.router)
 app.include_router(routes_results.router)
 app.include_router(routes_scoring.router)
+app.include_router(routes_model_access.router)
