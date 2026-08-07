@@ -63,17 +63,20 @@ def categorize(protection: str | None, file_field: str | None) -> str | None:
     return "dll" if ".dll" in (file_field or "").lower() else "exe"
 
 
-def regions_from_records(records: list[dict], dump_dir: Path) -> list[Region]:
+def regions_from_records(records: list[dict], dump_dir: Path,
+                         snapshot_ordinal: int | None = None) -> list[Region]:
     """Turn vadinfo --dump JSON rows + on-disk .dmp files into grid Regions."""
     out: list[Region] = []
     for rec in records:
-        category = categorize(_field(rec, "Protection"), _field(rec, "File"))
+        file_field = _field(rec, "File")
+        protection = _field(rec, "Protection")
+        category = categorize(protection, file_field)
         if category is None:
             continue
         out_name = _field(rec, "File output", "FileOutput")
         if not out_name or str(out_name).lower() in {"disabled", "error outputting file"}:
             continue
-        dmp = dump_dir / str(out_name)
+        dmp = dump_dir / Path(str(out_name)).name
         if not dmp.exists():
             continue
         addr = _as_int(_field(rec, "Start VPN", "Start", default=0)) or 0
@@ -81,9 +84,14 @@ def regions_from_records(records: list[dict], dump_dir: Path) -> list[Region]:
         out.append(Region(
             addr=addr,
             tag=str(_field(rec, "Tag", default="")),
-            protection=str(_field(rec, "Protection", default="")),
+            protection=str(protection or ""),
             category=category,
             data=data,
+            end_addr=_as_int(_field(rec, "End VPN", "End")),
+            file_backing=str(file_field or ""),
+            dmp_path=str(dmp),
+            snapshot_ordinal=snapshot_ordinal,
+            private=not bool(file_field),
         ))
     return out
 
@@ -106,7 +114,7 @@ def _vol_command(vol_path: str | None, image_path: str, pid: int, out_dir: str) 
 
 
 def dump_snapshot(image_path: str, pid: int, out_dir: str, *, vol_path: str | None,
-                  timeout_s: int) -> list[Region]:
+                  timeout_s: int, snapshot_ordinal: int | None = None) -> list[Region]:
     """Run vadinfo --dump for one PID on one snapshot and parse its regions."""
     Path(out_dir).mkdir(parents=True, exist_ok=True)
     proc = subprocess.run(  # noqa: S603 — args are built here, never shell
@@ -119,4 +127,5 @@ def dump_snapshot(image_path: str, pid: int, out_dir: str, *, vol_path: str | No
         records = []
     if isinstance(records, dict):
         records = records.get("rows") or records.get("records") or []
-    return regions_from_records([r for r in records if isinstance(r, dict)], Path(out_dir))
+    return regions_from_records([r for r in records if isinstance(r, dict)], Path(out_dir),
+                                snapshot_ordinal)

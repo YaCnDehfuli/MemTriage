@@ -29,13 +29,27 @@ PROTECTION_MAPPING = {"PAGE_EXECUTE_READWRITE": 45, "PAGE_EXECUTE_WRITECOPY": 0}
 
 @dataclass
 class Region:
-    """One dumped VAD region ready to render."""
+    """One dumped VAD region ready to render.
+
+    The first five fields are everything the grid needs. The rest is provenance
+    the low-level deep-dive uses to describe a region once attention has singled
+    it out, and is deliberately not read by any rendering code.
+    """
 
     addr: int                 # Start VPN (used for ordering)
     tag: str                  # Vad / VadS / VadF
     protection: str           # PAGE_EXECUTE_* etc.
     category: str             # "exe" | "dll" (grid uses these, in this order)
     data: np.ndarray          # uint8 byte array of the region
+    end_addr: int | None = None
+    file_backing: str = ""    # mapped file, "" for private memory
+    dmp_path: str = ""        # on-disk region dump the bytes came from
+    snapshot_ordinal: int | None = None
+    private: bool = True
+
+    @property
+    def size(self) -> int:
+        return int(len(self.data))
 
 
 # --------------------------------------------------------------------------

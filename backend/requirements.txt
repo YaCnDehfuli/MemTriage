@@ -31,6 +31,12 @@ tqdm==4.67.1
 # torch/torchvision/timm are heavy and CPU-only for the demo; pinned in the
 # worker Dockerfile to match VADViT (torch 2.x, timm 0.6.12).
 
+# --- Low-level region analysis (phase 2 deep-dive) ---
+# Both are pure-Python-installable and imported lazily: without them the deep-dive
+# drops the instruction listing / PE header panels and says so, rather than failing.
+capstone==5.0.3
+pefile==2024.8.26
+
 # --- Reporting ---
 jinja2==3.1.5
 
