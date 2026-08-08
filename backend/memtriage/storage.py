@@ -54,6 +54,8 @@ class ProcessPaths:
         self.grid = self.root / "grid.png"
         self.attention = self.root / "attention.png"
         self.result = self.root / "analysis.json"
+        self.region_manifest = self.root / "regions.json"
+        self.lowlevel = self.root / "lowlevel.json"
 
     def ensure(self) -> "ProcessPaths":
         for d in (self.root, self.regions):

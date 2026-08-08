@@ -32,8 +32,9 @@ ANALYSIS_STAGE_PROGRESS: dict[str, int] = {
     "dumping": 20,       # vadinfo --dump across snapshots
     "consolidating": 40, # pick the snapshot with the most regions
     "rendering": 60,     # VADViT grid
-    "classifying": 80,
-    "explaining": 92,
+    "classifying": 75,
+    "explaining": 85,
+    "regions": 94,       # low-level analysis of the highest-attention regions
     "done": 100,
 }
 

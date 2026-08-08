@@ -56,3 +56,60 @@ def get_artifact(
     if not safe_within(ppaths.root, target) or not target.exists():
         raise HTTPException(status_code=404, detail="Artifact not found")
     return FileResponse(target, media_type="image/png")
+
+
+def _read_json(path, missing: str) -> object:
+    if not path.exists():
+        raise HTTPException(status_code=404, detail=missing)
+    try:
+        return json.loads(path.read_text())
+    except (OSError, ValueError):
+        raise HTTPException(status_code=409, detail="Artifact is unreadable") from None
+
+
+@router.get("/investigations/{investigation_id}/processes/{pid}/regions")
+def get_region_manifest(
+    investigation_id: str, pid: int, session: Session = Depends(get_session)
+) -> JSONResponse:
+    """Every patch-backed VAD region for this process, ranked by model attention."""
+    _require_investigation(investigation_id, session)
+    ppaths = ProcessPaths(investigation_id, pid)
+    if not safe_within(ppaths.root, ppaths.region_manifest):
+        raise HTTPException(status_code=404, detail="Region manifest not found")
+    return JSONResponse(_read_json(
+        ppaths.region_manifest,
+        "No region manifest for this process — run the analysis first.",
+    ))
+
+
+@router.get("/investigations/{investigation_id}/processes/{pid}/lowlevel")
+def get_lowlevel(
+    investigation_id: str, pid: int, session: Session = Depends(get_session)
+) -> JSONResponse:
+    """Low-level deep-dives for the highest-attention regions."""
+    _require_investigation(investigation_id, session)
+    ppaths = ProcessPaths(investigation_id, pid)
+    if not safe_within(ppaths.root, ppaths.lowlevel):
+        raise HTTPException(status_code=404, detail="Region analysis not found")
+    return JSONResponse(_read_json(
+        ppaths.lowlevel,
+        "No region analysis for this process — run the analysis first.",
+    ))
+
+
+@router.get("/investigations/{investigation_id}/processes/{pid}/lowlevel/{patch_index}")
+def get_lowlevel_region(
+    investigation_id: str, pid: int, patch_index: int,
+    session: Session = Depends(get_session),
+) -> JSONResponse:
+    """One region's deep-dive, by its patch index in the rendered grid."""
+    _require_investigation(investigation_id, session)
+    ppaths = ProcessPaths(investigation_id, pid)
+    payload = _read_json(ppaths.lowlevel, "No region analysis for this process.")
+    regions = payload.get("regions", []) if isinstance(payload, dict) else []
+    match = next((r for r in regions if r.get("region", {}).get("patch_index") == patch_index),
+                 None)
+    if match is None:
+        raise HTTPException(status_code=404,
+                            detail=f"No analysis for patch {patch_index}")
+    return JSONResponse(match)
