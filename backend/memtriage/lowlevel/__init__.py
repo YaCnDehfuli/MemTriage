@@ -13,5 +13,6 @@ explicit budget.
 """
 from .budget import Budget
 from .manifest import RegionRecord, build_manifest
+from .report import analyze_region
 
-__all__ = ["Budget", "RegionRecord", "build_manifest"]
+__all__ = ["Budget", "RegionRecord", "analyze_region", "build_manifest"]
