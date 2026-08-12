@@ -1,7 +1,12 @@
 import type {
   AnalysisState,
   InvestigationState,
+  LowLevelReport,
+  ModelAccessPolicy,
+  ModelAccessRequest,
+  ModelAccessResponse,
   ProcessItem,
+  RegionRecord,
   RescoreResponse,
   Triage,
   TuningProfile,
@@ -13,10 +18,16 @@ export interface ConsolidatedResult {
   process_analyses: import("../types").AnalysisResult[];
 }
 
+export type UploadProgress = (fraction: number) => void;
+
 export interface ApiClient {
   demo: boolean;
   createInvestigation(): Promise<{ investigation_id: string }>;
-  addDump(id: string, file: File): Promise<{ ordinal: number; dump_count: number }>;
+  addDump(
+    id: string,
+    file: File,
+    onProgress?: UploadProgress,
+  ): Promise<{ ordinal: number; dump_count: number }>;
   startTriage(id: string): Promise<InvestigationState>;
   getInvestigation(id: string): Promise<InvestigationState>;
   getResult(id: string): Promise<ConsolidatedResult>;
@@ -25,6 +36,10 @@ export interface ApiClient {
   analyzeProcess(id: string, pid: number): Promise<AnalysisState>;
   getAnalysis(id: string, analysisId: string): Promise<AnalysisState>;
   artifactUrl(id: string, pid: number, kind: "grid" | "attention"): string;
+  getRegions(id: string, pid: number): Promise<RegionRecord[]>;
+  getLowLevel(id: string, pid: number): Promise<LowLevelReport>;
+  getModelAccessPolicy(): Promise<ModelAccessPolicy>;
+  requestModelAccess(body: ModelAccessRequest): Promise<ModelAccessResponse>;
 }
 
 export class ApiError extends Error {
@@ -69,14 +84,40 @@ export function createLiveClient(base = ""): ApiClient {
     async createInvestigation() {
       return json(await fetch(`${api}/investigations`, { method: "POST" }));
     },
-    async addDump(id, file) {
-      return json(
-        await fetch(`${api}/investigations/${id}/dumps`, {
-          method: "POST",
-          headers: { "X-Filename": file.name },
-          body: file,
-        }),
-      );
+    addDump(id, file, onProgress) {
+      // fetch cannot report upload progress; a multi-gigabyte image without a
+      // progress bar looks like a hang, so this one call uses XHR.
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `${api}/investigations/${id}/dumps`);
+        xhr.setRequestHeader("X-Filename", file.name);
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) onProgress?.(event.loaded / event.total);
+        };
+        xhr.onload = () => {
+          let body: Record<string, unknown> = {};
+          try {
+            body = JSON.parse(xhr.responseText);
+          } catch {
+            /* fall through to the status-based message */
+          }
+          if (xhr.status >= 200 && xhr.status < 300) {
+            onProgress?.(1);
+            resolve(body as { ordinal: number; dump_count: number });
+            return;
+          }
+          const envelope = body.error as { message?: string; code?: string } | undefined;
+          reject(new ApiError(
+            xhr.status,
+            envelope?.message ?? (body.detail as string) ?? xhr.statusText ?? "Upload failed",
+            envelope?.code ?? "http_error",
+            xhr.getResponseHeader("X-Request-ID") ?? "",
+          ));
+        };
+        xhr.onerror = () => reject(new ApiError(0, "Upload failed: the connection dropped."));
+        xhr.onabort = () => reject(new ApiError(0, "Upload cancelled."));
+        xhr.send(file);
+      });
     },
     async startTriage(id) {
       return json(await fetch(`${api}/investigations/${id}/triage`, { method: "POST" }));
@@ -113,6 +154,24 @@ export function createLiveClient(base = ""): ApiClient {
     },
     artifactUrl(id, pid, kind) {
       return `${api}/investigations/${id}/processes/${pid}/artifacts/${kind}`;
+    },
+    async getRegions(id, pid) {
+      return json(await fetch(`${api}/investigations/${id}/processes/${pid}/regions`));
+    },
+    async getLowLevel(id, pid) {
+      return json(await fetch(`${api}/investigations/${id}/processes/${pid}/lowlevel`));
+    },
+    async getModelAccessPolicy() {
+      return json(await fetch(`${api}/model-access`));
+    },
+    async requestModelAccess(body) {
+      return json(
+        await fetch(`${api}/model-access-requests`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }),
+      );
     },
   };
 }

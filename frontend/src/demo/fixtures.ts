@@ -6,12 +6,51 @@ import type {
   AnalysisResult,
   AttackTechnique,
   Diff,
+  Instruction,
+  LowLevelReport,
+  ModelAccessPolicy,
   ProcessItem,
+  RegionAnalysis,
+  RegionRecord,
   RescoreResponse,
   ScoredObject,
   Triage,
   TuningProfile,
 } from "../types";
+
+const DEMO_MODEL_ACCESS: ModelAccessPolicy = {
+  contact: "yasindeh@yorku.ca",
+  intended_use_options: [
+    { value: "research", label: "Academic research" },
+    { value: "education", label: "Teaching or coursework" },
+    { value: "thesis", label: "Thesis or dissertation" },
+    { value: "evaluation", label: "Evaluation / benchmarking" },
+    { value: "commercial", label: "Commercial use" },
+    { value: "other", label: "Other" },
+  ],
+  policy:
+    "The trained VADViT checkpoint is the output of university research and is not " +
+    "distributed with this application. MemTriage runs an untrained structural " +
+    "placeholder in its place, so every stage of the pipeline still works — but a " +
+    "placeholder family label is not a detection. To use the trained weights, send " +
+    "the author a short description of your intended use and they will follow up " +
+    "directly.",
+  terms:
+    "Requested weights are for the stated use only, are not redistributed, and any " +
+    "published result that relies on them cites the VADViT work.",
+  model: {
+    trained_weights_present: false,
+    placeholder_active: true,
+    placeholder_cached: true,
+    auto_placeholder: true,
+    runtime_available: true,
+    contact: "yasindeh@yorku.ca",
+    note:
+      "Untrained structural placeholder — this family label is NOT a detection. " +
+      "The attention map and region analysis below are architectural and still " +
+      "describe real memory; the class name is not evidence of anything.",
+  },
+};
 
 const band = (score: number, bands: Record<string, number>) =>
   score >= bands.critical
@@ -239,6 +278,357 @@ function attentionSvg(): string {
 
 const dataUri = (svg: string) => `data:image/svg+xml,${encodeURIComponent(svg)}`;
 
+
+// ---- phase 2: ranked regions and one worked low-level example -------------
+
+const DEMO_REGIONS: RegionRecord[] = [
+  {
+    patch_index: 8, row: 1, col: 1, rank: 1, attention: 1.0,
+    addr: "0x1f0000", addr_int: 0x1f0000, end_addr: "0x1fa000", size: 40960,
+    tag: "VadS", protection: "PAGE_EXECUTE_READWRITE", category: "exe",
+    file_backing: "", private: true, snapshot_ordinal: 2,
+    sha256: "3f1a9c4e77b0d2158ac6e0f39b7d4412c8a05e6b1d93f70ac2e5849b6d1fa037",
+    entropy: 6.94, executable: true, writable: true,
+    flags: ["rwx", "private-executable", "no-file-backing", "high-entropy", "vad-short"],
+  },
+  {
+    patch_index: 9, row: 1, col: 2, rank: 2, attention: 0.91,
+    addr: "0x210000", addr_int: 0x210000, end_addr: "0x214000", size: 16384,
+    tag: "VadS", protection: "PAGE_EXECUTE_READWRITE", category: "exe",
+    file_backing: "", private: true, snapshot_ordinal: 2,
+    sha256: "b74c05e918d2af36105c7de24a8b93f16e0d5a7c4b2189fe36d0c5a17b94e2d8",
+    entropy: 7.41, executable: true, writable: true,
+    flags: ["rwx", "private-executable", "no-file-backing", "mz-header", "high-entropy"],
+  },
+  {
+    patch_index: 16, row: 2, col: 2, rank: 3, attention: 0.73,
+    addr: "0x7ffb1200000", addr_int: 0x7ffb1200000, end_addr: "0x7ffb1290000", size: 589824,
+    tag: "Vad", protection: "PAGE_EXECUTE_WRITECOPY", category: "dll",
+    file_backing: "\\Windows\\System32\\ntdll.dll", private: false, snapshot_ordinal: 2,
+    sha256: "5c22ab90e1d4736f8a05be1793c26d40f8e17b5a90cd3e2418fb6740a9c5312e",
+    entropy: 6.12, executable: true, writable: false, flags: [],
+  },
+  {
+    patch_index: 15, row: 2, col: 1, rank: 4, attention: 0.66,
+    addr: "0x7ffb0f40000", addr_int: 0x7ffb0f40000, end_addr: "0x7ffb0fd0000", size: 585728,
+    tag: "Vad", protection: "PAGE_EXECUTE_WRITECOPY", category: "dll",
+    file_backing: "\\Windows\\System32\\kernel32.dll", private: false, snapshot_ordinal: 2,
+    sha256: "9d17f2c0b6a34e58193d7c02af61b8e5407d29ca31f6b840e2c95d7a061bf3c4",
+    entropy: 5.87, executable: true, writable: false, flags: [],
+  },
+  {
+    patch_index: 23, row: 3, col: 2, rank: 5, attention: 0.51,
+    addr: "0x7ffb0a10000", addr_int: 0x7ffb0a10000, end_addr: "0x7ffb0a48000", size: 229376,
+    tag: "Vad", protection: "PAGE_EXECUTE_WRITECOPY", category: "dll",
+    file_backing: "\\Windows\\System32\\ws2_32.dll", private: false, snapshot_ordinal: 2,
+    sha256: "1e83b45097d2c6fa3810b7e5924dc0136af7285be09c41d7fa625390e8b7145c",
+    entropy: 5.44, executable: true, writable: false, flags: [],
+  },
+];
+
+function insn(
+  address: number, bytesHex: string, mnemonic: string, opStr: string, kind = "normal",
+  target: number | null = null,
+): Instruction {
+  return {
+    address, address_hex: `0x${address.toString(16)}`, size: bytesHex.length / 2,
+    bytes_hex: bytesHex, mnemonic, op_str: opStr, text: `${mnemonic} ${opStr}`.trim(),
+    kind, target,
+  };
+}
+
+const DEMO_INSTRUCTIONS: Instruction[] = [
+  insn(0x1f0000, "e800000000", "call", "0x1f0005", "call", 0x1f0005),
+  insn(0x1f0005, "5b", "pop", "rbx"),
+  insn(0x1f0006, "4881eb05000000", "sub", "rbx, 5"),
+  insn(0x1f000d, "65488b042560000000", "mov", "rax, qword ptr gs:[0x60]"),
+  insn(0x1f0016, "488b4018", "mov", "rax, qword ptr [rax + 0x18]"),
+  insn(0x1f001a, "488b4020", "mov", "rax, qword ptr [rax + 0x20]"),
+  insn(0x1f001e, "4885c0", "test", "rax, rax"),
+  insn(0x1f0021, "0f8443000000", "je", "0x1f006a", "cjump", 0x1f006a),
+  insn(0x1f0027, "8a0c03", "mov", "cl, byte ptr [rbx + rax]"),
+  insn(0x1f002a, "80f13c", "xor", "cl, 0x3c"),
+  insn(0x1f002d, "880c03", "mov", "byte ptr [rbx + rax], cl"),
+  insn(0x1f0030, "48ffc0", "inc", "rax"),
+  insn(0x1f0033, "483d00100000", "cmp", "rax, 0x1000"),
+  insn(0x1f0039, "72ec", "jb", "0x1f0027", "cjump", 0x1f0027),
+  insn(0x1f003b, "c1cf0d", "ror", "edi, 0xd"),
+  insn(0x1f003e, "e827000000", "call", "0x1f006a", "call", 0x1f006a),
+  insn(0x1f0043, "4889c1", "mov", "rcx, rax"),
+  insn(0x1f0046, "ffd0", "call", "rax", "call"),
+  insn(0x1f0048, "4885c0", "test", "rax, rax"),
+  insn(0x1f004b, "751d", "jne", "0x1f006a", "cjump", 0x1f006a),
+  insn(0x1f004d, "4831c0", "xor", "rax, rax"),
+  insn(0x1f0050, "eb18", "jmp", "0x1f006a", "jump", 0x1f006a),
+  insn(0x1f006a, "c3", "ret", "", "ret"),
+];
+
+const DEMO_REGION_ANALYSIS: RegionAnalysis = {
+  region: DEMO_REGIONS[0],
+  summary: {
+    headline:
+      "0x1f0000 · 40960 bytes · PAGE_EXECUTE_READWRITE — highest-severity indicator: " +
+      "GetPC gadget (call/pop)",
+    highest_severity: "high",
+    pattern_count: 6,
+    techniques: ["T1027", "T1055", "T1055.001", "T1071.001", "T1106", "T1140"],
+    instruction_count: DEMO_INSTRUCTIONS.length,
+    block_count: 5,
+    function_count: 4,
+    indirect_calls: 1,
+    entropy: 6.94,
+    pe_present: false,
+    caveat:
+      "Indicators, not conclusions. Every item below is a property of the bytes in " +
+      "this region; deciding what it means is the analyst's call.",
+  },
+  structure: {
+    size: 40960,
+    analyzed_bytes: 40960,
+    truncated: false,
+    entropy: {
+      overall: 6.94,
+      windows: Array.from({ length: 48 }, (_, i) =>
+        Number((i < 12 ? 4.1 + i * 0.12 : i < 34 ? 7.6 + Math.sin(i) * 0.15 : 5.2).toFixed(2))),
+      peak: 7.78,
+      peak_offset_hex: "0x4c00",
+      window_bytes: 853,
+      high_entropy_ratio: 0.46,
+    },
+    histogram: Array.from({ length: 32 }, (_, i) => 600 + Math.round(Math.sin(i / 3) * 220 + i * 9)),
+    printable_ratio: 0.21,
+    pe: {
+      present: false,
+      reason: "No MZ signature at the start of the region.",
+      machine: "", is_dll: false, entry_point: "", image_base: "", timestamp: 0,
+      subsystem: "", characteristics: [], parser: "", sections: [], imported_dlls: [],
+    },
+    hexdump: [
+      { offset: 0, address: "0x1f0000", bytes: "e8000000005b4881eb050000006548 8b04".replace(/ /g, ""), ascii: "....[H......eH.." },
+      { offset: 16, address: "0x1f0010", bytes: "2560000000488b4018488b40204885", ascii: "%`...H.@.H.@ H." },
+      { offset: 32, address: "0x1f0020", bytes: "c00f84430000008a0c0380f13c880c", ascii: "...C..........<." },
+      { offset: 48, address: "0x1f0030", bytes: "0348ffc0483d0010000072ecc1cf0d", ascii: ".H..H=....r....." },
+    ],
+  },
+  disassembly: {
+    available: true,
+    arch: "x86-64",
+    reason: "",
+    base_addr: "0x1f0000",
+    analyzed_bytes: 40960,
+    truncated: false,
+    invalid_bytes: 0,
+    coverage: 0.98,
+    entry_points: ["0x1f0000"],
+    instruction_count: DEMO_INSTRUCTIONS.length,
+    instructions: DEMO_INSTRUCTIONS,
+  },
+  control_flow: {
+    available: true,
+    reason: "",
+    entry_block: 0,
+    truncated: false,
+    loops: 1,
+    unreachable_blocks: 0,
+    block_count: 5,
+    edge_count: 6,
+    blocks: [
+      { id: 0, start: 0x1f0000, start_hex: "0x1f0000", end_hex: "0x1f0027", instruction_count: 8,
+        terminator: "cjump", layer: 0, order: 0, label: "0x1f0000", branch_target: 0x1f006a,
+        instructions: DEMO_INSTRUCTIONS.slice(0, 8) },
+      { id: 1, start: 0x1f0027, start_hex: "0x1f0027", end_hex: "0x1f003b", instruction_count: 6,
+        terminator: "cjump", layer: 1, order: 0, label: "0x1f0027", branch_target: 0x1f0027,
+        instructions: DEMO_INSTRUCTIONS.slice(8, 14) },
+      { id: 2, start: 0x1f003b, start_hex: "0x1f003b", end_hex: "0x1f0043", instruction_count: 2,
+        terminator: "call", layer: 2, order: 0, label: "0x1f003b", branch_target: 0x1f006a,
+        instructions: DEMO_INSTRUCTIONS.slice(14, 16) },
+      { id: 3, start: 0x1f0043, start_hex: "0x1f0043", end_hex: "0x1f0052", instruction_count: 6,
+        terminator: "jump", layer: 3, order: 0, label: "0x1f0043", branch_target: 0x1f006a,
+        instructions: DEMO_INSTRUCTIONS.slice(16, 22) },
+      { id: 4, start: 0x1f006a, start_hex: "0x1f006a", end_hex: "0x1f006b", instruction_count: 1,
+        terminator: "ret", layer: 4, order: 0, label: "0x1f006a", branch_target: null,
+        instructions: DEMO_INSTRUCTIONS.slice(22) },
+    ],
+    edges: [
+      { source: 0, target: 1, kind: "fallthrough" },
+      { source: 0, target: 4, kind: "taken" },
+      { source: 1, target: 1, kind: "taken" },
+      { source: 1, target: 2, kind: "fallthrough" },
+      { source: 2, target: 3, kind: "fallthrough" },
+      { source: 3, target: 4, kind: "jump" },
+    ],
+    dot: "digraph cfg { b0 -> b1; b0 -> b4; b1 -> b1; b1 -> b2; b2 -> b3; b3 -> b4; }",
+  },
+  call_graph: {
+    available: true,
+    reason: "",
+    indirect_calls: 1,
+    resolved_apis: ["VirtualAlloc", "LoadLibraryA", "GetProcAddress", "CreateRemoteThread"],
+    truncated: false,
+    node_count: 8,
+    edge_count: 4,
+    nodes: [
+      { id: 0, address: 0x1f0000, address_hex: "0x1f0000", label: "entry", kind: "entry",
+        call_count: 0, instruction_count: 14, layer: 0, order: 0 },
+      { id: 1, address: 0x1f0005, address_hex: "0x1f0005", label: "sub_1f0005", kind: "local",
+        call_count: 1, instruction_count: 9, layer: 1, order: 0 },
+      { id: 2, address: 0x1f006a, address_hex: "0x1f006a", label: "sub_1f006a", kind: "local",
+        call_count: 2, instruction_count: 1, layer: 1, order: 1 },
+      { id: 3, address: 0x1f0043, address_hex: "0x1f0043", label: "sub_1f0043", kind: "local",
+        call_count: 0, instruction_count: 6, layer: 2, order: 0 },
+      { id: 4, address: 0, address_hex: "", label: "VirtualAlloc", kind: "api",
+        call_count: 0, instruction_count: 0, layer: 3, order: 0 },
+      { id: 5, address: 0, address_hex: "", label: "LoadLibraryA", kind: "api",
+        call_count: 0, instruction_count: 0, layer: 3, order: 1 },
+      { id: 6, address: 0, address_hex: "", label: "GetProcAddress", kind: "api",
+        call_count: 0, instruction_count: 0, layer: 3, order: 2 },
+      { id: 7, address: 0, address_hex: "", label: "CreateRemoteThread", kind: "api",
+        call_count: 0, instruction_count: 0, layer: 3, order: 3 },
+    ],
+    edges: [
+      { source: 0, target: 1, count: 1 },
+      { source: 0, target: 2, count: 1 },
+      { source: 1, target: 2, count: 1 },
+      { source: 2, target: 3, count: 1 },
+    ],
+    dot: "digraph calls { n0 -> n1; n0 -> n2; n1 -> n2; n2 -> n3; }",
+  },
+  strings: {
+    total_found: 118,
+    truncated: false,
+    by_category: { text: 96, url: 2, "windows-path": 6, dll: 8, ipv4: 2, command: 2, base64: 2 },
+    interesting: [
+      { offset: 0x2a10, offset_hex: "0x2a10", encoding: "ascii", category: "url",
+        value: "http://cdn.update-delivery.example/gate.php" },
+      { offset: 0x2a48, offset_hex: "0x2a48", encoding: "ascii", category: "ipv4",
+        value: "93.184.216.34:4444" },
+      { offset: 0x2b00, offset_hex: "0x2b00", encoding: "utf-16le", category: "command",
+        value: "powershell -nop -w hidden -enc SQBFAFgA" },
+      { offset: 0x2c20, offset_hex: "0x2c20", encoding: "ascii", category: "registry",
+        value: "Software\\Microsoft\\Windows\\CurrentVersion\\Run" },
+    ],
+    strings: [
+      { offset: 0x2a10, offset_hex: "0x2a10", encoding: "ascii", category: "url",
+        value: "http://cdn.update-delivery.example/gate.php" },
+      { offset: 0x2a48, offset_hex: "0x2a48", encoding: "ascii", category: "ipv4",
+        value: "93.184.216.34:4444" },
+      { offset: 0x2b00, offset_hex: "0x2b00", encoding: "utf-16le", category: "command",
+        value: "powershell -nop -w hidden -enc SQBFAFgA" },
+      { offset: 0x2c20, offset_hex: "0x2c20", encoding: "ascii", category: "registry",
+        value: "Software\\Microsoft\\Windows\\CurrentVersion\\Run" },
+      { offset: 0x3110, offset_hex: "0x3110", encoding: "ascii", category: "dll",
+        value: "kernel32.dll" },
+      { offset: 0x3120, offset_hex: "0x3120", encoding: "ascii", category: "dll",
+        value: "ws2_32.dll" },
+      { offset: 0x31d0, offset_hex: "0x31d0", encoding: "ascii", category: "windows-path",
+        value: "C:\\Users\\Public\\svc32.tmp" },
+      { offset: 0x3240, offset_hex: "0x3240", encoding: "ascii", category: "text",
+        value: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+    ],
+  },
+  patterns: {
+    instruction_scan: true,
+    note: "",
+    hit_count: 6,
+    highest_severity: "high",
+    hits: [
+      { id: "getpc_call_pop", title: "GetPC gadget (call/pop)", severity: "high",
+        description:
+          "A zero-displacement call followed by a pop recovers the instruction pointer — " +
+          "position-independent shellcode locating its own data.",
+        technique: "T1055", technique_name: "Process Injection", occurrences: 1,
+        offsets: ["0x0"], evidence: "e8000000005b4881eb0500" },
+      { id: "peb_walk_x64", title: "PEB walk (64-bit)", severity: "high",
+        description: "Reads the PEB via gs:[0x60], the 64-bit equivalent of the fs:[0x30] walk.",
+        technique: "T1106", technique_name: "Native API", occurrences: 1,
+        offsets: ["0xd"], evidence: "65488b042560000000" },
+      { id: "api_hash_ror13", title: "API hashing (ROR-13)", severity: "high",
+        description:
+          "The ROR-13 export-name hash constant appears — imports are resolved by hash so " +
+          "no readable API name is present in the region.",
+        technique: "T1027", technique_name: "Obfuscated Files or Information", occurrences: 3,
+        offsets: ["0x3b", "0x1a40", "0x1a9c"], evidence: "c1cf0d" },
+      { id: "private_executable", title: "Executable private memory", severity: "high",
+        description:
+          "Executable memory with no backing file on disk — code that cannot be attributed " +
+          "to a module the loader mapped.",
+        technique: "T1055.001", technique_name: "Dynamic-link Library Injection",
+        occurrences: 1, offsets: [], evidence: "PAGE_EXECUTE_READWRITE" },
+      { id: "decoder_loop", title: "In-place decoder loop", severity: "high",
+        description:
+          "A backward branch around arithmetic on moved bytes — the shape of a self-decoding " +
+          "or string-deobfuscating stub.",
+        technique: "T1140", technique_name: "Deobfuscate/Decode Files or Information",
+        occurrences: 1, offsets: ["0x39"], evidence: "" },
+      { id: "http_c2", title: "Embedded HTTP endpoint", severity: "medium",
+        description:
+          "A URL is present in the region — worth correlating with the network artifacts " +
+          "surfaced during triage.",
+        technique: "T1071.001", technique_name: "Web Protocols", occurrences: 2,
+        offsets: ["0x2a10"], evidence: "687474703a2f2f63646e" },
+    ],
+  },
+};
+
+const DEMO_SECOND_REGION: RegionAnalysis = {
+  ...DEMO_REGION_ANALYSIS,
+  region: DEMO_REGIONS[1],
+  summary: {
+    ...DEMO_REGION_ANALYSIS.summary,
+    headline:
+      "0x210000 · 16384 bytes · PAGE_EXECUTE_READWRITE — highest-severity indicator: " +
+      "Embedded PE image",
+    pattern_count: 4,
+    pe_present: true,
+    entropy: 7.41,
+  },
+  structure: {
+    ...DEMO_REGION_ANALYSIS.structure,
+    size: 16384,
+    analyzed_bytes: 16384,
+    pe: {
+      present: true,
+      reason: "",
+      machine: "x86-64",
+      is_dll: true,
+      entry_point: "0x1420",
+      image_base: "0x180000000",
+      timestamp: 1751328000,
+      subsystem: "gui",
+      characteristics: ["dynamic-base", "nx-compatible"],
+      parser: "pefile",
+      sections: [
+        { name: ".text", virtual_address: "0x1000", virtual_size: 8192, raw_size: 8192,
+          entropy: 6.62, characteristics: "0x60000020" },
+        { name: ".rdata", virtual_address: "0x3000", virtual_size: 2048, raw_size: 2048,
+          entropy: 4.91, characteristics: "0x40000040" },
+        { name: ".data", virtual_address: "0x4000", virtual_size: 1024, raw_size: 512,
+          entropy: 7.83, characteristics: "0xc0000040" },
+      ],
+      imported_dlls: ["kernel32.dll", "advapi32.dll", "ws2_32.dll"],
+    },
+  },
+  patterns: {
+    ...DEMO_REGION_ANALYSIS.patterns,
+    hit_count: 4,
+    hits: DEMO_REGION_ANALYSIS.patterns.hits.slice(0, 4),
+  },
+};
+
+const DEMO_LOWLEVEL: LowLevelReport = {
+  generated_at: "2026-08-16T14:22:05+00:00",
+  grid_size: 7,
+  ranked_regions: 5,
+  regions: [DEMO_REGION_ANALYSIS, DEMO_SECOND_REGION],
+  summary: {
+    analyzed: 2,
+    techniques: ["T1027", "T1055", "T1055.001", "T1071.001", "T1106", "T1140"],
+    highest_severity: "high",
+    top_region: DEMO_REGION_ANALYSIS.summary.headline,
+    top_region_patterns: 6,
+  },
+};
+
 const ANALYSIS: AnalysisResult = {
   analysis_id: "demo-analysis",
   pid: 1337,
@@ -261,7 +651,11 @@ const ANALYSIS: AnalysisResult = {
       Placeholder_Worm: 0.098,
     },
     placeholder: true,
-    note: "Structural placeholder model — the family label is NOT a real detection.",
+    model_source: "placeholder",
+    note:
+      "Untrained structural placeholder — this family label is NOT a detection. " +
+      "The attention map and region analysis below are architectural and still " +
+      "describe real memory; the class name is not evidence of anything.",
   },
   explainability: {
     grid_png: "grid",
@@ -273,7 +667,25 @@ const ANALYSIS: AnalysisResult = {
       { patch_index: 15, row: 2, col: 1, attention: 0.66, region_addr: "0x7ffb0f40000", category: "dll" },
       { patch_index: 23, row: 3, col: 2, attention: 0.51, region_addr: "0x7ffb0a10000", category: "dll" },
     ],
+    region_count_ranked: 5,
+    regions_analyzed: 2,
   },
+  regions: DEMO_REGIONS,
+  region_analysis_summary: {
+    analyzed: 2,
+    techniques: ["T1055", "T1055.001", "T1071.001", "T1106", "T1140"],
+    highest_severity: "high",
+    top_region: "0x1f0000 · 40960 bytes · PAGE_EXECUTE_READWRITE — highest-severity indicator: GetPC gadget (call/pop)",
+    top_region_patterns: 6,
+  },
+  notes: [
+    "Classification came from an untrained structural placeholder: the family " +
+      "label is not a detection. Attention, region ranking and the low-level " +
+      "analysis below are unaffected by which weights are loaded.",
+    "5 rendered regions ranked by attention; 2 analyzed down to the instruction level.",
+    "Region indicators are properties of the bytes, not conclusions about the " +
+      "process. Corroborate against the phase-1 artifacts before acting.",
+  ],
 };
 
 function demoTriage(preset: Preset): Triage {
@@ -344,6 +756,44 @@ export function createDemoClient(): ApiClient {
     },
     async getAnalysis() {
       return analysisState();
+    },
+    async getRegions() {
+      return DEMO_REGIONS;
+    },
+    async getLowLevel() {
+      return DEMO_LOWLEVEL;
+    },
+    async getModelAccessPolicy() {
+      return DEMO_MODEL_ACCESS;
+    },
+    async requestModelAccess(body) {
+      const subject =
+        `VADViT trained-model access request — ${body.full_name} (${body.organization})`;
+      const text = [
+        "Request id: demo-0000",
+        "",
+        `Name:          ${body.full_name}`,
+        `Email:         ${body.email}`,
+        `Organization:  ${body.organization}`,
+        `Role:          ${body.role}`,
+        `Country:       ${body.country || "-"}`,
+        `Intended use:  ${body.intended_use}`,
+        `Publication:   ${body.expected_publication || "-"}`,
+        "",
+        "What the model would be used for:",
+        body.project_description,
+      ].join("\n");
+      return {
+        request_id: "demo-0000",
+        submitted_at: new Date().toISOString(),
+        contact: DEMO_MODEL_ACCESS.contact,
+        email_subject: subject,
+        email_body: text,
+        mailto:
+          `mailto:${DEMO_MODEL_ACCESS.contact}?subject=${encodeURIComponent(subject)}` +
+          `&body=${encodeURIComponent(text)}`,
+        note: "Demo mode: nothing was recorded. Copy the message to reach the author.",
+      };
     },
     artifactUrl(_id, _pid, kind) {
       return dataUri(kind === "grid" ? `<svg xmlns='http://www.w3.org/2000/svg' width='224' height='224'><rect width='224' height='224' fill='rgb(10,14,22)'/>${gridSvg().replace(/^<svg[^>]*>|<\/svg>$/g, "")}</svg>` : attentionSvg());

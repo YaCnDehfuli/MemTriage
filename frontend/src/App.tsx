@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { ErrorBanner } from "./components/ErrorBanner";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { LeftRail } from "./components/LeftRail";
 import { TopBar } from "./components/TopBar";
 import { DeepDiveView } from "./components/stages/DeepDiveView";
@@ -23,11 +25,14 @@ export default function App() {
         <LeftRail />
         <main className="min-w-0 flex-1 overflow-y-auto px-6 py-6">
           <div className="mx-auto max-w-[1180px]">
-            {stage === "ingest" && <IngestView />}
-            {stage === "triage" && <TriageView />}
-            {stage === "inventory" && <InventoryView />}
-            {stage === "deepdive" && <DeepDiveView />}
-            {stage === "report" && <ReportView />}
+            <ErrorBanner />
+            <ErrorBoundary key={stage}>
+              {stage === "ingest" && <IngestView />}
+              {stage === "triage" && <TriageView />}
+              {stage === "inventory" && <InventoryView />}
+              {stage === "deepdive" && <DeepDiveView />}
+              {stage === "report" && <ReportView />}
+            </ErrorBoundary>
           </div>
         </main>
       </div>

@@ -1,11 +1,12 @@
 import { useApp } from "../../state/store";
 import { pct } from "../../lib/format";
 import { Chip, EmptyState, Meter, Panel } from "../primitives";
+import { JobProgressBar } from "../JobProgressBar";
 import { GridViewer } from "../process/GridViewer";
 import { VerdictPanel } from "../process/VerdictPanel";
 
 export function DeepDiveView() {
-  const { analysis, selectedPid, client, investigationId, setStage } = useApp();
+  const { analysis, selectedPid, client, investigationId, setStage, analysisProgress } = useApp();
 
   if (!analysis) {
     return (
@@ -14,6 +15,11 @@ export function DeepDiveView() {
           title={selectedPid ? `Analyzing PID ${selectedPid}…` : "No process selected"}
           hint="Choose a process from the inventory to render its VAD grid, classify it, and attribute the model's attention back to VAD regions."
         />
+        {analysisProgress && (
+          <div className="mx-auto max-w-md px-6 pb-6">
+            <JobProgressBar job={analysisProgress} />
+          </div>
+        )}
         <div className="flex justify-center pb-6">
           <button className="btn-ghost text-xs" onClick={() => setStage("inventory")}>
             ← Back to inventory

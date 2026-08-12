@@ -1,9 +1,11 @@
 import { useApp } from "../../state/store";
 import { bytes } from "../../lib/format";
+import { JobProgressBar } from "../JobProgressBar";
 import { Panel } from "../primitives";
+import { UploadPanel } from "../UploadPanel";
 
 export function IngestView() {
-  const { triage, demo, setStage } = useApp();
+  const { triage, demo, setStage, triageProgress } = useApp();
   return (
     <div className="space-y-5">
       <header>
@@ -17,6 +19,19 @@ export function IngestView() {
       </header>
 
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
+        <div className="space-y-5">
+        <Panel eyebrow="Intake" title="Add memory images">
+          <UploadPanel />
+        </Panel>
+
+        {triageProgress && (
+          <Panel eyebrow="Progress" title="Triage">
+            <div className="px-4 py-4">
+              <JobProgressBar job={triageProgress} />
+            </div>
+          </Panel>
+        )}
+
         <Panel eyebrow="Snapshots" title="Provided evidence" className="overflow-hidden">
           {triage ? (
             <table className="w-full text-sm">
@@ -47,6 +62,7 @@ export function IngestView() {
             </div>
           )}
         </Panel>
+        </div>
 
         <Panel eyebrow="Pipeline" title="What happens next">
           <ol className="space-y-3 px-4 py-4 text-[13px] text-mist-300">

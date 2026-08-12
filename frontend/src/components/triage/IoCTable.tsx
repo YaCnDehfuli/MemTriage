@@ -50,7 +50,7 @@ export function IoCTable({
             return (
               <Fragment key={id}>
                 <tr
-                  onClick={() => setOpen(isOpen ? null : o.key)}
+                  onClick={() => setOpen(isOpen ? null : id)}
                   className={`cursor-pointer border-b border-ink-800/70 transition-colors hover:bg-ink-800/50 ${
                     isOpen ? "bg-ink-800/40" : ""
                   }`}
