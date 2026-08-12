@@ -3,10 +3,12 @@ import { pct } from "../../lib/format";
 import { Chip, EmptyState, Meter, Panel } from "../primitives";
 import { JobProgressBar } from "../JobProgressBar";
 import { GridViewer } from "../process/GridViewer";
+import { RegionDeepDive } from "../process/RegionDeepDive";
 import { VerdictPanel } from "../process/VerdictPanel";
 
 export function DeepDiveView() {
-  const { analysis, selectedPid, client, investigationId, setStage, analysisProgress } = useApp();
+  const { analysis, selectedPid, client, investigationId, setStage, analysisProgress, lowlevel } =
+    useApp();
 
   if (!analysis) {
     return (
@@ -109,6 +111,21 @@ export function DeepDiveView() {
           </Panel>
         </div>
       </div>
+
+      <RegionDeepDive regions={analysis.regions ?? []} lowlevel={lowlevel} />
+
+      {(analysis.notes?.length ?? 0) > 0 && (
+        <Panel eyebrow="Reading this" title="What these results do and do not establish">
+          <ul className="space-y-2 px-4 py-4 text-[12px] text-mist-300">
+            {analysis.notes?.map((note) => (
+              <li key={note} className="flex gap-2">
+                <span aria-hidden className="mt-0.5 text-mist-400">·</span>
+                <span>{note}</span>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      )}
     </div>
   );
 }
