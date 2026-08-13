@@ -23,6 +23,38 @@ from .attack import map_techniques
 
 # Names with no analyzable user VADs — excluded from VADViT selection.
 _NON_ANALYZABLE = {"system", "registry", "memory compression", "secure system"}
+
+# Phase 1 is a fast, wide read of the image, not an adjudication. The rules are
+# deliberately simple and hand-tuned, and they run over statistically-derived
+# aggregate features plus a handful of per-object plugin outputs. Everything they
+# surface is a lead. This statement travels with the data — into triage.json,
+# every /rescore response, the consolidated result and the export — so it cannot
+# be separated from the findings it qualifies.
+TRIAGE_DISCLAIMER = {
+    "headline": "Clues for review, not conclusions.",
+    "summary": (
+        "Phase 1 extracts structured, statistically significant features from the "
+        "image and applies simple, tuned rules to them. Everything it surfaces is "
+        "a lead for an analyst to confirm or dismiss — not an established fact, a "
+        "detection, or an attribution."
+    ),
+    "points": [
+        "The rules are basic and hand-tuned. They encode well-known indicators, "
+        "not learned behaviour, and they carry no notion of ground truth.",
+        "Scores and risk bands are relative ranking aids under the current "
+        "profile. Re-tuning changes them; it does not change the underlying image.",
+        "A high score means 'look here first'. A low score is not a clean bill of "
+        "health — an absent indicator is only an indicator that did not fire.",
+        "ATT&CK techniques are alignment for triage. They describe what an "
+        "artifact resembles, not what was confirmed to have happened.",
+        "Every value here is derived from an untrusted memory image and can be "
+        "influenced by whatever produced that image.",
+    ],
+    "intent": (
+        "The aim is a fast multi-view of one memory image, with the structured "
+        "features an analyst needs to decide where to spend manual effort."
+    ),
+}
 _NON_ANALYZABLE_PIDS = {0, 4}
 
 # Plugins the triage extractor caches raw JSON for, so the scoring engine can
@@ -208,14 +240,17 @@ def assemble_triage(features_flat: dict, records: dict[str, list[dict]], *,
         "risk_summary": {},
         "attack_techniques": [],
         "profile": {},
+        "disclaimer": TRIAGE_DISCLAIMER,
     }
     _apply_scoring(dashboard, inventory, scoring)
+    dashboard["disclaimer"] = TRIAGE_DISCLAIMER
     return {
         "features": features_flat or {},
         "dashboard": dashboard,
         "processes": inventory,
         "profile": scoring["profile"],
         "vol_version": vol_version,
+        "disclaimer": TRIAGE_DISCLAIMER,
     }
 
 

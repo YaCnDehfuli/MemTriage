@@ -15,6 +15,7 @@ import type {
   AnalysisResult,
   AttackTechnique,
   Diff,
+  TriageDisclaimer as TriageDisclaimerType,
   LowLevelReport,
   ProcessItem,
   RiskSummary,
@@ -54,6 +55,7 @@ interface AppState {
   profile: TuningProfile | null;
   riskSummary: RiskSummary | null;
   attack: AttackTechnique[];
+  disclaimer: TriageDisclaimerType | null;
   diff: Diff | null;
   selectedPid: number | null;
   analysis: AnalysisResult | null;
@@ -98,6 +100,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<TuningProfile | null>(null);
   const [riskSummary, setRiskSummary] = useState<RiskSummary | null>(null);
   const [attack, setAttack] = useState<AttackTechnique[]>([]);
+  const [disclaimer, setDisclaimer] = useState<TriageDisclaimerType | null>(null);
   const [diff, setDiff] = useState<Diff | null>(null);
   const [selectedPid, setSelectedPid] = useState<number | null>(null);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
@@ -139,6 +142,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setProfile(t.dashboard?.profile ?? null);
     setRiskSummary(t.dashboard?.risk_summary ?? null);
     setAttack(t.dashboard?.attack_techniques ?? []);
+    setDisclaimer(t.dashboard?.disclaimer ?? null);
   }, []);
 
   const loadResult = useCallback(
@@ -230,6 +234,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setProfile(r.profile);
         setRiskSummary(r.risk_summary);
         setAttack(r.attack_techniques);
+        if (r.disclaimer) setDisclaimer(r.disclaimer);
         setDiff(r.diff);
       } catch (e) {
         fail(e, () => rescore(patch));
@@ -294,6 +299,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setProfile(null);
     setRiskSummary(null);
     setAttack([]);
+    setDisclaimer(null);
     setAnalysis(null);
     setLowlevel(null);
     setScored([]);
@@ -310,13 +316,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       demo, client, stage, loading, error, retryLast, investigationId, triage, processes,
-      scored, profile, riskSummary, attack, diff, selectedPid, analysis, lowlevel,
+      scored, profile, riskSummary, attack, disclaimer, diff, selectedPid, analysis, lowlevel,
       triageProgress, analysisProgress, uploads,
       setDemo, setStage, bootstrap, rescore, selectProcess, uploadDumps, startTriage,
       clearError,
     }),
     [demo, client, stage, loading, error, retryLast, investigationId, triage, processes,
-      scored, profile, riskSummary, attack, diff, selectedPid, analysis, lowlevel,
+      scored, profile, riskSummary, attack, disclaimer, diff, selectedPid, analysis, lowlevel,
       triageProgress, analysisProgress, uploads,
       setDemo, bootstrap, rescore, selectProcess, uploadDumps, startTriage, clearError],
   );

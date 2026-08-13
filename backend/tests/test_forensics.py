@@ -101,3 +101,34 @@ def test_triage_task_wires_adapter_and_sanitizes(client, monkeypatch):
     result = client.get(f"/api/investigations/{inv_id}/result").json()
     techs = result["triage"]["dashboard"]["attack_techniques"]
     assert techs[0]["technique_id"] == "T1055"
+
+
+# --------------------------------------------------------------------------
+# The phase-1 boundary statement travels with the data it qualifies.
+# --------------------------------------------------------------------------
+
+def test_disclaimer_is_attached_to_every_assembled_triage():
+    from memtriage.pipeline import volmemlyzer_adapter as vml
+
+    view = vml.assemble_triage({}, {"pslist": [], "malfind": [], "netscan": []})
+    assert view["disclaimer"] == vml.TRIAGE_DISCLAIMER
+    assert view["dashboard"]["disclaimer"] == vml.TRIAGE_DISCLAIMER
+
+
+def test_disclaimer_states_the_limits_it_needs_to():
+    from memtriage.pipeline.volmemlyzer_adapter import TRIAGE_DISCLAIMER
+
+    text = " ".join([TRIAGE_DISCLAIMER["headline"], TRIAGE_DISCLAIMER["summary"],
+                     TRIAGE_DISCLAIMER["intent"], *TRIAGE_DISCLAIMER["points"]]).lower()
+    assert "not conclusions" in TRIAGE_DISCLAIMER["headline"].lower()
+    assert "lead" in text
+    assert "tuned" in text
+    assert "not a clean bill of health" in text
+    assert "alignment for triage" in text
+
+
+def test_rescore_response_carries_the_disclaimer():
+    from memtriage.pipeline import volmemlyzer_adapter as vml
+
+    view = vml.rescore_from_records({"pslist": []}, {}, profile={"preset": "aggressive"})
+    assert view["dashboard"]["disclaimer"]["headline"]

@@ -99,4 +99,5 @@ def rescore(
         "scored_objects": new_dashboard["scored_objects"],
         "suspicious_processes": new_dashboard["suspicious_processes"],
         "diff": diff,
+        "disclaimer": new_dashboard.get("disclaimer"),
     })

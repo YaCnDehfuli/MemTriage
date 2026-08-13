@@ -77,6 +77,13 @@ export interface TuningProfile {
   rule_overrides: Record<string, { enabled?: boolean; weight?: number }>;
 }
 
+export interface TriageDisclaimer {
+  headline: string;
+  summary: string;
+  points: string[];
+  intent: string;
+}
+
 export interface Dashboard {
   features: Record<string, unknown>;
   injections: unknown[];
@@ -87,6 +94,7 @@ export interface Dashboard {
   risk_summary: RiskSummary;
   attack_techniques: AttackTechnique[];
   profile: TuningProfile;
+  disclaimer?: TriageDisclaimer;
 }
 
 export interface Triage {
@@ -125,6 +133,7 @@ export interface Diff {
 
 export interface RescoreResponse {
   investigation_id: string;
+  disclaimer?: TriageDisclaimer;
   profile: TuningProfile;
   risk_summary: RiskSummary;
   attack_techniques: AttackTechnique[];

@@ -1,9 +1,11 @@
 import { useApp } from "../../state/store";
+import { TriageDisclaimer } from "../triage/Disclaimer";
 import { RISK_ORDER } from "../../lib/format";
 import { EmptyState, Panel, RiskBadge } from "../primitives";
 
 export function ReportView() {
-  const { scored, riskSummary, attack, analysis, triage, investigationId, demo } = useApp();
+  const { scored, riskSummary, attack, analysis, triage, investigationId, demo, disclaimer } =
+    useApp();
 
   if (!triage) return <EmptyState title="Nothing to report yet" hint="Run triage first." />;
 
@@ -29,6 +31,8 @@ export function ReportView() {
           <span className="btn-ghost cursor-default text-xs opacity-60">Export (live only)</span>
         )}
       </header>
+
+      <TriageDisclaimer disclaimer={disclaimer} />
 
       <div className="grid gap-5 sm:grid-cols-3">
         {RISK_ORDER.map((r) => (

@@ -212,6 +212,7 @@ def run_triage(self, investigation_id: str) -> str:  # noqa: ANN001
             # re-run the engine from disk without re-running Volatility.
             "artifacts": view.get("manifest", {}),
             "profile": view.get("profile") or dashboard.get("profile"),
+            "disclaimer": view.get("disclaimer") or dashboard.get("disclaimer"),
         })
         paths.triage.write_text(json.dumps(triage, indent=2))
 

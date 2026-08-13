@@ -1,11 +1,13 @@
 import { useApp } from "../../state/store";
 import { Panel } from "../primitives";
+import { TriageDisclaimer } from "../triage/Disclaimer";
 import { IoCTable } from "../triage/IoCTable";
 import { AttackPanel, RiskSummaryPanel } from "../triage/Summary";
 import { TuningBar } from "../triage/TuningBar";
 
 export function TriageView() {
-  const { scored, profile, riskSummary, attack, diff, rescore, selectProcess, loading } = useApp();
+  const { scored, profile, riskSummary, attack, disclaimer, diff, rescore, selectProcess, loading } =
+    useApp();
 
   return (
     <div className="space-y-5">
@@ -20,6 +22,8 @@ export function TriageView() {
           </p>
         </div>
       </header>
+
+      <TriageDisclaimer disclaimer={disclaimer} />
 
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
         <Panel
