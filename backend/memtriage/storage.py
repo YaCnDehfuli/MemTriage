@@ -32,6 +32,7 @@ class InvestigationPaths:
         self.processes = self.root / "processes"
         self.triage = self.root / "triage.json"
         self.result = self.root / "result.json"
+        self.assistant = self.root / "assistant"
 
     def ensure(self) -> "InvestigationPaths":
         for d in (self.root, self.dumps, self.volmemlyzer, self.processes):
