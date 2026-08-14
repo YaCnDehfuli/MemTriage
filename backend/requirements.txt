@@ -37,6 +37,12 @@ tqdm==4.67.1
 capstone==5.0.3
 pefile==2024.8.26
 
+# --- Assistant (phase 3, bring-your-own-key) ---
+# Both SDKs are optional and imported lazily: a missing one degrades to "install
+# this to use that provider", never to a failed request for another provider.
+anthropic==0.69.0
+openai==1.99.1
+
 # --- Reporting ---
 jinja2==3.1.5
 
