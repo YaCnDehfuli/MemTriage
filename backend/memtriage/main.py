@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 
 from . import __version__
 from .api import (
+    routes_assistant,
     routes_events,
     routes_investigations,
     routes_model_access,
@@ -89,3 +90,4 @@ app.include_router(routes_events.router)
 app.include_router(routes_results.router)
 app.include_router(routes_scoring.router)
 app.include_router(routes_model_access.router)
+app.include_router(routes_assistant.router)
