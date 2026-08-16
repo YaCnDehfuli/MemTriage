@@ -3,6 +3,7 @@ import { ErrorBanner } from "./components/ErrorBanner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { LeftRail } from "./components/LeftRail";
 import { TopBar } from "./components/TopBar";
+import { AssistantView } from "./components/stages/AssistantView";
 import { DeepDiveView } from "./components/stages/DeepDiveView";
 import { IngestView } from "./components/stages/IngestView";
 import { InventoryView } from "./components/stages/InventoryView";
@@ -31,6 +32,7 @@ export default function App() {
               {stage === "triage" && <TriageView />}
               {stage === "inventory" && <InventoryView />}
               {stage === "deepdive" && <DeepDiveView />}
+              {stage === "assist" && <AssistantView />}
               {stage === "report" && <ReportView />}
             </ErrorBoundary>
           </div>

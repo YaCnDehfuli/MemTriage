@@ -1,8 +1,12 @@
+import { useState } from "react";
 import type { Verdict } from "../../types";
 import { pct } from "../../lib/format";
+import { ModelAccessForm } from "../ModelAccessForm";
 import { Meter, Panel } from "../primitives";
 
 export function VerdictPanel({ verdict }: { verdict: Verdict }) {
+  const [requesting, setRequesting] = useState(false);
+
   if (!verdict.model_loaded) {
     return (
       <Panel eyebrow="VADViT" title="Classification">
@@ -12,7 +16,11 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
             Model not loaded
           </div>
           <p className="mt-3 text-sm text-mist-400">{verdict.note}</p>
+          <button className="btn-ghost mt-3 text-[12px]" onClick={() => setRequesting(true)}>
+            Request the trained weights
+          </button>
         </div>
+        {requesting && <ModelAccessForm onClose={() => setRequesting(false)} />}
       </Panel>
     );
   }
@@ -23,8 +31,18 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
       <div className="px-4 py-4">
         {verdict.placeholder && (
           <div className="mb-3 rounded-md border border-risk-medium/30 bg-risk-medium/10 px-3 py-2 text-[12px] text-risk-medium">
-            Placeholder model — this family label is <b>not</b> a real detection. Drop in the trained
-            weights to enable classification.
+            <p>
+              <b>Untrained structural placeholder.</b> This family label is not a detection
+              and carries no information. The attention map, the region ranking and the
+              low-level analysis below are architectural — they describe real memory
+              regardless of which weights are loaded.
+            </p>
+            <button
+              className="btn-ghost mt-2 text-[11px]"
+              onClick={() => setRequesting(true)}
+            >
+              Request the trained weights →
+            </button>
           </div>
         )}
         <div className="flex items-baseline justify-between">
@@ -46,6 +64,7 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
           ))}
         </div>
       </div>
+      {requesting && <ModelAccessForm onClose={() => setRequesting(false)} />}
     </Panel>
   );
 }

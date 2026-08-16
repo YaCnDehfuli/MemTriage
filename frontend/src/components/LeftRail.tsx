@@ -6,7 +6,8 @@ const STAGES: { id: Stage; label: string; hint: string }[] = [
   { id: "ingest", label: "Ingest", hint: "Dump snapshots" },
   { id: "triage", label: "Triage overview", hint: "IoC table · tuning" },
   { id: "inventory", label: "Process inventory", hint: "Select a PID" },
-  { id: "deepdive", label: "VADViT deep-dive", hint: "Grid · attention" },
+  { id: "deepdive", label: "VADViT deep-dive", hint: "Grid · attention · regions" },
+  { id: "assist", label: "Assistant", hint: "Ask about the findings" },
   { id: "report", label: "Report", hint: "Findings · export" },
 ];
 

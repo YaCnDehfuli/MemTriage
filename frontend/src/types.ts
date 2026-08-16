@@ -1,7 +1,7 @@
 // Shapes mirrored from the FastAPI backend (schemas.py + scoring/pipeline output).
 
 export type Risk = "Critical" | "High" | "Medium" | "Low";
-export type Stage = "ingest" | "triage" | "inventory" | "deepdive" | "report";
+export type Stage = "ingest" | "triage" | "inventory" | "deepdive" | "assist" | "report";
 
 export interface InvestigationState {
   investigation_id: string;
@@ -453,4 +453,72 @@ export interface ModelAccessResponse {
   email_body: string;
   mailto: string;
   note: string;
+}
+
+export interface AssistantProvider {
+  id: string;
+  label: string;
+  transport: "anthropic" | "openai";
+  base_url: string;
+  default_model: string;
+  models: string[];
+  key_env: string;
+  docs_url: string;
+  prompt_cache: "explicit" | "automatic" | "none";
+  needs_key: boolean;
+  note: string;
+  local: boolean;
+}
+
+export interface AssistantCatalogue {
+  providers: AssistantProvider[];
+  custom_endpoints_enabled: boolean;
+  suggested_questions: string[];
+  consent_notice: string;
+}
+
+export interface ContextPackSummary {
+  investigation_id: string;
+  sha256: string;
+  approx_tokens: number;
+  sections: string[];
+  truncated_sections: string[];
+  consent_notice: string;
+  markdown?: string;
+}
+
+export interface ChatTurn {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface ChatReply {
+  text: string;
+  model: string;
+  provider: string;
+  stop_reason: string | null;
+  usage: {
+    input_tokens: number | null;
+    output_tokens: number | null;
+    cache_read_input_tokens: number | null;
+    cache_creation_input_tokens: number | null;
+  };
+  context: {
+    sha256: string;
+    approx_tokens: number;
+    sections: string[];
+    truncated_sections: string[];
+    prompt_cache: string;
+  };
+}
+
+export interface GeneratedScript {
+  provider: string;
+  model: string;
+  language: string;
+  filename: string;
+  briefing_filename: string;
+  briefing: string;
+  script: string;
+  instructions: string;
 }

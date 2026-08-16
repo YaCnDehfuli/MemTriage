@@ -1,5 +1,10 @@
 import type {
   AnalysisState,
+  AssistantCatalogue,
+  ChatReply,
+  ChatTurn,
+  ContextPackSummary,
+  GeneratedScript,
   InvestigationState,
   LowLevelReport,
   ModelAccessPolicy,
@@ -40,6 +45,21 @@ export interface ApiClient {
   getLowLevel(id: string, pid: number): Promise<LowLevelReport>;
   getModelAccessPolicy(): Promise<ModelAccessPolicy>;
   requestModelAccess(body: ModelAccessRequest): Promise<ModelAccessResponse>;
+  getAssistantProviders(): Promise<AssistantCatalogue>;
+  getContextPack(id: string, refresh?: boolean): Promise<ContextPackSummary>;
+  askAssistant(id: string, body: AssistantChatRequest): Promise<ChatReply>;
+  generateScript(
+    id: string,
+    body: { provider: string; model?: string; language: string },
+  ): Promise<GeneratedScript>;
+}
+
+export interface AssistantChatRequest {
+  provider: string;
+  model: string;
+  api_key: string;
+  messages: ChatTurn[];
+  refresh_context?: boolean;
 }
 
 export class ApiError extends Error {
@@ -167,6 +187,32 @@ export function createLiveClient(base = ""): ApiClient {
     async requestModelAccess(body) {
       return json(
         await fetch(`${api}/model-access-requests`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }),
+      );
+    },
+    async getAssistantProviders() {
+      return json(await fetch(`${api}/assistant/providers`));
+    },
+    async getContextPack(id, refresh = false) {
+      return json(
+        await fetch(`${api}/investigations/${id}/assistant/context?refresh=${refresh}`),
+      );
+    },
+    async askAssistant(id, body) {
+      return json(
+        await fetch(`${api}/investigations/${id}/assistant/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }),
+      );
+    },
+    async generateScript(id, body) {
+      return json(
+        await fetch(`${api}/investigations/${id}/assistant/script`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),

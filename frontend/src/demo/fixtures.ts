@@ -4,7 +4,9 @@
 import type { ApiClient, ConsolidatedResult } from "../api/client";
 import type {
   AnalysisResult,
+  AssistantCatalogue,
   AttackTechnique,
+  ContextPackSummary,
   Diff,
   Instruction,
   LowLevelReport,
@@ -41,6 +43,158 @@ const DEMO_DISCLAIMER: TriageDisclaimer = {
     "The aim is a fast multi-view of one memory image, with the structured features an " +
     "analyst needs to decide where to spend manual effort.",
 };
+
+const DEMO_PROVIDERS: AssistantCatalogue = {
+  custom_endpoints_enabled: false,
+  consent_notice:
+    "Sending a question forwards the briefing — memory-derived metadata, region " +
+    "addresses, disassembly and extracted strings — to the provider you choose. Pick a " +
+    "local provider to keep it on this machine. Your API key is used for the request " +
+    "and is never stored or logged.",
+  suggested_questions: [
+    "What are the three strongest leads in this image, and what would confirm each?",
+    "Walk me through the highest-attention region: what does its code appear to do?",
+    "Which findings could plausibly be benign, and what would tell them apart?",
+    "What is missing from this briefing that I would need to reach a conclusion?",
+    "Summarize this investigation as a handover note for the next analyst.",
+  ],
+  providers: [
+    { id: "anthropic", label: "Anthropic", transport: "anthropic",
+      base_url: "https://api.anthropic.com", default_model: "claude-opus-5",
+      models: ["claude-opus-5", "claude-sonnet-5", "claude-haiku-4-5"],
+      key_env: "ANTHROPIC_API_KEY", docs_url: "https://docs.claude.com/en/api/overview",
+      prompt_cache: "explicit", needs_key: true, local: false,
+      note: "The briefing is sent as a cached system block, so repeat questions " +
+        "re-read it from cache rather than re-sending it." },
+    { id: "openai", label: "OpenAI", transport: "openai",
+      base_url: "https://api.openai.com/v1", default_model: "gpt-4.1",
+      models: ["gpt-4.1", "gpt-4.1-mini", "o4-mini"], key_env: "OPENAI_API_KEY",
+      docs_url: "https://platform.openai.com/docs/api-reference/chat",
+      prompt_cache: "automatic", needs_key: true, local: false, note: "" },
+    { id: "groq", label: "Groq", transport: "openai",
+      base_url: "https://api.groq.com/openai/v1",
+      default_model: "llama-3.3-70b-versatile",
+      models: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"],
+      key_env: "GROQ_API_KEY", docs_url: "https://console.groq.com/docs/api-reference",
+      prompt_cache: "none", needs_key: true, local: false, note: "" },
+    { id: "ollama", label: "Ollama (local)", transport: "openai",
+      base_url: "http://localhost:11434/v1", default_model: "llama3.1",
+      models: ["llama3.1", "qwen2.5"], key_env: "",
+      docs_url: "https://docs.ollama.com/openai", prompt_cache: "none",
+      needs_key: false, local: true,
+      note: "Runs on the analyst's own machine, so the briefing never leaves the host." },
+  ],
+};
+
+const DEMO_CONTEXT: ContextPackSummary = {
+  investigation_id: "demo-investigation",
+  sha256: "9f2c41ab7d5e0c38b6142f9e07ad5c31882be0f4a17d69c530be71f2ac48d905",
+  approx_tokens: 3120,
+  sections: ["How to read this briefing", "Evidence", "Risk posture (phase 1)",
+             "Scored objects (phase 1 leads)", "Process inventory",
+             "Statistical features", "Process deep-dives (phase 2)",
+             "Scope of this briefing"],
+  truncated_sections: [],
+  consent_notice:
+    "Demo mode never sends anything. In live mode the briefing below is what would " +
+    "be forwarded to your chosen provider.",
+  markdown: [
+    "# MemTriage investigation briefing",
+    "",
+    "Investigation: `demo-investigation`",
+    "",
+    "## How to read this briefing",
+    "",
+    "**Phase 1 — Clues for review, not conclusions.**",
+    "",
+    "Phase 1 extracts structured, statistically significant features from the image",
+    "and applies simple, tuned rules to them. Everything it surfaces is a lead.",
+    "",
+    "## Evidence",
+    "",
+    "- Snapshots: 3",
+    "- Volatility: Volatility 3 Framework 2.26.2",
+    "",
+    "## Scored objects (phase 1 leads)",
+    "",
+    "### process · svchost.exe:1337",
+    "score=35.1 risk=Critical confidence=0.86 pid=1337",
+    "- `rwx_private_exec` (+12.0, conf 0.9) [T1055 Process Injection]: private RWX region",
+    "",
+    "## Process deep-dives (phase 2)",
+    "",
+    "### PID 1337 — svchost.exe",
+    "",
+    "- Classifier: `Placeholder_Trojan` at 0.514 (weights: placeholder)",
+    "  - **The classifier ran on untrained placeholder weights. This family label is",
+    "    not a detection and must not be reported as one.**",
+    "",
+    "#### Region `0x1f0000` (rank 1)",
+    "",
+    "0x1f0000 · 40960 bytes · PAGE_EXECUTE_READWRITE — GetPC gadget (call/pop)",
+    "",
+    "## Scope of this briefing",
+    "",
+    "- It contains no disk artifacts, no network capture, no host baseline and no timeline.",
+  ].join("\n"),
+};
+
+function demoAnswer(question: string): string {
+  const q = question.toLowerCase();
+  if (q.includes("region") || q.includes("assembly") || q.includes("code")) {
+    return [
+      "The highest-ranked region is `0x1f0000` in PID 1337 — 40 KB of private,",
+      "writable-and-executable memory with no backing file.",
+      "",
+      "Its first instructions are a zero-displacement `call` followed by `pop rbx`,",
+      "which recovers the instruction pointer, then a read of `gs:[0x60]` to reach the",
+      "PEB. After that there is a short loop that XORs bytes in place. That sequence is",
+      "the standard opening of position-independent code that resolves its own imports",
+      "and decodes its own payload.",
+      "",
+      "What this does *not* establish: none of it proves malice. A JIT region can",
+      "contain byte-identical gadgets. What makes this one worth your time is the",
+      "combination — RWX, no backing file, a decoder loop, and an embedded URL that",
+      "matches the phase-1 connection finding.",
+      "",
+      "Next step: compare `93.184.216.34:4444` against your network telemetry, and",
+      "check whether PID 1337's parent is a normal service host on this build.",
+      "",
+      "_(Demo mode: this is a canned answer. Switch to Live and supply a key to ask a",
+      "real model.)_",
+    ].join("\n");
+  }
+  if (q.includes("missing") || q.includes("conclu")) {
+    return [
+      "This briefing contains one memory image and nothing else. To reach a",
+      "conclusion you would need at minimum:",
+      "",
+      "- disk artifacts for the paths named in the region strings",
+      "- network telemetry covering the connection to 93.184.216.34:4444",
+      "- a baseline for what this host's svchost instances normally look like",
+      "- the trained VADViT weights, since the current family label came from an",
+      "  untrained placeholder and carries no information",
+      "",
+      "_(Demo mode: canned answer.)_",
+    ].join("\n");
+  }
+  return [
+    "Three leads, strongest first:",
+    "",
+    "1. **PID 1337 (svchost.exe)** — score 35.1, Critical. Private RWX memory with a",
+    "   GetPC gadget and a decoder loop. Confirm by dumping the region and checking",
+    "   whether the decoded bytes resolve imports by hash.",
+    "2. **93.184.216.34:4444** — an outbound connection on an unusual port, owned by",
+    "   the same PID. Confirm against network telemetry for the same window.",
+    "3. **`\\Microsoft\\Windows\\Updater` scheduled task** — persistence-shaped.",
+    "   Confirm by reading the task XML from disk.",
+    "",
+    "All three are leads from simple tuned rules, not detections.",
+    "",
+    "_(Demo mode: this is a canned answer. Switch to Live and supply a key to ask a",
+    "real model.)_",
+  ].join("\n");
+}
 
 const DEMO_MODEL_ACCESS: ModelAccessPolicy = {
   contact: "yasindeh@yorku.ca",
@@ -819,6 +973,49 @@ export function createDemoClient(): ApiClient {
           `mailto:${DEMO_MODEL_ACCESS.contact}?subject=${encodeURIComponent(subject)}` +
           `&body=${encodeURIComponent(text)}`,
         note: "Demo mode: nothing was recorded. Copy the message to reach the author.",
+      };
+    },
+    async getAssistantProviders() {
+      return DEMO_PROVIDERS;
+    },
+    async getContextPack() {
+      return DEMO_CONTEXT;
+    },
+    async askAssistant(_id, body) {
+      const question = body.messages[body.messages.length - 1]?.content ?? "";
+      return {
+        text: demoAnswer(question),
+        model: body.model || "demo-model",
+        provider: body.provider,
+        stop_reason: "end_turn",
+        usage: {
+          input_tokens: DEMO_CONTEXT.approx_tokens,
+          output_tokens: 220,
+          cache_read_input_tokens: DEMO_CONTEXT.approx_tokens,
+          cache_creation_input_tokens: null,
+        },
+        context: {
+          sha256: DEMO_CONTEXT.sha256,
+          approx_tokens: DEMO_CONTEXT.approx_tokens,
+          sections: DEMO_CONTEXT.sections,
+          truncated_sections: [],
+          prompt_cache: "explicit",
+        },
+      };
+    },
+    async generateScript(_id, body) {
+      return {
+        provider: body.provider,
+        model: body.model || "demo-model",
+        language: body.language,
+        filename: body.language === "curl" ? "memtriage_ask.sh" : "memtriage_ask.py",
+        briefing_filename: "memtriage_briefing.md",
+        briefing: DEMO_CONTEXT.markdown ?? "",
+        script:
+          "# Demo mode returns a placeholder. Switch to Live to generate a script\n" +
+          "# wired to your provider and this investigation's briefing.\n",
+        instructions:
+          "Demo mode does not generate a runnable script. Switch to Live to get one.",
       };
     },
     artifactUrl(_id, _pid, kind) {
