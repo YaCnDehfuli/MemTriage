@@ -100,3 +100,43 @@ def test_deep_health_reports_every_check(client):
     assert "VADViT checkpoint" in names
     for check in body["checks"]:
         assert check["status"] in {"ok", "degraded", "missing", "error"}
+
+
+def test_preflight_reports_and_only_fails_on_a_real_error(capsys, monkeypatch):
+    from memtriage import diagnostics, preflight
+
+    monkeypatch.setattr(diagnostics, "CHECKS", (
+        lambda: diagnostics.Check("optional thing", diagnostics.MISSING, "absent",
+                                  "install it"),
+    ))
+    assert preflight.main([]) == 0
+    printed = capsys.readouterr().out
+    assert "optional thing" in printed and "install it" in printed
+
+    monkeypatch.setattr(diagnostics, "CHECKS", (
+        lambda: diagnostics.Check("database", diagnostics.ERROR, "unreachable", "fix it"),
+    ))
+    assert preflight.main([]) == 1
+    assert preflight.main(["--warn-only"]) == 0
+
+
+def test_preflight_json_output_is_machine_readable(capsys):
+    import json
+
+    from memtriage import preflight
+
+    preflight.main(["--json", "--warn-only"])
+    report = json.loads(capsys.readouterr().out)
+    assert report["status"] in {"ok", "degraded", "error"}
+    assert isinstance(report["checks"], list)
+
+
+def test_a_failing_probe_does_not_take_the_report_down(monkeypatch):
+    from memtriage import diagnostics
+
+    monkeypatch.setattr(diagnostics, "CHECKS", (
+        lambda: (_ for _ in ()).throw(RuntimeError("probe exploded")),
+    ))
+    report = diagnostics.run_all()
+    assert report["status"] == "error"
+    assert "probe raised RuntimeError" in report["checks"][0]["detail"]

@@ -34,7 +34,9 @@ jobs:
         working-directory: backend
         run: |
           python -m pip install --upgrade pip
-          # torch/timm are worker-image only; the suite covers their absence.
+          # The provider SDKs are installed deliberately late — leaving them out
+          # here proves the assistant's lazy imports degrade instead of failing,
+          # which is the same reason torch/timm live only in the worker image.
           grep -v -E '^(anthropic|openai)==' requirements.txt > ci-requirements.txt
           pip install -r ci-requirements.txt
           pip install -e .
@@ -45,7 +47,7 @@ jobs:
 
       - name: Preflight reports capabilities without failing on optionals
         working-directory: backend
-        run: python -m memtriage.preflight
+        run: python -m memtriage.preflight --warn-only
 
   lint:
     name: lint

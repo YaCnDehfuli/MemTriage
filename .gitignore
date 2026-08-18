@@ -37,7 +37,11 @@ artifacts/
 models/*.pt
 models/*.pth
 models/*.safetensors
+models/model_meta.json
 labels.json
+
+# --- Generated placeholder checkpoint + assistant context cache ---
+model_cache/
 
 # --- Security scan outputs ---
 security/reports/*.json
