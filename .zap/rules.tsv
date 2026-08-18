@@ -1,0 +1,11 @@
+# ZAP baseline rule tuning. WARN keeps a finding visible without failing the run;
+# IGNORE is reserved for rules that do not apply to a JSON API with no browser
+# session, and each carries the reason.
+10015	WARN	(Re-examine Cache-control Directives)
+10021	IGNORE	(X-Content-Type-Options - set by the security-headers middleware on every response)
+10035	IGNORE	(HSTS - terminated by the deployment's reverse proxy, not the API container)
+10038	IGNORE	(CSP - the API serves JSON only; the SPA origin sets its own policy)
+10063	WARN	(Permissions Policy)
+10098	WARN	(Cross-Domain Misconfiguration)
+90004	WARN	(Insufficient Site Isolation)
+10202	IGNORE	(Anti-CSRF tokens - no cookie-backed session; CORS is origin-pinned and credentials are disabled)

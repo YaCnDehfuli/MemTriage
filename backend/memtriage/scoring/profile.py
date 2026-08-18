@@ -67,7 +67,7 @@ class TuningProfile:
 
     # -- construction ----------------------------------------------------
     @classmethod
-    def from_preset(cls, name: str) -> "TuningProfile":
+    def from_preset(cls, name: str) -> TuningProfile:
         key = (name or "balanced").strip().lower()
         if key not in PRESETS:
             key = "balanced"
@@ -79,7 +79,7 @@ class TuningProfile:
         )
 
     @classmethod
-    def from_dict(cls, data: dict | None) -> "TuningProfile":
+    def from_dict(cls, data: dict | None) -> TuningProfile:
         data = data or {}
         base = cls.from_preset(data.get("preset", "balanced"))
         if isinstance(data.get("risk_bands"), dict):
@@ -111,13 +111,13 @@ class TuningProfile:
         }
 
     # -- per-rule resolution --------------------------------------------
-    def rule_enabled(self, rule) -> bool:  # noqa: ANN001
+    def rule_enabled(self, rule) -> bool:
         ov = self.rule_overrides.get(rule.id)
         if ov is not None and ov.enabled is not None:
             return ov.enabled
         return rule.enabled
 
-    def rule_weight(self, rule) -> float:  # noqa: ANN001
+    def rule_weight(self, rule) -> float:
         ov = self.rule_overrides.get(rule.id)
         if ov is not None and ov.weight is not None:
             return float(ov.weight)

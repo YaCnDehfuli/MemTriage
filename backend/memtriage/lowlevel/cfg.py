@@ -78,7 +78,7 @@ class ControlFlowGraph:
         }
 
     @classmethod
-    def unavailable(cls, reason: str) -> "ControlFlowGraph":
+    def unavailable(cls, reason: str) -> ControlFlowGraph:
         return cls(available=False, reason=reason)
 
 

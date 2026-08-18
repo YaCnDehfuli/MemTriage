@@ -20,12 +20,12 @@ class Budget:
     entropy_windows: int = 256
 
     @classmethod
-    def deep(cls) -> "Budget":
+    def deep(cls) -> Budget:
         """For the single highest-attention region."""
         return cls()
 
     @classmethod
-    def shallow(cls) -> "Budget":
+    def shallow(cls) -> Budget:
         """For the runners-up: enough to characterize, not to fully map."""
         return cls(
             max_bytes=64 * 1024,

@@ -191,7 +191,7 @@ def scan_bytes(data: bytes, limit_per_rule: int = 12) -> list[PatternHit]:
         try:
             pattern = rule.pattern
             matches = list(pattern.finditer(data)) if hasattr(pattern, "finditer") else []
-        except Exception:
+        except Exception:  # noqa: S112 — one malformed rule must not stop the scan
             continue
         if len(matches) < rule.min_occurrences:
             continue

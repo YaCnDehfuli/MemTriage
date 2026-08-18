@@ -117,7 +117,7 @@ def dump_snapshot(image_path: str, pid: int, out_dir: str, *, vol_path: str | No
                   timeout_s: int, snapshot_ordinal: int | None = None) -> list[Region]:
     """Run vadinfo --dump for one PID on one snapshot and parse its regions."""
     Path(out_dir).mkdir(parents=True, exist_ok=True)
-    proc = subprocess.run(  # noqa: S603 — args are built here, never shell
+    proc = subprocess.run(
         _vol_command(vol_path, image_path, pid, out_dir),
         capture_output=True, text=True, timeout=timeout_s, check=False,
     )

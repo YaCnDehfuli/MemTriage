@@ -17,9 +17,9 @@ from .service import (
 )
 
 __all__ = [
-    "score_records",
+    "CONTEXT_PLUGINS",
+    "TuningProfile",
     "diff_scored",
     "normalize_plugin_key",
-    "TuningProfile",
-    "CONTEXT_PLUGINS",
+    "score_records",
 ]

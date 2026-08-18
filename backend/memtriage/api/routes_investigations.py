@@ -56,7 +56,8 @@ async def add_dump(
         if inv.dump_count >= settings.max_dumps_per_investigation:
             raise HTTPException(
                 status_code=409,
-                detail=f"At most {settings.max_dumps_per_investigation} snapshots per investigation.",
+                detail=(f"At most {settings.max_dumps_per_investigation} snapshots "
+                        "per investigation."),
             )
 
         filename = sanitize_text(x_filename, max_len=512)
@@ -93,7 +94,7 @@ async def add_dump(
         except HTTPException:
             target.unlink(missing_ok=True)
             raise
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             target.unlink(missing_ok=True)
             raise HTTPException(status_code=400, detail="Upload failed while streaming.") from exc
 

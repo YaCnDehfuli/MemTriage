@@ -1,0 +1,5 @@
+# Accepted findings, each with the reason it is accepted and when it is revisited.
+# Format: one CVE id per line. Keep this file short — an entry that cannot be
+# justified in a sentence should be a fix instead.
+
+# (No accepted findings at present.)

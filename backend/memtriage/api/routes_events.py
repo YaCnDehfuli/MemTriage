@@ -42,7 +42,7 @@ async def _stream(request: Request, initial_json: str, initial_status: str,
                     yield {"event": "ping", "data": "{}"}
                     continue
                 data = msg["data"]
-                payload = data.decode() if isinstance(data, (bytes, bytearray)) else str(data)
+                payload = data.decode() if isinstance(data, bytes | bytearray) else str(data)
                 yield {"event": "state", "data": payload}
                 try:
                     if json.loads(payload).get("status") in terminal:
@@ -84,7 +84,9 @@ async def analysis_events(
         s = SessionLocal()
         try:
             a = s.get(ProcessAnalysis, analysis_id)
-            return AnalysisState.from_orm_obj(a) if a and a.investigation_id == investigation_id else None
+            if a is None or a.investigation_id != investigation_id:
+                return None
+            return AnalysisState.from_orm_obj(a)
         finally:
             s.close()
 

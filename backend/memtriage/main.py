@@ -27,7 +27,7 @@ settings = get_settings()
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):  # noqa: ANN001
+async def lifespan(app: FastAPI):
     ensure_base_dirs()
     init_db()
     yield
@@ -57,7 +57,7 @@ register_error_handlers(app)
 
 
 @app.middleware("http")
-async def security_headers(request: Request, call_next):  # noqa: ANN001
+async def security_headers(request: Request, call_next):
     """Baseline hardening headers on every response."""
     rid = request_id(request)
     response = await call_next(request)

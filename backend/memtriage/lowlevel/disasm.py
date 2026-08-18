@@ -80,7 +80,7 @@ class Listing:
         }
 
     @classmethod
-    def unavailable(cls, reason: str) -> "Listing":
+    def unavailable(cls, reason: str) -> Listing:
         return cls(available=False, reason=reason)
 
 

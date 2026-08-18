@@ -1,0 +1,28 @@
+title = "MemTriage secret scanning"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "memtriage-llm-provider-key"
+description = "LLM provider API key committed to the repository"
+regex = '''\b(sk-ant-[A-Za-z0-9_\-]{16,}|sk-[A-Za-z0-9]{32,}|gsk_[A-Za-z0-9]{20,}|sk-or-v1-[A-Za-z0-9]{32,})\b'''
+tags = ["key", "llm"]
+
+[allowlist]
+description = "Documentation and tests reference key shapes on purpose"
+paths = [
+  '''docs/.*\.md''',
+  '''security/SCANNING\.md''',
+  '''backend/tests/.*\.py''',
+  '''backend/memtriage/assistant/errors\.py''',
+  '''frontend/src/demo/fixtures\.ts''',
+]
+regexes = [
+  '''sk-ant-abcdefgh''',
+  '''sk-ant-verysecretkey''',
+  '''sk-ant-anotherkey''',
+  '''sk-ant-secret''',
+  '''gsk_abcdefgh''',
+  '''sk-abcdefgh''',
+]

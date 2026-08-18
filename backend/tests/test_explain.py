@@ -1,15 +1,13 @@
 """Explainability: magma LUT, patch→VAD attribution, overlay rendering, and the
 run_process_analysis explaining-stage wiring. All pure (no torch)."""
-import json
 from dataclasses import dataclass
-from pathlib import Path
 
 from PIL import Image
 
 from memtriage.pipeline import explain as ex
 
 
-def _write_png(path):  # noqa: ANN001
+def _write_png(path):
     Image.new("RGB", (224, 224), (10, 20, 30)).save(str(path))
 
 
@@ -94,12 +92,12 @@ def test_process_analysis_produces_attention_and_attributions(client, monkeypatc
                         lambda regs, ps, gs, path: _write_png(path))
 
     class _FakeClf:
-        def classify(self, _png):  # noqa: ANN001
+        def classify(self, _png):
             return vm.Verdict(model_loaded=True, family="Placeholder_Trojan",
                               confidence=0.6, probabilities={"Placeholder_Trojan": 0.6},
                               placeholder=True, note="placeholder")
 
-        def attention_map(self, _png):  # noqa: ANN001
+        def attention_map(self, _png):
             return [0.1, 0.9]  # patch 1 (the dll region) dominates
 
     monkeypatch.setattr(vm, "get_classifier", lambda: _FakeClf())

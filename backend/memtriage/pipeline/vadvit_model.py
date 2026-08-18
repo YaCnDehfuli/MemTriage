@@ -70,7 +70,7 @@ class Verdict:
         }
 
     @classmethod
-    def unavailable(cls, note: str) -> "Verdict":
+    def unavailable(cls, note: str) -> Verdict:
         return cls(model_loaded=False, note=note)
 
 
@@ -103,7 +103,7 @@ def build_model(model_name: str, num_classes: int, *, pretrained: bool = False):
             self.vit = create_model(model_name, pretrained=pretrained)
             self.vit.head = nn.Linear(self.vit.num_features, num_classes)
 
-        def forward(self, x):  # noqa: ANN001
+        def forward(self, x):
             return self.vit(x)
 
     return ViTForImages()
@@ -294,7 +294,7 @@ class VADViTClassifier:
                 logits = model(tensor)
                 probs = torch.nn.functional.softmax(logits, dim=1).squeeze(0)
             probs_list = [float(v) for v in probs.detach().cpu().tolist()]
-        except Exception as exc:  # noqa: BLE001 - degrade, never crash the pipeline
+        except Exception as exc:
             return Verdict.unavailable(
                 f"VADViT inference unavailable ({type(exc).__name__})."
             )
@@ -336,7 +336,7 @@ class VADViTClassifier:
             model = self._ensure_model(checkpoint)
             captured: dict = {}
 
-            def _hook(module, inp, output):  # noqa: ANN001
+            def _hook(module, inp, output):
                 qkv = module.qkv(inp[0])
                 q, k, _ = qkv.chunk(3, dim=-1)
                 scores = (q @ k.transpose(-2, -1)) / (q.shape[-1] ** 0.5)
@@ -358,7 +358,7 @@ class VADViTClassifier:
                 return None
             cls_attention = attn[:, 0, 1:].mean(dim=0)  # CLS → patches
             return [float(v) for v in cls_attention.tolist()]
-        except Exception:  # noqa: BLE001 - explainability is best-effort
+        except Exception:
             return None
 
 

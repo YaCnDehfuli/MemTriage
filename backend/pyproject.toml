@@ -30,3 +30,48 @@ include = ["memtriage*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["."]
+exclude = ["build", "dist", ".venv"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",    # pycodestyle
+    "F",         # pyflakes
+    "I",         # import sorting
+    "UP",        # pyupgrade
+    "B",         # bugbear
+    "C4",        # comprehensions
+    "S",         # flake8-bandit
+    "SIM",       # simplify
+    "RUF",       # ruff-specific
+]
+ignore = [
+    # Broad excepts are the design here: every optional dependency, every
+    # analyzer and every provider call degrades rather than propagating.
+    "B904",
+    "S101",   # asserts are how the tests are written
+    "SIM105", # contextlib.suppress reads worse than try/except: pass at these sites
+    "B008",   # Depends(...) in a default is the FastAPI idiom
+    # Typography is deliberate: prose uses en dashes, and dimensions read as
+    # 224x224 with a multiplication sign.
+    "RUF001",
+    "RUF002",
+    "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "E501"]
+# Region analysis works on attacker-controlled bytes and calls out to Volatility;
+# the subprocess and hashing rules are answered in the code's own comments.
+"memtriage/pipeline/region_dump.py" = ["S603"]
+"memtriage/diagnostics.py" = ["S603", "S607"]
+
+[tool.bandit]
+exclude_dirs = ["tests", "build", "dist"]
+# B101 assert: not used outside tests. B404/B603: subprocess is how Volatility is
+# invoked, always with an argument list built in code, never through a shell.
+skips = ["B101", "B404"]

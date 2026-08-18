@@ -110,7 +110,7 @@ def test_process_analysis_records_model_verdict(client, monkeypatch):
                       placeholder=True, note="placeholder")
 
     class _FakeClf:
-        def classify(self, _png):  # noqa: ANN001
+        def classify(self, _png):
             return fake
 
     monkeypatch.setattr(vm, "get_classifier", lambda: _FakeClf())

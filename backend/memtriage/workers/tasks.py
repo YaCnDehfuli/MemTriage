@@ -18,13 +18,13 @@ from __future__ import annotations
 import hashlib
 import json
 import traceback
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from celery.utils.log import get_task_logger
 
 from ..config import get_settings
 from ..db import SessionLocal
-from ..models import AnalysisStatus, Dump, Investigation, InvestigationStatus, ProcessAnalysis
+from ..models import AnalysisStatus, Investigation, InvestigationStatus, ProcessAnalysis
 from ..pipeline.progress import set_state
 from ..security.sanitize import sanitize_obj, sanitize_text
 from ..storage import InvestigationPaths, ProcessPaths
@@ -57,7 +57,7 @@ def _analyze_regions(ordered_regions: list, attention, ppaths) -> tuple[list[dic
         logger.exception("region manifest could not be built")
         return manifest, lowlevel
 
-    by_patch = {index: region for index, region in enumerate(ordered_regions)}
+    by_patch = dict(enumerate(ordered_regions))
     analyses: list[dict] = []
     limit = DEEP_DIVE_REGIONS + SHALLOW_DIVE_REGIONS
     for position, record in enumerate(records[:limit]):
@@ -74,7 +74,7 @@ def _analyze_regions(ordered_regions: list, attention, ppaths) -> tuple[list[dic
             logger.exception("region analysis failed for patch %s", record.patch_index)
 
     lowlevel = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "grid_size": settings.grid_size,
         "ranked_regions": len(manifest),
         "regions": analyses,
@@ -143,7 +143,7 @@ def _sha256_streaming(path, chunk: int = 8 * 1024 * 1024) -> str:
     return h.hexdigest()
 
 
-def _write_consolidated(inv: Investigation, session) -> None:  # noqa: ANN001
+def _write_consolidated(inv: Investigation, session) -> None:
     """Rebuild result.json = triage + every completed process analysis."""
     paths = InvestigationPaths(inv.id)
     triage = json.loads(paths.triage.read_text()) if paths.triage.exists() else {}
@@ -154,7 +154,7 @@ def _write_consolidated(inv: Investigation, session) -> None:  # noqa: ANN001
             analyses.append(json.loads(p.read_text()))
     report = {
         "investigation_id": inv.id,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "triage": triage,
         "process_analyses": analyses,
     }
@@ -162,7 +162,7 @@ def _write_consolidated(inv: Investigation, session) -> None:  # noqa: ANN001
 
 
 @celery_app.task(name="memtriage.run_triage", bind=True)
-def run_triage(self, investigation_id: str) -> str:  # noqa: ANN001
+def run_triage(self, investigation_id: str) -> str:
     session = SessionLocal()
     try:
         inv = session.get(Investigation, investigation_id)
@@ -231,7 +231,7 @@ def run_triage(self, investigation_id: str) -> str:  # noqa: ANN001
                   progress=100, message="Triage complete — select a process to analyze")
         return "triaged"
 
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.exception("run_triage failed for %s", investigation_id)
         inv = session.get(Investigation, investigation_id)
         if inv is not None:
@@ -245,7 +245,7 @@ def run_triage(self, investigation_id: str) -> str:  # noqa: ANN001
 
 
 @celery_app.task(name="memtriage.run_process_analysis", bind=True)
-def run_process_analysis(self, analysis_id: str) -> str:  # noqa: ANN001
+def run_process_analysis(self, analysis_id: str) -> str:
     session = SessionLocal()
     try:
         a = session.get(ProcessAnalysis, analysis_id)
@@ -316,7 +316,7 @@ def run_process_analysis(self, analysis_id: str) -> str:  # noqa: ANN001
         if grid_available and verdict.model_loaded:
             try:
                 attention = vm.get_classifier().attention_map(str(ppaths.grid))
-            except Exception:  # noqa: BLE001
+            except Exception:
                 attention = None
             if attention:
                 from ..pipeline import explain as ex
@@ -363,7 +363,7 @@ def run_process_analysis(self, analysis_id: str) -> str:  # noqa: ANN001
                   message="Process analysis complete")
         return "done"
 
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.exception("run_process_analysis failed for %s", analysis_id)
         a = session.get(ProcessAnalysis, analysis_id)
         if a is not None:

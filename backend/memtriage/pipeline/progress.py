@@ -92,6 +92,7 @@ def set_state(
     session.refresh(obj)
 
     if is_inv:
-        publish_event(investigation_channel(obj.id), InvestigationState.from_orm_obj(obj).model_dump())
+        publish_event(investigation_channel(obj.id),
+                      InvestigationState.from_orm_obj(obj).model_dump())
     else:
         publish_event(analysis_channel(obj.id), AnalysisState.from_orm_obj(obj).model_dump())

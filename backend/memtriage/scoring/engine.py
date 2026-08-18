@@ -72,7 +72,7 @@ class ScoringEngine:
                 continue
             try:
                 hits = rule.evaluate(ctx)
-            except Exception:  # noqa: BLE001 - a broken rule must not sink triage
+            except Exception:  # noqa: S112 — one failing rule must not stop scoring
                 continue
             weight = profile.rule_weight(rule)
             for hit in hits:
@@ -151,9 +151,7 @@ class ScoringEngine:
             return False
         if o.confidence < profile.confidence_floor:
             return False
-        if profile.require_correlation and not getattr(o, "_correlated", False):
-            return False
-        return True
+        return not (profile.require_correlation and not getattr(o, "_correlated", False))
 
     @staticmethod
     def _attack(objects: list[ScoredObject]) -> list[dict]:
@@ -194,7 +192,8 @@ class ScoringEngine:
                                     "risk": o["risk"], "score": o["score"]})
         for k in pi.keys() & ci.keys():
             a, b = pi[k], ci[k]
-            if a["score"] != b["score"] or a["risk"] != b["risk"] or a["confidence"] != b["confidence"]:
+            if (a["score"] != b["score"] or a["risk"] != b["risk"]
+                    or a["confidence"] != b["confidence"]):
                 changed.append({
                     "object_type": k[0], "key": k[1], "label": b["label"],
                     "score_from": a["score"], "score_to": b["score"],

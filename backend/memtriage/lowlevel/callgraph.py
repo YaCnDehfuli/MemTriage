@@ -93,7 +93,7 @@ class CallGraph:
         }
 
     @classmethod
-    def unavailable(cls, reason: str) -> "CallGraph":
+    def unavailable(cls, reason: str) -> CallGraph:
         return cls(available=False, reason=reason)
 
 
@@ -160,7 +160,7 @@ def _build(listing: Listing, data: bytes, budget: Budget) -> CallGraph:
         node_of[address] = node.id
         nodes.append(node)
 
-    boundaries = starts + [end]
+    boundaries = [*starts, end]
     for index, node in enumerate(nodes):
         low, high = boundaries[index], boundaries[index + 1]
         node.instruction_count = sum(1 for i in instructions if low <= i.address < high)

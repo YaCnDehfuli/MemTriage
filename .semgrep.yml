@@ -1,0 +1,87 @@
+# Repo-specific rules. The registry packs cover the general cases; these encode
+# the invariants this codebase depends on and would not otherwise be checked.
+rules:
+  - id: memtriage-no-shell-true
+    languages: [python]
+    severity: ERROR
+    message: >-
+      subprocess with shell=True. Volatility is invoked with an argument list
+      built in code; a shell here would put dump-derived text on a command line.
+    patterns:
+      - pattern-either:
+          - pattern: subprocess.run(..., shell=True, ...)
+          - pattern: subprocess.Popen(..., shell=True, ...)
+          - pattern: subprocess.call(..., shell=True, ...)
+          - pattern: os.system(...)
+    paths:
+      include: ["backend/"]
+
+  - id: memtriage-no-eval-of-dump-data
+    languages: [python]
+    severity: ERROR
+    message: >-
+      eval/exec on data. Everything in this pipeline is derived from an untrusted
+      memory image and is parsed as data only.
+    patterns:
+      - pattern-either:
+          - pattern: eval(...)
+          - pattern: exec(...)
+          - pattern: pickle.loads(...)
+          - pattern: yaml.load($X)
+    paths:
+      include: ["backend/"]
+
+  - id: memtriage-no-logging-secrets
+    languages: [python]
+    severity: ERROR
+    message: >-
+      An API key or token is being logged. Assistant keys are held for one
+      request and must never reach a log line or a stored record.
+    patterns:
+      - pattern-either:
+          - pattern: $LOG.info(..., $BODY.api_key, ...)
+          - pattern: $LOG.warning(..., $BODY.api_key, ...)
+          - pattern: $LOG.error(..., $BODY.api_key, ...)
+          - pattern: $LOG.debug(..., $BODY.api_key, ...)
+          - pattern: print(..., $BODY.api_key, ...)
+    paths:
+      include: ["backend/"]
+
+  - id: memtriage-no-key-persistence
+    languages: [python]
+    severity: ERROR
+    message: >-
+      An API key is being written to disk. Keys are request-scoped by design.
+    patterns:
+      - pattern-either:
+          - pattern: $PATH.write_text(..., $X.api_key, ...)
+          - pattern: 'json.dump({..., "api_key": ..., ...}, ...)'
+    paths:
+      include: ["backend/"]
+
+  - id: memtriage-artifact-path-guard
+    languages: [python]
+    severity: WARNING
+    message: >-
+      A FileResponse built from a request value. Artifact paths must be composed
+      from server-controlled parts and checked with storage.safe_within.
+    patterns:
+      - pattern: FileResponse($PATH / $USERVALUE, ...)
+    paths:
+      include: ["backend/memtriage/api/"]
+
+  - id: memtriage-no-key-in-browser-storage
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: >-
+      An assistant API key must not be written to localStorage or sessionStorage;
+      it lives in component state for the lifetime of the tab only.
+    patterns:
+      - pattern-either:
+          - pattern: localStorage.setItem("...", $KEY)
+          - pattern: sessionStorage.setItem("...", $KEY)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i).*(apikey|api_key|token|secret).*
+    paths:
+      include: ["frontend/src/"]

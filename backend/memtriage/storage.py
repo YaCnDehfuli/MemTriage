@@ -34,7 +34,7 @@ class InvestigationPaths:
         self.result = self.root / "result.json"
         self.assistant = self.root / "assistant"
 
-    def ensure(self) -> "InvestigationPaths":
+    def ensure(self) -> InvestigationPaths:
         for d in (self.root, self.dumps, self.volmemlyzer, self.processes):
             d.mkdir(parents=True, exist_ok=True)
         return self
@@ -58,7 +58,7 @@ class ProcessPaths:
         self.region_manifest = self.root / "regions.json"
         self.lowlevel = self.root / "lowlevel.json"
 
-    def ensure(self) -> "ProcessPaths":
+    def ensure(self) -> ProcessPaths:
         for d in (self.root, self.regions):
             d.mkdir(parents=True, exist_ok=True)
         return self

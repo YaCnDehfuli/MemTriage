@@ -35,7 +35,7 @@ class InvestigationState(BaseModel):
     updated_at: datetime
 
     @classmethod
-    def from_orm_obj(cls, inv) -> "InvestigationState":  # type: ignore[no-untyped-def]
+    def from_orm_obj(cls, inv) -> InvestigationState:  # type: ignore[no-untyped-def]
         return cls(
             investigation_id=inv.id,
             status=inv.status,
@@ -95,7 +95,7 @@ class AnalysisState(BaseModel):
     updated_at: datetime
 
     @classmethod
-    def from_orm_obj(cls, a) -> "AnalysisState":  # type: ignore[no-untyped-def]
+    def from_orm_obj(cls, a) -> AnalysisState:  # type: ignore[no-untyped-def]
         return cls(
             analysis_id=a.id,
             investigation_id=a.investigation_id,

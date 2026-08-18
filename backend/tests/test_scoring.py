@@ -7,7 +7,6 @@ from memtriage.scoring import diff_scored, score_records
 from memtriage.scoring import heuristics as H
 from memtriage.storage import InvestigationPaths
 
-
 # --------------------------------------------------------------------------
 # helpers
 # --------------------------------------------------------------------------

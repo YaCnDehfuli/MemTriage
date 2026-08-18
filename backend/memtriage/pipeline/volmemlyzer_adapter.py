@@ -18,7 +18,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from ..scoring import CONTEXT_PLUGINS, normalize_plugin_key, score_records
+from ..scoring import normalize_plugin_key, score_records
 from .attack import map_techniques
 
 # Names with no analyzable user VADs — excluded from VADViT selection.
@@ -271,7 +271,7 @@ def build_pipeline(vol_path: str | None, timeout_s: int):
 def _registry_has(pipe, name: str) -> bool:
     try:
         return bool(pipe.registry.has(name))
-    except Exception:  # noqa: BLE001 - be permissive about registry surface drift
+    except Exception:
         return True
 
 

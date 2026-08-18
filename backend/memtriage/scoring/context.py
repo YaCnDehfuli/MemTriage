@@ -99,7 +99,7 @@ class TriageContext:
 # Names that carry no user VADs and are noisy sources of false positives.
 _SYSTEM_OWNERS = {
     "system", "services.exe", "lsass.exe", "wininit.exe", "svchost.exe",
-    "smss.exe", "csrss.exe", "wininit.exe", "spoolsv.exe",
+    "smss.exe", "csrss.exe", "spoolsv.exe",
 }
 
 
@@ -200,5 +200,6 @@ def _build_net_aggregates(ctx: TriageContext, rows: list[dict] | None) -> None:
         if pid:
             ctx.pid_conn_count[pid] = ctx.pid_conn_count.get(pid, 0) + 1
         if (state in {"ESTABLISHED", "SYN_SENT"} and fip
-                and fip not in {"*", "0.0.0.0", "::"} and not _is_private_ip(fip)):
+                and fip not in {"*", "0.0.0.0", "::"}  # noqa: S104 — wildcard check
+                and not _is_private_ip(fip)):
             ctx.remote_pub_count[fip] = ctx.remote_pub_count.get(fip, 0) + 1

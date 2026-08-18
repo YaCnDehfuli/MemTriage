@@ -12,7 +12,7 @@ The workflow is two-phase and user-driven:
 from __future__ import annotations
 
 import enum
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import (
     JSON,
@@ -31,7 +31,7 @@ from .db import Base
 
 
 def _utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class InvestigationStatus(str, enum.Enum):
@@ -76,10 +76,10 @@ class Investigation(Base):
         DateTime(timezone=True), default=_utcnow, onupdate=_utcnow
     )
 
-    dumps: Mapped[list["Dump"]] = relationship(
+    dumps: Mapped[list[Dump]] = relationship(
         back_populates="investigation", cascade="all, delete-orphan"
     )
-    analyses: Mapped[list["ProcessAnalysis"]] = relationship(
+    analyses: Mapped[list[ProcessAnalysis]] = relationship(
         back_populates="investigation", cascade="all, delete-orphan"
     )
 
@@ -98,7 +98,7 @@ class Dump(Base):
     size_bytes: Mapped[int] = mapped_column(BigInteger, default=0)
     sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
-    investigation: Mapped["Investigation"] = relationship(back_populates="dumps")
+    investigation: Mapped[Investigation] = relationship(back_populates="dumps")
 
 
 class ProcessAnalysis(Base):
@@ -138,4 +138,4 @@ class ProcessAnalysis(Base):
         DateTime(timezone=True), default=_utcnow, onupdate=_utcnow
     )
 
-    investigation: Mapped["Investigation"] = relationship(back_populates="analyses")
+    investigation: Mapped[Investigation] = relationship(back_populates="analyses")

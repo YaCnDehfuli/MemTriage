@@ -19,7 +19,7 @@ Run as::
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from ..config import get_settings
@@ -71,7 +71,7 @@ def generate_placeholder(
         "placeholder": True,
         "model_name": model_name,
         "num_classes": num_classes,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "note": ("Randomly-initialized structural placeholder. Verdicts are NOT "
                  "meaningful; replace with the trained checkpoint to enable real "
                  "classification."),

@@ -55,7 +55,7 @@ def sanitize_obj(obj: Any, *, max_len: int = DEFAULT_MAX_LEN, _depth: int = 0) -
         return "…[max depth]"
     if isinstance(obj, str):
         return sanitize_text(obj, max_len=max_len)
-    if isinstance(obj, bool) or obj is None or isinstance(obj, (int, float)):
+    if isinstance(obj, bool) or obj is None or isinstance(obj, int | float):
         return obj
     if isinstance(obj, dict):
         return {
@@ -64,7 +64,7 @@ def sanitize_obj(obj: Any, *, max_len: int = DEFAULT_MAX_LEN, _depth: int = 0) -
             )
             for k, v in obj.items()
         }
-    if isinstance(obj, (list, tuple)):
+    if isinstance(obj, list | tuple):
         return [sanitize_obj(v, max_len=max_len, _depth=_depth + 1) for v in obj]
     # Unknown/opaque type: stringify and clean.
     return sanitize_text(obj, max_len=max_len)

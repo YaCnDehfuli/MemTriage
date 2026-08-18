@@ -295,7 +295,8 @@ def _thread_unbacked(ctx: TriageContext) -> list[Hit]:
             unbacked_flag = g(r, "Unbacked", "Suspicious")
             # Fire when the start address resolves to no backing module, or the
             # plugin explicitly flagged the region as unbacked/private.
-            if unbacked_flag in (True, 1, "1") or (owner in (None, "") and "owner" in {k.lower() for k in r}):
+            owner_missing = owner in (None, "") and "owner" in {k.lower() for k in r}
+            if unbacked_flag in (True, 1, "1") or owner_missing:
                 pid = g(r, "PID", "Pid", "pid")
                 try:
                     pid = int(pid)
@@ -319,7 +320,7 @@ _COMMON_PORTS = {
 
 
 def _is_public(ip: str) -> bool:
-    if not ip or ip in {"*", "0.0.0.0", "::"}:
+    if not ip or ip in {"*", "0.0.0.0", "::"}:  # noqa: S104 — matching a wildcard bind, not binding one
         return False
     try:
         return not ipaddress.ip_address(ip).is_private
@@ -350,7 +351,7 @@ def _conn(row: dict) -> dict:
     }
 
 
-def _net_rule(pred, ev):  # noqa: ANN001
+def _net_rule(pred, ev):
     def _eval(ctx: TriageContext) -> list[Hit]:
         hits: list[Hit] = []
         for row in ctx.records("netscan"):
@@ -363,49 +364,49 @@ def _net_rule(pred, ev):  # noqa: ANN001
     return _eval
 
 
-def _p_public_no_pid(c, ctx):  # noqa: ANN001
+def _p_public_no_pid(c, ctx):
     if (c["proto"].upper().startswith("TCP") and c["state"] == "ESTABLISHED"
             and _is_public(c["fip"]) and c["pid"] in (None, "", 0)):
         return f"Public ESTABLISHED connection to {c['fip']} with no owning PID"
     return None
 
 
-def _p_admin_outbound(c, ctx):  # noqa: ANN001
+def _p_admin_outbound(c, ctx):
     if (c["state"] in {"ESTABLISHED", "SYN_SENT"} and _is_public(c["fip"])
             and c["fp"] in {445, 3389, 23}):
         return f"Outbound to admin/service port {c['fp']} on public {c['fip']}"
     return None
 
 
-def _p_lolbin_outbound(c, ctx):  # noqa: ANN001
+def _p_lolbin_outbound(c, ctx):
     if (c["state"] in {"ESTABLISHED", "SYN_SENT"} and _is_public(c["fip"])
             and c["owner"] in LOLBIN_NET_CLIENTS):
         return f"{c['owner']} connecting outbound to public {c['fip']}"
     return None
 
 
-def _p_bad_port(c, ctx):  # noqa: ANN001
+def _p_bad_port(c, ctx):
     if (c["state"] in {"ESTABLISHED", "SYN_SENT"} and _is_public(c["fip"])
             and c["fp"] in _SUSPICIOUS_PORTS):
         return f"Known implant/C2 destination port {c['fp']} to {c['fip']}"
     return None
 
 
-def _p_uncommon_port(c, ctx):  # noqa: ANN001
+def _p_uncommon_port(c, ctx):
     if (c["state"] in {"ESTABLISHED", "SYN_SENT"} and _is_public(c["fip"])
             and c["fp"] and c["fp"] not in _COMMON_PORTS and c["fp"] not in _SUSPICIOUS_PORTS):
         return f"Uncommon destination port {c['fp']} to public {c['fip']}"
     return None
 
 
-def _p_unexpected_listener(c, ctx):  # noqa: ANN001
+def _p_unexpected_listener(c, ctx):
     if (c["proto"].upper().startswith("TCP") and c["state"] in {"LISTENING", "LISTEN"}
             and c["lp"] in {3389, 445, 139} and not is_system_owner(c["owner"])):
         return f"{c['owner'] or 'non-system process'} listening on sensitive port {c['lp']}"
     return None
 
 
-def _p_high_port_listener(c, ctx):  # noqa: ANN001
+def _p_high_port_listener(c, ctx):
     lip = c["la"].split(":")[0].strip() if c["la"] else ""
     is_loop = lip in {"127.0.0.1", "::1"}
     if (c["proto"].upper().startswith("TCP") and c["state"] in {"LISTENING", "LISTEN"}
@@ -415,7 +416,7 @@ def _p_high_port_listener(c, ctx):  # noqa: ANN001
     return None
 
 
-def _p_fanout(c, ctx):  # noqa: ANN001
+def _p_fanout(c, ctx):
     if _is_public(c["fip"]) and ctx.remote_pub_count.get(c["fip"], 0) >= 8:
         return f"{ctx.remote_pub_count[c['fip']]} sockets to the same remote {c['fip']}"
     return None
@@ -442,13 +443,17 @@ def _score_scheduled_task(row: dict) -> tuple[int, list[str]]:
     payload = (act + " " + args)
     non_system = H.not_system_path(payload) and H.is_suspicious_path(payload)
     if has_risky:
-        score += 12; why.append("Obfuscated/remote-content command")
+        score += 12
+        why.append("Obfuscated/remote-content command")
     if has_script:
-        score += 10; why.append("Script payload")
+        score += 10
+        why.append("Script payload")
     if non_system:
-        score += 10; why.append("Non-system/user-writable payload path")
+        score += 10
+        why.append("Non-system/user-writable payload path")
     if is_lolbin and (has_risky or has_script or non_system):
-        score += 8; why.append(f"LOLBIN action with risky content ({act})")
+        score += 8
+        why.append(f"LOLBIN action with risky content ({act})")
     return score, why
 
 
@@ -475,16 +480,19 @@ def _score_userassist(name: str) -> tuple[int, list[str]]:
     tools = ("mimikatz", "psexec", "procdump", "bloodhound", "sharphound", "rubeus",
              "cobaltstrike", "metasploit", "lazagne", "winpeas", "nc.exe", "ncat")
     if any(t in nl for t in tools):
-        score += 12; why.append("Known offensive tool name")
+        score += 12
+        why.append("Known offensive tool name")
     for tok, w, label in (("\\temp\\", 10, "Temp directory"),
                           ("\\downloads\\", 10, "Downloads directory"),
                           ("\\desktop\\", 8, "Desktop directory"),
                           ("\\users\\public\\", 8, "Public directory"),
                           ("\\appdata\\", 6, "AppData directory")):
         if tok in nl:
-            score += w; why.append(label)
+            score += w
+            why.append(label)
     if H.not_system_path(n):
-        score += 6; why.append("Non-system path")
+        score += 6
+        why.append("Non-system path")
     return score, why
 
 

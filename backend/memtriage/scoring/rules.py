@@ -13,8 +13,9 @@ traceable back to the rules and evidence that produced it.
 """
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from .context import TriageContext
@@ -55,7 +56,7 @@ class Rule:
     object_type: str            # OBJ_PROCESS | OBJ_CONNECTION | OBJ_PERSISTENCE
     severity: int               # 1..4
     confidence: float           # 0..1 — reliability of the source signal
-    evaluate: Callable[["TriageContext"], list[Hit]]
+    evaluate: Callable[[TriageContext], list[Hit]]
     enabled: bool = True
     rationale: str = ""         # why this heuristic / weight (documented inline)
 

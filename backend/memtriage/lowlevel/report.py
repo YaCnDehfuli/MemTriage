@@ -110,7 +110,7 @@ def _summarize(meta: dict, listing, control_flow: dict, calls: dict,
         "highest_severity": patterns.get("highest_severity", "none"),
         "pattern_count": len(hits),
         "techniques": sorted({h["technique"] for h in hits if h.get("technique")}),
-        "instruction_count": getattr(listing, "instructions", None) and len(listing.instructions)
+        "instruction_count": (getattr(listing, "instructions", None) and len(listing.instructions))
         or 0,
         "block_count": control_flow.get("block_count", 0),
         "function_count": calls.get("node_count", 0),

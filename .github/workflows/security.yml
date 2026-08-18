@@ -1,0 +1,224 @@
+name: security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly, so a newly disclosed CVE in a pinned dependency surfaces without a push.
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sast:
+    name: semgrep
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install semgrep==1.97.0
+      - name: Scan
+        run: |
+          semgrep scan \
+            --config p/ci --config p/python --config p/react \
+            --config p/security-audit --config .semgrep.yml \
+            --sarif --output semgrep.sarif \
+            --metrics off --error --severity ERROR
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep
+
+  bandit:
+    name: bandit
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "bandit[sarif,toml]==1.8.0"
+      - name: Scan
+        run: |
+          bandit -r backend/memtriage -c backend/pyproject.toml \
+            --severity-level medium --confidence-level medium \
+            -f sarif -o bandit.sarif
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: bandit.sarif
+          category: bandit
+
+  dependencies:
+    name: dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: pip install pip-audit==2.7.3
+      - name: pip-audit
+        run: pip-audit -r backend/requirements.txt --strict --desc
+      - name: npm audit
+        working-directory: frontend
+        run: npm audit --audit-level=high
+
+  secrets:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: a key committed and later removed is still a leaked key.
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  filesystem:
+    name: trivy (filesystem + config)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vulnerabilities and secrets in the tree
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scanners: vuln,secret,misconfig
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          format: sarif
+          output: trivy-fs.sarif
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-fs.sarif
+          category: trivy-fs
+      - name: Fail on high or critical
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scanners: vuln,misconfig
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          format: table
+
+  images:
+    name: trivy (images)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [api, frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: docker build -f deploy/Dockerfile.${{ matrix.image }} -t memtriage-${{ matrix.image }}:ci .
+      - name: Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: image
+          image-ref: memtriage-${{ matrix.image }}:ci
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          format: sarif
+          output: trivy-${{ matrix.image }}.sarif
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-${{ matrix.image }}.sarif
+          category: trivy-image-${{ matrix.image }}
+
+  codeql:
+    name: codeql (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript-typescript]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: codeql-${{ matrix.language }}
+
+  dast:
+    name: zap baseline
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start the API
+        run: |
+          docker build -f deploy/Dockerfile.api -t memtriage-api:zap .
+          docker run -d --name memtriage-api -p 8000:8000 \
+            -e MEMTRIAGE_DATABASE_URL=sqlite:////tmp/zap.db \
+            -e MEMTRIAGE_DATA_DIR=/tmp/zap-data \
+            -e MEMTRIAGE_REDIS_URL=redis://127.0.0.1:6379/0 \
+            memtriage-api:zap
+          for _ in $(seq 1 40); do
+            curl -fsS http://127.0.0.1:8000/api/health && break
+            sleep 3
+          done
+
+      - name: Baseline scan
+        uses: zaproxy/action-baseline@v0.13.0
+        with:
+          target: http://127.0.0.1:8000
+          rules_file_name: .zap/rules.tsv
+          cmd_options: "-a -I -j"
+          allow_issue_writing: false
+
+      - name: API logs
+        if: always()
+        run: docker logs memtriage-api || true
+
+  sbom:
+    name: sbom
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: cyclonedx-json
+          artifact-name: memtriage-sbom.cdx.json

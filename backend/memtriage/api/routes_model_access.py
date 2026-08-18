@@ -12,7 +12,7 @@ import json
 import re
 import time
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from threading import Lock
 
@@ -171,7 +171,7 @@ def create_model_access_request(body: ModelAccessRequest, request: Request) -> M
     _rate_limit(client_ip)
 
     request_id = uuid.uuid4().hex
-    submitted_at = datetime.now(timezone.utc)
+    submitted_at = datetime.now(UTC)
     clean = ModelAccessRequest(
         full_name=sanitize_text(body.full_name, max_len=120),
         email=body.email,

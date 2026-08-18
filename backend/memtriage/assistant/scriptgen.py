@@ -11,7 +11,7 @@ import json
 
 from .context_pack import ContextPack
 from .providers import ANTHROPIC, Provider, get_provider, resolve_base_url
-from .service import ROLE_INSTRUCTIONS, build_system_prompt
+from .service import ROLE_INSTRUCTIONS
 
 BRIEFING_FILENAME = "memtriage_briefing.md"
 

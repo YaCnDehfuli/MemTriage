@@ -141,11 +141,11 @@ def register_error_handlers(app: FastAPI) -> None:
 
 
 __all__ = [
+    "REQUEST_ID_HEADER",
     "Conflict",
     "MemTriageError",
     "NotFound",
     "RateLimited",
-    "REQUEST_ID_HEADER",
     "UpstreamError",
     "ValidationFailed",
     "error_response",
