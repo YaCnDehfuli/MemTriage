@@ -104,6 +104,42 @@ def check_volatility() -> Check:
     return Check("volatility3", OK, candidate)
 
 
+def check_symbols() -> Check:
+    """Windows images need a kernel symbol table, and the worker has no egress.
+
+    Without one every windows.* plugin fails and triage completes empty, which is
+    indistinguishable from a clean image unless someone says so here.
+    """
+    settings = get_settings()
+    configured = list(settings.vol_symbol_dirs or [])
+    if not configured:
+        return Check("volatility symbols", MISSING, "no symbol directories configured",
+                     "Set MEMTRIAGE_VOL_SYMBOL_DIRS, or give this host outbound access "
+                     "to msdl.microsoft.com. See docs/SYMBOLS.md.")
+
+    present, empty, absent = [], [], []
+    for candidate in configured:
+        path = Path(candidate)
+        try:
+            if not path.is_dir():
+                absent.append(candidate)
+            elif any(path.rglob("*.json*")):
+                present.append(candidate)
+            else:
+                empty.append(candidate)
+        except OSError:
+            absent.append(candidate)
+
+    if present:
+        return Check("volatility symbols", OK, ", ".join(present),
+                     extra={"empty": empty, "missing": absent})
+    detail = f"configured but unusable: {', '.join(empty + absent)}"
+    return Check("volatility symbols", MISSING, detail,
+                 "Pre-fetch symbols on a networked machine and mount them here; "
+                 "otherwise every Windows plugin fails and triage returns nothing. "
+                 "See docs/SYMBOLS.md.")
+
+
 def check_model() -> Check:
     settings = get_settings()
     checkpoint = Path(settings.model_checkpoint_path)
@@ -174,6 +210,7 @@ CHECKS = (
     check_database,
     check_broker,
     check_volatility,
+    check_symbols,
     check_inference,
     check_disassembly,
     check_pe_parser,

@@ -15,11 +15,14 @@ Nothing here is executed against the dump — records are parsed as data only.
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import Any
 
 from ..scoring import normalize_plugin_key, score_records
 from .attack import map_techniques
+
+logger = logging.getLogger(__name__)
 
 # Names with no analyzable user VADs — excluded from VADViT selection.
 _NON_ANALYZABLE = {"system", "registry", "memory compression", "secure system"}
@@ -258,14 +261,57 @@ def assemble_triage(features_flat: dict, records: dict[str, list[dict]], *,
 # Volatility-touching orchestration (thin)
 # --------------------------------------------------------------------------
 
-def build_pipeline(vol_path: str | None, timeout_s: int):
-    """Construct a VolMemLyzer Pipeline (lazy import; worker image only)."""
+def usable_symbol_dirs(candidates: list[str] | None) -> list[str]:
+    """Keep only symbol directories that exist and hold something.
+
+    Passing a path that is not there is worse than passing nothing: Volatility
+    accepts it silently and the run still fails, one layer further from the
+    cause.
+    """
+    usable = []
+    for candidate in candidates or []:
+        # Path("") is the current directory, which would hand Volatility the
+        # working directory as a symbol path.
+        if not str(candidate).strip():
+            continue
+        path = Path(candidate)
+        try:
+            if path.is_dir() and any(path.iterdir()):
+                usable.append(str(path))
+        except OSError:
+            continue
+    return usable
+
+
+def build_pipeline(vol_path: str | None, timeout_s: int, *,
+                   symbol_dirs: list[str] | None = None, offline: bool = False):
+    """Construct a VolMemLyzer Pipeline (lazy import; worker image only).
+
+    ``symbol_dirs``/``offline`` are only forwarded when the installed VolMemLyzer
+    accepts them, so an older checkout of the submodule still works — it just
+    cannot run offline.
+    """
+    import inspect
+
     from volmemlyzer.pipeline import Pipeline
     from volmemlyzer.plugins import build_registry
     from volmemlyzer.runner import VolRunner
 
-    runner = VolRunner(vol_path=vol_path, default_timeout_s=timeout_s, default_renderer="json")
-    return Pipeline(runner, build_registry())
+    kwargs: dict = {"vol_path": vol_path, "default_timeout_s": timeout_s,
+                    "default_renderer": "json"}
+    supported = set(inspect.signature(VolRunner.__init__).parameters)
+    dirs = usable_symbol_dirs(symbol_dirs)
+    if "symbol_dirs" in supported and dirs:
+        kwargs["symbol_dirs"] = dirs
+    if "offline" in supported and offline:
+        kwargs["offline"] = True
+    if dirs and "symbol_dirs" not in supported:
+        logger.warning(
+            "Symbol directories are configured (%s) but the installed VolMemLyzer "
+            "cannot forward them to Volatility. Update the component, or Windows "
+            "plugins will fail on a host without outbound access.", ", ".join(dirs))
+
+    return Pipeline(VolRunner(**kwargs), build_registry())
 
 
 def _registry_has(pipe, name: str) -> bool:
@@ -275,51 +321,126 @@ def _registry_has(pipe, name: str) -> bool:
         return True
 
 
-def collect_records(pipe, image_path: str, artifacts_dir: str) -> tuple[dict, dict]:
-    """Run the triage plugin set once and return (records_by_key, manifest).
+def _attempted_count(pipe) -> int:
+    """How many plugins this run tried. Feature extraction covers the whole
+    registry, which is the larger of the two passes."""
+    try:
+        return max(len(pipe.registry.names()), len(TRIAGE_PLUGINS))
+    except Exception:
+        return len(TRIAGE_PLUGINS)
 
-    ``records_by_key`` is keyed by canonical context key; ``manifest`` maps that
-    key to the cached artifact's filename so ``/rescore`` can reload it without
-    touching Volatility.
+
+def collect_records(pipe, image_path: str, artifacts_dir: str) -> tuple[dict, dict, dict]:
+    """Run the triage plugin set once and return (records, manifest, failures).
+
+    ``records`` is keyed by canonical context key; ``manifest`` maps that key to
+    the cached artifact's filename so ``/rescore`` can reload it without touching
+    Volatility; ``failures`` names the plugins that produced nothing usable.
     """
     requested = {p for p in TRIAGE_PLUGINS if _registry_has(pipe, p)}
     res = pipe.run_plugin_raw(image_path=image_path, enable=requested,
                               outdir=artifacts_dir, use_cache=True)
-    plugins = res.artifacts.get("plugins", {}) if res and res.artifacts else {}
+    artifacts = (res.artifacts if res and res.artifacts else {}) or {}
+    plugins = artifacts.get("plugins", {}) or {}
+    failures = dict(artifacts.get("failed_plugins", {}) or {})
 
     records: dict[str, list[dict]] = {}
     manifest: dict[str, str] = {}
     for vml_name, path in plugins.items():
         key = normalize_plugin_key(vml_name)
-        records[key] = _load_records(path)
-        if path:
+        parsed = _load_records(path)
+        records[key] = parsed
+        if path and Path(path).exists():
             manifest[key] = Path(path).name
-    return records, manifest
+        if not parsed and key not in failures and not _has_content(path):
+            failures[key] = "produced no parseable records"
+    return records, manifest, failures
+
+
+def _has_content(path) -> bool:
+    try:
+        return bool(path) and Path(path).is_file() and Path(path).stat().st_size > 0
+    except OSError:
+        return False
+
+
+def extraction_health(attempted: int, failures: dict) -> dict:
+    """Summarize whether this run can be trusted, and say why when it cannot.
+
+    Distinguishing "this image has no such artifacts" from "Volatility could not
+    run" is the whole point: both otherwise arrive as an empty dashboard.
+    """
+    failed = len(failures)
+    health = {
+        "plugins_attempted": attempted,
+        "plugins_failed": failed,
+        "failed_plugins": dict(sorted(failures.items())),
+        "degraded": failed > 0,
+        "severity": "ok",
+        "message": "",
+    }
+    if not failed:
+        health["message"] = "All requested Volatility plugins produced output."
+        return health
+
+    blob = " ".join(str(v) for v in failures.values()).lower()
+    symbols = "symbol" in blob
+    widespread = attempted and failed >= max(3, int(attempted * 0.5))
+    if widespread or symbols:
+        health["severity"] = "critical"
+        health["message"] = (
+            f"{failed} of {attempted} Volatility plugins produced no output"
+            + (", and the failures point at an unresolvable kernel symbol table. "
+               "Windows plugins cannot run without one, so this triage is empty "
+               "rather than clean. Supply pre-fetched symbols (see docs/SYMBOLS.md)."
+               if symbols else
+               ". Most plugins failing usually means one shared cause; check a "
+               ".stderr.txt file beside the cached artifacts.")
+        )
+    else:
+        health["severity"] = "warning"
+        health["message"] = (
+            f"{failed} of {attempted} Volatility plugins produced no output, so some "
+            "features and evidence are missing from this triage."
+        )
+    return health
 
 
 def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
-               timeout_s: int, profile: dict | None = None) -> dict:
+               timeout_s: int, profile: dict | None = None,
+               symbol_dirs: list[str] | None = None, offline: bool = False) -> dict:
     """Run VolMemLyzer on one snapshot and return the scored triage view.
 
-    Returns keys: features, dashboard, processes, profile, manifest, vol_version.
+    Returns keys: features, dashboard, processes, profile, manifest, vol_version,
+    extraction.
     """
     from dataclasses import asdict
 
     from volmemlyzer.utilities import _flatten_dict
 
-    pipe = build_pipeline(vol_path, timeout_s)
+    pipe = build_pipeline(vol_path, timeout_s, symbol_dirs=symbol_dirs, offline=offline)
 
     # Aggregate IoC features (dashboard backbone).
     row = pipe.run_extract_features(image_path=image_path, artifacts_dir=artifacts_dir,
                                     use_cache=True)
     features_flat = _flatten_dict(asdict(row).get("features") or {})
     vol_version = getattr(row, "vol_version", None)
+    failures = dict(getattr(row, "failed_plugins", {}) or {})
 
     # Cache the full triage plugin set once; the scoring engine works off it.
-    records, manifest = collect_records(pipe, image_path, artifacts_dir)
+    records, manifest, raw_failures = collect_records(pipe, image_path, artifacts_dir)
+    failures.update(raw_failures)
+
+    health = extraction_health(_attempted_count(pipe), failures)
+    if health["severity"] == "critical":
+        logger.error("triage extraction degraded: %s", health["message"])
+    elif health["degraded"]:
+        logger.warning("triage extraction degraded: %s", health["message"])
 
     view = assemble_triage(features_flat, records, vol_version=vol_version, profile=profile)
     view["manifest"] = manifest
+    view["extraction"] = health
+    view["dashboard"]["extraction"] = health
     return view
 
 

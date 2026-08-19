@@ -65,7 +65,7 @@ def test_triage_task_wires_adapter_and_sanitizes(client, monkeypatch):
 
     from memtriage.pipeline import volmemlyzer_adapter as vml
 
-    def fake_run_triage(image_path, artifacts_dir, *, vol_path, timeout_s):
+    def fake_run_triage(image_path, artifacts_dir, *, vol_path, timeout_s, **kwargs):
         return {
             "features": {"pslist.nproc": 42},
             "dashboard": {

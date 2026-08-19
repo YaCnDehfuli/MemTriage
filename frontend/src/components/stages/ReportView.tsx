@@ -1,5 +1,6 @@
 import { useApp } from "../../state/store";
 import { TriageDisclaimer } from "../triage/Disclaimer";
+import { ExtractionNotice } from "../triage/ExtractionNotice";
 import { RISK_ORDER } from "../../lib/format";
 import { EmptyState, Panel, RiskBadge } from "../primitives";
 
@@ -31,6 +32,8 @@ export function ReportView() {
           <span className="btn-ghost cursor-default text-xs opacity-60">Export (live only)</span>
         )}
       </header>
+
+      <ExtractionNotice health={triage?.dashboard?.extraction} />
 
       <TriageDisclaimer disclaimer={disclaimer} />
 
