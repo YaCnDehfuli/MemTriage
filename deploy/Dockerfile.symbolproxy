@@ -1,0 +1,17 @@
+# --- MemTriage symbol proxy ---
+# The only component that bridges the isolated worker to the outside world, and
+# it can reach exactly one host. Kept to the Python standard library so there is
+# nothing to audit but proxy.py itself.
+FROM python:3.11-alpine
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /app
+COPY deploy/symbolproxy/proxy.py /app/proxy.py
+
+RUN addgroup -S proxy && adduser -S -G proxy proxy
+USER proxy
+
+EXPOSE 3128
+CMD ["python", "/app/proxy.py"]

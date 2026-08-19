@@ -23,7 +23,38 @@ indistinguishable from a clean image. MemTriage now says so explicitly (the
 triage record carries an `extraction` block, and `/api/health/deep` reports a
 `volatility symbols` check), but the fix is to supply the symbols.
 
-## Producing them
+## How the shipped stack solves this
+
+The worker still has **no direct egress**. A `symbolproxy` service sits on both
+networks and forwards to the symbol server *only*:
+
+```
+worker (internal only)  --HTTP_PROXY-->  symbolproxy  --https-->  msdl.microsoft.com
+                                              |
+                                              +--> anything else: 403, logged
+```
+
+`deploy/symbolproxy/proxy.py` is ~180 lines of standard library, because it is a
+security control and should be readable in one sitting. It:
+
+- allows only the hosts in `SYMBOLPROXY_ALLOWED_HOSTS` (exact match — no suffix
+  matching, so `msdl.microsoft.com.attacker.example` is refused);
+- **re-issues plain http upstream over https.** Volatility requests
+  `http://msdl.microsoft.com/...`, and a PDB fetched in the clear is a binary an
+  on-path attacker can choose, parsed in the container holding your evidence;
+- tunnels `CONNECT` only for allowlisted hosts, and only to port 443;
+- refuses redirects that leave the allowlist, caps response size, and logs every
+  ALLOW and DENY;
+- refuses to start at all if the allowlist is empty.
+
+That is enough for Volatility to resolve symbols for any image automatically. The
+pre-fetched `symbols/` directory below still takes precedence and remains the
+right answer for genuinely air-gapped work.
+
+To go fully offline, drop the `symbolproxy` service, remove the worker's
+`HTTP_PROXY`/`HTTPS_PROXY`, and set `MEMTRIAGE_VOL_OFFLINE=true`.
+
+## Producing them (air-gapped, or to pin a specific build)
 
 On a machine **with** internet access and the same Volatility version the worker
 uses:
@@ -100,17 +131,19 @@ If plugins still fail, Volatility's own error for each one is written beside the
 cached artifact as `<name>.json.stderr.txt` under the investigation's
 `volmemlyzer/` directory.
 
-## If you would rather allow egress
+## Why not just give the worker the internet
 
-Give the worker a network with outbound access and leave `symbols/` empty:
+You can (`networks: [internal, edge]`, `MEMTRIAGE_VOL_OFFLINE=false`), and for a
+throwaway lab it is fine. What you give up:
 
-```yaml
-# deploy/docker-compose.yml
-worker:
-  networks: [internal, edge]
-  environment:
-    MEMTRIAGE_VOL_OFFLINE: "false"
-```
+- **The fetch is cleartext.** Volatility's symbol server URL is
+  `http://msdl.microsoft.com/download/symbols`, so without the proxy's scheme
+  upgrade you are parsing a binary delivered over unauthenticated HTTP.
+- **It becomes an exfiltration path.** The worker feeds attacker-controlled bytes
+  to Capstone and pefile; those are the most plausible RCE surface in the stack.
+  Contained today: no route out, dropped capabilities, no privilege escalation.
+- **It discloses metadata.** The PDB GUID tells Microsoft, and anyone on path,
+  which Windows build you are analysing and when.
 
-This trades the isolation the worker was built for — it parses attacker-supplied
-input — against convenience. Prefer pre-fetched symbols.
+The proxy keeps automatic symbols while removing all three, for one small
+service. That is why it is the default.
