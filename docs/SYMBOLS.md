@@ -23,6 +23,20 @@ indistinguishable from a clean image. MemTriage now says so explicitly (the
 triage record carries an `extraction` block, and `/api/health/deep` reports a
 `volatility symbols` check), but the fix is to supply the symbols.
 
+## Required VolMemLyzer version
+
+The `components/volmemlyzer` submodule is pinned to a commit that carries the
+symbol-directory support (`VolRunner(symbol_dirs=..., offline=...)`). Older
+checkouts cannot forward those arguments to Volatility; MemTriage detects that,
+logs it once, and carries on without them — so triage still runs, it just cannot
+resolve symbols on a host with no outbound access.
+
+After cloning, make sure the submodule is at the pinned commit:
+
+```bash
+git submodule update --init --recursive
+```
+
 ## How the shipped stack solves this
 
 The worker still has **no direct egress**. A `symbolproxy` service sits on both
