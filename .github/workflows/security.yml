@@ -107,7 +107,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Vulnerabilities and secrets in the tree
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scanners: vuln,secret,misconfig
@@ -122,7 +122,7 @@ jobs:
           sarif_file: trivy-fs.sarif
           category: trivy-fs
       - name: Fail on high or critical
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scanners: vuln,misconfig
@@ -146,7 +146,7 @@ jobs:
       - name: Build
         run: docker build -f deploy/Dockerfile.${{ matrix.image }} -t memtriage-${{ matrix.image }}:ci .
       - name: Scan
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: memtriage-${{ matrix.image }}:ci
