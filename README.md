@@ -104,6 +104,10 @@ Memory images are untrusted input, and the design treats them that way.
 - **The worker has no outbound network access** — internal-only network, dropped
   capabilities, no privilege escalation, bounded memory. Dump bytes are read as
   data and never executed. Raw region bytes are never served for download.
+- **Volatility's one required fetch goes through an allowlisting proxy.** Windows
+  images need a kernel PDB from Microsoft or every plugin fails; a small
+  standard-library proxy grants exactly that host, upgrades the fetch from
+  cleartext to TLS, and logs every decision. See [docs/SYMBOLS.md](docs/SYMBOLS.md).
 - **Uploads are constrained** by file count, size, extension and denied
   executable/container magic bytes, and stream to disk rather than into memory.
 - **Everything dump-derived is sanitised** before it is persisted or rendered,

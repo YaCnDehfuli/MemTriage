@@ -56,6 +56,23 @@ services:
       redis: {condition: service_healthy}
     security_opt: ["no-new-privileges:true"]
 
+  # The only bridge between the isolated worker and the internet, and it can
+  # reach exactly one host. Volatility must fetch a Windows image's kernel PDB
+  # or every windows.* plugin fails; this grants that and nothing else, and
+  # re-issues the fetch over TLS because Volatility asks for it in the clear.
+  symbolproxy:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.symbolproxy
+    environment:
+      SYMBOLPROXY_ALLOWED_HOSTS: "msdl.microsoft.com,download.volatilityfoundation.org"
+    # On both networks by design: this is the boundary. Nothing is published.
+    networks: [edge, internal]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+    read_only: true
+    mem_limit: 256m
+
   worker:
     build:
       context: ..
@@ -64,12 +81,16 @@ services:
       <<: *common-env
       MEMTRIAGE_MODEL_CHECKPOINT_PATH: /models/Multi_32_224_6f_3u.pt
       MEMTRIAGE_LABELS_PATH: /models/labels.json
-      # This container has no route out, so Volatility can never reach the
-      # Microsoft symbol server. Read symbols from the mount below and fail fast
-      # instead of spending the per-plugin timeout on a download that cannot
-      # succeed. See docs/SYMBOLS.md.
+      # Volatility resolves Windows kernel symbols through symbolproxy, which
+      # permits the symbol server and nothing else. The mount below still takes
+      # precedence, and is what an air-gapped deployment uses on its own: set
+      # MEMTRIAGE_VOL_OFFLINE=true and drop the proxy to go fully offline.
+      # See docs/SYMBOLS.md.
       MEMTRIAGE_VOL_SYMBOL_DIRS: '["/symbols"]'
-      MEMTRIAGE_VOL_OFFLINE: "true"
+      MEMTRIAGE_VOL_OFFLINE: "false"
+      HTTP_PROXY: http://symbolproxy:3128
+      HTTPS_PROXY: http://symbolproxy:3128
+      NO_PROXY: postgres,redis,localhost,127.0.0.1
     volumes:
       - data:/data
       # Drop the VADViT checkpoint + labels.json here to enable real verdicts.
@@ -83,6 +104,7 @@ services:
     depends_on:
       postgres: {condition: service_healthy}
       redis: {condition: service_healthy}
+      symbolproxy: {condition: service_started}
     security_opt: ["no-new-privileges:true"]
     cap_drop: ["ALL"]
     mem_limit: 8g
