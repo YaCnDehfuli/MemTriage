@@ -61,6 +61,17 @@ class Settings(BaseSettings):
     vol_path: str | None = None
     vol_timeout_s: int = 1800  # per-plugin subprocess timeout
 
+    # Volatility resolves a Windows image's kernel symbols by downloading the
+    # matching PDB from msdl.microsoft.com. The worker deliberately has no route
+    # out, and without a kernel symbol table EVERY windows.* plugin fails — the
+    # run completes with an empty feature row and an empty process inventory.
+    # Point this at a directory of pre-fetched symbols (see docs/SYMBOLS.md);
+    # only directories that exist are passed through.
+    vol_symbol_dirs: list[str] = Field(default_factory=lambda: ["/symbols"])
+    # Skip the download attempt entirely. True is correct wherever there is no
+    # egress: it turns a slow failure into an immediate, clearly-labelled one.
+    vol_offline: bool = False
+
     # --- VADViT model (brought-your-own weights) ---
     model_checkpoint_path: Path = Path("/models/Multi_32_224_6f_3u.pt")
     labels_path: Path = Path("/models/labels.json")

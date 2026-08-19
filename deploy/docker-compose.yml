@@ -64,10 +64,19 @@ services:
       <<: *common-env
       MEMTRIAGE_MODEL_CHECKPOINT_PATH: /models/Multi_32_224_6f_3u.pt
       MEMTRIAGE_LABELS_PATH: /models/labels.json
+      # This container has no route out, so Volatility can never reach the
+      # Microsoft symbol server. Read symbols from the mount below and fail fast
+      # instead of spending the per-plugin timeout on a download that cannot
+      # succeed. See docs/SYMBOLS.md.
+      MEMTRIAGE_VOL_SYMBOL_DIRS: '["/symbols"]'
+      MEMTRIAGE_VOL_OFFLINE: "true"
     volumes:
       - data:/data
       # Drop the VADViT checkpoint + labels.json here to enable real verdicts.
       - ../models:/models:ro
+      # Pre-fetched Volatility symbols. Without a kernel symbol table every
+      # windows.* plugin fails and triage completes empty.
+      - ../symbols:/symbols:ro
     # Untrusted-input isolation: internal network only (no egress), dropped
     # capabilities, no privilege escalation, bounded memory.
     networks: [internal]

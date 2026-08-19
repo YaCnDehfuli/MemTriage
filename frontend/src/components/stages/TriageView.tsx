@@ -1,13 +1,14 @@
 import { useApp } from "../../state/store";
 import { Panel } from "../primitives";
 import { TriageDisclaimer } from "../triage/Disclaimer";
+import { ExtractionNotice } from "../triage/ExtractionNotice";
 import { IoCTable } from "../triage/IoCTable";
 import { AttackPanel, RiskSummaryPanel } from "../triage/Summary";
 import { TuningBar } from "../triage/TuningBar";
 
 export function TriageView() {
-  const { scored, profile, riskSummary, attack, disclaimer, diff, rescore, selectProcess, loading } =
-    useApp();
+  const { scored, profile, riskSummary, attack, disclaimer, diff, rescore, selectProcess,
+    loading, triage } = useApp();
 
   return (
     <div className="space-y-5">
@@ -22,6 +23,8 @@ export function TriageView() {
           </p>
         </div>
       </header>
+
+      <ExtractionNotice health={triage?.dashboard?.extraction} />
 
       <TriageDisclaimer disclaimer={disclaimer} />
 

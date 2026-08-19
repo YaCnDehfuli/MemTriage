@@ -188,7 +188,9 @@ def run_triage(self, investigation_id: str) -> str:
 
         primary = paths.dump_path(dumps[0].ordinal)
         view = vml.run_triage(str(primary), str(paths.volmemlyzer),
-                              vol_path=settings.vol_path, timeout_s=settings.vol_timeout_s)
+                              vol_path=settings.vol_path, timeout_s=settings.vol_timeout_s,
+                              symbol_dirs=settings.vol_symbol_dirs,
+                              offline=settings.vol_offline)
 
         set_state(session, inv, stage="inventorying",
                   message="Building process/PID inventory")
@@ -213,6 +215,7 @@ def run_triage(self, investigation_id: str) -> str:
             "artifacts": view.get("manifest", {}),
             "profile": view.get("profile") or dashboard.get("profile"),
             "disclaimer": view.get("disclaimer") or dashboard.get("disclaimer"),
+            "extraction": view.get("extraction") or dashboard.get("extraction"),
         })
         paths.triage.write_text(json.dumps(triage, indent=2))
 

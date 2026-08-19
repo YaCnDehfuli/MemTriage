@@ -307,7 +307,8 @@ _CACHED = {
 def _fake_triage_factory():
     from memtriage.pipeline import volmemlyzer_adapter as vml
 
-    def fake_run_triage(image_path, artifacts_dir, *, vol_path, timeout_s, profile=None):
+    def fake_run_triage(image_path, artifacts_dir, *, vol_path, timeout_s,
+                        profile=None, **kwargs):
         from pathlib import Path
         manifest = {}
         for key, recs in _CACHED.items():

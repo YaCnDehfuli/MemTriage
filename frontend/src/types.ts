@@ -77,6 +77,15 @@ export interface TuningProfile {
   rule_overrides: Record<string, { enabled?: boolean; weight?: number }>;
 }
 
+export interface ExtractionHealth {
+  plugins_attempted: number;
+  plugins_failed: number;
+  failed_plugins: Record<string, string>;
+  degraded: boolean;
+  severity: "ok" | "warning" | "critical";
+  message: string;
+}
+
 export interface TriageDisclaimer {
   headline: string;
   summary: string;
@@ -95,6 +104,7 @@ export interface Dashboard {
   attack_techniques: AttackTechnique[];
   profile: TuningProfile;
   disclaimer?: TriageDisclaimer;
+  extraction?: ExtractionHealth;
 }
 
 export interface Triage {

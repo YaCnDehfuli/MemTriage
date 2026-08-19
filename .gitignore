@@ -43,6 +43,10 @@ labels.json
 # --- Generated placeholder checkpoint + assistant context cache ---
 model_cache/
 
+# --- Volatility symbol packs (large, host-specific, fetched not committed) ---
+symbols/*
+!symbols/README.md
+
 # --- Security scan outputs ---
 security/reports/*.json
 security/reports/*.sarif

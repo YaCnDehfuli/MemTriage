@@ -15,8 +15,11 @@ SQLAlchemy==2.0.36
 psycopg[binary]==3.2.3
 
 # --- Forensics component (wrapped, installed from local path in Docker) ---
-# volmemlyzer is installed via `pip install -e ../VolMemLyzer3-CLI_forensic_tool`
-# in the worker image; it pulls in volatility3 as a transitive dependency.
+# volmemlyzer is installed via `pip install -e components/volmemlyzer` in the
+# worker image. It declares volatility3 without a version, so left alone the
+# engine silently changes between image builds; pin it here so a run is
+# reproducible and a regression is attributable.
+volatility3==2.28.0
 
 # --- Rendering / numerics (VADViT preprocessing reproduction) ---
 numpy==1.26.4
