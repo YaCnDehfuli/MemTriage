@@ -22,7 +22,7 @@
 > **MemTriage is an analyst triage aid, not a verdict engine.** It is not an EDR, antivirus product, or live endpoint monitor. Scores, ATT&CK mappings, model attention, and low-level indicators are evidence for review — not proof that a host or process is malicious. See [docs/METHODOLOGY.md](docs/METHODOLOGY.md) for the intended interpretation of each phase.
 
 <p align="center">
-  <img src="docs/assets/readme/volmemlyzer-workbench.png" alt="MemTriage VolMemLyzer workbench running automated memory-forensics triage" width="100%">
+  <img src="docs/assets/volmemlyzer-workbench.png" alt="MemTriage VolMemLyzer workbench running automated memory-forensics triage" width="100%">
 </p>
 
 ## Why MemTriage
@@ -100,11 +100,11 @@ The workbench supports automated or manual plugin execution, selectable coverage
 <table>
 <tr>
 <td width="50%" valign="top">
-<img src="docs/assets/readme/volmemlyzer-workbench.png" alt="VolMemLyzer workbench with automated triage controls and activity status">
+<img src="docs/assets/volmemlyzer-workbench.png" alt="VolMemLyzer workbench with automated triage controls and activity status">
 <br><sub><strong>Automated triage.</strong> Coverage, plugin selection, concurrency, cache policy, and run status stay visible in one place.</sub>
 </td>
 <td width="50%" valign="top">
-<img src="docs/assets/readme/volmemlyzer-feature-extraction.png" alt="VolMemLyzer searchable feature extraction table">
+<img src="docs/assets/volmemlyzer-feature-extraction.png" alt="VolMemLyzer searchable feature extraction table">
 <br><sub><strong>Feature extraction.</strong> Searchable feature output with JSON/CSV export for research and downstream analysis.</sub>
 </td>
 </tr>
@@ -115,7 +115,7 @@ The workbench supports automated or manual plugin execution, selectable coverage
 The model grid is only useful if the analyst can recover the memory it represents. MemTriage keeps that mapping explicit: high-attention patches are listed beside their VAD addresses and region types, so the next click lands on inspectable bytes rather than an abstract heatmap.
 
 <p align="center">
-  <img src="docs/assets/readme/vadvit-attention-attribution.png" alt="VADViT classification and attention mapped to VAD addresses" width="100%">
+  <img src="docs/assets/vadvit-attention-attribution.png" alt="VADViT classification and attention mapped to VAD addresses" width="100%">
 </p>
 
 > [!IMPORTANT]
@@ -128,31 +128,31 @@ Once a VAD is selected, the analyst can move laterally across views without losi
 <table>
 <tr>
 <td width="50%" valign="top">
-<img src="docs/assets/readme/region-overview.png" alt="Region analysis overview with instruction, block, function, call and indicator counts">
+<img src="docs/assets/region-overview.png" alt="Region analysis overview with instruction, block, function, call and indicator counts">
 <br><sub><strong>Overview.</strong> Address range, protection, backing file, VAD tag, hashes, analysis counts, and triage-aligned ATT&CK techniques.</sub>
 </td>
 <td width="50%" valign="top">
-<img src="docs/assets/readme/region-disassembly.png" alt="Region disassembly view">
+<img src="docs/assets/region-disassembly.png" alt="Region disassembly view">
 <br><sub><strong>Disassembly.</strong> Decoded instructions with addresses and bytes; partial decode coverage is shown rather than hidden.</sub>
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
-<img src="docs/assets/readme/region-call-graph.png" alt="Region call graph with local functions and indirect calls">
+<img src="docs/assets/region-call-graph.png" alt="Region call graph with local functions and indirect calls">
 <br><sub><strong>Call graph.</strong> Local functions, resolved API names, and indirect calls reveal the shape of dynamically resolved behavior.</sub>
 </td>
 <td width="50%" valign="top">
-<img src="docs/assets/readme/region-patterns.png" alt="Region analysis pattern indicators including decoder loops, PEB walks and indirect calls">
+<img src="docs/assets/region-patterns.png" alt="Region analysis pattern indicators including decoder loops, PEB walks and indirect calls">
 <br><sub><strong>Patterns.</strong> Decoder loops, PEB walks, writable/executable memory, indirect-call dominance, stack-built strings, and related indicators are surfaced with severity and technique context.</sub>
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
-<img src="docs/assets/readme/region-structure.png" alt="Region structure view with entropy profile and PE sections">
+<img src="docs/assets/region-structure.png" alt="Region structure view with entropy profile and PE sections">
 <br><sub><strong>Structure.</strong> Entropy profile, byte distribution, PE metadata, sections, imports, and image properties help distinguish layout from behavior.</sub>
 </td>
 <td width="50%" valign="top">
-<img src="docs/assets/readme/region-hex.png" alt="Hex dump of a selected memory region">
+<img src="docs/assets/region-hex.png" alt="Hex dump of a selected memory region">
 <br><sub><strong>Hex.</strong> A bounded byte view keeps the lowest-level evidence available for manual verification without exposing raw-region downloads.</sub>
 </td>
 </tr>
