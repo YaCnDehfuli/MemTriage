@@ -21,7 +21,7 @@ from ..models import (
     ProcessAnalysis,
 )
 from ..schemas import AnalysisState, AnalyzeProcessRequest, ProcessListItem
-from ..security.sanitize import sanitize_obj
+from ..security.sanitize import sanitize_obj, sanitize_text
 from ..storage import InvestigationPaths
 from ..workers.celery_app import celery_app
 
@@ -68,7 +68,11 @@ def analyze_process(
     body: AnalyzeProcessRequest,
     session: Session = Depends(get_session),
 ) -> AnalysisState:
-    inv = session.get(Investigation, investigation_id)
+    inv = session.scalars(
+        select(Investigation)
+        .where(Investigation.id == investigation_id)
+        .with_for_update()
+    ).one_or_none()
     if inv is None:
         raise HTTPException(status_code=404, detail="Investigation not found")
     if inv.status != InvestigationStatus.TRIAGED:
@@ -113,7 +117,21 @@ def analyze_process(
     session.add(analysis)
     session.commit()
     session.refresh(analysis)
-    celery_app.send_task("memtriage.run_process_analysis", args=[analysis.id])
+    try:
+        celery_app.send_task("memtriage.run_process_analysis", args=[analysis.id])
+    except Exception as exc:
+        analysis.status = AnalysisStatus.FAILED
+        analysis.stage = "failed"
+        analysis.message = "Process analysis could not be queued"
+        analysis.error = sanitize_text(
+            f"Queue submission failed ({type(exc).__name__})", max_len=1000
+        )
+        session.add(analysis)
+        session.commit()
+        raise HTTPException(
+            status_code=503,
+            detail="Process analysis could not be queued; retry when the broker is available.",
+        ) from exc
     return AnalysisState.from_orm_obj(analysis)
 
 

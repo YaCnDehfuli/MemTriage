@@ -7,16 +7,19 @@ create → add dump(s) → start triage under the hood.
 """
 from __future__ import annotations
 
+import hashlib
 import uuid
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from ..config import get_settings
 from ..db import SessionLocal, get_session
-from ..models import Dump, Investigation, InvestigationStatus
-from ..schemas import InvestigationCreatedResponse, InvestigationState
+from ..models import Dump, Investigation, InvestigationStatus, PluginRun, PluginRunStatus
+from ..pipeline.plugin_runner import plugin_catalog
+from ..pipeline.volmemlyzer_adapter import DEEP_TRIAGE_PLUGINS, LIGHT_TRIAGE_PLUGINS
+from ..schemas import InvestigationCreatedResponse, InvestigationState, StartTriageRequest
 from ..security.limits import SNIFF_BYTES, UploadRejected, sniff_reject, validate_extension
 from ..security.sanitize import sanitize_text
 from ..storage import InvestigationPaths, ensure_base_dirs
@@ -47,6 +50,7 @@ async def add_dump(
     x_filename: str = Header(..., description="Original filename of the snapshot"),
 ) -> dict:
     session = SessionLocal()
+    temporary = None
     try:
         inv = session.get(Investigation, investigation_id)
         if inv is None:
@@ -70,14 +74,18 @@ async def add_dump(
         if declared and declared.isdigit() and int(declared) > settings.max_upload_bytes:
             raise HTTPException(status_code=413, detail="Dump exceeds the size limit.")
 
-        ordinal = inv.dump_count
         paths = InvestigationPaths(investigation_id).ensure()
-        target = paths.dump_path(ordinal)
+        # Stream into a request-unique file first. The final ordinal is reserved
+        # only after all bytes are safely on disk, under a short row lock; two
+        # concurrent multi-GB uploads can therefore never write the same path.
+        temporary = paths.dumps / f".upload_{uuid.uuid4().hex}.part"
+        session.rollback()
 
         total = 0
         sniffed = False
+        digest = hashlib.sha256()
         try:
-            with open(target, "wb") as out:
+            with open(temporary, "xb") as out:
                 async for chunk in request.stream():
                     if not chunk:
                         continue
@@ -91,47 +99,139 @@ async def add_dump(
                     if total > settings.max_upload_bytes:
                         raise HTTPException(status_code=413, detail="Dump exceeds the size limit.")
                     out.write(chunk)
+                    digest.update(chunk)
         except HTTPException:
-            target.unlink(missing_ok=True)
             raise
         except Exception as exc:
-            target.unlink(missing_ok=True)
             raise HTTPException(status_code=400, detail="Upload failed while streaming.") from exc
 
         if total == 0:
-            target.unlink(missing_ok=True)
             raise HTTPException(status_code=400, detail="Empty upload.")
 
+        # Atomically reserve the next ordinal only after streaming succeeds.
+        # This is safe on both PostgreSQL and the SQLite development/test path,
+        # and holds the write lock for only the final rename + metadata insert.
+        new_count = session.scalar(
+            update(Investigation)
+            .where(Investigation.id == investigation_id)
+            .where(Investigation.status == InvestigationStatus.RECEIVED)
+            .where(Investigation.dump_count < settings.max_dumps_per_investigation)
+            .values(
+                dump_count=Investigation.dump_count + 1,
+                total_bytes=Investigation.total_bytes + total,
+            )
+            .returning(Investigation.dump_count)
+        )
+        if new_count is None:
+            session.rollback()
+            current = session.get(Investigation, investigation_id)
+            if current is None:
+                raise HTTPException(status_code=404, detail="Investigation not found")
+            if current.status != InvestigationStatus.RECEIVED:
+                raise HTTPException(
+                    status_code=409, detail="Triage already started; no more dumps"
+                )
+            raise HTTPException(
+                status_code=409,
+                detail=(f"At most {settings.max_dumps_per_investigation} snapshots "
+                        "per investigation."),
+            )
+
+        ordinal = int(new_count) - 1
+        target = paths.dump_path(ordinal)
+        temporary.replace(target)
+        temporary = None
         dump = Dump(id=str(uuid.uuid4()), investigation_id=investigation_id, ordinal=ordinal,
-                    original_filename=filename, size_bytes=total)
-        inv.dump_count += 1
-        inv.total_bytes += total
-        session.add_all([dump, inv])
+                    original_filename=filename, size_bytes=total, sha256=digest.hexdigest())
+        session.add(dump)
         session.commit()
         return {"investigation_id": investigation_id, "ordinal": ordinal,
-                "dump_count": inv.dump_count, "size_bytes": total}
+                "dump_count": int(new_count), "size_bytes": total}
     finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
         session.close()
 
 
 @router.post("/investigations/{investigation_id}/triage", response_model=InvestigationState)
 def start_triage(
-    investigation_id: str, session: Session = Depends(get_session)
+    investigation_id: str,
+    body: StartTriageRequest | None = None,
+    session: Session = Depends(get_session),
 ) -> InvestigationState:
-    inv = session.get(Investigation, investigation_id)
+    body = body or StartTriageRequest()
+    inv = session.scalars(
+        select(Investigation)
+        .where(Investigation.id == investigation_id)
+        .with_for_update()
+    ).one_or_none()
     if inv is None:
         raise HTTPException(status_code=404, detail="Investigation not found")
     if inv.dump_count < 1:
         raise HTTPException(status_code=409, detail="Add at least one dump before triage.")
-    if inv.status != InvestigationStatus.RECEIVED:
-        raise HTTPException(status_code=409, detail="Triage already started.")
+    if inv.status == InvestigationStatus.TRIAGING:
+        raise HTTPException(status_code=409, detail="Triage is already running.")
+
+    active_manual = session.scalars(
+        select(PluginRun)
+        .where(PluginRun.investigation_id == investigation_id)
+        .where(PluginRun.status.in_([PluginRunStatus.QUEUED, PluginRunStatus.RUNNING]))
+    ).first()
+    if active_manual is not None:
+        raise HTTPException(
+            status_code=409,
+            detail="A manual Volatility run is active; wait for it before starting triage.",
+        )
+
+    if body.mode == "light":
+        requested = list(LIGHT_TRIAGE_PLUGINS)
+    elif body.mode == "deep":
+        requested = list(DEEP_TRIAGE_PLUGINS)
+    else:
+        known = {row["name"] for row in plugin_catalog()}
+        requested = list(dict.fromkeys(
+            p.strip().lower() for p in body.plugins if p.strip()
+        ))
+        if not requested:
+            raise HTTPException(status_code=422, detail="Custom triage needs at least one plugin.")
+        unknown = [p for p in requested if p not in known]
+        if unknown:
+            raise HTTPException(status_code=422,
+                                detail=f"Unknown plugin(s): {', '.join(unknown)}")
+        # The process inventory is built from pslist. Make that contract
+        # server-owned so a custom plan cannot leave the inventory empty.
+        if "pslist" not in requested:
+            requested.insert(0, "pslist")
+
+    inv.status = InvestigationStatus.TRIAGING
     inv.stage = "queued"
-    inv.message = "Queued for triage"
+    inv.message = (f"Queued {body.mode} triage with {len(requested)} plugin(s)"
+                   + (" (force refresh)" if body.force else ""))
     inv.progress = 3
+    inv.error = None
+    inv.triage_mode = body.mode
+    inv.requested_plugins = requested
+    inv.concurrency = body.concurrency
+    inv.events = []
+    inv.cache_source = None
     session.add(inv)
     session.commit()
     session.refresh(inv)
-    celery_app.send_task("memtriage.run_triage", args=[investigation_id])
+    try:
+        celery_app.send_task("memtriage.run_triage", args=[investigation_id, body.force])
+    except Exception as exc:
+        inv.status = InvestigationStatus.FAILED
+        inv.stage = "failed"
+        inv.message = "Triage could not be queued"
+        inv.error = sanitize_text(
+            f"Queue submission failed ({type(exc).__name__})", max_len=1000
+        )
+        session.add(inv)
+        session.commit()
+        raise HTTPException(
+            status_code=503,
+            detail="Triage could not be queued; retry when the worker broker is available.",
+        ) from exc
     return InvestigationState.from_orm_obj(inv)
 
 

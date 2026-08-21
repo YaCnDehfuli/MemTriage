@@ -31,7 +31,8 @@ export function DeepDiveView() {
     );
   }
 
-  const id = investigationId ?? "demo-investigation";
+  if (!investigationId) return <EmptyState title="No investigation selected" hint="Upload a memory image and run triage first." />;
+  const id = investigationId;
   const gridUrl = client.artifactUrl(id, analysis.pid, "grid");
   const attnUrl = analysis.explainability.attention_png
     ? client.artifactUrl(id, analysis.pid, "attention")

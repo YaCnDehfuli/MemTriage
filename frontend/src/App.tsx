@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ErrorBanner } from "./components/ErrorBanner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { LeftRail } from "./components/LeftRail";
@@ -12,12 +12,45 @@ import { TriageView } from "./components/stages/TriageView";
 import { useApp } from "./state/store";
 
 export default function App() {
-  const { stage, demo, bootstrap, triage } = useApp();
+  const { stage, triageProgress, pluginRun, analysisProgress } = useApp();
+  const allowNavigation = useRef(false);
+  const workActive = (
+    triageProgress?.status === "triaging"
+    || pluginRun?.status === "queued"
+    || pluginRun?.status === "running"
+    || analysisProgress?.status === "analyzing"
+    || analysisProgress?.status === "queued"
+  );
 
-  // Boot straight into a populated workspace in demo mode.
   useEffect(() => {
-    if (demo && !triage) void bootstrap();
-  }, [demo, triage, bootstrap]);
+    if (!workActive) return;
+    window.history.pushState({ memtriageWorkGuard: true }, "", window.location.href);
+    const onPopState = () => {
+      if (allowNavigation.current) {
+        allowNavigation.current = false;
+        return;
+      }
+      const leave = window.confirm(
+        "Analysis is still running. Leaving this page may make the live work harder to monitor. Continue?",
+      );
+      if (leave) {
+        allowNavigation.current = true;
+        window.history.back();
+      } else {
+        window.history.pushState({ memtriageWorkGuard: true }, "", window.location.href);
+      }
+    };
+    const onBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("popstate", onPopState);
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => {
+      window.removeEventListener("popstate", onPopState);
+      window.removeEventListener("beforeunload", onBeforeUnload);
+    };
+  }, [workActive]);
 
   return (
     <div className="flex h-full flex-col">

@@ -15,8 +15,8 @@ const CACHE_LABEL: Record<string, string> = {
 };
 
 export function AssistantView() {
-  const { client, investigationId, demo, triage } = useApp();
-  const id = investigationId ?? "demo-investigation";
+  const { client, investigationId, triage } = useApp();
+  const id = investigationId ?? "";
 
   const [catalogue, setCatalogue] = useState<AssistantCatalogue | null>(null);
   const [pack, setPack] = useState<ContextPackSummary | null>(null);
@@ -346,11 +346,6 @@ export function AssistantView() {
                 </>
               ) : (
                 <p className="text-[12px] text-mist-400">Building the briefing…</p>
-              )}
-              {demo && (
-                <p className="text-[11px] text-mist-400">
-                  Demo mode answers from fixtures and makes no network request.
-                </p>
               )}
             </div>
           </Panel>

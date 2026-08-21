@@ -10,10 +10,15 @@ import type {
   ModelAccessPolicy,
   ModelAccessRequest,
   ModelAccessResponse,
+  PluginCatalogEntry,
+  PluginOutputFormat,
+  PluginOutputPreview,
+  PluginRunState,
   ProcessItem,
   RegionRecord,
   RescoreResponse,
   Triage,
+  TriageOptions,
   TuningProfile,
 } from "../types";
 
@@ -26,14 +31,13 @@ export interface ConsolidatedResult {
 export type UploadProgress = (fraction: number) => void;
 
 export interface ApiClient {
-  demo: boolean;
   createInvestigation(): Promise<{ investigation_id: string }>;
   addDump(
     id: string,
     file: File,
     onProgress?: UploadProgress,
   ): Promise<{ ordinal: number; dump_count: number }>;
-  startTriage(id: string): Promise<InvestigationState>;
+  startTriage(id: string, options: TriageOptions): Promise<InvestigationState>;
   getInvestigation(id: string): Promise<InvestigationState>;
   getResult(id: string): Promise<ConsolidatedResult>;
   listProcesses(id: string): Promise<ProcessItem[]>;
@@ -45,6 +49,23 @@ export interface ApiClient {
   getLowLevel(id: string, pid: number): Promise<LowLevelReport>;
   getModelAccessPolicy(): Promise<ModelAccessPolicy>;
   requestModelAccess(body: ModelAccessRequest): Promise<ModelAccessResponse>;
+  getPluginCatalog(): Promise<PluginCatalogEntry[]>;
+  runPlugins(id: string, plugins: string[], concurrency: number): Promise<PluginRunState>;
+  getPluginRun(id: string, runId: string): Promise<PluginRunState>;
+  listPluginRuns(id: string): Promise<PluginRunState[]>;
+  getPluginOutput(
+    id: string,
+    runId: string,
+    plugin: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<PluginOutputPreview>;
+  pluginOutputDownloadUrl(
+    id: string,
+    runId: string,
+    plugin: string,
+    format: PluginOutputFormat,
+  ): string;
   getAssistantProviders(): Promise<AssistantCatalogue>;
   getContextPack(id: string, refresh?: boolean): Promise<ContextPackSummary>;
   askAssistant(id: string, body: AssistantChatRequest): Promise<ChatReply>;
@@ -100,7 +121,6 @@ async function json<T>(res: Response): Promise<T> {
 export function createLiveClient(base = ""): ApiClient {
   const api = `${base}/api`;
   return {
-    demo: false,
     async createInvestigation() {
       return json(await fetch(`${api}/investigations`, { method: "POST" }));
     },
@@ -139,8 +159,14 @@ export function createLiveClient(base = ""): ApiClient {
         xhr.send(file);
       });
     },
-    async startTriage(id) {
-      return json(await fetch(`${api}/investigations/${id}/triage`, { method: "POST" }));
+    async startTriage(id, options) {
+      return json(
+        await fetch(`${api}/investigations/${id}/triage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(options),
+        }),
+      );
     },
     async getInvestigation(id) {
       return json(await fetch(`${api}/investigations/${id}`));
@@ -192,6 +218,37 @@ export function createLiveClient(base = ""): ApiClient {
           body: JSON.stringify(body),
         }),
       );
+    },
+    async getPluginCatalog() {
+      return json(await fetch(`${api}/plugins/catalog`));
+    },
+    async runPlugins(id, plugins, concurrency) {
+      return json(
+        await fetch(`${api}/investigations/${id}/plugins/run`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ plugins, concurrency }),
+        }),
+      );
+    },
+    async getPluginRun(id, runId) {
+      return json(await fetch(`${api}/investigations/${id}/plugins/runs/${runId}`));
+    },
+    async listPluginRuns(id) {
+      // The workbench restores only the most recent run; do not transfer every
+      // historical run's durable event transcript just to select its first row.
+      return json(await fetch(`${api}/investigations/${id}/plugins/runs?limit=1`));
+    },
+    async getPluginOutput(id, runId, plugin, offset = 0, limit = 200) {
+      return json(
+        await fetch(
+          `${api}/investigations/${id}/plugins/runs/${runId}/outputs/${encodeURIComponent(plugin)}?offset=${offset}&limit=${limit}`,
+        ),
+      );
+    },
+    pluginOutputDownloadUrl(id, runId, plugin, format) {
+      const output = `${api}/investigations/${id}/plugins/runs/${runId}/outputs/${encodeURIComponent(plugin)}`;
+      return `${output}/download?format=${encodeURIComponent(format)}`;
     },
     async getAssistantProviders() {
       return json(await fetch(`${api}/assistant/providers`));

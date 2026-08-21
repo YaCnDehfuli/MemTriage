@@ -32,7 +32,8 @@ tqdm==4.67.1
 
 # --- ML inference (worker image only; kept here for a single source of truth) ---
 # torch/torchvision/timm are heavy and CPU-only for the demo; pinned in the
-# worker Dockerfile to match VADViT (torch 2.x, timm 0.6.12).
+# worker Dockerfile to match VADViT (torch 2.x, timm 0.6.13 — not 0.6.12, see
+# the Dockerfile comment: 0.6.12 doesn't import under Python 3.11).
 
 # --- Low-level region analysis (phase 2 deep-dive) ---
 # Both are pure-Python-installable and imported lazily: without them the deep-dive
