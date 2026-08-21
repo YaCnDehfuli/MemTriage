@@ -58,6 +58,35 @@ def test_dump_cap_per_investigation(client, monkeypatch):
     assert _add_dump(client, inv_id, name="s2.raw").status_code == 409
 
 
+def test_concurrent_dump_uploads_reserve_distinct_ordinals(client):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+
+    from memtriage.storage import InvestigationPaths
+
+    inv_id = _new_investigation(client)
+    barrier = Barrier(2)
+    payloads = [b"snapshot-A" * 131_072, b"snapshot-B" * 131_072]
+
+    def upload(index: int):
+        barrier.wait()
+        return _add_dump(
+            client, inv_id, content=payloads[index], name=f"snap{index}.raw"
+        )
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        responses = list(pool.map(upload, range(2)))
+
+    assert all(response.status_code == 201 for response in responses)
+    assert {response.json()["ordinal"] for response in responses} == {0, 1}
+    state = client.get(f"/api/investigations/{inv_id}").json()
+    assert state["dump_count"] == 2
+    assert state["total_bytes"] == sum(map(len, payloads))
+    paths = InvestigationPaths(inv_id)
+    stored = {paths.dump_path(index).read_bytes() for index in range(2)}
+    assert stored == set(payloads)
+
+
 def test_full_two_phase_lifecycle(client, monkeypatch):
     from memtriage.pipeline import volmemlyzer_adapter as vml
     from memtriage.workers.tasks import run_process_analysis, run_triage

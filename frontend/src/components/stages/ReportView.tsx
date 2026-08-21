@@ -1,18 +1,17 @@
 import { useApp } from "../../state/store";
-import { TriageDisclaimer } from "../triage/Disclaimer";
 import { ExtractionNotice } from "../triage/ExtractionNotice";
 import { RISK_ORDER } from "../../lib/format";
 import { EmptyState, Panel, RiskBadge } from "../primitives";
 
 export function ReportView() {
-  const { scored, riskSummary, attack, analysis, triage, investigationId, demo, disclaimer } =
+  const { scored, riskSummary, attack, analysis, triage, investigationId } =
     useApp();
 
   if (!triage) return <EmptyState title="Nothing to report yet" hint="Run triage first." />;
 
   const top = scored.slice(0, 6);
   const exportHref =
-    demo || !investigationId ? undefined : `/api/investigations/${investigationId}/export`;
+    !investigationId ? undefined : `/api/investigations/${investigationId}/export`;
 
   return (
     <div className="space-y-5">
@@ -34,8 +33,6 @@ export function ReportView() {
       </header>
 
       <ExtractionNotice health={triage?.dashboard?.extraction} />
-
-      <TriageDisclaimer disclaimer={disclaimer} />
 
       <div className="grid gap-5 sm:grid-cols-3">
         {RISK_ORDER.map((r) => (

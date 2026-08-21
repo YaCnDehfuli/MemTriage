@@ -51,8 +51,9 @@ worker (internal only)  --HTTP_PROXY-->  symbolproxy  --https-->  msdl.microsoft
 `deploy/symbolproxy/proxy.py` is ~180 lines of standard library, because it is a
 security control and should be readable in one sitting. It:
 
-- allows only the hosts in `SYMBOLPROXY_ALLOWED_HOSTS` (exact match — no suffix
-  matching, so `msdl.microsoft.com.attacker.example` is refused);
+- allows the exact hosts in `SYMBOLPROXY_ALLOWED_HOSTS` plus Microsoft's
+  dynamically named `*.blob.core.windows.net` redirect hosts (lookalike domains
+  such as `blob.core.windows.net.attacker.example` are refused);
 - **re-issues plain http upstream over https.** Volatility requests
   `http://msdl.microsoft.com/...`, and a PDB fetched in the clear is a binary an
   on-path attacker can choose, parsed in the container holding your evidence;
@@ -64,6 +65,12 @@ security control and should be readable in one sitting. It:
 That is enough for Volatility to resolve symbols for any image automatically. The
 pre-fetched `symbols/` directory below still takes precedence and remains the
 right answer for genuinely air-gapped work.
+
+The online compose stack uses `/data/symbols` as a writable persistent cache. It
+may start empty: the worker creates it, Volatility requests an unseen kernel
+through `symbolproxy`, and the converted symbol is retained in the shared data
+volume for later analyses. The repository `symbols/` mount is optional and is
+reserved for offline deployments.
 
 To go fully offline, drop the `symbolproxy` service, remove the worker's
 `HTTP_PROXY`/`HTTPS_PROXY`, and set `MEMTRIAGE_VOL_OFFLINE=true`.
@@ -103,9 +110,11 @@ symbols/
       9074FC2B82ED2B7E1CB3366B64BE62F9-1.json.xz
 ```
 
-Then `docker compose -f deploy/docker-compose.yml up` — the directory is mounted
+Then set `MEMTRIAGE_VOL_OFFLINE=true` and run
+`docker compose -f deploy/docker-compose.yml up` — the directory is mounted
 read-only at `/symbols`, and the worker passes it to Volatility as
-`-s /symbols --offline`.
+`-s /symbols --offline`. For the normal online stack, leave offline mode false
+and let `/data/symbols` populate through the proxy.
 
 Symbols are per kernel build, so an image from a different host or patch level
 needs its own. Repeat the step above for each; they accumulate in the directory.
@@ -130,20 +139,28 @@ docker compose -f deploy/docker-compose.yml exec api \
 ```
 
 The `volatility symbols` line should read `ok` and name `/symbols`. After a
-triage run, `triage.json` carries:
+triage run, `triage.json` carries extraction health for the plugins selected for
+that run. For example, a successful MemTriage Deep run reports:
 
 ```json
 "extraction": {
-  "plugins_attempted": 62,
+  "plugins_attempted": 17,
   "plugins_failed": 0,
   "degraded": false,
   "severity": "ok"
 }
 ```
 
-If plugins still fail, Volatility's own error for each one is written beside the
-cached artifact as `<name>.json.stderr.txt` under the investigation's
-`volmemlyzer/` directory.
+Light and Custom runs report their own selected count; an unselected plugin is
+not a failure. During either guided triage or a manual suite run, the Triage
+activity view identifies the active plugin and shows cache hits, completion,
+timeouts and failures. Symbol resolution can itself take time, and physical
+scanners may run for hours on a large image, so a long-running state is not by
+itself an error.
+
+If plugins do fail, Volatility's own error for each one is shown in the activity
+log and written beside the cached artifact as `<name>.json.stderr.txt` under the
+investigation's `volmemlyzer/` directory.
 
 ## Why not just give the worker the internet
 

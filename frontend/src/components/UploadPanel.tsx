@@ -17,7 +17,7 @@ function extensionOf(name: string): string {
 }
 
 export function UploadPanel() {
-  const { uploads, uploadDumps, startTriage, loading, demo, investigationId } = useApp();
+  const { uploads, uploadDumps, setStage, loading, investigationId } = useApp();
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [rejected, setRejected] = useState<string[]>([]);
@@ -35,15 +35,6 @@ export function UploadPanel() {
   );
 
   const done = uploads.length > 0 && uploads.every((u) => u.status === "done");
-
-  if (demo) {
-    return (
-      <div className="px-4 py-6 text-[13px] text-mist-400">
-        Demo mode uses a canned three-snapshot dataset. Switch to <b className="text-mist-200">Live</b>{" "}
-        in the header to upload a real memory image.
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-4 px-4 py-4">
@@ -124,9 +115,9 @@ export function UploadPanel() {
       <button
         className="btn-accent w-full justify-center"
         disabled={loading || !done || !investigationId}
-        onClick={() => void startTriage()}
+        onClick={() => setStage("triage")}
       >
-        {loading ? "Uploading…" : "Run triage →"}
+        {loading ? "Uploading…" : "Configure VolMemLyzer triage →"}
       </button>
     </div>
   );

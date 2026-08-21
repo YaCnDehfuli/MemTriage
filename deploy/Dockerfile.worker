@@ -16,11 +16,17 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # CPU-only torch/torchvision + timm pinned to match VADViT exactly (state_dict
-# key fidelity depends on timm 0.6.12). Installed first for layer caching.
+# key fidelity depends on the 0.6.x line). 0.6.13, not 0.6.12: timm 0.6.12
+# crashes on import under Python 3.11 (this image's base) — `maxxvit.py` gives
+# a dataclass field a mutable dataclass-instance default, which 3.11's
+# dataclasses module rejects at class-definition time, and `timm/__init__.py`
+# imports every model family eagerly, including that one, whether or not it's
+# ever used. 0.6.13 is a same-minor patch release (no model/state_dict changes)
+# that just fixes this. Installed first for layer caching.
 RUN pip install --no-cache-dir \
         torch==2.0.0 torchvision==0.15.1 \
         --index-url https://download.pytorch.org/whl/cpu \
-    && pip install --no-cache-dir timm==0.6.12
+    && pip install --no-cache-dir timm==0.6.13
 
 COPY backend/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt

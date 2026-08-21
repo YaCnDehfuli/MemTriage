@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 from collections.abc import Iterator
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
@@ -67,18 +67,50 @@ _WIDENED_TO_BIGINT = (
     ("dumps", "size_bytes"),
 )
 
+# Additive columns introduced after the first demo schema. There is deliberately
+# no destructive migration here: existing deployments keep their rows and the
+# response layer supplies backwards-compatible defaults for NULL legacy values.
+_ADDITIVE_COLUMNS: dict[str, tuple[tuple[str, str], ...]] = {
+    "investigations": (
+        ("triage_mode", "VARCHAR(16)"),
+        ("requested_plugins", "JSON"),
+        ("concurrency", "INTEGER"),
+        ("events", "JSON"),
+        ("cache_source", "VARCHAR(1024)"),
+    ),
+    "plugin_runs": (
+        ("artifacts", "JSON"),
+        ("failed_plugins", "JSON"),
+    ),
+    "dumps": (
+        ("sha256", "VARCHAR(64)"),
+    ),
+}
+
 
 def ensure_schema() -> None:
-    """Apply the few idempotent widenings ``create_all`` cannot do itself."""
-    if engine.dialect.name != "postgresql":
-        return
-    from sqlalchemy import text
-
+    """Apply idempotent additions/widenings ``create_all`` cannot do itself."""
     with engine.begin() as conn:
-        for table, column in _WIDENED_TO_BIGINT:
-            try:
-                conn.execute(text(
-                    f"ALTER TABLE {table} ALTER COLUMN {column} TYPE BIGINT"
-                ))
-            except SQLAlchemyError:
-                logger.warning("could not widen %s.%s to BIGINT", table, column)
+        schema = inspect(conn)
+        tables = set(schema.get_table_names())
+        for table, additions in _ADDITIVE_COLUMNS.items():
+            if table not in tables:
+                continue
+            existing = {c["name"] for c in schema.get_columns(table)}
+            for column, sql_type in additions:
+                if column in existing:
+                    continue
+                try:
+                    # table/column/type are closed constants above, never input.
+                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {sql_type}"))
+                except SQLAlchemyError:
+                    logger.warning("could not add %s.%s", table, column)
+
+        if engine.dialect.name == "postgresql":
+            for table, column in _WIDENED_TO_BIGINT:
+                try:
+                    conn.execute(text(
+                        f"ALTER TABLE {table} ALTER COLUMN {column} TYPE BIGINT"
+                    ))
+                except SQLAlchemyError:
+                    logger.warning("could not widen %s.%s to BIGINT", table, column)

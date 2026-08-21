@@ -2,6 +2,14 @@
 
 export type Risk = "Critical" | "High" | "Medium" | "Low";
 export type Stage = "ingest" | "triage" | "inventory" | "deepdive" | "assist" | "report";
+export type TriageMode = "light" | "deep" | "custom";
+
+export interface TriageOptions {
+  mode: TriageMode;
+  plugins: string[];
+  concurrency: number;
+  force: boolean;
+}
 
 export interface InvestigationState {
   investigation_id: string;
@@ -15,6 +23,11 @@ export interface InvestigationState {
   process_count: number;
   has_triage: boolean;
   summary?: RiskSummaryEnvelope | null;
+  triage_mode: TriageMode;
+  requested_plugins: string[];
+  concurrency: number;
+  events: PluginEvent[];
+  cache_source: string | null;
 }
 
 export interface RiskSummaryEnvelope {
@@ -425,6 +438,106 @@ export interface AnalysisState {
   region_count: number | null;
   has_result: boolean;
   error?: string | null;
+}
+
+// --- Shared VolMemLyzer triage/manual-run surfaces ---
+
+export interface PluginCatalogEntry {
+  name: string;
+  category: string;
+  cost: "fast" | "scan" | "heavy";
+  deps: string[];
+  in_light_set: boolean;
+  in_deep_set: boolean;
+  /** Kept while older cached catalogues are upgraded. */
+  in_triage_set?: boolean;
+}
+
+/**
+ * One normalized live event. `type` selects which of the optional fields are
+ * present — mirrors backend/memtriage/pipeline/plugin_runner.py. One behavior
+ * worth designing around is that a cache hit is `plugin_cached`, not
+ * `plugin_finished`, because the runner is never invoked for it.
+ */
+export interface PluginEvent {
+  type:
+    | "plan"
+    | "layer_dispatched"
+    | "plugin_dispatched"
+    | "plugin_started"
+    | "plugin_finished"
+    | "plugin_cached"
+    | "plugin_converted"
+    | "plugin_failed_detail"
+    | "plugin_failed"
+    | "plugin_unavailable"
+    | "plugin_timeout"
+    | "run_summary"
+    | "heartbeat"
+    | "cache_reused"
+    | "cache_seeded"
+    | "cache_copy_started"
+    | "cache_copy_progress"
+    | "cache_copy_finished"
+    | "cache_copy_failed"
+    | "artifact_ready"
+    | "log";
+  at: number;
+  layers?: string[][];
+  concurrency?: number;
+  plugins?: string[];
+  plugin?: string;
+  rc?: number;
+  ok?: boolean;
+  duration_s?: number;
+  explanation?: string;
+  timeout_s?: number;
+  from_format?: string;
+  to_format?: string;
+  failed?: number;
+  attempted?: number;
+  plugin_names?: string;
+  level?: string;
+  logger?: string;
+  line?: string;
+  elapsed_s?: number;
+  message?: string;
+  source?: string;
+  artifact?: string;
+  size_bytes?: number;
+  bytes_copied?: number;
+  synthetic?: boolean;
+}
+
+export interface PluginRunState {
+  plugin_run_id: string;
+  investigation_id: string;
+  status: "queued" | "running" | "done" | "failed";
+  stage: string;
+  progress: number;
+  message: string;
+  error?: string | null;
+  requested_plugins: string[];
+  concurrency: number;
+  events: PluginEvent[];
+  available_outputs: string[];
+  failed_plugins: Record<string, string>;
+}
+
+export type PluginOutputFormat = "json" | "csv";
+
+export interface PluginOutputPreview {
+  plugin: string;
+  format: string;
+  columns: string[];
+  rows: Array<Record<string, unknown>>;
+  row_count: number;
+  truncated: boolean;
+  cached: boolean;
+  data?: unknown | null;
+  offset?: number;
+  limit?: number;
+  total?: number;
 }
 
 export interface ModelAccessPolicy {

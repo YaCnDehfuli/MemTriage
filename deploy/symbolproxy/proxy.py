@@ -7,7 +7,8 @@ plugin fails and triage returns nothing.
 
 This closes that gap without handing the worker the internet:
 
-* only hosts on the allowlist are reachable; everything else is refused;
+* only the symbol server and its Azure Blob redirect hosts are reachable;
+    everything else is refused;
 * plain http is re-issued upstream over https, because Volatility asks for
   http://msdl.microsoft.com/... and a PDB fetched in the clear is a binary an
   on-path attacker can choose, parsed in the container holding the evidence;
@@ -40,6 +41,10 @@ ALLOWED_HOSTS = {
     ).split(",")
     if h.strip()
 }
+# Microsoft currently redirects PDB downloads to dynamically named storage
+# hosts. Keep this bounded to Azure Blob's exact DNS namespace; do not permit a
+# general suffix match against the user-configured host allowlist.
+ALLOWED_REDIRECT_SUFFIXES = (".blob.core.windows.net",)
 UPSTREAM_TIMEOUT_S = float(os.environ.get("SYMBOLPROXY_TIMEOUT_S", "120"))
 # Set only when this host itself reaches the internet through a proxy (corporate
 # egress). Deliberately NOT read from the ambient HTTP_PROXY: the worker points
@@ -54,9 +59,12 @@ logger = logging.getLogger("symbolproxy")
 
 
 def host_allowed(host: str) -> bool:
-    """Exact host match only. No suffix matching: 'evil-msdl.microsoft.com.attacker
-    .example' must not pass, and neither should a subdomain we did not name."""
-    return (host or "").split(":")[0].lower() in ALLOWED_HOSTS
+    """Allow exact configured hosts and Microsoft's bounded Blob redirects."""
+    normalized = (host or "").split(":")[0].lower()
+    return normalized in ALLOWED_HOSTS or any(
+        normalized.endswith(suffix) and normalized != suffix[1:]
+        for suffix in ALLOWED_REDIRECT_SUFFIXES
+    )
 
 
 class Handler(BaseHTTPRequestHandler):

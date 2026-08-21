@@ -42,6 +42,11 @@ def test_matching_is_case_insensitive(proxy):
     assert proxy.host_allowed("MSDL.Microsoft.COM")
 
 
+def test_microsoft_blob_redirect_hosts_are_allowed(proxy):
+    assert proxy.host_allowed("vsblobprodscussu5shard42.blob.core.windows.net")
+    assert proxy.host_allowed("VSBlobProd.blob.core.windows.net:443")
+
+
 @pytest.mark.parametrize(
     "host",
     [
@@ -52,6 +57,9 @@ def test_matching_is_case_insensitive(proxy):
         "msdl.microsoft.com.attacker.example",   # suffix confusion
         "notmsdl.microsoft.com",                 # prefix confusion
         "sub.msdl.microsoft.com",                # unlisted subdomain
+        "blob.core.windows.net",                 # bare suffix is not a host
+        "blob.core.windows.net.attacker.example",
+        "evil.blob.core.windows.net.attacker.example",
         "attacker.example#msdl.microsoft.com",
         "msdl.microsoft.com.",                   # trailing dot
     ],

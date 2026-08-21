@@ -1,7 +1,7 @@
 import { useApp } from "../state/store";
 
 export function TopBar() {
-  const { demo, setDemo, investigationId } = useApp();
+  const { investigationId } = useApp();
   return (
     <header className="flex items-center justify-between border-b border-ink-700/70 bg-ink-900/70 px-5 py-3 backdrop-blur">
       <div className="flex items-center gap-3">
@@ -27,24 +27,6 @@ export function TopBar() {
             {investigationId}
           </span>
         )}
-        <div className="flex items-center rounded-md bg-ink-800 p-0.5 ring-1 ring-inset ring-ink-600">
-          <button
-            className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
-              demo ? "bg-accent/20 text-accent" : "text-mist-400 hover:text-mist-200"
-            }`}
-            onClick={() => setDemo(true)}
-          >
-            Demo
-          </button>
-          <button
-            className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
-              !demo ? "bg-accent/20 text-accent" : "text-mist-400 hover:text-mist-200"
-            }`}
-            onClick={() => setDemo(false)}
-          >
-            Live
-          </button>
-        </div>
       </div>
     </header>
   );

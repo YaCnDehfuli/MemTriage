@@ -8,6 +8,7 @@ cells, and cap length to prevent both stored-XSS and UI/DoS via oversized fields
 """
 from __future__ import annotations
 
+import math
 import re
 from typing import Any
 
@@ -47,14 +48,20 @@ def sanitize_text(
 def sanitize_obj(obj: Any, *, max_len: int = DEFAULT_MAX_LEN, _depth: int = 0) -> Any:
     """Recursively sanitize a JSON-like structure of extracted artifacts.
 
-    Strings are cleaned; numbers/bools/None pass through; dict keys are also
-    sanitized (short cap) since some plugins surface attacker-influenced keys.
-    Recursion depth is bounded to avoid pathological nesting.
+    Strings are cleaned; numbers/bools/None pass through (except a non-finite
+    float — NaN/Infinity, e.g. a mean-of-empty-list in some feature computed
+    from a plugin that found nothing — which is not valid JSON and would
+    otherwise break the exact API responses this whole module protects, so it
+    becomes None instead); dict keys are also sanitized (short cap) since some
+    plugins surface attacker-influenced keys. Recursion depth is bounded to
+    avoid pathological nesting.
     """
     if _depth > 32:
         return "…[max depth]"
     if isinstance(obj, str):
         return sanitize_text(obj, max_len=max_len)
+    if isinstance(obj, float) and not math.isfinite(obj):
+        return None
     if isinstance(obj, bool) or obj is None or isinstance(obj, int | float):
         return obj
     if isinstance(obj, dict):

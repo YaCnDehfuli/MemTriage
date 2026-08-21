@@ -5,7 +5,7 @@ import { Panel } from "../primitives";
 import { UploadPanel } from "../UploadPanel";
 
 export function IngestView() {
-  const { triage, demo, setStage, triageProgress } = useApp();
+  const { triage, setStage, triageProgress } = useApp();
   return (
     <div className="space-y-5">
       <header>
@@ -67,7 +67,7 @@ export function IngestView() {
         <Panel eyebrow="Pipeline" title="What happens next">
           <ol className="space-y-3 px-4 py-4 text-[13px] text-mist-300">
             {[
-              ["Extract", "VolMemLyzer runs the triage plugin set once; raw JSON is cached."],
+              ["Extract", "Choose Light, Deep, or Custom coverage; compatible artifacts are reused."],
               ["Score", "The tunable engine scores every object with traceable evidence."],
               ["Select", "Pick a process from the inventory to deep-dive."],
               ["Classify", "VADViT renders its VAD grid, classifies, and overlays attention."],
@@ -84,7 +84,7 @@ export function IngestView() {
           </ol>
           <div className="border-t border-ink-800/70 px-4 py-3">
             <button className="btn-accent w-full justify-center" onClick={() => setStage("triage")}>
-              {demo ? "View triage overview →" : "Go to triage →"}
+              Go to triage →
             </button>
           </div>
         </Panel>

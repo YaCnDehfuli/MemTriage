@@ -1,0 +1,171 @@
+
+[
+  {
+    "File output": "Disabled",
+    "FileFullPath": "",
+    "Offset": 246870343905280,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Offset": 246870343987200,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\REGISTRY\\MACHINE\\HARDWARE",
+    "Offset": 246870344417280,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Offset": 246870357381120,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\Device\\HarddiskVolume1\\EFI\\Microsoft\\Boot\\BCD",
+    "Offset": 246870357651456,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\SystemRoot\\System32\\Config\\DEFAULT",
+    "Offset": 246870390341632,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\SystemRoot\\System32\\Config\\SECURITY",
+    "Offset": 246870392889344,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\SystemRoot\\System32\\Config\\SAM",
+    "Offset": 246870393880576,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Offset": 246870397218816,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Offset": 246870398873600,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\SystemRoot\\System32\\Config\\BBI",
+    "Offset": 246870399102976,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Windows\\AppCompat\\Programs\\Amcache.hve",
+    "Offset": 246870409367552,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Offset": 246870349492224,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Offset": 246870355165184,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.FileExp_1000.22700.1000.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Offset": 246870398357504,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.Core_1000.22700.1011.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Offset": 246870470635520,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.CBS_1000.22700.1041.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Offset": 246870473269248,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.WebExperience_524.30502.30.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Offset": 246870353059840,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\Microsoft.Windows.StartMenuExperienceHost_10.0.22621.4249_neutral_neutral_cw5n1h2txyewy\\ActivationStore.dat",
+    "Offset": 246870353772544,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\Microsoft.UI.Xaml.CBS_8.2404.3001.0_x64__8wekyb3d8bbwe\\ActivationStore.dat",
+    "Offset": 246870389714944,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\ProgramData\\Packages\\MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy\\S-1-5-21-2515051972-3704521753-3160219359-1001\\SystemAppData\\Helium\\Cache\\8c304d05383a2e00.dat",
+    "Offset": 246870418747392,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy\\SystemAppData\\Helium\\User.dat",
+    "Offset": 246870412447744,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy\\SystemAppData\\Helium\\UserClasses.dat",
+    "Offset": 246870389936128,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\ProgramData\\Packages\\MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy\\S-1-5-21-2515051972-3704521753-3160219359-1001\\SystemAppData\\Helium\\Cache\\8c304d05383a2e00_COM15.dat",
+    "Offset": 246870413496320,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\ProgramData\\Packages\\MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy\\S-1-5-21-2515051972-3704521753-3160219359-1001\\SystemAppData\\Helium\\Cache\\8c304d05383a2e00.dat",
+    "Offset": 246870480871424,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\Settings\\settings.dat",
+    "Offset": 246870415986688,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\Settings\\settings.dat",
+    "Offset": 246870426497024,
+    "__children": []
+  },
+  {
+    "File output": "Disabled",
+    "FileFullPath": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\AppData\\Local\\Microsoft\\Windows\\DeliveryOptimization\\State\\dosvcState.dat",
+    "Offset": 246870421549056,
+    "__children": []
+  }
+]

@@ -366,6 +366,24 @@ def test_rescore_endpoint_diff_persist_and_sanitize(client, monkeypatch):
     assert triage["profile"]["preset"] == "conservative"
 
 
+def test_rescore_rejects_a_corrupt_cached_artifact(client, monkeypatch):
+    inv_id = _triaged_investigation(client, monkeypatch)
+    paths = InvestigationPaths(inv_id)
+    triage = json.loads(paths.triage.read_text())
+    artifact = next(iter(triage["artifacts"].values()))
+    paths.volmemlyzer.joinpath(artifact).write_text("not-json")
+
+    response = client.post(
+        f"/api/investigations/{inv_id}/rescore",
+        json={"profile": {"preset": "aggressive"}},
+    )
+
+    assert response.status_code == 409
+    assert "missing or invalid" in response.json()["error"]["message"]
+    persisted = json.loads(paths.triage.read_text())
+    assert persisted["profile"]["preset"] == "balanced"
+
+
 def test_rescore_requires_triage(client):
     inv_id = client.post("/api/investigations").json()["investigation_id"]
     r = client.post(f"/api/investigations/{inv_id}/rescore", json={"profile": {}})

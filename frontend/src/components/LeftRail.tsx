@@ -4,7 +4,7 @@ import { bytes } from "../lib/format";
 
 const STAGES: { id: Stage; label: string; hint: string }[] = [
   { id: "ingest", label: "Ingest", hint: "Dump snapshots" },
-  { id: "triage", label: "Triage overview", hint: "IoC table · tuning" },
+  { id: "triage", label: "VolMemLyzer", hint: "Triage · manual suite" },
   { id: "inventory", label: "Process inventory", hint: "Select a PID" },
   { id: "deepdive", label: "VADViT deep-dive", hint: "Grid · attention · regions" },
   { id: "assist", label: "Assistant", hint: "Ask about the findings" },
@@ -12,7 +12,7 @@ const STAGES: { id: Stage; label: string; hint: string }[] = [
 ];
 
 export function LeftRail() {
-  const { stage, setStage, triage, demo, riskSummary } = useApp();
+  const { stage, setStage, triage, riskSummary } = useApp();
   const done = (id: Stage) =>
     (id === "ingest" || id === "triage") && !!triage;
 
@@ -70,10 +70,8 @@ export function LeftRail() {
           </div>
         )}
         <div className="flex items-center gap-2 px-1 text-[11px] text-mist-400">
-          <span
-            className={`h-1.5 w-1.5 rounded-full ${demo ? "bg-risk-medium" : "bg-accent"}`}
-          />
-          {demo ? "Demo data (no backend)" : "Live backend"}
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          Live backend
         </div>
         <p className="px-1 text-[10px] leading-relaxed text-mist-400">
           Triage aid, not EDR/AV. Findings are analyst-facing and MITRE ATT&CK aligned.

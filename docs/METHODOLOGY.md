@@ -5,7 +5,7 @@ support, and the difference matters more than the output of any one of them.
 
 | Phase | What it does | What its output is |
 |---|---|---|
-| 1 · Triage | VolMemLyzer-backed extraction, then simple tuned rules over the result | **Leads.** Ranked places to look |
+| 1 · Triage | Analyst-scoped VolMemLyzer extraction, then simple tuned rules over the available result | **Leads.** Ranked places to look |
 | 2 · Deep-dive | VADViT renders a process's VAD regions, classifies, and attention ranks them; the top regions are analyzed to the instruction level | **Observations.** Properties of specific bytes |
 | 3 · Assistant | A structured briefing of phases 1 and 2, answered against by an LLM of the analyst's choosing | **A reading aid.** Nothing new is measured |
 
@@ -21,23 +21,143 @@ supposed to be doing.
 ### What is measured
 
 [VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool)
-runs a fixed plugin set once and produces two things: a flat aggregate feature
-row (roughly 520 `plugin.metric` values), and cached raw JSON for the plugins
-MemTriage needs per-object detail from — `pslist`, `malfind`, `netscan`, and the
-context plugins the rules read. The raw JSON is cached so re-scoring never
-re-runs Volatility.
+runs the plugins selected for this investigation and produces two related forms
+of evidence: flat `plugin.metric` features and raw JSON records for the objects
+the rules inspect. The selected set is real execution scope: it is passed to
+both feature extraction and the scoring-record pass. MemTriage does not run an
+unselected full extraction behind a smaller selection.
 
-The features are statistical descriptions of the image: counts, ratios,
-distributions. They are not judgements.
+The Triage workbench offers three ways to choose that scope:
+
+- **Light** is a MemTriage preset with eight quick census and persistence
+  plugins: `info`, `pslist`, `pstree`, `cmdline`, `privileges`,
+  `scheduled_tasks`, `registry.userassist` and `registry.hivelist`. It excludes
+  whole-image scanners and plugins classified as heavy.
+- **Deep** is the original curated evidence set plus the inexpensive bearings
+  plugin (17 total): `info`, `pslist`, `pstree`,
+  `psscan`, `psxview`, `cmdline`, `malfind`, `ldrmodules`, `handles`,
+  `privileges`, `threads`, `netscan`, `svcscan`, `scheduled_tasks`,
+  `registry.userassist`, `registry.hivelist` and `registry.hivescan`.
+- **Custom** is exactly the analyst's checked plugin set. It is useful when a
+  question is narrower than either preset, or when a known-expensive scanner is
+  not worth the delay on this image.
+
+Concurrency controls how many dependency-ready plugins may overlap and is capped
+at eight workers. More workers do not make one scanner intrinsically faster and
+can increase disk contention on a large image.
+
+These are application presets, not synonyms for the VolMemLyzer CLI's
+`analyze --deep` option. In particular, VolMemLyzer currently uses its own
+`--deep` flag to add a process cross-check; MemTriage's Deep preset defines the
+complete application-side plugin scope above.
+
+The features are statistical descriptions of the selected views of the image:
+counts, ratios and distributions. They are not judgements. The feature explorer
+shows the extracted flat names and values directly so an analyst can inspect the
+measurements behind the dashboard. The number and kinds of available features
+therefore vary with the preset or Custom selection.
+
+### The manual suite is part of triage
+
+The same Triage screen contains a manual Volatility suite for questions that do
+not belong in the guided scoring run. The analyst can pick a batch, choose its
+concurrency and follow it without treating it as another workflow phase. Manual
+output is captured in JSON, rendered as a readable table, and downloadable as
+JSON or CSV. The CSV is another representation of the captured JSON, not a
+second Volatility execution with potentially different evidence.
+
+The API parses an artifact to build the table preview or convert it to CSV, so
+those two server-rendered forms are limited to 16 MiB per plugin artifact. The
+original JSON download does not parse the document: it streams the file from
+disk and remains available regardless of size. Large outputs should therefore be
+downloaded as JSON and inspected with local, streaming-capable tools.
+
+A manual run does not silently change an existing score. Its artifacts share the
+same cache, however, so a later guided run that explicitly selects the same
+plugin can reuse them, and a manual run can reuse an artifact produced by guided
+triage.
+
+### Cache and provenance
+
+Caching is enabled by default because whole-image plugins are expensive. A
+completed triage is safe to reuse only when all of the following are true:
+
+- the recorded primary-dump SHA-256 matches;
+- the exact selected plugin plan matches;
+- the record uses triage schema version 2;
+- it still carries the default **Balanced** scoring profile rather than a
+  subsequently tuned profile;
+- extraction is healthy: every selected plugin was attempted and none failed;
+- the artifact manifest covers the complete plan, each target is valid JSON of
+  the expected row/record shape, and any accompanying stderr has no recognized
+  failure marker.
+
+These checks apply to the current investigation's `triage.json` and to a
+completed prior MemTriage investigation found by primary-dump SHA. Mode labels
+and worker concurrency do not change the evidence when the resulting plugin plan
+is identical; the selected plan is the cache identity that matters.
+
+A tuned, degraded, schema-v1, corrupt or incomplete triage is not returned as the
+new result. MemTriage instead rebuilds the default scoring view from any raw
+artifacts that pass their own JSON/stderr validation and runs Volatility for
+missing or invalid selected outputs. **Force refresh** bypasses completed-triage
+reuse and raw plugin-artifact reuse for the requested guided-triage operation.
+
+The ordinary upload workflow does not search the dump's source directory or
+blindly accept a sibling `analysis.json`. Captured VolMemLyzer output can be
+loaded only through the explicit development/test seeder described in the main
+README, run from `backend/`:
+
+```bash
+python -m memtriage.pipeline.fixture_seed \
+  --dumps-dir ../Dumps \
+  --image-name 2580_5.vmem
+```
+
+It verifies the named image is present, creates an investigation, symlinks that
+image, and copies cache-named `<image>_<plugin>.json`/stderr files into the
+investigation layout before optionally running triage. This is controlled fixture
+import, not cache discovery by filename.
+
+Cache decisions appear in the same activity stream as executions. This matters
+methodologically: “cached” means previously measured evidence was reused, while
+“completed” means Volatility ran during this operation.
+
+### Activity and long-running plugins
+
+Each selected plugin has a visible queued, running, cached, completed, timed-out
+or failed state, with the underlying VolMemLyzer activity alongside it. Progress
+is the fraction of selected plugin work that has reached a terminal state. It is
+not an estimate of the internal scan position of the plugin currently running.
+
+Runtime is dominated by image size, symbol availability, storage and the plugin's
+algorithm. Whole-image and physical-layer scans such as `psscan`, `psxview` and
+`netscan` may take hours; on a very large image or slow host a run can approach a
+day. A plugin remaining in `running` for a long time is not, by itself, evidence
+of a hang. Completion, timeout and failure are recorded distinctly so a slow run
+cannot be mistaken for a clean result. MemTriage defaults to a 24-hour per-plugin
+timeout (`MEMTRIAGE_VOL_TIMEOUT_S`). The containing Celery task has no shorter
+global deadline. Redis's visibility lease is at least
+`MEMTRIAGE_BROKER_VISIBILITY_TIMEOUT_S` (60 days by default) and is raised, if
+needed, to the current catalog size multiplied by the per-plugin timeout plus six
+hours of headroom. The lease governs broker redelivery after worker loss; it is
+not an additional runtime allowance for an individual plugin.
 
 ### How rules work
 
-The scoring engine applies a catalogue of rules to those artifacts. Each rule
-that fires contributes a weight, a confidence, an evidence string, and an ATT&CK
-technique where one applies. An object's score is the sum of its contributions;
-its risk band is that score placed against the current profile's thresholds.
-Correlation rules add weight when independent indicators point at the same
-object.
+The scoring engine applies a catalogue of rules to the selected artifacts. Each
+rule that fires contributes a weight, a confidence, an evidence string, and an
+ATT&CK technique where one applies. An object's score is the sum of its
+contributions; its risk band is that score placed against the current profile's
+thresholds. Correlation rules add weight when independent indicators point at
+the same object.
+
+A rule whose source plugin was not selected has no evidence to evaluate and
+cannot fire. That is different from the plugin running successfully and finding
+nothing, and both are different from a plugin failure. The run configuration,
+activity and extraction-health information provide that context. Live sensitivity
+tuning only re-scores the cached records that exist; it never launches an omitted
+plugin implicitly.
 
 **The rules are basic and hand-tuned.** They encode well-known indicators —
 unbacked executable memory, unusual parentage, suspicious command lines, listening
@@ -53,8 +173,9 @@ ground truth.
 - A **high score means "look here first."** It is a claim about how many
   indicators lined up, not about intent or outcome.
 - A **low score is not a clean bill of health.** An indicator that did not fire
-  is exactly that. Malware that avoids the shapes these rules look for scores
-  low, which is why phase 1 is a starting point rather than a filter.
+  is exactly that; a plugin excluded by Light or Custom scope was not checked at
+  all. Malware that avoids the shapes these rules look for scores low, which is
+  why phase 1 is a starting point rather than a filter.
 - **ATT&CK alignment is descriptive.** It says an artifact resembles a technique.
   It does not say the technique was executed.
 - Every value is **derived from an untrusted image** and can be influenced by

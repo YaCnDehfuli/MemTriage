@@ -36,8 +36,8 @@ def _load_cached_records(paths: InvestigationPaths, manifest: dict) -> dict:
     records: dict[str, list[dict]] = {}
     for key, fname in (manifest or {}).items():
         fp = vdir / Path(str(fname)).name  # basename only — never trust for traversal
-        if not safe_within(vdir, fp) or not fp.exists():
-            continue
+        if not safe_within(vdir, fp) or not vml.valid_json_cache_artifact(fp):
+            raise ValueError(f"cached artifact is missing or invalid: {key}")
         records[str(key)] = vml._load_records(str(fp))
     return records
 
@@ -66,7 +66,16 @@ def rescore(
             detail="Triage predates cached artifacts; re-run triage to enable tuning.",
         )
 
-    records = _load_cached_records(paths, manifest)
+    try:
+        records = _load_cached_records(paths, manifest)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "A cached plugin artifact is missing or invalid; rerun triage "
+                "to rebuild the evidence before re-scoring."
+            ),
+        ) from exc
     prev_scored = (triage.get("dashboard") or {}).get("scored_objects") or []
     features = (triage.get("dashboard") or {}).get("features") or {}
 
