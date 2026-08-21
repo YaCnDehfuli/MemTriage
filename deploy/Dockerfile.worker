@@ -3,7 +3,7 @@
 # submodule) for extraction, and VADViT (PyTorch/timm) for classification. This
 # image parses UNTRUSTED memory images, so at runtime it is confined to an
 # internal Docker network with no internet egress (see docker-compose.yml).
-FROM python:3.11-slim AS base
+FROM python:3.14-slim AS base
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
