@@ -2,11 +2,10 @@
 
 Triage builds on VolMemLyzer's two stable surfaces:
 
-* ``Pipeline.run_extract_features`` — the ~520-feature aggregate IoC row (a flat
-  ``plugin.metric`` dict), which is the dashboard's backbone.
-* ``Pipeline.run_plugin_raw`` — raw Volatility ``-r=json`` records for the
-  plugins we need per-object detail from: ``pslist`` (the process/PID inventory),
-  ``malfind`` (injections), ``netscan`` (connections).
+* ``Pipeline.run_extract_features`` — one selected-plugin pass that produces the
+  aggregate IoC row and canonical raw JSON used by the dashboard, process
+  inventory and scoring engine.
+* ``Pipeline.run_plugin_raw`` — the manual suite's analyst-selected batch path.
 
 The Volatility-touching calls are thin; the record→view transforms are pure
 functions so they can be unit-tested without Volatility or a memory image.
@@ -16,6 +15,8 @@ from __future__ import annotations
 
 import json
 import logging
+import re
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +24,10 @@ from ..scoring import normalize_plugin_key, score_records
 from .attack import map_techniques
 
 logger = logging.getLogger(__name__)
+
+_CACHE_FAILURE_RE = re.compile(
+    r"Traceback|ERROR|Exception|No suitable address space|failed", re.IGNORECASE
+)
 
 # Names with no analyzable user VADs — excluded from VADViT selection.
 _NON_ANALYZABLE = {"system", "registry", "memory compression", "secure system"}
@@ -60,14 +65,24 @@ TRIAGE_DISCLAIMER = {
 }
 _NON_ANALYZABLE_PIDS = {0, 4}
 
-# Plugins the triage extractor caches raw JSON for, so the scoring engine can
-# re-score from cache on every tuning change without re-running Volatility. Uses
-# VolMemLyzer/Volatility plugin names (mapped to context keys on load).
-TRIAGE_PLUGINS: tuple[str, ...] = (
-    "pslist", "pstree", "psscan", "psxview", "cmdline", "malfind", "ldrmodules",
+# A genuinely quick preset: linked-list/metadata reads only. Whole-image scans
+# and internally repeated scans are deliberately absent, so choosing Light has
+# a predictable material effect rather than being a cosmetic label.
+LIGHT_TRIAGE_PLUGINS: tuple[str, ...] = (
+    "info", "pslist", "pstree", "cmdline", "privileges", "scheduled_tasks",
+    "registry.userassist", "registry.hivelist",
+)
+
+# The full rule-engine evidence set. This includes whole-image scanners and the
+# expensive psxview cross-check, so the UI labels it as potentially long-running.
+DEEP_TRIAGE_PLUGINS: tuple[str, ...] = (
+    "info", "pslist", "pstree", "psscan", "psxview", "cmdline", "malfind", "ldrmodules",
     "handles", "privileges", "threads", "netscan", "svcscan", "scheduled_tasks",
     "registry.userassist", "registry.hivelist", "registry.hivescan",
 )
+
+# Backwards-compatible name used by scoring/tests and older clients.
+TRIAGE_PLUGINS = DEEP_TRIAGE_PLUGINS
 
 
 def _is_available() -> bool:
@@ -261,12 +276,13 @@ def assemble_triage(features_flat: dict, records: dict[str, list[dict]], *,
 # Volatility-touching orchestration (thin)
 # --------------------------------------------------------------------------
 
-def usable_symbol_dirs(candidates: list[str] | None) -> list[str]:
-    """Keep only symbol directories that exist and hold something.
+def usable_symbol_dirs(candidates: list[str] | None, *, allow_empty: bool = False) -> list[str]:
+    """Keep symbol directories that exist, optionally including empty caches.
 
     Passing a path that is not there is worse than passing nothing: Volatility
     accepts it silently and the run still fails, one layer further from the
-    cause.
+    cause. Online symbol caches are deliberately allowed to start empty because
+    Volatility populates them through the configured symbol proxy.
     """
     usable = []
     for candidate in candidates or []:
@@ -276,15 +292,70 @@ def usable_symbol_dirs(candidates: list[str] | None) -> list[str]:
             continue
         path = Path(candidate)
         try:
-            if path.is_dir() and any(path.iterdir()):
+            if allow_empty and not path.exists():
+                path.mkdir(parents=True, exist_ok=True)
+            if path.is_dir() and (allow_empty or any(path.iterdir())):
                 usable.append(str(path))
         except OSError:
             continue
     return usable
 
 
+def _valid_empty_json_cache(
+    artifacts_dir: str, plugin_name: str, image_name: str,
+) -> dict[str, Any] | None:
+    """Recognize a valid no-findings JSON artifact the wrapped cache rejects.
+
+    Volatility plugins commonly and legitimately return ``[]``. The pinned
+    component historically treated that as a cache miss, which made empty,
+    expensive scans rerun forever. Only that narrow case is relaxed here;
+    corrupt/zero-byte output and artifacts with critical stderr remain misses.
+    """
+    path = Path(artifacts_dir) / f"{image_name}_{plugin_name}.json"
+    if not valid_json_cache_artifact(path):
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        empty = payload == [] or (
+            isinstance(payload, dict)
+            and (payload.get("rows") == [] or payload.get("records") == [])
+        )
+        if not empty:
+            return None
+    except (OSError, ValueError):
+        return None
+    return {"ok": True, "path": str(path), "format": "json"}
+
+
+def valid_json_cache_artifact(path: str | Path) -> bool:
+    """Validate canonical JSON and its stderr using wrapped-cache semantics."""
+    candidate = Path(path)
+    try:
+        if not candidate.is_file() or candidate.stat().st_size == 0:
+            return False
+        payload = json.loads(candidate.read_text(encoding="utf-8"))
+        valid_shape = isinstance(payload, list) or (
+            isinstance(payload, dict)
+            and (
+                isinstance(payload.get("rows"), list)
+                or isinstance(payload.get("records"), list)
+            )
+        )
+        if not valid_shape:
+            return False
+        stderr_path = Path(f"{candidate}.stderr.txt")
+        if stderr_path.is_file():
+            stderr = stderr_path.read_text(encoding="utf-8", errors="replace")
+            if _CACHE_FAILURE_RE.search(stderr):
+                return False
+    except (OSError, ValueError):
+        return False
+    return True
+
+
 def build_pipeline(vol_path: str | None, timeout_s: int, *,
-                   symbol_dirs: list[str] | None = None, offline: bool = False):
+                   symbol_dirs: list[str] | None = None, offline: bool = False,
+                   volmemlyzer_src: str | Path | None = None):
     """Construct a VolMemLyzer Pipeline (lazy import; worker image only).
 
     ``symbol_dirs``/``offline`` are only forwarded when the installed VolMemLyzer
@@ -293,14 +364,66 @@ def build_pipeline(vol_path: str | None, timeout_s: int, *,
     """
     import inspect
 
+    if volmemlyzer_src:
+        src = Path(volmemlyzer_src).expanduser().resolve()
+        if not src.is_dir():
+            raise FileNotFoundError(f"VolMemLyzer source directory not found: {src}")
+        if str(src) not in sys.path:
+            sys.path.insert(0, str(src))
+
     from volmemlyzer.pipeline import Pipeline
     from volmemlyzer.plugins import build_registry
     from volmemlyzer.runner import VolRunner
 
+    class ObservableVolRunner(VolRunner):
+        def run_plugin(self, memory_dump_path, plugin_specs, *args, **kwargs):
+            # Pipeline's "Running" line is emitted when work enters the executor,
+            # which may be hours before a worker slot is available. This line is
+            # deliberately inside the worker call and therefore means executing.
+            logging.getLogger("volmemlyzer.runner").info(
+                "Executing plugin %s", plugin_specs.name
+            )
+            result = super().run_plugin(
+                memory_dump_path, plugin_specs, *args, **kwargs,
+            )
+            # VolRunner writes a stderr companion when Volatility emits output,
+            # but historically left an older companion in place after a clean
+            # retry.  That stale ERROR/TIMEOUT text would make the fresh JSON
+            # fail strict cache validation forever.
+            if getattr(result, "rc", None) == 0 and not getattr(
+                result, "stderr_path", None,
+            ):
+                output_path = getattr(result, "output_path", None)
+                if output_path:
+                    try:
+                        Path(f"{output_path}.stderr.txt").unlink(missing_ok=True)
+                    except OSError as exc:
+                        logger.warning(
+                            "Could not remove stale stderr for %s: %s",
+                            plugin_specs.name, exc,
+                        )
+            return result
+
+    class CacheAwarePipeline(Pipeline):
+        def check_cache(
+            self, artifacts_dir, plugin_name, image_name, *,
+            require_format=None, strict=False,
+        ):
+            hit = super().check_cache(
+                artifacts_dir, plugin_name, image_name,
+                require_format=require_format, strict=strict,
+            )
+            if hit.get("ok") or require_format != "json":
+                return hit
+            return (
+                _valid_empty_json_cache(artifacts_dir, plugin_name, image_name)
+                or hit
+            )
+
     kwargs: dict = {"vol_path": vol_path, "default_timeout_s": timeout_s,
                     "default_renderer": "json"}
     supported = set(inspect.signature(VolRunner.__init__).parameters)
-    dirs = usable_symbol_dirs(symbol_dirs)
+    dirs = usable_symbol_dirs(symbol_dirs, allow_empty=True)
     if "symbol_dirs" in supported and dirs:
         kwargs["symbol_dirs"] = dirs
     if "offline" in supported and offline:
@@ -311,7 +434,7 @@ def build_pipeline(vol_path: str | None, timeout_s: int, *,
             "cannot forward them to Volatility. Update the component, or Windows "
             "plugins will fail on a host without outbound access.", ", ".join(dirs))
 
-    return Pipeline(VolRunner(**kwargs), build_registry())
+    return CacheAwarePipeline(ObservableVolRunner(**kwargs), build_registry())
 
 
 def _registry_has(pipe, name: str) -> bool:
@@ -321,25 +444,21 @@ def _registry_has(pipe, name: str) -> bool:
         return True
 
 
-def _attempted_count(pipe) -> int:
-    """How many plugins this run tried. Feature extraction covers the whole
-    registry, which is the larger of the two passes."""
-    try:
-        return max(len(pipe.registry.names()), len(TRIAGE_PLUGINS))
-    except Exception:
-        return len(TRIAGE_PLUGINS)
-
-
-def collect_records(pipe, image_path: str, artifacts_dir: str) -> tuple[dict, dict, dict]:
+def collect_records(
+    pipe, image_path: str, artifacts_dir: str, *,
+    plugins: list[str] | tuple[str, ...] | None = None,
+    concurrency: int = 1, use_cache: bool = True,
+) -> tuple[dict, dict, dict]:
     """Run the triage plugin set once and return (records, manifest, failures).
 
     ``records`` is keyed by canonical context key; ``manifest`` maps that key to
     the cached artifact's filename so ``/rescore`` can reload it without touching
     Volatility; ``failures`` names the plugins that produced nothing usable.
     """
-    requested = {p for p in TRIAGE_PLUGINS if _registry_has(pipe, p)}
+    requested = {p for p in (plugins or TRIAGE_PLUGINS) if _registry_has(pipe, p)}
     res = pipe.run_plugin_raw(image_path=image_path, enable=requested,
-                              outdir=artifacts_dir, use_cache=True)
+                              outdir=artifacts_dir, concurrency=concurrency,
+                              use_cache=use_cache)
     artifacts = (res.artifacts if res and res.artifacts else {}) or {}
     plugins = artifacts.get("plugins", {}) or {}
     failures = dict(artifacts.get("failed_plugins", {}) or {})
@@ -355,6 +474,37 @@ def collect_records(pipe, image_path: str, artifacts_dir: str) -> tuple[dict, di
         if not parsed and key not in failures and not _has_content(path):
             failures[key] = "produced no parseable records"
     return records, manifest, failures
+
+
+def records_from_feature_cache(
+    pipe, image_path: str, artifacts_dir: str, plugins: list[str] | tuple[str, ...],
+    failures: dict[str, str] | None = None,
+) -> tuple[dict, dict, dict]:
+    """Load the JSON files the feature pass just produced without a second run.
+
+    ``run_extract_features`` already invokes every selected plugin and writes its
+    canonical JSON. Asking ``run_plugin_raw`` for the same set immediately after
+    that only adds a second cache traversal (and used to make the live log look as
+    though triage ran everything twice).
+    """
+    failed = dict(failures or {})
+    image_name = Path(image_path).name
+    records: dict[str, list[dict]] = {}
+    manifest: dict[str, str] = {}
+    for name in plugins:
+        if not _registry_has(pipe, name):
+            continue
+        spec, _extractor = pipe.registry.get(name)
+        path = Path(artifacts_dir) / f"{image_name}_{spec.name}.json"
+        key = normalize_plugin_key(name)
+        parsed = _load_records(str(path))
+        records[key] = parsed
+        valid_json = valid_json_cache_artifact(path)
+        if valid_json and name not in failed:
+            manifest[key] = path.name
+        elif name not in failed:
+            failed[name] = "produced no parseable JSON output"
+    return records, manifest, failed
 
 
 def _has_content(path) -> bool:
@@ -408,7 +558,10 @@ def extraction_health(attempted: int, failures: dict) -> dict:
 
 def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
                timeout_s: int, profile: dict | None = None,
-               symbol_dirs: list[str] | None = None, offline: bool = False) -> dict:
+               symbol_dirs: list[str] | None = None, offline: bool = False,
+               volmemlyzer_src: str | Path | None = None,
+               plugins: list[str] | tuple[str, ...] | None = None,
+               concurrency: int = 4, use_cache: bool = True) -> dict:
     """Run VolMemLyzer on one snapshot and return the scored triage view.
 
     Returns keys: features, dashboard, processes, profile, manifest, vol_version,
@@ -418,20 +571,27 @@ def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
 
     from volmemlyzer.utilities import _flatten_dict
 
-    pipe = build_pipeline(vol_path, timeout_s, symbol_dirs=symbol_dirs, offline=offline)
+    pipe = build_pipeline(vol_path, timeout_s, symbol_dirs=symbol_dirs, offline=offline,
+                          volmemlyzer_src=volmemlyzer_src)
+    selected = tuple(dict.fromkeys(
+        p.lower() for p in (plugins or DEEP_TRIAGE_PLUGINS) if _registry_has(pipe, p.lower())
+    ))
 
-    # Aggregate IoC features (dashboard backbone).
+    # Aggregate IoC features and canonical raw JSON in one selected, concurrent
+    # pass. Light therefore never launches a plugin that belongs only to Deep.
     row = pipe.run_extract_features(image_path=image_path, artifacts_dir=artifacts_dir,
-                                    use_cache=True)
+                                    enable=set(selected), concurrency=concurrency,
+                                    use_cache=use_cache)
     features_flat = _flatten_dict(asdict(row).get("features") or {})
     vol_version = getattr(row, "vol_version", None)
     failures = dict(getattr(row, "failed_plugins", {}) or {})
 
-    # Cache the full triage plugin set once; the scoring engine works off it.
-    records, manifest, raw_failures = collect_records(pipe, image_path, artifacts_dir)
+    # The scoring engine consumes the same JSON the extractors just used.
+    records, manifest, raw_failures = records_from_feature_cache(
+        pipe, image_path, artifacts_dir, selected, failures)
     failures.update(raw_failures)
 
-    health = extraction_health(_attempted_count(pipe), failures)
+    health = extraction_health(len(selected), failures)
     if health["severity"] == "critical":
         logger.error("triage extraction degraded: %s", health["message"])
     elif health["degraded"]:
@@ -439,6 +599,7 @@ def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
 
     view = assemble_triage(features_flat, records, vol_version=vol_version, profile=profile)
     view["manifest"] = manifest
+    view["plugins"] = list(selected)
     view["extraction"] = health
     view["dashboard"]["extraction"] = health
     return view

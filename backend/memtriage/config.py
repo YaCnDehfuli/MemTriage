@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     # --- infrastructure ---
     database_url: str = "postgresql+psycopg://memtriage:memtriage@postgres:5432/memtriage"
     redis_url: str = "redis://redis:6379/0"
+    # One batch may contain every catalog plugin and several sequential dependency
+    # waves. Individual subprocesses are bounded below; the broker lease covers
+    # the worst-case 56-plugin sequential batch plus cleanup headroom.
+    broker_visibility_timeout_s: int = 60 * 24 * 60 * 60
 
     # --- upload limits (DoS controls) ---
     # 4GB+ dumps are a first-class case; the cap is per dump.
@@ -59,7 +63,12 @@ class Settings(BaseSettings):
     # --- Volatility 3 ---
     # None => VolMemLyzer auto-resolves `vol`/`vol.py`/`python -m volatility3`.
     vol_path: str | None = None
-    vol_timeout_s: int = 1800  # per-plugin subprocess timeout
+    # Source checkout path for local development when VolMemLyzer is not
+    # installed into the backend environment.
+    volmemlyzer_src: Path | None = None
+    # Whole-image scanners can legitimately need many hours on a large dump.
+    # Keep a finite ceiling, but do not kill expected work after only 30 minutes.
+    vol_timeout_s: int = 86_400  # per-plugin subprocess timeout (24 hours)
 
     # Volatility resolves a Windows image's kernel symbols by downloading the
     # matching PDB from msdl.microsoft.com. The worker deliberately has no route

@@ -6,6 +6,8 @@ failures into something the analyst sees.
 """
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 from memtriage.pipeline import volmemlyzer_adapter as vml
 
 # --------------------------------------------------------------------------
@@ -52,6 +54,9 @@ def _fake_volmemlyzer(monkeypatch, *, supports_symbols: bool):
         def __init__(self, runner, registry):
             self.runner, self.registry = runner, registry
 
+        def check_cache(self, *_args, **_kwargs):
+            return {"ok": False, "path": None, "format": None}
+
     for name, attrs in {
         "volmemlyzer.runner": {"VolRunner": VolRunner},
         "volmemlyzer.pipeline": {"Pipeline": Pipeline},
@@ -84,6 +89,51 @@ def test_an_older_volmemlyzer_still_works_but_warns(monkeypatch, tmp_path, caplo
     with caplog.at_level("WARNING"):
         vml.build_pipeline(None, 60, symbol_dirs=[str(symbols)], offline=True)
     assert "cannot forward them" in caplog.text
+
+
+def test_backend_wrapper_reuses_valid_empty_json_but_not_failed_output(
+    monkeypatch, tmp_path,
+):
+    _fake_volmemlyzer(monkeypatch, supports_symbols=True)
+    pipe = vml.build_pipeline(None, 60)
+    output = tmp_path / "dump_0_pslist.json"
+    output.write_text("[]")
+
+    hit = pipe.check_cache(
+        str(tmp_path), "pslist", "dump_0", require_format="json", strict=True,
+    )
+    assert hit == {"ok": True, "path": str(output), "format": "json"}
+
+    output.with_name(f"{output.name}.stderr.txt").write_text("ERROR: plugin failed")
+    miss = pipe.check_cache(
+        str(tmp_path), "pslist", "dump_0", require_format="json", strict=True,
+    )
+    assert miss["ok"] is False
+
+
+def test_clean_retry_removes_a_stale_stderr_companion(monkeypatch, tmp_path):
+    _fake_volmemlyzer(monkeypatch, supports_symbols=True)
+    pipe = vml.build_pipeline(None, 60)
+    output = tmp_path / "dump_0_pslist.json"
+    output.write_text("[]")
+    stderr = output.with_name(f"{output.name}.stderr.txt")
+    stderr.write_text("ERROR: failure from an earlier attempt")
+
+    base_runner = pipe.runner.__class__.__mro__[1]
+    monkeypatch.setattr(
+        base_runner,
+        "run_plugin",
+        lambda *_args, **_kwargs: SimpleNamespace(
+            rc=0, output_path=str(output), stderr_path=None,
+        ),
+        raising=False,
+    )
+    pipe.runner.run_plugin(
+        "dump_0", SimpleNamespace(name="pslist"), output_dir=str(tmp_path),
+    )
+
+    assert not stderr.exists()
+    assert vml.valid_json_cache_artifact(output) is True
 
 
 # --------------------------------------------------------------------------
