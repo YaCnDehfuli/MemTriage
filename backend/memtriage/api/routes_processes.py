@@ -98,7 +98,9 @@ def analyze_process(
         select(ProcessAnalysis)
         .where(ProcessAnalysis.investigation_id == investigation_id)
         .where(ProcessAnalysis.pid == body.pid)
-        .where(ProcessAnalysis.status.in_([AnalysisStatus.QUEUED, AnalysisStatus.ANALYZING]))
+        .where(ProcessAnalysis.status.in_([
+            AnalysisStatus.QUEUED, AnalysisStatus.ANALYZING, AnalysisStatus.DONE,
+        ]))
         .order_by(ProcessAnalysis.created_at.desc())
     ).first()
     if inflight is not None:
