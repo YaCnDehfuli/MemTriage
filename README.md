@@ -10,11 +10,11 @@ Memory-forensics workspace that runs Volatility 3 triage, re-scores cached artif
 
 ![MemTriage live investigation path](docs/demo/memtriage-live.gif)
 
-Work in progress. Not an EDR, antivirus, or live endpoint monitor. Without a compatible VADViT checkpoint the system returns an explicit unavailable result.
+Stable tool. Not an EDR, antivirus, or live endpoint monitor. VADViT weights come from the research facility; request them via the deep-dive panel or yasindeh@yorku.ca. See [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md).
 
-One dump, or up to five interval snapshots, is uploaded through FastAPI. Celery workers run Volatility 3 through VolMemLyzer, persist artifacts in PostgreSQL and on disk, and stream progress over SSE. The React workspace re-scores cached plugin output without starting Volatility again. Selecting a process runs `windows.vadinfo --dump`, renders a VADViT grid, and ranks regions by attention. Region panels include disassembly, control flow, strings, entropy, and a bounded hex view.
+One dump, or up to five interval snapshots, is uploaded through FastAPI. Celery workers run Volatility 3 through VolMemLyzer, persist artifacts in PostgreSQL and on disk, and stream progress over SSE. The React workspace re-scores cached plugin output without starting Volatility again. Selecting a process runs `windows.vadinfo --dump`, renders a VADViT grid, and ranks regions by attention. Region panels include disassembly, control flow, call graph, strings, entropy, and a bounded hex view.
 
-The GIF above is a live Docker run against `2580_5.vmem` with Prefer cache. Regenerating it is documented in [docs/demo/README.md](docs/demo/README.md).
+The GIF above is a live Docker run against `2580_5.vmem` with Prefer cache.
 
 ## Quickstart
 
@@ -30,7 +30,7 @@ Open `http://127.0.0.1:5173`. Upload a memory image, leave Prefer cache selected
 docker compose -f deploy/docker-compose.yml exec api python -m memtriage.preflight
 ```
 
-Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a named unavailable capability.
+Preflight reports named capabilities (Volatility, Capstone, PyTorch, VADViT checkpoint).
 
 ## Workspace
 
@@ -39,8 +39,8 @@ Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a n
 | Ingest | One dump or up to five snapshots, streamed to disk and hashed. |
 | Triage | Ranked leads with severity, confidence, evidence, and ATT&CK alignment. |
 | Inventory | Processes ranked by score. The analyst picks the PID. |
-| VADViT | Attention overlay and a top-K region table, or an explicit unavailable verdict. |
-| Region analysis | Disassembly, graphs, patterns, strings, structure, entropy, hex. |
+| VADViT | Attention overlay and a top-K region table. Weights come from the research facility. |
+| Region analysis | Disassembly, CFG, FCG, patterns, strings, structure, entropy, hex. |
 
 <p align="center">
   <img src="docs/figures/triage-board.png" alt="Triage board with risk bands and scored objects" width="100%">
@@ -90,15 +90,46 @@ The GIF walks ingest → triage → a process. These stills are the region views
 </table>
 
 <p align="center">
+  <img src="docs/assets/volmemlyzer-workbench.png" alt="VolMemLyzer workbench with automated triage controls and activity status" width="100%">
+</p>
+<sub>Automated triage. Coverage, plugin selection, concurrency, cache policy, and run status.</sub>
+
+<p align="center">
   <img src="docs/assets/volmemlyzer-feature-extraction.png" alt="VolMemLyzer searchable feature extraction table" width="100%">
 </p>
 <sub>Feature extraction. Searchable VolMemLyzer features with JSON/CSV export — a table the GIF does not pause on.</sub>
 
+## Architecture
+
+```text
+Memory image(s)
+      ↓
+Ingest + validation
+      ↓
+VolMemLyzer3 / Volatility 3
+      ↓
+Normalized artifacts + features
+      ↓
+Explainable scoring + ATT&CK alignment
+      ↓
+Process inventory
+      ↓
+VADViT grid + attention
+      ↓
+Region analysis (disasm · CFG · FCG · patterns · bytes)
+      ↓
+Deterministic briefing → Assistant / Report
+```
+
+The stack is a React/TypeScript workspace and a local service: FastAPI, Celery, Redis, PostgreSQL, SSE, Docker Compose, and nginx. Derived artifacts live on disk.
+
+## VADViT model access
+
+MemTriage does not ship the trained VADViT weights. They are research artifacts from the research facility and are released on request. Use the request flow in the deep-dive panel or email **yasindeh@yorku.ca**. Placement is documented in [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md).
+
 ## Status
 
-Work in progress. Not an EDR, antivirus, or live endpoint monitor. Without a compatible VADViT checkpoint the system returns an explicit unavailable result.
-
-The stack is FastAPI, Celery, PostgreSQL, Redis, SSE, React/TypeScript, Docker Compose, and nginx. The trained VADViT weights are not in this repository. Request them via the deep-dive panel or [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md).
+Stable tool. Not an EDR, antivirus, or live endpoint monitor. VADViT weights come from the research facility; request them via the deep-dive panel or yasindeh@yorku.ca. See [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md).
 
 ## Limitations
 
