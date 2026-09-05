@@ -19,6 +19,8 @@ frontend/.vite/
 npm-debug.log*
 
 # --- MemTriage runtime data (never commit dumps, artifacts, models) ---
+/Samples
+/samples
 /data/
 data/
 *.raw
@@ -52,6 +54,12 @@ security/reports/*.json
 security/reports/*.sarif
 security/reports/*.html
 zap-report.*
+
+# --- Demo recorder scratch (keep the committed GIF) ---
+docs/demo/test-results/
+docs/demo/playwright-report/
+docs/demo/node_modules/
+docs/figures/ingest.png
 
 # --- OS / editor ---
 .DS_Store

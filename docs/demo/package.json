@@ -1,0 +1,11 @@
+{
+  "name": "memtriage-demo-record",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "record": "playwright test record.spec.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}
