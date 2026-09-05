@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "memtriage"
-version = "0.2.0"
+version = "1.0.0"
 description = "Combined memory-forensics + explainable malware-classification pipeline"
 # setuptools refuses readme paths outside backend/; the GitHub README stays at repo root.
 requires-python = ">=3.11"

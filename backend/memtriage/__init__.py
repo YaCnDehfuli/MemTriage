@@ -7,4 +7,4 @@ consolidated-investigation-report service. It does not fork or rewrite either
 component; both are imported/invoked as dependencies.
 """
 
-__version__ = "0.2.0"
+__version__ = "1.0.0"
