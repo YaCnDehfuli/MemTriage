@@ -506,8 +506,6 @@ class _OutputPipe:
     registry = SimpleNamespace(topo_layers=lambda selected: [set(selected)])
 
     def run_plugin_raw(self, *, image_path, enable, outdir, concurrency, use_cache):
-        from volmemlyzer.core import ActionResult
-
         plugin = next(iter(enable))
         path = Path(outdir, f"{Path(image_path).name}_{plugin}.json")
         path.write_text(json.dumps({"records": [
@@ -518,15 +516,13 @@ class _OutputPipe:
         logging.getLogger("volmemlyzer.runner").info("Executing plugin %s", plugin)
         logging.getLogger("volmemlyzer.runner").info(
             "Finished %s rc=%s in %.2fs", plugin, 0, 0.1)
-        return ActionResult(artifacts={"plugins": {plugin: str(path)}, "failed_plugins": {}})
+        return SimpleNamespace(artifacts={"plugins": {plugin: str(path)}, "failed_plugins": {}})
 
 
 class _ConvertedOutputPipe:
     registry = SimpleNamespace(topo_layers=lambda selected: [set(selected)])
 
     def run_plugin_raw(self, *, image_path, enable, outdir, concurrency, use_cache):
-        from volmemlyzer.core import ActionResult
-
         plugin = next(iter(enable))
         path = Path(outdir, f"{plugin}.json")
         path.write_text(json.dumps([{"PID": 7, "Source": "converted"}]))
@@ -534,7 +530,7 @@ class _ConvertedOutputPipe:
             "Converted %s: %s -> %s via %s. Re-run avoided",
             plugin, "csv", "json", "csv",
         )
-        return ActionResult(artifacts={"plugins": {plugin: str(path)}, "failed_plugins": {}})
+        return SimpleNamespace(artifacts={"plugins": {plugin: str(path)}, "failed_plugins": {}})
 
 
 def test_converted_manual_output_is_snapshotted_from_its_actual_path(client, monkeypatch):
