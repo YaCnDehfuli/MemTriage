@@ -5,7 +5,7 @@ definition. Reports about how it handles that input are especially welcome.
 
 ## Reporting a vulnerability
 
-Email **yasindeh@yorku.ca** with:
+Email **dehfouliyasin@gmail.com** with:
 
 - what the issue is and where in the code it lives,
 - how to reproduce it, ideally with a minimal input,
