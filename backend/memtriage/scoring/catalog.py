@@ -320,7 +320,7 @@ _COMMON_PORTS = {
 
 
 def _is_public(ip: str) -> bool:
-    if not ip or ip in {"*", "0.0.0.0", "::"}:  # noqa: S104 — matching a wildcard bind, not binding one
+    if not ip or ip in {"*", "0.0.0.0", "::"}:  # noqa: S104  # nosec B104 — matching a wildcard, not binding
         return False
     try:
         return not ipaddress.ip_address(ip).is_private

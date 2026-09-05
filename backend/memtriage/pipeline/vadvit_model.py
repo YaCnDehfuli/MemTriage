@@ -257,7 +257,11 @@ class VADViTClassifier:
         import torch
 
         model = build_model(self.model_name, self.num_classes, pretrained=False)
-        state = torch.load(str(checkpoint), map_location=self.device)
+        # Local .pt we placed (research-facility or generated placeholder).
+        # weights_only rejects pickled objects; Bandit still flags the API.
+        state = torch.load(  # nosec B614
+            str(checkpoint), map_location=self.device, weights_only=True,
+        )
         if isinstance(state, dict) and "state_dict" in state \
                 and not any(str(k).startswith("vit.") for k in state):
             state = state["state_dict"]

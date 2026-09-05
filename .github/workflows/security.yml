@@ -28,7 +28,9 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: pip install semgrep==1.97.0
+      # setuptools provides pkg_resources; semgrep 1.97 crashes without it
+      # on the hosted Python 3.12 image (ModuleNotFoundError).
+      - run: pip install setuptools semgrep==1.97.0
       - name: Scan
         run: |
           semgrep scan \
@@ -37,7 +39,7 @@ jobs:
             --sarif --output semgrep.sarif \
             --metrics off --error --severity ERROR
       - name: Upload SARIF
-        if: always()
+        if: always() && hashFiles('semgrep.sarif') != ''
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: semgrep.sarif

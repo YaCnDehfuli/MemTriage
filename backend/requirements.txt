@@ -1,7 +1,8 @@
 # --- Web / API ---
-fastapi==0.115.6
+fastapi==0.141.1
+starlette==1.3.1
 uvicorn[standard]==0.34.0
-python-multipart==0.0.20
+python-multipart==0.0.31
 pydantic==2.10.4
 pydantic-settings==2.7.1
 sse-starlette==2.1.3
@@ -23,7 +24,7 @@ volatility3==2.28.0
 
 # --- Rendering / numerics (VADViT preprocessing reproduction) ---
 numpy==1.26.4
-Pillow==10.4.0
+Pillow==12.3.0
 opencv-python-headless==4.10.0.84
 # pandas/tqdm are pulled in transitively by VolMemLyzer; declared here because
 # the VADViT grid-rendering fidelity test imports VADViT's ProcessVisulaizer.
@@ -38,7 +39,7 @@ tqdm==4.67.1
 # --- Low-level region analysis (phase 2 deep-dive) ---
 # Both are pure-Python-installable and imported lazily: without them the deep-dive
 # drops the instruction listing / PE header panels and says so, rather than failing.
-capstone==5.0.3
+capstone==5.0.8
 pefile==2024.8.26
 
 # --- Assistant (phase 3, bring-your-own-key) ---
@@ -48,8 +49,8 @@ anthropic==0.69.0
 openai==1.99.1
 
 # --- Reporting ---
-jinja2==3.1.5
+jinja2==3.1.6
 
 # --- Dev / test ---
-pytest==8.3.4
+pytest==9.0.3
 httpx==0.28.1
