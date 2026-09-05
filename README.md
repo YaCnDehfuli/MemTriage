@@ -22,7 +22,7 @@ MemTriage wraps two independently published components rather than forking them,
 
 | Layer | Role |
 | --- | --- |
-| **[VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool)** | Volatility 3 execution, feature extraction, caching, and analyst-oriented triage |
+| **[VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool)** | Volatility 3 execution, feature extraction, caching, and analyst-oriented triage. Measured extract baseline for the pinned 10-plugin set: 172.16s serial, 71.12s with 4 workers (cache-warm 3.1517s is artifact reuse); see the VolMemLyzer README. |
 | **[VADViT](https://github.com/YaCnDehfuli/VADViT)** | Process-memory representation, Vision Transformer classification, attention mapped to VAD regions |
 | **FastAPI + Celery + Redis + PostgreSQL** | Investigation state, uploads, scoring, SSE, assistant, reports |
 | **React / TypeScript** | Analyst workspace |
