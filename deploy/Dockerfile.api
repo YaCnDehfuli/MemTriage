@@ -2,7 +2,7 @@
 # The API only accepts uploads, tracks jobs, streams progress, and serves
 # reports. It enqueues work by task name, so it needs none of the worker's
 # forensics/ML dependencies.
-FROM python:3.11-slim AS base
+FROM python:3.14-slim AS base
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \

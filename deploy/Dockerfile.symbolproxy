@@ -2,7 +2,7 @@
 # The only component that bridges the isolated worker to the outside world, and
 # it can reach exactly one host. Kept to the Python standard library so there is
 # nothing to audit but proxy.py itself.
-FROM python:3.11-alpine
+FROM python:3.14-alpine
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
