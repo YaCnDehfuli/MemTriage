@@ -7,6 +7,11 @@ suite needs no Postgres/Redis to run.
 import os
 import sys
 import tempfile
+from pathlib import Path
+
+_VML_SRC = Path(__file__).resolve().parents[2] / "components" / "volmemlyzer" / "src"
+if _VML_SRC.is_dir() and str(_VML_SRC) not in sys.path:
+    sys.path.insert(0, str(_VML_SRC))
 
 # The grid-render fidelity test imports VADViT's module from the submodule;
 # don't let Python drop a .pyc there and dirty the pinned submodule tree.
