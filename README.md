@@ -54,6 +54,46 @@ Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a n
   <img src="docs/figures/attention-overlay.png" alt="VADViT attention overlay and region attribution table" width="100%">
 </p>
 
+The GIF walks ingest → triage → a process. These stills are the region views it does not hold on: the function-call graph, disassembly, entropy / PE layout, and the other analyst tabs.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/assets/region-call-graph.png" alt="Region function-call graph with local functions and indirect calls">
+<br><sub><strong>Call graph (FCG).</strong> Local functions, resolved API names, and indirect calls. Indirect calls are counted rather than drawn.</sub>
+</td>
+<td width="50%" valign="top">
+<img src="docs/assets/region-disassembly.png" alt="Region disassembly with addresses, bytes, and mnemonics">
+<br><sub><strong>Disassembly.</strong> Decoded instructions with addresses and bytes; partial decode coverage is shown rather than hidden.</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/assets/region-overview.png" alt="Region analysis overview with instruction, block, function, call and indicator counts">
+<br><sub><strong>Overview.</strong> Address range, protection, backing file, hashes, analysis counts, and triage-aligned ATT&CK techniques. The Control flow (CFG) tab sits next to Call graph.</sub>
+</td>
+<td width="50%" valign="top">
+<img src="docs/assets/region-patterns.png" alt="Region analysis pattern indicators including decoder loops, PEB walks and indirect calls">
+<br><sub><strong>Patterns.</strong> Decoder loops, PEB walks, writable/executable memory, indirect-call dominance, and stack-built strings, with severity and technique context.</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/assets/region-structure.png" alt="Region structure view with entropy profile and PE sections">
+<br><sub><strong>Structure.</strong> Entropy profile, byte distribution, PE metadata, sections, and imports — layout as distinct from behavior.</sub>
+</td>
+<td width="50%" valign="top">
+<img src="docs/assets/region-hex.png" alt="Hex dump of a selected memory region">
+<br><sub><strong>Hex.</strong> A bounded byte view for manual verification. Raw region bytes are not served for download.</sub>
+</td>
+</tr>
+</table>
+
+<p align="center">
+  <img src="docs/assets/volmemlyzer-feature-extraction.png" alt="VolMemLyzer searchable feature extraction table" width="100%">
+</p>
+<sub>Feature extraction. Searchable VolMemLyzer features with JSON/CSV export — a table the GIF does not pause on.</sub>
+
 ## Status
 
 Work in progress. Not an EDR, antivirus, or live endpoint monitor. Without a compatible VADViT checkpoint the system returns an explicit unavailable result.
