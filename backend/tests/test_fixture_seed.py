@@ -51,7 +51,6 @@ def test_seeds_real_rows_and_copies_cached_artifacts(client):
 
 
 def test_live_triage_from_cached_artifacts_produces_a_populated_dashboard(client):
-    pytest.importorskip("volmemlyzer")
     from memtriage.pipeline.fixture_seed import seed_investigation_from_dumps
 
     summary = seed_investigation_from_dumps(FIXTURES)

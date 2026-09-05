@@ -1,0 +1,10 @@
+# Mount host dumps + VolMemLyzer cache artifacts at /samples.
+# Set MEMTRIAGE_SAMPLES_DIR to the directory that holds 2580_5.vmem and
+# its <image>_<plugin>.json sidecars. Do not add that directory to git.
+services:
+  api:
+    volumes:
+      - ${MEMTRIAGE_SAMPLES_DIR}:/samples:ro
+  worker:
+    volumes:
+      - ${MEMTRIAGE_SAMPLES_DIR}:/samples:ro
