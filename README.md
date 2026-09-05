@@ -16,27 +16,23 @@ One dump, or up to five interval snapshots, is uploaded through FastAPI. Celery 
 
 The GIF above is a live Docker run against `2580_5.vmem` with Prefer cache. Regenerating it is documented in [docs/demo/README.md](docs/demo/README.md).
 
-## How it works
+## Quickstart
 
-Memory forensics is rarely short of artifacts. The hard part is getting from a multi-gigabyte image to a small set of defensible leads without losing the path that produced them.
+```bash
+git clone --recurse-submodules https://github.com/YaCnDehfuli/MemTriage.git
+cd MemTriage
+docker compose -f deploy/docker-compose.yml up --build
+```
 
-MemTriage connects two existing bodies of work:
+Open `http://127.0.0.1:5173`. Upload a memory image, leave Prefer cache selected, and run triage. Compatible VolMemLyzer artifacts next to the image, or from a prior investigation of the same SHA-256, are reused.
 
-- **[VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool)** for Volatility 3 execution, feature extraction, caching, and analyst-oriented triage.
-- **[VADViT](https://github.com/YaCnDehfuli/VADViT)** for process-memory representation, Vision Transformer classification, and attention mapped back to concrete Virtual Address Descriptor (VAD) regions.
+```bash
+docker compose -f deploy/docker-compose.yml exec api python -m memtriage.preflight
+```
 
-| Stage | What happens | What the analyst gets |
-| --- | --- | --- |
-| Ingest | One image, or up to five interval snapshots, is validated and streamed to disk. | A bounded input with explicit validation failures. |
-| VolMemLyzer triage | Volatility plugins run, artifacts are normalized, features are extracted, and explainable rules score the evidence. | Ranked leads with severity, confidence, evidence, and ATT&CK alignment. |
-| Process inventory | The process set is presented for review and selection. | A concrete PID rather than a wall of plugin output. |
-| VADViT deep-dive | VAD regions are rendered into the model grid, classified, and attention is mapped back to region addresses. | A ranked list of the regions the model weighted most. |
-| Region analysis | Selected regions are decoded into instructions, a CFG, an FCG, patterns, strings, PE layout, entropy, and bytes. | Evidence that can be inspected down to individual addresses. |
-| Assistant and report | The investigation is packed into a deterministic briefing for an optional LLM and a final report. | A question-answering layer anchored to collected evidence, plus an exportable record. |
+Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a named unavailable capability.
 
-Sensitivity can be changed without rerunning Volatility: the app rescales existing evidence instead of hiding rule contributions behind a single number. The analyst chooses the PID. VADViT attention is mapped to concrete VAD addresses. A selected region can be read as code rather than as one label.
-
-See [docs/METHODOLOGY.md](docs/METHODOLOGY.md) for what each phase does and does not establish.
+`.env.example` documents the configuration knobs. Copy it to `.env` to override defaults.
 
 ## Workspace
 
@@ -102,23 +98,10 @@ Once a VAD is selected, the analyst can move across views without losing the add
 
 The same analysis surface also includes the **control-flow graph (CFG)** and **strings** views. Indicators describe properties of the bytes in a region; deciding what those properties mean remains an analyst decision.
 
-## Quickstart
-
-```bash
-git clone --recurse-submodules https://github.com/YaCnDehfuli/MemTriage.git
-cd MemTriage
-docker compose -f deploy/docker-compose.yml up --build
-```
-
-Open `http://127.0.0.1:5173`. Upload a memory image, leave Prefer cache selected, and run triage. Compatible VolMemLyzer artifacts next to the image, or from a prior investigation of the same SHA-256, are reused.
-
-```bash
-docker compose -f deploy/docker-compose.yml exec api python -m memtriage.preflight
-```
-
-Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a named unavailable capability.
-
-`.env.example` documents the configuration knobs. Copy it to `.env` to override defaults.
+<p align="center">
+  <img src="docs/figures/evidence-expansion.png" alt="Expanded evidence row with rule, severity, and evidence string" width="100%">
+</p>
+<sub>Evidence expansion. A scored object opens to the rule, severity, confidence, and evidence string that produced it.</sub>
 
 ## Architecture
 
