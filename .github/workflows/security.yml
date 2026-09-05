@@ -28,9 +28,9 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      # setuptools provides pkg_resources; semgrep 1.97 crashes without it
-      # on the hosted Python 3.12 image (ModuleNotFoundError).
-      - run: pip install setuptools semgrep==1.97.0
+      # setuptools 82+ dropped pkg_resources; semgrep 1.97 still imports it
+      # (ModuleNotFoundError on the hosted Python 3.12 image).
+      - run: pip install "setuptools>=70,<81" semgrep==1.97.0
       - name: Scan
         run: |
           semgrep scan \
