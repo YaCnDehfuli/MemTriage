@@ -10,57 +10,68 @@ Memory-forensics workspace that runs Volatility 3 triage, re-scores cached artif
 
 ![MemTriage live investigation path](docs/demo/memtriage-live.gif)
 
-Stable tool. Not an EDR, antivirus, or live endpoint monitor. VADViT weights come from the research facility; request them via the deep-dive panel or yasindeh@yorku.ca. See [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md).
+Stable tool. Not an EDR, antivirus, or live endpoint monitor. The trained VADViT checkpoint is obtained through the research facility (BCCC / York) on request; it is not shipped in this repository.
 
-One dump, or up to five interval snapshots, is uploaded through FastAPI. Celery workers run Volatility 3 through VolMemLyzer, persist artifacts in PostgreSQL and on disk, and stream progress over SSE. The React workspace re-scores cached plugin output without starting Volatility again. Selecting a process runs `windows.vadinfo --dump`, renders a VADViT grid, and ranks regions by attention. Region panels include disassembly, control flow, call graph, strings, entropy, and a bounded hex view.
+One dump, or up to five interval snapshots, is uploaded through FastAPI. Celery workers run Volatility 3 through VolMemLyzer, persist artifacts in PostgreSQL and on disk, and stream progress over SSE. The React workspace re-scores cached plugin output without starting Volatility again. Selecting a process runs `windows.vadinfo --dump`, renders a VADViT grid, and ranks regions by attention. Region panels include disassembly, a control-flow graph (CFG), a function-call graph (FCG), patterns, strings, structure, entropy, and a bounded hex view.
 
-The GIF above is a live Docker run against `2580_5.vmem` with Prefer cache.
+The GIF above is a live Docker run against `2580_5.vmem` with Prefer cache. Regenerating it is documented in [docs/demo/README.md](docs/demo/README.md).
 
-## Quickstart
+## How it works
 
-```bash
-git clone --recurse-submodules https://github.com/YaCnDehfuli/MemTriage.git
-cd MemTriage
-docker compose -f deploy/docker-compose.yml up --build
-```
+Memory forensics is rarely short of artifacts. The hard part is getting from a multi-gigabyte image to a small set of defensible leads without losing the path that produced them.
 
-Open `http://127.0.0.1:5173`. Upload a memory image, leave Prefer cache selected, and run triage. Compatible VolMemLyzer artifacts next to the image, or from a prior investigation of the same SHA-256, are reused.
+MemTriage connects two existing bodies of work:
 
-```bash
-docker compose -f deploy/docker-compose.yml exec api python -m memtriage.preflight
-```
+- **[VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool)** for Volatility 3 execution, feature extraction, caching, and analyst-oriented triage.
+- **[VADViT](https://github.com/YaCnDehfuli/VADViT)** for process-memory representation, Vision Transformer classification, and attention mapped back to concrete Virtual Address Descriptor (VAD) regions.
 
-Preflight reports named capabilities (Volatility, Capstone, PyTorch, VADViT checkpoint).
+| Stage | What happens | What the analyst gets |
+| --- | --- | --- |
+| Ingest | One image, or up to five interval snapshots, is validated and streamed to disk. | A bounded input with explicit validation failures. |
+| VolMemLyzer triage | Volatility plugins run, artifacts are normalized, features are extracted, and explainable rules score the evidence. | Ranked leads with severity, confidence, evidence, and ATT&CK alignment. |
+| Process inventory | The process set is presented for review and selection. | A concrete PID rather than a wall of plugin output. |
+| VADViT deep-dive | VAD regions are rendered into the model grid, classified, and attention is mapped back to region addresses. | A ranked list of the regions the model weighted most. |
+| Region analysis | Selected regions are decoded into instructions, a CFG, an FCG, patterns, strings, PE layout, entropy, and bytes. | Evidence that can be inspected down to individual addresses. |
+| Assistant and report | The investigation is packed into a deterministic briefing for an optional LLM and a final report. | A question-answering layer anchored to collected evidence, plus an exportable record. |
+
+Sensitivity can be changed without rerunning Volatility: the app rescales existing evidence instead of hiding rule contributions behind a single number. The analyst chooses the PID. VADViT attention is mapped to concrete VAD addresses. A selected region can be read as code rather than as one label.
+
+See [docs/METHODOLOGY.md](docs/METHODOLOGY.md) for what each phase does and does not establish.
 
 ## Workspace
 
-| Stage | What the analyst gets |
-| --- | --- |
-| Ingest | One dump or up to five snapshots, streamed to disk and hashed. |
-| Triage | Ranked leads with severity, confidence, evidence, and ATT&CK alignment. |
-| Inventory | Processes ranked by score. The analyst picks the PID. |
-| VADViT | Attention overlay and a top-K region table. Weights come from the research facility. |
-| Region analysis | Disassembly, CFG, FCG, patterns, strings, structure, entropy, hex. |
+The GIF walks ingest → triage → a process. The stills below are the region-level and feature views it does not hold on — including the CFG/FCG graph tabs.
 
 <p align="center">
-  <img src="docs/figures/triage-board.png" alt="Triage board with risk bands and scored objects" width="100%">
+  <img src="docs/figures/triage-board.png" alt="Live triage board with risk bands and scored objects" width="100%">
 </p>
 
 <p align="center">
-  <img src="docs/figures/evidence-expansion.png" alt="Expanded evidence row with rule, severity, and evidence string" width="100%">
+  <img src="docs/assets/volmemlyzer-workbench.png" alt="VolMemLyzer workbench with automated triage controls and activity status" width="100%">
 </p>
+<sub>VolMemLyzer workbench. Coverage, plugin selection, concurrency, cache policy, and run status stay visible in one place.</sub>
 
 <p align="center">
-  <img src="docs/figures/attention-overlay.png" alt="VADViT attention overlay and region attribution table" width="100%">
+  <img src="docs/assets/volmemlyzer-feature-extraction.png" alt="VolMemLyzer searchable feature extraction table" width="100%">
+</p>
+<sub>Feature extraction. Searchable VolMemLyzer features with JSON/CSV export.</sub>
+
+<p align="center">
+  <img src="docs/figures/attention-overlay.png" alt="VADViT attention overlay and region attribution on a live process" width="100%">
 </p>
 
-The GIF walks ingest → triage → a process. These stills are the region views it does not hold on: the function-call graph, disassembly, entropy / PE layout, and the other analyst tabs.
+> [!IMPORTANT]
+> The VADViT panel above shows the **untrained structural placeholder** when the research-facility checkpoint is not mounted. Grid construction, attention, region ranking, and the low-level deep-dive still describe real memory. The family label does not. The UI marks that state and offers the request form.
+
+### Region analysis: CFG, FCG, and the other tabs
+
+Once a VAD is selected, the analyst can move across views without losing the address context. **Control flow** is the CFG (basic blocks and typed edges). **Call graph** is the FCG (local functions, resolved APIs, indirect calls).
 
 <table>
 <tr>
 <td width="50%" valign="top">
-<img src="docs/assets/region-call-graph.png" alt="Region function-call graph with local functions and indirect calls">
-<br><sub><strong>Call graph (FCG).</strong> Local functions, resolved API names, and indirect calls. Indirect calls are counted rather than drawn.</sub>
+<img src="docs/assets/region-overview.png" alt="Region analysis overview with instruction, block, function, call and indicator counts">
+<br><sub><strong>Overview.</strong> Address range, protection, backing file, hashes, analysis counts, and triage-aligned ATT&CK techniques. Control flow (CFG) and Call graph (FCG) are adjacent tabs.</sub>
 </td>
 <td width="50%" valign="top">
 <img src="docs/assets/region-disassembly.png" alt="Region disassembly with addresses, bytes, and mnemonics">
@@ -69,8 +80,8 @@ The GIF walks ingest → triage → a process. These stills are the region views
 </tr>
 <tr>
 <td width="50%" valign="top">
-<img src="docs/assets/region-overview.png" alt="Region analysis overview with instruction, block, function, call and indicator counts">
-<br><sub><strong>Overview.</strong> Address range, protection, backing file, hashes, analysis counts, and triage-aligned ATT&CK techniques. The Control flow (CFG) tab sits next to Call graph.</sub>
+<img src="docs/assets/region-call-graph.png" alt="Region function-call graph with local functions and indirect calls">
+<br><sub><strong>Call graph (FCG).</strong> Local functions, resolved API names, and indirect calls. Indirect calls are counted rather than drawn because their targets are not statically known.</sub>
 </td>
 <td width="50%" valign="top">
 <img src="docs/assets/region-patterns.png" alt="Region analysis pattern indicators including decoder loops, PEB walks and indirect calls">
@@ -89,15 +100,25 @@ The GIF walks ingest → triage → a process. These stills are the region views
 </tr>
 </table>
 
-<p align="center">
-  <img src="docs/assets/volmemlyzer-workbench.png" alt="VolMemLyzer workbench with automated triage controls and activity status" width="100%">
-</p>
-<sub>Automated triage. Coverage, plugin selection, concurrency, cache policy, and run status.</sub>
+The same analysis surface also includes the **control-flow graph (CFG)** and **strings** views. Indicators describe properties of the bytes in a region; deciding what those properties mean remains an analyst decision.
 
-<p align="center">
-  <img src="docs/assets/volmemlyzer-feature-extraction.png" alt="VolMemLyzer searchable feature extraction table" width="100%">
-</p>
-<sub>Feature extraction. Searchable VolMemLyzer features with JSON/CSV export — a table the GIF does not pause on.</sub>
+## Quickstart
+
+```bash
+git clone --recurse-submodules https://github.com/YaCnDehfuli/MemTriage.git
+cd MemTriage
+docker compose -f deploy/docker-compose.yml up --build
+```
+
+Open `http://127.0.0.1:5173`. Upload a memory image, leave Prefer cache selected, and run triage. Compatible VolMemLyzer artifacts next to the image, or from a prior investigation of the same SHA-256, are reused.
+
+```bash
+docker compose -f deploy/docker-compose.yml exec api python -m memtriage.preflight
+```
+
+Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a named unavailable capability.
+
+`.env.example` documents the configuration knobs. Copy it to `.env` to override defaults.
 
 ## Architecture
 
@@ -121,15 +142,15 @@ Region analysis (disasm · CFG · FCG · patterns · bytes)
 Deterministic briefing → Assistant / Report
 ```
 
-The stack is a React/TypeScript workspace and a local service: FastAPI, Celery, Redis, PostgreSQL, SSE, Docker Compose, and nginx. Derived artifacts live on disk.
+FastAPI exposes investigation, upload, process, result, scoring, artifact, event, model-access, and assistant routes. Celery and Redis coordinate long-running work; PostgreSQL stores investigation state; derived artifacts live on disk.
 
 ## VADViT model access
 
-MemTriage does not ship the trained VADViT weights. They are research artifacts from the research facility and are released on request. Use the request flow in the deep-dive panel or email **yasindeh@yorku.ca**. Placement is documented in [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md).
+**MemTriage does not ship the trained VADViT weights.** They are research artifacts. The checkpoint is obtained through the research facility (BCCC / York) on request, then placed in `models/`.
 
-## Status
+Without the checkpoint, the application builds an architecturally identical model once from a fixed seed. Grid construction, attention plumbing, region ranking, and the low-level deep-dive stay available. **The resulting family classification is not meaningful**, and MemTriage marks that state in the verdict, report, and assistant briefing.
 
-Stable tool. Not an EDR, antivirus, or live endpoint monitor. VADViT weights come from the research facility; request them via the deep-dive panel or yasindeh@yorku.ca. See [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md).
+To request the trained weights, use the form on the VADViT deep-dive panel or email **yasindeh@yorku.ca**. See [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md) for placement and access details.
 
 ## Limitations
 
@@ -140,7 +161,11 @@ Stable tool. Not an EDR, antivirus, or live endpoint monitor. VADViT weights com
 - VADViT published metrics (99.2% binary accuracy, 92% macro-averaged F1 on BCCC-MalMem-SnapLog-2025) belong to the study that produced those checkpoints. They do not transfer to this workspace without those weights and that corpus.
 - Volatility symbol support, acquisition quality, and what was resident at capture time bound every later stage.
 
-See [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
+## Status
+
+The integrated API, worker pipeline, scoring engine, feature view, process workflow, region analysis (including CFG and FCG), assistant, report path, Docker stack, security scanning, and test suite are implemented. This repository is not under development as a WIP product and is not an EDR, antivirus, or live endpoint monitor.
+
+The trained VADViT model is obtained through the research facility (BCCC / York) on request — via the deep-dive form or **yasindeh@yorku.ca** — and is not bundled here. Without that checkpoint the rest of the investigation path stays inspectable; family labels from the placeholder are not detections.
 
 ## Citation
 
