@@ -65,7 +65,7 @@ def render_attention_overlay(grid_png_path, attention, grid_size: int, out_path,
 
     # Upsample patch grid → full image with a smooth (bicubic) interpolation.
     heat = Image.fromarray((grid * 255).astype(np.uint8), mode="L").resize(
-        (width, height), Image.BICUBIC
+        (width, height), Image.Resampling.BICUBIC
     )
     heat = np.asarray(heat, dtype=np.float32) / 255.0
 

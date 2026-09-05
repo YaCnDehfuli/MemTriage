@@ -59,7 +59,8 @@ def generate_placeholder(
 
     ckpt = Path(checkpoint_path)
     ckpt.parent.mkdir(parents=True, exist_ok=True)
-    torch.save(model.state_dict(), str(ckpt))
+    # Writing our own randomly-initialized state_dict, not loading untrusted input.
+    torch.save(model.state_dict(), str(ckpt))  # nosec B614
 
     labels = PLACEHOLDER_LABELS[:num_classes]
     if len(labels) < num_classes:
