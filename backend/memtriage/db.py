@@ -102,14 +102,17 @@ def ensure_schema() -> None:
                     continue
                 try:
                     # table/column/type are closed constants above, never input.
-                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {sql_type}"))
+                    conn.execute(text(  # nosemgrep: python.sqlalchemy.security.audit.avoid-sqlalchemy-text.avoid-sqlalchemy-text
+                        f"ALTER TABLE {table} ADD COLUMN {column} {sql_type}"
+                    ))
                 except SQLAlchemyError:
                     logger.warning("could not add %s.%s", table, column)
 
         if engine.dialect.name == "postgresql":
             for table, column in _WIDENED_TO_BIGINT:
                 try:
-                    conn.execute(text(
+                    # table/column are closed constants in _WIDENED_TO_BIGINT, never input.
+                    conn.execute(text(  # nosemgrep: python.sqlalchemy.security.audit.avoid-sqlalchemy-text.avoid-sqlalchemy-text
                         f"ALTER TABLE {table} ALTER COLUMN {column} TYPE BIGINT"
                     ))
                 except SQLAlchemyError:
