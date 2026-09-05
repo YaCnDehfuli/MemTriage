@@ -42,6 +42,8 @@ jobs:
           grep -v -E '^(anthropic|openai)==' requirements.txt > ci-requirements.txt
           pip install -r ci-requirements.txt
           pip install -e .
+          # VolMemLyzer is a submodule; the live fixture-seed test imports it.
+          pip install -e ../components/volmemlyzer
 
       - name: Test
         working-directory: backend
