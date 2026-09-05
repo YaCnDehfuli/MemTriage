@@ -556,6 +556,18 @@ def extraction_health(attempted: int, failures: dict) -> dict:
     return health
 
 
+def _flatten_dict(d: dict, prefix: str = "", sep: str = ".") -> dict:
+    """Flatten nested feature dicts. Local copy so mocked tests need no submodule."""
+    flat: dict = {}
+    for key, value in (d or {}).items():
+        next_key = f"{prefix}{sep}{key}" if prefix else key
+        if isinstance(value, dict):
+            flat.update(_flatten_dict(value, next_key, sep))
+        else:
+            flat[next_key] = value
+    return flat
+
+
 def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
                timeout_s: int, profile: dict | None = None,
                symbol_dirs: list[str] | None = None, offline: bool = False,
@@ -568,8 +580,6 @@ def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
     extraction.
     """
     from dataclasses import asdict
-
-    from volmemlyzer.utilities import _flatten_dict
 
     pipe = build_pipeline(vol_path, timeout_s, symbol_dirs=symbol_dirs, offline=offline,
                           volmemlyzer_src=volmemlyzer_src)
