@@ -162,6 +162,41 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [client, applyTriage],
   );
 
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("investigation");
+    if (!id) return;
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      clearError();
+      try {
+        setInvestigationId(id);
+        const state = await client.getInvestigation(id);
+        if (cancelled) return;
+        setTriageProgress(state);
+        const res = await loadResult(id);
+        if (cancelled) return;
+        const existing = res.process_analyses[0];
+        if (existing) {
+          setAnalysis(existing);
+          setSelectedPid(existing.pid);
+          try {
+            setLowlevel(await client.getLowLevel(id, existing.pid));
+          } catch {
+            setLowlevel(null);
+          }
+        }
+      } catch (e) {
+        if (!cancelled) fail(e);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [client, loadResult, fail, clearError]);
+
   const bootstrap = useCallback(async () => {
     setLoading(true);
     clearError();
