@@ -2,14 +2,11 @@
 
 Memory-forensics workspace that runs Volatility 3 triage, re-scores cached artifacts, and maps VADViT attention back to process regions.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 [![CI](https://github.com/YaCnDehfuli/MemTriage/actions/workflows/ci.yml/badge.svg)](https://github.com/YaCnDehfuli/MemTriage/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-FastAPI-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![React](https://img.shields.io/badge/UI-React-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![Volatility 3](https://img.shields.io/badge/Forensics-Volatility_3-111827)](https://volatilityfoundation.org/)
-[![Docker](https://img.shields.io/badge/Deploy-Docker-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.jisa.2025.104200-7c3aed)](https://doi.org/10.1016/j.jisa.2025.104200)
-[![Security scanning](https://img.shields.io/badge/Security-Semgrep%20%C2%B7%20CodeQL%20%C2%B7%20Trivy%20%C2%B7%20ZAP-2ea44f)](security/SCANNING.md)
-[![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/YaCnDehfuli/MemTriage)](https://github.com/YaCnDehfuli/MemTriage/releases)
 
 ![MemTriage live investigation path](docs/demo/memtriage-live.gif)
 
