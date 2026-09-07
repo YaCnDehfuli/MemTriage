@@ -95,7 +95,7 @@ class Settings(BaseSettings):
     # verdict is labelled as a non-detection.
     model_auto_placeholder: bool = True
     placeholder_seed: int = 20250817
-    model_contact: str = "yasindeh@yorku.ca"
+    model_contact: str = "dehfouliyasin@gmail.com"
 
     # --- grid geometry (VADViT preprocessing; see pipeline/grid_render.py) ---
     # Default matches the vit_base_patch32_224 model + the "32_224" dataset.
