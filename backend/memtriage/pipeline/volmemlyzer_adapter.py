@@ -317,7 +317,7 @@ def overview_scoring_from_records(records: dict[str, list[dict]], *,
         _summary, _susp = eng._score_processes(census, psscan, psxview)
     finally:
         OverviewAnalysis._score_map = _orig_score_map
-    for pid, name, ppid, score, flag_str, rationale in captured_process_rows:
+    for pid, name, _ppid, score, flag_str, rationale in captured_process_rows:
         if int(score) < eng._threshold("process"):
             continue
         evidence = str(rationale).strip()
@@ -342,41 +342,39 @@ def overview_scoring_from_records(records: dict[str, list[dict]], *,
         objects.append(obj)
         _remember_pid(obj)
 
-    if "malfind" in selected or _plugin_records(records, "malfind"):
-        # Only score malfind when the plugin ran or its records are present *and*
-        # selected. Presence-only would revive excluded-scanner-adjacent cache.
-        if "malfind" in selected:
-            regions: dict[tuple, dict] = {}
-            for row in _plugin_records(records, "malfind"):
-                score, flags, rationale = eng._score_injections(row)
-                if score < eng._threshold("malfind"):
-                    continue
-                pid = row.get("PID")
-                start_vpn = row.get("Start VPN")
-                region_key = (pid, start_vpn)
-                finding = {
-                    "object_type": "injection",
-                    "key": f"{pid}:{start_vpn}",
-                    "label": f"{row.get('Process') or 'process'} ({pid})",
-                    "pid": int(pid) if pid is not None else None,
-                    "score": int(score),
-                    "score_max": OverviewAnalysis.MAX_RISK_SCORE,
-                    "risk": eng._risk_from_score(int(score)),
-                    "confidence": 0.75,
-                    "tactics": ["Defense Evasion"],
-                    "techniques": ["T1055"],
-                    "contributions": [_overview_contribution(
-                        (str(flags).split(",")[0].strip() or "malfind"),
-                        "Injection evidence", int(score), str(rationale),
-                        "T1055", "Process Injection", "Defense Evasion",
-                    )],
-                }
-                previous = regions.get(region_key)
-                if previous is None or finding["score"] > previous["score"]:
-                    regions[region_key] = finding
-            for obj in regions.values():
-                objects.append(obj)
-                _remember_pid(obj)
+    # Presence-only would revive cache for an analysis the user excluded.
+    if "malfind" in selected:
+        regions: dict[tuple, dict] = {}
+        for row in _plugin_records(records, "malfind"):
+            score, flags, rationale = eng._score_injections(row)
+            if score < eng._threshold("malfind"):
+                continue
+            pid = row.get("PID")
+            start_vpn = row.get("Start VPN")
+            region_key = (pid, start_vpn)
+            finding = {
+                "object_type": "injection",
+                "key": f"{pid}:{start_vpn}",
+                "label": f"{row.get('Process') or 'process'} ({pid})",
+                "pid": int(pid) if pid is not None else None,
+                "score": int(score),
+                "score_max": OverviewAnalysis.MAX_RISK_SCORE,
+                "risk": eng._risk_from_score(int(score)),
+                "confidence": 0.75,
+                "tactics": ["Defense Evasion"],
+                "techniques": ["T1055"],
+                "contributions": [_overview_contribution(
+                    (str(flags).split(",")[0].strip() or "malfind"),
+                    "Injection evidence", int(score), str(rationale),
+                    "T1055", "Process Injection", "Defense Evasion",
+                )],
+            }
+            previous = regions.get(region_key)
+            if previous is None or finding["score"] > previous["score"]:
+                regions[region_key] = finding
+        for obj in regions.values():
+            objects.append(obj)
+            _remember_pid(obj)
 
     if "scheduled_tasks" in selected:
         for task in _plugin_records(records, "scheduled_tasks"):

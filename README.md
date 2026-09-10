@@ -1,6 +1,7 @@
 # MemTriage
 
-Memory-forensics workspace that runs Volatility 3 triage, re-scores cached artifacts, and maps VADViT attention back to process regions.
+Analyst workspace for Volatility 3 memory triage, re-scoring cached evidence,
+and mapping VADViT attention back to process regions.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 [![CI](https://github.com/YaCnDehfuli/MemTriage/actions/workflows/ci.yml/badge.svg)](https://github.com/YaCnDehfuli/MemTriage/actions/workflows/ci.yml)
@@ -10,9 +11,50 @@ Memory-forensics workspace that runs Volatility 3 triage, re-scores cached artif
 
 ![MemTriage live investigation path](docs/demo/memtriage-live.gif)
 
+<sub>Windows memory-capture workflow: ingest a capture, inspect triage evidence,
+and adjust sensitivity. Risk counts are re-scored from cached evidence without
+rerunning Volatility.</sub>
+
+## Results
+
+The default catalog contains **27 enabled scoring rules**: 16 process, 8
+connection, and 3 persistence rules. This is an implementation-coverage count,
+not a measure of detection accuracy. Investigations accept one dump or, by
+default, up to **5 interval snapshots**; deployments can configure that limit.
+Cached re-scoring latency has not been measured.
+
+[Catalog count, command output and snapshot-limit source](docs/measurements/scoring-catalog.md).
+
 **Stable tool.** Not an EDR, antivirus, or live endpoint monitor. The trained VADViT checkpoint is obtained through the research facility (BCCC / York) on request; it is not shipped in this repository.
 
-One dump, or up to five interval snapshots, is uploaded through FastAPI. Celery workers run Volatility 3 through VolMemLyzer, persist artifacts in PostgreSQL and on disk, and stream progress over SSE. The React workspace re-scores cached plugin output without starting Volatility again. Selecting a process runs `windows.vadinfo --dump`, renders a VADViT grid, and ranks regions by attention. Region panels include disassembly, a control-flow graph (CFG), a function-call graph (FCG), patterns, strings, structure, entropy, and a bounded hex view.
+FastAPI accepts one dump or an interval series (five snapshots by default).
+Celery workers run Volatility 3 through VolMemLyzer, persist artifacts in
+PostgreSQL and on disk, and stream progress over SSE. The React workspace
+re-scores cached plugin output without starting Volatility again. Selecting a
+process runs `windows.vadinfo --dump`, renders a VADViT grid, and ranks regions
+by attention. Region panels expose disassembly, control-flow and function-call
+graphs, patterns, strings, structure, entropy, and a bounded hex view.
+
+
+## Quickstart
+
+```bash
+git clone --recurse-submodules https://github.com/YaCnDehfuli/MemTriage.git
+cd MemTriage
+docker compose -f deploy/docker-compose.yml up --build
+```
+
+If the repository was cloned without submodules: `git submodule update --init --recursive`.
+
+Open `http://127.0.0.1:5173`. Upload a memory image, leave Prefer cache selected, and run triage. Compatible VolMemLyzer artifacts next to the image, or from a prior investigation of the same SHA-256, are reused.
+
+```bash
+docker compose -f deploy/docker-compose.yml exec api python -m memtriage.preflight
+```
+
+Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a named unavailable capability.
+
+`.env.example` documents the configuration knobs. Copy it to `.env` to override defaults.
 
 The GIF above is a live Docker run against `2580_5.vmem`. Scores are bounded VolMemLyzer triage indicators (not malware detections).
 
@@ -41,7 +83,7 @@ FastAPI exposes investigation, upload, process, result, scoring, artifact, event
 
 ## Workflow
 
-1. **Ingest** — upload one dump or up to five interval snapshots. Files stream to disk with size, count, extension, and magic-byte checks.
+1. **Ingest** — upload one dump or an interval series (up to five snapshots by default). Files stream to disk with size, count, extension, and magic-byte checks.
 2. **Triage** — VolMemLyzer runs the evidence plan, reuses compatible cached artifacts, extracts features, and scores them.
 3. **Inventory** — review the ranked process list and pick a PID. The analyst chooses; the model does not.
 4. **Deep-dive** — assemble that process's VAD regions, render the grid, classify, attribute attention, and open the regions it points at.
@@ -50,33 +92,13 @@ FastAPI exposes investigation, upload, process, result, scoring, artifact, event
 
 Sensitivity can be changed without rerunning Volatility: the app rescales existing evidence instead of hiding rule contributions behind a single number. See [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
 
-## Quickstart
-
-```bash
-git clone --recurse-submodules https://github.com/YaCnDehfuli/MemTriage.git
-cd MemTriage
-docker compose -f deploy/docker-compose.yml up --build
-```
-
-If the repository was cloned without submodules: `git submodule update --init --recursive`.
-
-Open `http://127.0.0.1:5173`. Upload a memory image, leave Prefer cache selected, and run triage. Compatible VolMemLyzer artifacts next to the image, or from a prior investigation of the same SHA-256, are reused.
-
-```bash
-docker compose -f deploy/docker-compose.yml exec api python -m memtriage.preflight
-```
-
-Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a named unavailable capability.
-
-`.env.example` documents the configuration knobs. Copy it to `.env` to override defaults.
-
 ## How it works
 
 Memory forensics is rarely short of artifacts. The hard part is getting from a multi-gigabyte image to a small set of defensible leads without losing the path that produced them.
 
 | Stage | What happens | What the analyst gets |
 | --- | --- | --- |
-| Ingest | One image, or up to five interval snapshots, is validated and streamed to disk. | A bounded input with explicit validation failures. |
+| Ingest | One image, or an interval series with a default five-snapshot limit, is validated and streamed to disk. | A bounded input with explicit validation failures. |
 | VolMemLyzer triage | Volatility plugins run, artifacts are normalized, features are extracted, and explainable rules score the evidence. | Ranked leads with severity, confidence, evidence, and ATT&CK alignment. |
 | Process inventory | The process set is presented for review and selection. | A concrete PID rather than a wall of plugin output. |
 | VADViT deep-dive | VAD regions are rendered into the model grid, classified, and attention is mapped back to region addresses. | A ranked list of the regions the model weighted most. |
@@ -191,7 +213,7 @@ Deterministic briefing → Assistant / Report
 
 Without the checkpoint, the application builds an architecturally identical model once from a fixed seed. Grid construction, attention plumbing, region ranking, and the low-level deep-dive stay available. **The resulting family classification is not meaningful**, and MemTriage marks that state in the verdict, report, and assistant briefing.
 
-To request the trained weights, use the form on the VADViT deep-dive panel or email **yasindeh@yorku.ca**. See [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md) for placement and access details.
+To request the trained weights, use the form on the VADViT deep-dive panel or email **dehfouliyasin@gmail.com**. See [docs/MODEL_ACCESS.md](docs/MODEL_ACCESS.md) for placement and access details.
 
 ## Assistant providers
 
@@ -225,7 +247,7 @@ The repository scans itself with **Semgrep, Bandit, pip-audit, npm audit, gitlea
 
 The integrated API, worker pipeline, scoring engine, feature view, process workflow, region analysis (including CFG and FCG), assistant, report path, Docker stack, security scanning, and test suite are implemented. This repository is not under development as a WIP product and is not an EDR, antivirus, or live endpoint monitor.
 
-The trained VADViT model is obtained through the research facility (BCCC / York) on request — via the deep-dive form or **yasindeh@yorku.ca** — and is not bundled here. Without that checkpoint the rest of the investigation path stays inspectable; family labels from the placeholder are not detections.
+The trained VADViT model is obtained through the research facility (BCCC / York) on request — via the deep-dive form or **dehfouliyasin@gmail.com** — and is not bundled here. Without that checkpoint the rest of the investigation path stays inspectable; family labels from the placeholder are not detections.
 
 ## Citation
 
@@ -256,3 +278,16 @@ MemTriage uses **VolMemLyzer3** as the broad extraction layer. Earlier VolMemLyz
 | **VADViT** | VAD representation, ViT inference path, attention attribution | MIT — see the [upstream repository](https://github.com/YaCnDehfuli/VADViT) |
 
 Wrapped components retain their own licenses and citation requirements.
+
+## Related work in this portfolio
+
+Memory forensics → detection engineering → evaluation of AI in security operations.
+
+| Repository | What it establishes |
+| --- | --- |
+| [VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool) | Volatility 3 orchestration and feature extraction; 2.4× parallel speedup on a pinned 10-plugin set |
+| [VADViT](https://github.com/YaCnDehfuli/VADViT) | Published ViT classification of process memory — 99.2% binary accuracy, 92% macro-F1 |
+| [MalGraph](https://github.com/YaCnDehfuli/MalGraph) | Why memory-time recovery matters: UPX packing leaves 5.4% of functions statically recoverable |
+| **MemTriage** | The analyst workspace that consumes both |
+| [detection-under-load](https://github.com/YaCnDehfuli/detection-under-load) | Published Sigma coverage for T1003.001 collapses under operator-controlled renaming |
+| [agent-under-load](https://github.com/YaCnDehfuli/agent-under-load) | Whether an LLM agent can triage those detections, measured against deterministic ground truth |

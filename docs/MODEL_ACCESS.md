@@ -40,7 +40,7 @@ To turn the fallback off and go back to an explicit "model not loaded" state, se
 Either use the **Request trained weights** form in the app — it is on the VADViT
 deep-dive panel, next to the placeholder banner — or email the author directly.
 
-**Contact: yasindeh@yorku.ca**
+**Contact: dehfouliyasin@gmail.com**
 
 The form asks for:
 
