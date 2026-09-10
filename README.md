@@ -56,6 +56,7 @@ Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a n
 
 `.env.example` documents the configuration knobs. Copy it to `.env` to override defaults.
 
+The GIF above is a live Docker run against `2580_5.vmem`. Scores are bounded VolMemLyzer triage indicators (not malware detections).
 
 ## Stack
 
