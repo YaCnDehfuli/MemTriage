@@ -57,12 +57,13 @@ Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a n
 `.env.example` documents the configuration knobs. Copy it to `.env` to override defaults.
 
 The walkthrough above is a live Docker run against `2580_5.vmem`. Scores are
-bounded VolMemLyzer triage indicators, not malware detections. Start with the
-**[VolMemLyzer evidence-report guide](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool#evidence-report)**,
-then use the **[interactive analysis report](https://yacndehfuli.github.io/VolMemLyzer3-CLI_forensic_tool/)**
+bounded VolMemLyzer triage indicators, not malware detections. Open the
+**[interactive analysis report](https://yacndehfuli.github.io/VolMemLyzer3-CLI_forensic_tool/)**
 to search exact hypotheses, fields, regular expressions, weights, correlation
 families, thresholds, ATT&CK mappings, cache validation, and all 520 extracted
-features. The exhaustive rules remain available as a
+features. For repository navigation and source context, see the
+**[VolMemLyzer evidence-report guide](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool#evidence-report)**.
+The exhaustive rules remain available as a
 [repository-native specification](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool/blob/main/docs/ANALYSIS_RULES.md).
 
 ## Stack
