@@ -12,15 +12,18 @@ docker compose -f deploy/docker-compose.yml -f docs/demo/compose.samples.yml up 
 
 Open `http://127.0.0.1:5173`. Upload `2580_5.vmem` (SHA-256
 `777d71d7106e5ded19592c075058da12049bfcd658221e70f0579ad4bbd9cff4`).
-Leave **Prefer cache** selected. Cached VolMemLyzer artifacts sit next to the
-image as `<image>_<plugin>.json`.
+Leave **Prefer cache** selected for Volatility JSON sidecars. Cached plugin
+artifacts sit next to the image as `<image>_<plugin>.json`. Scoring is always
+recomputed from VolMemLyzer's bounded OverviewAnalysis (max 30); do not reuse a
+stale `triage.json` that still carries the old unbounded catalog scores.
 
-To seed those artifacts into an investigation without re-uploading 4 GiB:
+To seed those artifacts into an investigation without re-uploading 4 GiB, use
+the **quick** plugin set (no psscan/psxview/netscan/hivescan):
 
 ```bash
 docker compose -f deploy/docker-compose.yml -f docs/demo/compose.samples.yml \
   exec worker python -m memtriage.pipeline.fixture_seed \
-  --dumps-dir /samples --image-name 2580_5.vmem
+  --dumps-dir /samples --image-name 2580_5.vmem --quick
 ```
 
 The command prints an `investigation_id`. Open

@@ -14,7 +14,7 @@ Memory-forensics workspace that runs Volatility 3 triage, re-scores cached artif
 
 One dump, or up to five interval snapshots, is uploaded through FastAPI. Celery workers run Volatility 3 through VolMemLyzer, persist artifacts in PostgreSQL and on disk, and stream progress over SSE. The React workspace re-scores cached plugin output without starting Volatility again. Selecting a process runs `windows.vadinfo --dump`, renders a VADViT grid, and ranks regions by attention. Region panels include disassembly, a control-flow graph (CFG), a function-call graph (FCG), patterns, strings, structure, entropy, and a bounded hex view.
 
-The GIF above is a live Docker run against `2580_5.vmem` with Prefer cache.
+The GIF above is a live Docker run against `2580_5.vmem`. Scores are bounded VolMemLyzer triage indicators (not malware detections).
 
 ## Stack
 

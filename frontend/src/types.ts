@@ -61,11 +61,12 @@ export interface Contribution {
 }
 
 export interface ScoredObject {
-  object_type: "process" | "connection" | "persistence";
+  object_type: "process" | "injection" | "connection" | "persistence";
   key: string;
   label: string;
   pid: number | null;
   score: number;
+  score_max?: number;
   risk: Risk;
   confidence: number;
   tactics: string[];

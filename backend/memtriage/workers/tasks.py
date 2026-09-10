@@ -57,7 +57,7 @@ from .celery_app import celery_app
 
 logger = get_task_logger(__name__)
 settings = get_settings()
-TRIAGE_SCHEMA_VERSION = 2
+TRIAGE_SCHEMA_VERSION = 3
 
 
 # How many regions get the low-level treatment. The top-ranked one gets the full

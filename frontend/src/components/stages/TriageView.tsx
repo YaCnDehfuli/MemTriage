@@ -32,7 +32,7 @@ export function TriageView() {
 
           <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
             <Panel
-              eyebrow="Indicators of compromise"
+              eyebrow="Triage indicators"
               title="Scored objects"
               className="overflow-hidden"
               right={

@@ -1,0 +1,17 @@
+.git
+**/.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+Samples
+samples
+data
+*.vmem
+*.raw
+*.mem
+docs/demo/test-results
+docs/demo/playwright-report
+docs/demo/memtriage-live.gif
+models/*.pt
+symbols
+.DS_Store
