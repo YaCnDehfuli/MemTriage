@@ -9,11 +9,11 @@ and mapping VADViT attention back to process regions.
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.jisa.2025.104200-7c3aed)](https://doi.org/10.1016/j.jisa.2025.104200)
 [![Release](https://img.shields.io/github/v/release/YaCnDehfuli/MemTriage)](https://github.com/YaCnDehfuli/MemTriage/releases)
 
-![MemTriage live investigation path](docs/demo/memtriage-live.gif)
+[![MemTriage live investigation path](docs/demo/memtriage-live.gif)](docs/demo/memtriage-live.mp4)
 
-<sub>Windows memory-capture workflow: ingest a capture, inspect triage evidence,
-and adjust sensitivity. Risk counts are re-scored from cached evidence without
-rerunning Volatility.</sub>
+<sub>Updated live walkthrough: ingest a capture, run concurrent VolMemLyzer
+analysis, inspect surfaced evidence, and continue into the PID/VAD deep-dive.
+Click the preview for the full-resolution MP4.</sub>
 
 ## Results
 
@@ -56,10 +56,14 @@ Missing Volatility, Capstone, PyTorch, or a VADViT checkpoint is reported as a n
 
 `.env.example` documents the configuration knobs. Copy it to `.env` to override defaults.
 
-The GIF above is a live Docker run against `2580_5.vmem`. Scores are bounded VolMemLyzer triage indicators (not malware detections).
-For the exact hypotheses, fields, regular expressions, weights, correlation
-families, thresholds, ATT&CK mappings, and cache-only validation, read the
-**[VolMemLyzer analysis rules and validation report](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool/blob/main/docs/ANALYSIS_RULES.md)**.
+The walkthrough above is a live Docker run against `2580_5.vmem`. Scores are
+bounded VolMemLyzer triage indicators, not malware detections. Start with the
+**[VolMemLyzer evidence-report guide](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool#evidence-report)**,
+then use the **[interactive analysis report](https://yacndehfuli.github.io/VolMemLyzer3-CLI_forensic_tool/)**
+to search exact hypotheses, fields, regular expressions, weights, correlation
+families, thresholds, ATT&CK mappings, cache validation, and all 520 extracted
+features. The exhaustive rules remain available as a
+[repository-native specification](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool/blob/main/docs/ANALYSIS_RULES.md).
 
 ## Stack
 
@@ -67,7 +71,7 @@ MemTriage wraps two independently published components rather than forking them,
 
 | Layer | Role |
 | --- | --- |
-| **[VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool)** | Volatility 3 execution, feature extraction, caching, and analyst-oriented triage. Measured extract baseline for the pinned 10-plugin set: 172.16s serial, 71.12s with 4 workers (cache-warm 3.1517s is artifact reuse); see the VolMemLyzer README. |
+| **[VolMemLyzer3](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool)** | Volatility 3 execution, feature extraction, caching, and analyst-oriented triage. Measured extract baseline for the pinned 10-plugin set: 172.16s serial, 71.12s with 4 workers (cache-warm 3.1517s is artifact reuse); see the [evidence-report guide](https://github.com/YaCnDehfuli/VolMemLyzer3-CLI_forensic_tool#evidence-report). |
 | **[VADViT](https://github.com/YaCnDehfuli/VADViT)** | Process-memory representation, Vision Transformer classification, attention mapped to VAD regions |
 | **FastAPI + Celery + Redis + PostgreSQL** | Investigation state, uploads, scoring, SSE, assistant, reports |
 | **React / TypeScript** | Analyst workspace |
@@ -110,7 +114,9 @@ Memory forensics is rarely short of artifacts. The hard part is getting from a m
 
 ## Workspace
 
-The GIF walks ingest → triage → a process. The stills below are the region-level, VolMemLyzer, and VADViT views it does not hold on — including the CFG/FCG graph tabs.
+The walkthrough covers ingest → triage → a process. The stills below preserve
+the region-level, VolMemLyzer, and VADViT views it moves through—including the
+CFG/FCG graph tabs.
 
 <p align="center">
   <img src="docs/figures/triage-board.png" alt="Live triage board with risk bands and scored objects" width="100%">
