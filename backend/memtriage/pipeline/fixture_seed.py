@@ -49,6 +49,7 @@ from ..storage import InvestigationPaths, ensure_base_dirs
 
 def seed_investigation_from_dumps(
     dumps_dir: str | Path, *, image_name: str = "2580_5.vmem", run: bool = True,
+    plugins: list[str] | tuple[str, ...] | None = None, concurrency: int = 4,
 ) -> dict:
     """Create (and, by default, triage) a real Investigation from captured artifacts.
 
@@ -65,11 +66,15 @@ def seed_investigation_from_dumps(
 
     session = SessionLocal()
     try:
+        selected = [p.lower() for p in plugins] if plugins else None
         inv = Investigation(
             id=str(uuid.uuid4()),
             status=InvestigationStatus.RECEIVED,
             stage="received",
             message=f"Seeded from captured artifacts in {dumps_dir}",
+            requested_plugins=list(selected) if selected else [],
+            triage_mode="custom" if selected else "deep",
+            concurrency=max(1, min(8, int(concurrency or 4))),
         )
         session.add(inv)
         session.commit()
@@ -97,11 +102,21 @@ def seed_investigation_from_dumps(
         # will actually look for — see the module docstring.
         prefix = f"{image_name}_"
         copied = 0
+        allowed_suffixes = None
+        if selected:
+            allowed_suffixes = set()
+            for plugin in selected:
+                allowed_suffixes.add(f"{plugin}.json")
+                allowed_suffixes.add(f"{plugin}.json.stderr.txt")
         for candidate in sorted(dumps_dir.glob(f"{prefix}*")):
-            if candidate.is_file():
-                renamed = f"{dump_target.name}_{candidate.name[len(prefix):]}"
-                shutil.copy2(candidate, paths.volmemlyzer / renamed)
-                copied += 1
+            if not candidate.is_file():
+                continue
+            suffix = candidate.name[len(prefix):]
+            if allowed_suffixes is not None and suffix not in allowed_suffixes:
+                continue
+            renamed = f"{dump_target.name}_{suffix}"
+            shutil.copy2(candidate, paths.volmemlyzer / renamed)
+            copied += 1
     finally:
         session.close()
 
@@ -143,12 +158,21 @@ def _main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dumps-dir", required=True, help="Directory holding the raw image "
                         "plus its <image>_<plugin>.<ext> cached artifacts")
     parser.add_argument("--image-name", default="2580_5.vmem")
+    parser.add_argument("--quick", action="store_true",
+                        help="Seed VolMemLyzer quick plugins only (no pool scanners)")
+    parser.add_argument("--concurrency", type=int, default=4)
     parser.add_argument("--no-run", action="store_true",
                         help="Only seed the files/DB rows; don't run triage")
     args = parser.parse_args(argv)
 
+    plugins = None
+    if args.quick:
+        from .volmemlyzer_adapter import QUICK_TRIAGE_PLUGINS
+        plugins = QUICK_TRIAGE_PLUGINS
+
     summary = seed_investigation_from_dumps(
-        args.dumps_dir, image_name=args.image_name, run=not args.no_run
+        args.dumps_dir, image_name=args.image_name, run=not args.no_run,
+        plugins=plugins, concurrency=args.concurrency,
     )
     print(json.dumps(summary, indent=2, default=str))
     return 0

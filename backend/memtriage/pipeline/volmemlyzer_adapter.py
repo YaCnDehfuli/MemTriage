@@ -65,12 +65,19 @@ TRIAGE_DISCLAIMER = {
 }
 _NON_ANALYZABLE_PIDS = {0, 4}
 
+# VolMemLyzer quick analysis (no --deep): structure walks only. Pool scanners
+# stay out of this set so Light/Custom-quick cannot launch them by accident.
+QUICK_TRIAGE_PLUGINS: tuple[str, ...] = (
+    "info", "pslist", "pstree", "malfind", "scheduled_tasks",
+    "registry.userassist", "registry.hivelist",
+)
+
 # A genuinely quick preset: linked-list/metadata reads only. Whole-image scans
 # and internally repeated scans are deliberately absent, so choosing Light has
 # a predictable material effect rather than being a cosmetic label.
 LIGHT_TRIAGE_PLUGINS: tuple[str, ...] = (
-    "info", "pslist", "pstree", "cmdline", "privileges", "scheduled_tasks",
-    "registry.userassist", "registry.hivelist",
+    "info", "pslist", "pstree", "cmdline", "malfind", "privileges",
+    "scheduled_tasks", "registry.userassist", "registry.hivelist",
 )
 
 # The full rule-engine evidence set. This includes whole-image scanners and the
@@ -234,6 +241,225 @@ def _apply_scoring(dashboard: dict, processes: list[dict], scoring: dict) -> Non
         for o in scored if o["object_type"] == "process" and o["pid"] is not None
     ]
     dashboard["persistence"] = [o for o in scored if o["object_type"] == "persistence"]
+
+
+def _plugin_records(records: dict[str, list[dict]], *names: str) -> list[dict]:
+    for name in names:
+        rows = records.get(name)
+        if rows:
+            return rows
+    return []
+
+
+def _overview_contribution(rule_id: str, title: str, weight: int, evidence: str,
+                           technique_id: str, technique_name: str, tactic: str) -> dict:
+    return {
+        "rule_id": rule_id,
+        "title": title,
+        "weight": int(weight),
+        "evidence": evidence,
+        "mitre": {
+            "technique_id": technique_id,
+            "technique_name": technique_name,
+            "tactic": tactic,
+        },
+        "severity": 3,
+        "confidence": 0.75,
+    }
+
+
+def overview_scoring_from_records(records: dict[str, list[dict]], *,
+                                  plugins: list[str] | tuple[str, ...] | None = None) -> dict:
+    """Score cached plugin records with VolMemLyzer's bounded OverviewAnalysis.
+
+    This is the live-triage path: 30-point ordinal evidence, not MemTriage's
+    unbounded catalog sum. Pool-scan plugins are consulted only when they were
+    actually selected for the run.
+    """
+    from volmemlyzer.analysis import OverviewAnalysis
+
+    eng = OverviewAnalysis(min_risk="low")
+    selected = {normalize_plugin_key(p) for p in (plugins or ())}
+    objects: list[dict] = []
+    process_risk: dict[int, dict] = {}
+
+    def _remember_pid(obj: dict) -> None:
+        pid = obj.get("pid")
+        if pid is None:
+            return
+        pid = int(pid)
+        previous = process_risk.get(pid)
+        if previous is None or obj["score"] > previous["score"]:
+            process_risk[pid] = {
+                "risk": obj["risk"],
+                "score": obj["score"],
+                "confidence": obj["confidence"],
+                "techniques": list(obj["techniques"]),
+                "flags": [c["rule_id"] for c in obj["contributions"]],
+            }
+
+    census = eng._build_census(
+        _plugin_records(records, "pslist"),
+        _plugin_records(records, "pstree"),
+    )
+    psscan = _plugin_records(records, "psscan") if "psscan" in selected else None
+    psxview = _plugin_records(records, "psxview") if "psxview" in selected else None
+    captured_process_rows: list[tuple] = []
+    _orig_score_map = OverviewAnalysis._score_map
+
+    @classmethod
+    def _capturing_score_map(cls, row, index):
+        captured_process_rows.append(row)
+        return _orig_score_map.__func__(cls, row, index)
+
+    OverviewAnalysis._score_map = _capturing_score_map
+    try:
+        _summary, _susp = eng._score_processes(census, psscan, psxview)
+    finally:
+        OverviewAnalysis._score_map = _orig_score_map
+    for pid, name, ppid, score, flag_str, rationale in captured_process_rows:
+        if int(score) < eng._threshold("process"):
+            continue
+        evidence = str(rationale).strip()
+        flags = [flag.strip() for flag in str(flag_str).split(",") if flag.strip()]
+        contribs = [_overview_contribution(
+            (flags[0] if flags else "process"), "Process evidence", int(score),
+            evidence or "—", "T1036", "Masquerading", "Defense Evasion",
+        )]
+        obj = {
+            "object_type": "process",
+            "key": str(pid),
+            "label": f"{name} ({pid})",
+            "pid": int(pid),
+            "score": int(score),
+            "score_max": OverviewAnalysis.MAX_RISK_SCORE,
+            "risk": eng._risk_from_score(int(score)),
+            "confidence": 0.75,
+            "tactics": ["Defense Evasion"],
+            "techniques": ["T1036"],
+            "contributions": contribs,
+        }
+        objects.append(obj)
+        _remember_pid(obj)
+
+    if "malfind" in selected or _plugin_records(records, "malfind"):
+        # Only score malfind when the plugin ran or its records are present *and*
+        # selected. Presence-only would revive excluded-scanner-adjacent cache.
+        if "malfind" in selected:
+            regions: dict[tuple, dict] = {}
+            for row in _plugin_records(records, "malfind"):
+                score, flags, rationale = eng._score_injections(row)
+                if score < eng._threshold("malfind"):
+                    continue
+                pid = row.get("PID")
+                start_vpn = row.get("Start VPN")
+                region_key = (pid, start_vpn)
+                finding = {
+                    "object_type": "injection",
+                    "key": f"{pid}:{start_vpn}",
+                    "label": f"{row.get('Process') or 'process'} ({pid})",
+                    "pid": int(pid) if pid is not None else None,
+                    "score": int(score),
+                    "score_max": OverviewAnalysis.MAX_RISK_SCORE,
+                    "risk": eng._risk_from_score(int(score)),
+                    "confidence": 0.75,
+                    "tactics": ["Defense Evasion"],
+                    "techniques": ["T1055"],
+                    "contributions": [_overview_contribution(
+                        (str(flags).split(",")[0].strip() or "malfind"),
+                        "Injection evidence", int(score), str(rationale),
+                        "T1055", "Process Injection", "Defense Evasion",
+                    )],
+                }
+                previous = regions.get(region_key)
+                if previous is None or finding["score"] > previous["score"]:
+                    regions[region_key] = finding
+            for obj in regions.values():
+                objects.append(obj)
+                _remember_pid(obj)
+
+    if "scheduled_tasks" in selected:
+        for task in _plugin_records(records, "scheduled_tasks"):
+            score, why = eng._score_scheduled_task(task)
+            if score < eng._threshold("scheduled_tasks"):
+                continue
+            name = str(task.get("Task Name") or "")
+            act = str(task.get("Action") or "")
+            args = str(task.get("Action Arguments") or "")
+            evidence = " | ".join([w for w in why if w]) if isinstance(why, list) else str(why)
+            key = f"task:{(name.strip().lower() or act.strip().lower() or 'unknown')}"
+            objects.append({
+                "object_type": "persistence",
+                "key": key,
+                "label": f"{name} :: {act} {args}".strip(),
+                "pid": None,
+                "score": int(score),
+                "score_max": OverviewAnalysis.MAX_RISK_SCORE,
+                "risk": eng._risk_from_score(int(score)),
+                "confidence": 0.75,
+                "tactics": ["Persistence"],
+                "techniques": ["T1053.005"],
+                "contributions": [_overview_contribution(
+                    "scheduled_task", "Scheduled task evidence", int(score),
+                    evidence or "—", "T1053.005", "Scheduled Task/Job", "Persistence",
+                )],
+            })
+
+    if "userassist" in selected:
+        ua_tree = _plugin_records(records, "userassist", "registry.userassist")
+        ua_vals = [r for r in eng._flatten_UA_with_context(ua_tree) if r.get("Type") == "Value"]
+        for row in ua_vals:
+            name = str(row.get("Name") or "")
+            if name.startswith("UEME_") and not eng._seems_pathlike(name):
+                continue
+            score, why = eng._score_userassist_name(name)
+            if score < eng._threshold("userassist") or not eng._seems_pathlike(name):
+                continue
+            evidence = " | ".join([w for w in why if w]) if isinstance(why, list) else str(why)
+            objects.append({
+                "object_type": "persistence",
+                "key": f"ua:{name.strip().lower()}",
+                "label": name,
+                "pid": None,
+                "score": int(score),
+                "score_max": OverviewAnalysis.MAX_RISK_SCORE,
+                "risk": eng._risk_from_score(int(score)),
+                "confidence": 0.75,
+                "tactics": ["Execution"],
+                "techniques": ["T1204"],
+                "contributions": [_overview_contribution(
+                    "userassist", "UserAssist evidence", int(score),
+                    evidence or "—", "T1204", "User Execution", "Execution",
+                )],
+            })
+
+    objects.sort(key=lambda o: (o["score"], o["confidence"]), reverse=True)
+
+    bands = {"Critical": 0, "High": 0, "Medium": 0, "Low": 0}
+    types: dict[str, int] = {}
+    attack: dict[str, dict] = {}
+    for obj in objects:
+        bands[obj["risk"]] = bands.get(obj["risk"], 0) + 1
+        types[obj["object_type"]] = types.get(obj["object_type"], 0) + 1
+        for contrib in obj["contributions"]:
+            tid = contrib["mitre"]["technique_id"]
+            entry = attack.setdefault(tid, {
+                "technique_id": tid,
+                "name": contrib["mitre"]["technique_name"],
+                "tactic": contrib["mitre"]["tactic"],
+                "object_count": 0,
+                "evidence": contrib["evidence"],
+            })
+            entry["object_count"] += 1
+
+    from ..scoring.profile import TuningProfile
+    return {
+        "scored_objects": objects,
+        "attack_techniques": sorted(attack.values(), key=lambda t: t["object_count"], reverse=True),
+        "risk_summary": {"total": len(objects), "by_risk": bands, "by_type": types},
+        "profile": TuningProfile.from_preset("balanced").to_dict(),
+        "process_risk": process_risk,
+    }
 
 
 def assemble_triage(features_flat: dict, records: dict[str, list[dict]], *,
@@ -608,6 +834,14 @@ def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
         logger.warning("triage extraction degraded: %s", health["message"])
 
     view = assemble_triage(features_flat, records, vol_version=vol_version, profile=profile)
+    overview = overview_scoring_from_records(records, plugins=selected)
+    _apply_scoring(view["dashboard"], view["processes"], overview)
+    view["profile"] = overview["profile"]
+    view["dashboard"]["scoring"] = {
+        "kind": "bounded ordinal evidence",
+        "maximum": 30,
+        "not_a_probability": True,
+    }
     view["manifest"] = manifest
     view["plugins"] = list(selected)
     view["extraction"] = health

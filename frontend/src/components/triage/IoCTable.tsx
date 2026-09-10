@@ -5,6 +5,7 @@ import { pct } from "../../lib/format";
 
 const TYPE_LABEL: Record<string, string> = {
   process: "Process",
+  injection: "Injection",
   connection: "Connection",
   persistence: "Persistence",
 };
@@ -72,7 +73,9 @@ export function IoCTable({
                     <RiskBadge risk={o.risk} />
                   </td>
                   <td className="px-3 py-2.5 font-mono text-[13px] text-mist-200">
-                    {o.score.toFixed(1)}
+                    {o.score_max != null
+                      ? `${Math.round(o.score)}/${o.score_max}`
+                      : o.score.toFixed(1)}
                   </td>
                   <td className="px-3 py-2.5">
                     <div className="flex items-center gap-2">
