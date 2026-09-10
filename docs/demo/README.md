@@ -1,7 +1,9 @@
-# Live-path recording
+# Live-path recording assets
 
-The README GIF is a live Docker run, not a mocked UI. Demo-mode documentation
-was removed from the application and the first-screen README.
+`memtriage-live.mp4` is the full-resolution source and `memtriage-live.gif` is
+its GitHub-README-compatible preview. Both show a live Docker run, not a mocked
+UI. The README preview links to the MP4 so the detailed workbench text remains
+readable.
 
 ## Stack
 
@@ -45,15 +47,18 @@ MEMTRIAGE_INVESTIGATION=<id> npm run record
 Video lands under `docs/demo/test-results/`. Stills land under `docs/figures/`
 at 1280×800: `triage-board.png`, `evidence-expansion.png`, `attention-overlay.png`.
 
-## ffmpeg + gifski
+## Publish the recording
 
-Target: 20–25 s, under 6 MB. If the GIF is larger, drop to 12 fps and 1000 px
-wide before cutting content.
+Keep the MP4 as the canonical walkthrough, optimize it for web playback, and
+derive a lower-frame-rate GIF for inline rendering on GitHub:
 
 ```bash
 VIDEO=$(ls -t docs/demo/test-results/**/*.webm | head -1)
-ffmpeg -y -i "$VIDEO" -vf "fps=12,scale=1000:-1:flags=lanczos" /tmp/memtriage-frames/frame%04d.png
-gifski -o docs/demo/memtriage-live.gif --fps 12 --width 1000 /tmp/memtriage-frames/frame*.png
+ffmpeg -y -i "$VIDEO" -c:v libx264 -pix_fmt yuv420p -movflags +faststart \
+  docs/demo/memtriage-live.mp4
+ffmpeg -y -i docs/demo/memtriage-live.mp4 -filter_complex \
+  "fps=4,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=64:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle" \
+  docs/demo/memtriage-live.gif
 ```
 
 Social preview (1280×640) from the triage-board still. GitHub has no API for the
