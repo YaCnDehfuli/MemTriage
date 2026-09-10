@@ -5,6 +5,40 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.1.0] - 2026-09-10
+
+This release integrates VolMemLyzer's bounded evidence model and makes the
+analysis rationale easier to inspect from the MemTriage project page.
+
+### Added
+
+- Full-resolution live MP4 walkthrough with a GitHub-compatible animated GIF
+  preview covering ingest, concurrent analysis, surfaced evidence, and the
+  PID/VAD deep-dive.
+- Direct navigation to VolMemLyzer's interactive rule, cache-validation, and
+  520-feature report, with the repository-native rule specification retained
+  as the audit source.
+- Measured scoring-catalog documentation that distinguishes implementation
+  coverage from detection accuracy.
+
+### Changed
+
+- VolMemLyzer is pinned to the 3.1.0 release line with evidence-family
+  correlation, a 9-point surfacing threshold, and a hard 30-point score ceiling.
+- Cached artifacts are re-scored through the current analysis logic rather than
+  reusing stale unbounded triage values.
+- README language now consistently presents surfaced objects as analyst review
+  leads rather than malware verdicts.
+- Default model and security-contact documentation were clarified.
+
+### Fixed
+
+- Fixture seeding and the analyst UI now preserve the bounded score, confidence,
+  rule flags, ATT&CK alignment, and cache provenance used by the current
+  VolMemLyzer adapter.
+
 ## [1.0.0] - 2026-09-05
 
 First public GitHub release of the stable MemTriage workspace.
@@ -34,4 +68,6 @@ First public GitHub release of the stable MemTriage workspace.
 - Semgrep DDL suppressions and setuptools / Vite advisory pins so `ci` and `security` on `main` succeed.
 - Image paths in the README.
 
+[Unreleased]: https://github.com/YaCnDehfuli/MemTriage/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/YaCnDehfuli/MemTriage/releases/tag/v1.1.0
 [1.0.0]: https://github.com/YaCnDehfuli/MemTriage/releases/tag/v1.0.0
