@@ -11,10 +11,23 @@ function duration(seconds: number): string {
   return `${secs}s`;
 }
 
-/** Keeps a visibly-live clock even when a Volatility scanner emits no log lines. */
-export function RunTiming({ events, running }: { events: PluginEvent[]; running: boolean }) {
+/**
+ * Keeps a visibly-live clock even when a Volatility scanner emits no log
+ * lines — whole-image scanners can legitimately run for hours with a quiet
+ * log, so this is what tells the analyst the job hasn't actually stopped.
+ * Compute-only: the caller decides where to render the strings, since a
+ * dedicated box for this cost more scroll than the numbers were worth.
+ */
+export function useRunTiming(events: PluginEvent[], running: boolean, runId?: string | number) {
   const mountedAt = useRef(Date.now());
   const [now, setNow] = useState(Date.now());
+
+  // Re-anchor on a new run instead of keeping the previous run's mount
+  // time — without this a rerun briefly shows elapsed time inherited from
+  // whenever the page first loaded, until its first event self-corrects it.
+  useEffect(() => {
+    mountedAt.current = Date.now();
+  }, [runId]);
 
   useEffect(() => {
     if (!running) return;
@@ -26,19 +39,8 @@ export function RunTiming({ events, running }: { events: PluginEvent[]; running:
   const lastAt = events.length ? events[events.length - 1].at * 1000 : null;
   const elapsedUntil = running ? now : (lastAt ?? now);
 
-  return (
-    <div className="space-y-2 rounded-md border border-ink-700/60 bg-ink-900/30 px-3 py-2.5">
-      <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-mist-400">
-        <span>Elapsed {duration((elapsedUntil - firstAt) / 1000)}</span>
-        <span>
-          {lastAt ? `Last activity ${duration((now - lastAt) / 1000)} ago` : "Awaiting first activity"}
-        </span>
-        {running && <span className="text-accent">job active</span>}
-      </div>
-      <p className="text-[11px] leading-relaxed text-mist-400">
-        Whole-image scanners can legitimately run for hours and, on very large dumps, up to a
-        day. A quiet log does not mean the job has stopped.
-      </p>
-    </div>
-  );
+  return {
+    elapsed: duration((elapsedUntil - firstAt) / 1000),
+    lastActivity: lastAt ? duration((now - lastAt) / 1000) : null,
+  };
 }

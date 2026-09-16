@@ -11,8 +11,8 @@ export function ErrorBanner() {
     >
       <span aria-hidden className="mt-0.5 text-risk-critical">▲</span>
       <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium text-mist-100">Something went wrong</div>
-        <p className="mt-0.5 break-words text-[13px] text-mist-300">{error}</p>
+        <div className="text-sm font-medium text-ink-100">Something went wrong</div>
+        <p className="mt-0.5 break-words text-[13px] text-ink-300">{error}</p>
       </div>
       <div className="flex shrink-0 gap-2">
         {retryLast && (

@@ -30,7 +30,7 @@ export function ExtractionNotice({ health }: { health?: ExtractionHealth | null 
         >
           {critical ? "Extraction failed — these results are not trustworthy" : "Partial extraction"}
         </span>
-        <span className="min-w-0 flex-1 text-[12px] text-mist-300">{health.message}</span>
+        <span className="min-w-0 flex-1 text-[12px] text-ink-300">{health.message}</span>
         {failed.length > 0 && (
           <button className="btn-ghost shrink-0 text-[11px]" onClick={() => setOpen((v) => !v)}>
             {open ? "Hide plugins" : `${failed.length} plugin${failed.length > 1 ? "s" : ""}`}
@@ -39,7 +39,7 @@ export function ExtractionNotice({ health }: { health?: ExtractionHealth | null 
       </div>
 
       {critical && (
-        <p className="mt-2 text-[12px] text-mist-300">
+        <p className="mt-2 text-[12px] text-ink-300">
           An empty dashboard here means Volatility produced nothing, not that the image is
           clean. Do not read the absence of findings as a result.
         </p>
@@ -49,8 +49,8 @@ export function ExtractionNotice({ health }: { health?: ExtractionHealth | null 
         <ul className="mt-3 space-y-1">
           {failed.map(([name, why]) => (
             <li key={name} className="flex gap-2 font-mono text-[11px]">
-              <span className="shrink-0 text-mist-200">{name}</span>
-              <span className="min-w-0 break-all text-mist-400">{why}</span>
+              <span className="shrink-0 text-ink-200">{name}</span>
+              <span className="min-w-0 break-all text-ink-400">{why}</span>
             </li>
           ))}
         </ul>

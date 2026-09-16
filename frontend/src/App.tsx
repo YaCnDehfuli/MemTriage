@@ -1,9 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ErrorBanner } from "./components/ErrorBanner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { LeftRail } from "./components/LeftRail";
-import { TopBar } from "./components/TopBar";
-import { AssistantView } from "./components/stages/AssistantView";
+import { TopNav } from "./components/TopNav";
 import { DeepDiveView } from "./components/stages/DeepDiveView";
 import { IngestView } from "./components/stages/IngestView";
 import { InventoryView } from "./components/stages/InventoryView";
@@ -54,23 +52,19 @@ export default function App() {
 
   return (
     <div className="flex h-full flex-col">
-      <TopBar />
-      <div className="flex min-h-0 flex-1">
-        <LeftRail />
-        <main className="min-w-0 flex-1 overflow-y-auto px-6 py-6">
-          <div className="mx-auto max-w-[1180px]">
-            <ErrorBanner />
-            <ErrorBoundary key={stage}>
-              {stage === "ingest" && <IngestView />}
-              {stage === "triage" && <TriageView />}
-              {stage === "inventory" && <InventoryView />}
-              {stage === "deepdive" && <DeepDiveView />}
-              {stage === "assist" && <AssistantView />}
-              {stage === "report" && <ReportView />}
-            </ErrorBoundary>
-          </div>
-        </main>
-      </div>
+      <TopNav />
+      <main className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
+        <div className="mx-auto max-w-[1680px]">
+          <ErrorBanner />
+          <ErrorBoundary key={stage}>
+            {stage === "ingest" && <IngestView />}
+            {stage === "triage" && <TriageView />}
+            {stage === "inventory" && <InventoryView />}
+            {stage === "deepdive" && <DeepDiveView />}
+            {stage === "report" && <ReportView />}
+          </ErrorBoundary>
+        </div>
+      </main>
     </div>
   );
 }

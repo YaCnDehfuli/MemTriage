@@ -43,11 +43,11 @@ export function DeepDiveView() {
       <header className="flex items-end justify-between">
         <div>
           <div className="eyebrow">Phase 2 · VADViT deep-dive</div>
-          <h1 className="text-lg font-semibold text-mist-100">
+          <h1 className="text-lg font-semibold text-ink-100">
             {analysis.process_name}{" "}
-            <span className="font-mono text-mist-400">(PID {analysis.pid})</span>
+            <span className="font-mono text-ink-400">(PID {analysis.pid})</span>
           </h1>
-          <p className="mt-1 text-sm text-mist-400">
+          <p className="mt-1 text-sm text-ink-400">
             Consolidated from snapshot #{analysis.chosen_dump_ordinal} ·{" "}
             {analysis.region_count} VAD regions rendered.
           </p>
@@ -73,7 +73,7 @@ export function DeepDiveView() {
             ) : (
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-ink-700/60 text-left text-[11px] uppercase tracking-wider text-mist-400">
+                  <tr className="border-b border-surface-700/60 text-left text-[11px] uppercase tracking-wider text-ink-400">
                     <th className="px-4 py-2">Patch</th>
                     <th className="px-3 py-2">VAD address</th>
                     <th className="px-3 py-2">Region</th>
@@ -82,11 +82,11 @@ export function DeepDiveView() {
                 </thead>
                 <tbody>
                   {analysis.explainability.attributions.map((a) => (
-                    <tr key={a.patch_index} className="border-b border-ink-800/70">
-                      <td className="px-4 py-2 font-mono text-[12px] text-mist-400">
+                    <tr key={a.patch_index} className="border-b border-surface-800/70">
+                      <td className="px-4 py-2 font-mono text-[12px] text-ink-400">
                         r{a.row}·c{a.col}
                       </td>
-                      <td className="px-3 py-2 font-mono text-[12px] text-mist-200">
+                      <td className="px-3 py-2 font-mono text-[12px] text-ink-200">
                         {a.region_addr}
                       </td>
                       <td className="px-3 py-2">
@@ -94,8 +94,8 @@ export function DeepDiveView() {
                       </td>
                       <td className="px-3 py-2">
                         <div className="flex items-center gap-2">
-                          <Meter value={a.attention} tone="risk" />
-                          <span className="w-10 text-right font-mono text-[11px] text-mist-400">
+                          <Meter value={a.attention} tone="neutral" />
+                          <span className="w-10 text-right font-mono text-[11px] text-ink-400">
                             {pct(a.attention)}
                           </span>
                         </div>
@@ -105,7 +105,7 @@ export function DeepDiveView() {
                 </tbody>
               </table>
             )}
-            <p className="border-t border-ink-800/70 px-4 py-2 text-[10px] text-mist-400">
+            <p className="border-t border-surface-800/70 px-4 py-2 text-[10px] text-ink-400">
               Patches the classifier weighted most, mapped back to concrete VAD regions in this
               process.
             </p>
@@ -117,10 +117,10 @@ export function DeepDiveView() {
 
       {(analysis.notes?.length ?? 0) > 0 && (
         <Panel eyebrow="Reading this" title="What these results do and do not establish">
-          <ul className="space-y-2 px-4 py-4 text-[12px] text-mist-300">
+          <ul className="space-y-2 px-4 py-4 text-[12px] text-ink-300">
             {analysis.notes?.map((note) => (
               <li key={note} className="flex gap-2">
-                <span aria-hidden className="mt-0.5 text-mist-400">·</span>
+                <span aria-hidden className="mt-0.5 text-ink-400">·</span>
                 <span>{note}</span>
               </li>
             ))}

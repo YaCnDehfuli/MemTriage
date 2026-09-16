@@ -3,11 +3,11 @@ import type { RegionAnalysis } from "../../types";
 import { Chip } from "../primitives";
 
 const KIND_CLASS: Record<string, string> = {
-  call: "text-accent",
+  call: "text-accent-soft",
   jump: "text-risk-medium",
   cjump: "text-risk-medium",
   ret: "text-risk-low",
-  halt: "text-mist-400",
+  halt: "text-ink-400",
   syscall: "text-risk-high",
 };
 
@@ -45,29 +45,36 @@ export function Disassembly({ analysis }: { analysis: RegionAnalysis }) {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           placeholder="filter mnemonic, address or bytes"
-          className="ml-auto w-56 rounded-md border border-ink-600 bg-ink-900 px-2 py-1 font-mono text-[11px] text-mist-200 placeholder:text-mist-400 focus:border-accent/50 focus:outline-none"
+          className="ml-auto w-56 rounded-md border border-surface-600 bg-surface-900 px-2 py-1 font-mono text-[11px] text-ink-200 placeholder:text-ink-400 focus:border-accent/50 focus:outline-none"
         />
       </div>
 
-      <div className="max-h-[560px] overflow-auto rounded-md border border-ink-700/60">
+      <div className="max-h-[560px] overflow-auto rounded-md border border-surface-700/60">
         <table className="w-full font-mono text-[12px]">
+          <thead>
+            <tr className="border-b border-surface-700/60 text-left text-[10px] uppercase tracking-wider text-ink-400">
+              <th className="px-3 py-1.5 font-semibold">Address</th>
+              <th className="px-3 py-1.5 font-semibold">Bytes</th>
+              <th className="px-3 py-1.5 font-semibold">Instruction</th>
+            </tr>
+          </thead>
           <tbody>
             {rows.slice(0, shown).map((i) => (
-              <tr key={i.address} className="border-b border-ink-800/50 last:border-0">
-                <td className="whitespace-nowrap px-3 py-1 text-mist-400">{i.address_hex}</td>
-                <td className="whitespace-nowrap px-3 py-1 text-mist-400">
+              <tr key={i.address} className="border-b border-surface-800/50 last:border-0">
+                <td className="whitespace-nowrap px-3 py-1 text-ink-400">{i.address_hex}</td>
+                <td className="whitespace-nowrap px-3 py-1 text-ink-400">
                   {i.bytes_hex}
                 </td>
-                <td className={`px-3 py-1 ${KIND_CLASS[i.kind] ?? "text-mist-200"}`}>
+                <td className={`px-3 py-1 ${KIND_CLASS[i.kind] ?? "text-ink-200"}`}>
                   <span className="font-semibold">{i.mnemonic}</span>
-                  {i.op_str && <span className="text-mist-300"> {i.op_str}</span>}
+                  {i.op_str && <span className="text-ink-300"> {i.op_str}</span>}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
         {rows.length === 0 && (
-          <div className="px-4 py-8 text-center text-[12px] text-mist-400">
+          <div className="px-4 py-8 text-center text-[12px] text-ink-400">
             Nothing matches that filter.
           </div>
         )}
@@ -84,9 +91,9 @@ export function Disassembly({ analysis }: { analysis: RegionAnalysis }) {
 
 export function Unavailable({ reason }: { reason: string }) {
   return (
-    <div className="rounded-md border border-ink-700/60 bg-ink-900/40 px-4 py-6">
-      <div className="text-[13px] font-medium text-mist-200">Not available</div>
-      <p className="mt-1 max-w-xl text-[12px] text-mist-400">
+    <div className="rounded-md border border-surface-700/60 bg-surface-900/40 px-4 py-6">
+      <div className="text-[13px] font-medium text-ink-200">Not available</div>
+      <p className="mt-1 max-w-xl text-[12px] text-ink-400">
         {reason || "This representation could not be produced for this region."}
       </p>
     </div>

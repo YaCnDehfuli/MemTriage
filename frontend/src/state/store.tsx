@@ -63,6 +63,7 @@ interface AppState {
   analysis: AnalysisResult | null;
   lowlevel: LowLevelReport | null;
   triageProgress: InvestigationState | null;
+  triageRunSeq: number;
   triageStarting: boolean;
   analysisProgress: JobProgress | null;
   uploads: UploadItem[];
@@ -112,6 +113,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [lowlevel, setLowlevel] = useState<LowLevelReport | null>(null);
   const [triageProgress, setTriageProgress] = useState<InvestigationState | null>(null);
+  const [triageRunSeq, setTriageRunSeq] = useState(0);
   const [triageStarting, setTriageStarting] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState<JobProgress | null>(null);
   const [uploads, setUploads] = useState<UploadItem[]>([]);
@@ -255,6 +257,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     clearError();
     setStage("triage");
     setTriageStarting(true);
+    setTriageRunSeq((n) => n + 1);
     try {
       const state = await client.startTriage(investigationId, options);
       // The accepted request defines a new evidence scope. Do not render the
@@ -408,13 +411,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     () => ({
       client, stage, loading, error, retryLast, investigationId, triage, processes,
       scored, profile, riskSummary, attack, disclaimer, diff, selectedPid, analysis, lowlevel,
-      triageProgress, triageStarting, analysisProgress, uploads, pluginCatalog, pluginRun, pluginRunStarting,
+      triageProgress, triageRunSeq, triageStarting, analysisProgress, uploads, pluginCatalog, pluginRun, pluginRunStarting,
       setStage, bootstrap, rescore, selectProcess, uploadDumps, startTriage,
       clearError, loadPluginCatalog, runPlugins, restoreLatestPluginRun, newPluginRun,
     }),
     [client, stage, loading, error, retryLast, investigationId, triage, processes,
       scored, profile, riskSummary, attack, disclaimer, diff, selectedPid, analysis, lowlevel,
-      triageProgress, triageStarting, analysisProgress, uploads, pluginCatalog, pluginRun, pluginRunStarting,
+      triageProgress, triageRunSeq, triageStarting, analysisProgress, uploads, pluginCatalog, pluginRun, pluginRunStarting,
       setStage, bootstrap, rescore, selectProcess, uploadDumps, startTriage, clearError,
       loadPluginCatalog, runPlugins, restoreLatestPluginRun, newPluginRun],
   );

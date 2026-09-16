@@ -17,8 +17,8 @@ export function InventoryView() {
     <div className="space-y-5">
       <header>
         <div className="eyebrow">Phase 1 → 2 · Select</div>
-        <h1 className="text-lg font-semibold text-mist-100">Process inventory</h1>
-        <p className="mt-1 max-w-2xl text-sm text-mist-400">
+        <h1 className="text-lg font-semibold text-ink-100">Process inventory</h1>
+        <p className="mt-1 max-w-2xl text-sm text-ink-400">
           Every process the census surfaced, ranked by engine score. Pick one to run the VADViT
           deep-dive. Non-analyzable system processes (no user VADs) are marked.
         </p>
@@ -30,7 +30,7 @@ export function InventoryView() {
         className="overflow-hidden"
         right={
           <div className="flex items-center gap-2">
-            <label className="flex items-center gap-1.5 text-[11px] text-mist-400">
+            <label className="flex items-center gap-1.5 text-[11px] text-ink-400">
               <input
                 type="checkbox"
                 className="accent-accent"
@@ -43,7 +43,7 @@ export function InventoryView() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Filter name / PID"
-              className="w-40 rounded-md border border-ink-600 bg-ink-900 px-2 py-1 text-xs text-mist-200 placeholder:text-mist-400 focus:border-accent/50 focus:outline-none"
+              className="w-40 rounded-md border border-surface-600 bg-surface-900 px-2 py-1 text-xs text-ink-200 placeholder:text-ink-400 focus:border-accent/50 focus:outline-none"
             />
           </div>
         }
@@ -51,7 +51,7 @@ export function InventoryView() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-ink-700/60 text-left text-[11px] uppercase tracking-wider text-mist-400">
+              <tr className="border-b border-surface-700/60 text-left text-[11px] uppercase tracking-wider text-ink-400">
                 <th className="px-4 py-2">PID</th>
                 <th className="px-3 py-2">Name</th>
                 <th className="px-3 py-2">PPID</th>
@@ -63,24 +63,24 @@ export function InventoryView() {
             </thead>
             <tbody>
               {rows.map((p) => (
-                <tr key={p.pid} className="border-b border-ink-800/70 hover:bg-ink-800/40">
-                  <td className="px-4 py-2.5 font-mono text-mist-200">{p.pid}</td>
-                  <td className="px-3 py-2.5 text-mist-100">
+                <tr key={p.pid} className="border-b border-surface-800/70 hover:bg-surface-800/40">
+                  <td className="px-4 py-2.5 font-mono text-ink-200">{p.pid}</td>
+                  <td className="px-3 py-2.5 text-ink-100">
                     {p.name}
                     {!p.analyzable && (
-                      <span className="ml-2 text-[10px] uppercase tracking-wide text-mist-400">
+                      <span className="ml-2 text-[10px] uppercase tracking-wide text-ink-400">
                         no user VADs
                       </span>
                     )}
                   </td>
-                  <td className="px-3 py-2.5 font-mono text-[12px] text-mist-400">{p.ppid ?? "—"}</td>
+                  <td className="px-3 py-2.5 font-mono text-[12px] text-ink-400">{p.ppid ?? "—"}</td>
                   <td className="px-3 py-2.5">
                     <RiskBadge risk={p.risk} />
                   </td>
-                  <td className="px-3 py-2.5 font-mono text-[12px] text-mist-300">
+                  <td className="px-3 py-2.5 font-mono text-[12px] text-ink-300">
                     {p.score != null ? p.score.toFixed(1) : "—"}
                     {p.confidence != null && (
-                      <span className="ml-1 text-mist-400">({pct(p.confidence)})</span>
+                      <span className="ml-1 text-ink-400">({pct(p.confidence)})</span>
                     )}
                   </td>
                   <td className="px-3 py-2.5">
@@ -99,7 +99,7 @@ export function InventoryView() {
                       disabled={!p.analyzable}
                       onClick={() => selectProcess(p.pid)}
                     >
-                      Analyze →
+                      Analyze
                     </button>
                   </td>
                 </tr>

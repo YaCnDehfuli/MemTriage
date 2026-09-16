@@ -31,10 +31,10 @@ export class ErrorBoundary extends Component<Props, State> {
     return (
       <div className="panel p-6">
         <div className="eyebrow">Render error</div>
-        <h2 className="mt-1 text-sm font-semibold text-mist-100">
+        <h2 className="mt-1 text-sm font-semibold text-ink-100">
           This view could not be drawn
         </h2>
-        <p className="mt-2 max-w-xl text-[13px] text-mist-400">
+        <p className="mt-2 max-w-xl text-[13px] text-ink-400">
           The rest of the workspace is still usable. {error.message}
         </p>
         <button

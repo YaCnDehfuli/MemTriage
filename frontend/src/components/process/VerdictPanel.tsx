@@ -11,11 +11,11 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
     return (
       <Panel eyebrow="VADViT" title="Classification">
         <div className="px-4 py-6">
-          <div className="inline-flex items-center gap-2 rounded-md bg-ink-800 px-2.5 py-1 text-xs text-mist-300 ring-1 ring-inset ring-ink-600">
+          <div className="inline-flex items-center gap-2 rounded-md bg-surface-800 px-2.5 py-1 text-xs text-ink-300 ring-1 ring-inset ring-surface-600">
             <span className="h-1.5 w-1.5 rounded-full bg-risk-none" />
             Model not loaded
           </div>
-          <p className="mt-3 text-sm text-mist-400">{verdict.note}</p>
+          <p className="mt-3 text-sm text-ink-400">{verdict.note}</p>
           <button className="btn-ghost mt-3 text-[12px]" onClick={() => setRequesting(true)}>
             Request the trained weights
           </button>
@@ -41,25 +41,25 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
               className="btn-ghost mt-2 text-[11px]"
               onClick={() => setRequesting(true)}
             >
-              Request the trained weights →
+              Request the trained weights
             </button>
           </div>
         )}
         <div className="flex items-baseline justify-between">
-          <div className="text-xl font-semibold text-mist-100">{verdict.family}</div>
-          <div className="font-mono text-sm text-mist-300">{pct(verdict.confidence)}</div>
+          <div className="text-xl font-semibold text-ink-100">{verdict.family}</div>
+          <div className="font-mono text-sm text-ink-300">{pct(verdict.confidence)}</div>
         </div>
         <div className="mt-4 space-y-2">
           {ranked.map(([fam, p], i) => (
             <div key={fam} className="grid grid-cols-[120px_1fr_44px] items-center gap-2">
               <span
-                className={`truncate text-[12px] ${i === 0 ? "text-mist-100" : "text-mist-400"}`}
+                className={`truncate text-[12px] ${i === 0 ? "text-ink-100" : "text-ink-400"}`}
                 title={fam}
               >
                 {fam}
               </span>
               <Meter value={p} />
-              <span className="text-right font-mono text-[11px] text-mist-400">{pct(p)}</span>
+              <span className="text-right font-mono text-[11px] text-ink-400">{pct(p)}</span>
             </div>
           ))}
         </div>

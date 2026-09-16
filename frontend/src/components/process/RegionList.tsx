@@ -23,13 +23,13 @@ export function RegionList({
 }) {
   if (!regions.length) {
     return (
-      <div className="px-4 py-8 text-center text-[13px] text-mist-400">
+      <div className="px-4 py-8 text-center text-[13px] text-ink-400">
         No regions were rendered for this process.
       </div>
     );
   }
   return (
-    <ul className="divide-y divide-ink-800/70">
+    <ul className="divide-y divide-surface-800/70">
       {regions.map((r) => {
         const isSelected = r.patch_index === selected;
         const hasAnalysis = analyzed.has(r.patch_index);
@@ -42,34 +42,34 @@ export function RegionList({
                 ? undefined
                 : "Only the highest-ranked regions are analyzed down to the instruction level."}
               className={`w-full px-4 py-3 text-left transition-colors ${
-                isSelected ? "bg-accent/10" : hasAnalysis ? "hover:bg-ink-800/50" : "opacity-55"
+                isSelected ? "bg-accent/10" : hasAnalysis ? "hover:bg-surface-800/50" : "opacity-55"
               }`}
             >
               <div className="flex items-baseline justify-between gap-3">
-                <span className="font-mono text-[12px] text-mist-100">{r.addr}</span>
-                <span className="shrink-0 font-mono text-[11px] text-mist-400">
+                <span className="font-mono text-[12px] text-ink-100">{r.addr}</span>
+                <span className="shrink-0 font-mono text-[11px] text-ink-400">
                   #{r.rank} · {pct(r.attention)}
                 </span>
               </div>
               <div className="mt-1.5">
-                <Meter value={r.attention} tone="risk" />
+                <Meter value={r.attention} tone="neutral" />
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
                 <Chip tone={r.category === "exe" ? "accent" : "default"}>{r.category}</Chip>
-                <span className="font-mono text-[11px] text-mist-400">{bytes(r.size)}</span>
-                <span className="font-mono text-[11px] text-mist-400">H={r.entropy.toFixed(2)}</span>
+                <span className="font-mono text-[11px] text-ink-400">{bytes(r.size)}</span>
+                <span className="font-mono text-[11px] text-ink-400">H={r.entropy.toFixed(2)}</span>
                 {r.flags.map((f) => (
                   <span
                     key={f}
                     className={`rounded px-1.5 py-0.5 font-mono text-[10px] ring-1 ring-inset ${
-                      FLAG_TONE[f] ?? "text-mist-400 ring-ink-600"
+                      FLAG_TONE[f] ?? "text-ink-400 ring-surface-600"
                     }`}
                   >
                     {f}
                   </span>
                 ))}
               </div>
-              <div className="mt-1 truncate font-mono text-[11px] text-mist-400">
+              <div className="mt-1 truncate font-mono text-[11px] text-ink-400">
                 {r.file_backing || "private memory · no backing file"}
               </div>
             </button>

@@ -22,16 +22,17 @@ const LABELS: Record<string, string> = {
 export function JobProgressBar({ job }: { job: JobProgress | null }) {
   if (!job) return null;
   const failed = job.status === "failed";
+  const label = LABELS[job.stage] ?? job.stage;
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" role="status" aria-live="polite">
       <div className="flex items-baseline justify-between gap-3">
-        <span className={`text-[13px] ${failed ? "text-risk-critical" : "text-mist-200"}`}>
-          {LABELS[job.stage] ?? job.stage}
+        <span className={`text-[13px] ${failed ? "text-risk-critical" : "text-ink-200"}`}>
+          {label}
         </span>
-        <span className="font-mono text-[11px] text-mist-400">{job.progress}%</span>
+        <span className="font-mono text-[11px] text-ink-400">{job.progress}%</span>
       </div>
-      <Meter value={job.progress / 100} tone={failed ? "risk" : "accent"} />
-      {job.message && <p className="text-[12px] text-mist-400">{job.message}</p>}
+      <Meter value={job.progress / 100} tone={failed ? "risk" : "accent"} progress label={label} />
+      {job.message && <p className="text-[12px] text-ink-400">{job.message}</p>}
       {failed && job.error && <p className="text-[12px] text-risk-critical">{job.error}</p>}
     </div>
   );

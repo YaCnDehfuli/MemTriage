@@ -81,21 +81,21 @@ export function FeatureExplorer({ features }: { features: Record<string, unknown
       right={
         <div className="flex gap-2">
           <button className="btn-ghost text-[11px]" disabled={rows.length === 0} onClick={downloadJson}>
-            JSON ↓
+            JSON
           </button>
           <button className="btn-ghost text-[11px]" disabled={rows.length === 0} onClick={downloadCsv}>
-            CSV ↓
+            CSV
           </button>
         </div>
       }
     >
-      <div className="border-b border-ink-700/60 px-4 py-3">
+      <div className="border-b border-surface-700/60 px-4 py-3">
         <input
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search feature, plugin, or value…"
-          className="w-full rounded-md border border-ink-600 bg-ink-950 px-3 py-2 text-[12px] text-mist-100 outline-none placeholder:text-mist-500 focus:border-accent/50"
+          className="w-full rounded-md border border-surface-600 bg-surface-950 px-3 py-2 text-[12px] text-ink-100 outline-none placeholder:text-ink-400 focus:border-accent/50"
         />
       </div>
       {filtered.length === 0 ? (
@@ -106,8 +106,8 @@ export function FeatureExplorer({ features }: { features: Record<string, unknown
       ) : (
         <div className="max-h-[440px] overflow-auto">
           <table className="w-full text-left text-[12px]">
-            <thead className="sticky top-0 bg-ink-850 text-[10px] uppercase tracking-wider text-mist-400">
-              <tr className="border-b border-ink-700/60">
+            <thead className="sticky top-0 bg-surface-850 text-[10px] uppercase tracking-wider text-ink-400">
+              <tr className="border-b border-surface-700/60">
                 <th className="px-4 py-2">Source</th>
                 <th className="px-3 py-2">Feature</th>
                 <th className="px-3 py-2">Value</th>
@@ -115,10 +115,10 @@ export function FeatureExplorer({ features }: { features: Record<string, unknown
             </thead>
             <tbody>
               {filtered.map((row) => (
-                <tr key={row.key} className="border-b border-ink-800/70">
-                  <td className="whitespace-nowrap px-4 py-2 font-mono text-mist-400">{row.source}</td>
-                  <td className="px-3 py-2 font-mono text-mist-200">{row.feature}</td>
-                  <td className="max-w-md break-all px-3 py-2 font-mono text-mist-300">
+                <tr key={row.key} className="border-b border-surface-800/70">
+                  <td className="whitespace-nowrap px-4 py-2 font-mono text-ink-400">{row.source}</td>
+                  <td className="px-3 py-2 font-mono text-ink-200">{row.feature}</td>
+                  <td className="max-w-md break-all px-3 py-2 font-mono text-ink-300">
                     {renderValue(row.value)}
                   </td>
                 </tr>
