@@ -36,7 +36,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # PYTHONPATH so its model class + preprocessing can be reused for inference.
 COPY components/volmemlyzer /opt/components/volmemlyzer
 COPY components/vadvit /opt/components/vadvit
-RUN pip install --no-cache-dir -e /opt/components/volmemlyzer
+# Not editable: the image must run the code in its own layer, not whatever
+# happens to be on /opt/components at container start.
+RUN pip install --no-cache-dir /opt/components/volmemlyzer
 ENV PYTHONPATH=/opt/components/vadvit
 
 COPY backend/ /app/

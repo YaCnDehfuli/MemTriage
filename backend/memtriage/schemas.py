@@ -37,6 +37,8 @@ class InvestigationState(BaseModel):
     concurrency: int = 4
     events: list[dict] = Field(default_factory=list)
     cache_source: str | None = None
+    # Only for a queued triage: what the worker is busy with instead.
+    queue: dict | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -59,9 +61,83 @@ class InvestigationState(BaseModel):
             concurrency=inv.concurrency or 1,
             events=list(inv.events or []),
             cache_source=inv.cache_source,
+            queue=_queue_context(inv),
             created_at=inv.created_at,
             updated_at=inv.updated_at,
         )
+
+
+def _queue_context(inv) -> dict | None:  # type: ignore[no-untyped-def]
+    """What a queued triage is waiting behind.
+
+    The worker runs one Celery task at a time (``--concurrency=1`` in
+    deploy/Dockerfile.worker), and a Deep triage's psxview can hold that slot for
+    hours. Without this, a queued run shows a static "Queued" that is
+    indistinguishable from a hang. Computed from the database rather than the
+    broker, so it needs no broker introspection and stays correct across API
+    replicas. Built from the row's own session, so every place that emits
+    investigation state — including the live event stream — carries it.
+    """
+    if getattr(inv, "stage", None) != "queued":
+        return None
+    from sqlalchemy import select
+    from sqlalchemy.orm import object_session
+
+    from .models import Investigation, PluginRun, ProcessAnalysis
+
+    session = object_session(inv)
+    if session is None:
+        return None
+    since = inv.updated_at
+
+    running: list[dict] = []
+    for other in session.scalars(
+        select(Investigation).where(
+            Investigation.status == InvestigationStatus.TRIAGING,
+            Investigation.stage != "queued",
+            Investigation.id != inv.id,
+        )
+    ):
+        running.append({
+            "kind": "triage",
+            "investigation_id": other.id,
+            "mode": other.triage_mode,
+            "message": other.message,
+        })
+    for analysis in session.scalars(
+        select(ProcessAnalysis).where(ProcessAnalysis.status == AnalysisStatus.ANALYZING)
+    ):
+        running.append({
+            "kind": "process_analysis",
+            "investigation_id": analysis.investigation_id,
+            "message": f"VADViT deep-dive of {analysis.process_name} (PID {analysis.pid})",
+        })
+    for run in session.scalars(
+        select(PluginRun).where(PluginRun.status == PluginRunStatus.RUNNING)
+    ):
+        running.append({
+            "kind": "plugin_run",
+            "investigation_id": run.investigation_id,
+            "message": run.message,
+        })
+
+    ahead = 0
+    if since is not None:
+        ahead += len(session.scalars(select(Investigation.id).where(
+            Investigation.status == InvestigationStatus.TRIAGING,
+            Investigation.stage == "queued",
+            Investigation.id != inv.id,
+            Investigation.updated_at < since,
+        )).all())
+        ahead += len(session.scalars(select(ProcessAnalysis.id).where(
+            ProcessAnalysis.status == AnalysisStatus.QUEUED,
+            ProcessAnalysis.created_at < since,
+        )).all())
+        ahead += len(session.scalars(select(PluginRun.id).where(
+            PluginRun.status == PluginRunStatus.QUEUED,
+            PluginRun.created_at < since,
+        )).all())
+    return {"running": running, "waiting_ahead": ahead}
 
 
 class ProcessListItem(BaseModel):

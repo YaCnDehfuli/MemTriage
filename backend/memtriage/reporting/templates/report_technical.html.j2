@@ -1,0 +1,282 @@
+{% extends "base.html.j2" %}
+{% block title %}Technical report — {{ doc.investigation_id }}{% endblock %}
+{% block content %}
+
+<div class="cover">
+  <div class="eyebrow">MemTriage · memory forensics</div>
+  <h1>Technical investigation report</h1>
+  <dl>
+    <dt>Investigation</dt><dd class="mono">{{ doc.case.investigation_id }}</dd>
+    <dt>Opened</dt><dd class="mono">{{ doc.case.created_at }}</dd>
+    <dt>Generated</dt><dd class="mono">{{ doc.generated_at }}</dd>
+    <dt>Snapshots</dt><dd class="mono">{{ doc.case.dump_count }} ({{ doc.case.total_bytes | filesize }})</dd>
+    <dt>Processes</dt><dd class="mono">{{ doc.case.process_count }}</dd>
+    {% if doc.method.vol_version %}<dt>Volatility</dt><dd class="mono">{{ doc.method.vol_version }}</dd>{% endif %}
+  </dl>
+  {% if doc.sections %}
+  <div class="toc" style="margin-top:14px">
+    <div class="eyebrow">Contents</div>
+    <ol>{% for s in doc.sections %}<li>{{ s.title }}</li>{% endfor %}</ol>
+  </div>
+  {% endif %}
+</div>
+
+{% for s in doc.sections %}
+<section class="{% if loop.first %}first{% elif s.id in PAGE_BREAK_SECTIONS %}pagebreak{% endif %}">
+  <header><h2><span class="sec-num">{{ s.number }}</span>{{ s.title }}</h2></header>
+
+  {% if s.id == "overview" %}
+    <p>{{ doc.overview }}</p>
+    {% if doc.curated %}
+    <p class="small">
+      This report presents the {{ doc.findings | length + doc.examiner_artifacts | length }}
+      finding(s){% if doc.exhibits %} and {{ doc.exhibits | length }} memory region(s){% endif %}
+      the analyst selected as evidence, out of {{ doc.scored_total }} object(s) scored by
+      triage. Unselected leads remain in the investigation record; they are not part of
+      this report's findings.
+    </p>
+    {% endif %}
+
+  {% elif s.id == "notices" %}
+    {% for n in doc.notices %}<div class="notice">{{ n }}</div>{% endfor %}
+
+  {% elif s.id == "custody" %}
+    {% include "_chain_of_custody.html.j2" %}
+
+  {% elif s.id == "method" %}
+    <div class="scroll-x"><table>
+      <tbody>
+        <tr><td class="muted" style="width:14em">Triage coverage</td><td>{{ doc.method.triage_mode }} — {{ doc.method.plugin_count }} plugin(s), concurrency {{ doc.method.concurrency }}</td></tr>
+        {% if doc.method.preset %}<tr><td class="muted">Sensitivity preset</td><td>{{ doc.method.preset }}</td></tr>{% endif %}
+        {% if doc.method.confidence_floor is not none %}<tr><td class="muted">Confidence floor</td><td class="mono">{{ "%.0f" | format(doc.method.confidence_floor * 100) }}%</td></tr>{% endif %}
+        {% if doc.method.require_correlation is not none %}<tr><td class="muted">Correlation required</td><td>{{ "yes" if doc.method.require_correlation else "no" }}</td></tr>{% endif %}
+        {% if doc.method.rule_overrides %}<tr><td class="muted">Rule overrides</td><td class="mono">{{ doc.method.rule_overrides | length }} rule(s) tuned from default</td></tr>{% endif %}
+      </tbody>
+    </table></div>
+    {% if doc.method.requested_plugins %}
+    <p class="small muted" style="margin-top:8px">
+      Plugins: <span class="mono">{{ doc.method.requested_plugins | join(", ") }}</span>
+    </p>
+    {% endif %}
+
+  {% elif s.id == "hypothesis" %}
+    <div class="analyst">
+      <span class="who">Analyst hypothesis</span>
+      {{ doc.analyst.hypothesis }}
+    </div>
+
+  {% elif s.id == "narrative" %}
+    <p class="small muted">{{ doc.progression }}</p>
+
+    {% for stage in doc.stages %}
+    <div class="stage">
+      <div class="stage-head">
+        <h3>{{ stage.tactic }}</h3>
+        {% if stage.highest_risk %}<span class="badge risk-{{ stage.highest_risk }}">{{ stage.highest_risk }}</span>{% endif %}
+        <span class="small muted">{{ stage.count }} finding{{ "" if stage.count == 1 else "s" }}{% if stage.techniques %} · {{ stage.techniques | join(", ") }}{% endif %}</span>
+      </div>
+      <p class="stage-blurb">{{ stage.blurb }}</p>
+      {% if stage.drafted_note %}
+      <div class="drafted"><span class="who">Drafted narrative</span><p>{{ stage.drafted_note }}</p></div>
+      {% endif %}
+      {% if stage.analyst_note %}
+      <div class="analyst"><span class="who">Analyst</span>{{ stage.analyst_note }}</div>
+      {% endif %}
+      {% for f in stage.findings %}
+      <div class="finding">
+        <div class="finding-head">
+          <span class="badge risk-{{ f.object.risk }}">{{ f.object.risk }}</span>
+          <span class="label">{{ f.object.label }}</span>
+          {% if f.object.pid is not none %}<span class="small muted mono">PID {{ f.object.pid }}</span>{% endif %}
+        {% if f.analyst_confidence %}<span class="small muted">analyst: {{ f.analyst_confidence | replace("_", " ") }}</span>{% endif %}
+        </div>
+        <p class="small">{{ f.headline }}</p>
+        <p>{{ f.rationale }}</p>
+        {% if f.techniques %}<p class="small muted">{{ f.techniques }}</p>{% endif %}
+        {% if f.object.contributions %}
+        <ul class="rule-list small">
+          {% for c in f.object.contributions %}
+          <li>
+            <span class="mono">{{ c.rule_id }}</span> — {{ c.title }}
+            <span class="muted">(weight {{ c.weight }}, severity {{ c.severity }},
+            confidence {{ "%.0f" | format(c.confidence * 100) }}%{% if c.mitre and c.mitre.technique_id %}, {{ c.mitre.technique_id }}{% endif %})</span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if f.drafted_note %}
+        <div class="drafted"><span class="who">Drafted narrative</span><p>{{ f.drafted_note }}</p></div>
+        {% endif %}
+        {% if f.analyst_note %}
+        <div class="analyst"><span class="who">Analyst</span>{{ f.analyst_note }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+
+  {% elif s.id == "artifacts" %}
+    <p class="small muted">
+      These findings were scored by the rule engine and are genuinely present in
+      the image, but the analyst attributes them to the acquisition process
+      itself — the harness that collected the sample — not to adversary
+      activity. They are recorded here rather than removed, so the document
+      accounts for every scored object.
+    </p>
+    {% for f in doc.examiner_artifacts %}
+    <div class="finding">
+      <div class="finding-head">
+        <span class="badge risk-{{ f.object.risk }}">{{ f.object.risk }}</span>
+        <span class="label">{{ f.object.label }}</span>
+        <span class="small muted">collection artifact</span>
+      </div>
+      <p>{{ f.rationale }}</p>
+      {% if f.analyst_note %}
+      <div class="analyst"><span class="who">Analyst</span>{{ f.analyst_note }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+  {% elif s.id == "exhibits" %}
+    <p class="small muted">
+      Regions analysed to the instruction level, ordered by
+      {{ doc.exhibits[0].ranked_by if doc.exhibits else "model attention" }}.
+      {% if doc.exhibits and doc.exhibits[0].ranked_by == "measured properties" %}
+      The classifier checkpoint is an untrained placeholder, so its attention
+      ranking carries no signal; these are ordered instead by pattern severity,
+      anomalous protection flags and code density — properties of the bytes that
+      hold regardless of any model.
+      {% endif %}
+      Offsets are relative to the region base address, so every pattern below can
+      be checked against the region bytes.
+    </p>
+    {% for e in doc.exhibits %}
+    <div class="exhibit">
+      <h3>{{ e.addr }} <span class="muted small">— {{ e.process_name }} (PID {{ e.pid }})</span></h3>
+      {% if e.headline %}<p class="small">{{ e.headline }}</p>{% endif %}
+      <dl class="kv">
+        <dt>Protection</dt><dd>{{ e.protection }}{% if e.flags %} <span class="muted">({{ e.flags | join(", ") }})</span>{% endif %}</dd>
+        <dt>Size</dt><dd>{{ e.size | filesize }}{% if e.entropy.truncated %} <span class="muted">(analysed {{ e.entropy.analyzed_bytes | filesize }})</span>{% endif %}</dd>
+        <dt>Entropy</dt><dd>{{ "%.4f" | format(e.region_entropy) if e.region_entropy is not none else "—" }}{% if e.entropy.printable_ratio is not none %} <span class="muted">· printable {{ "%.0f" | format(e.entropy.printable_ratio * 100) }}%</span>{% endif %}</dd>
+        <dt>File backing</dt><dd>{{ e.file_backing or "none (private)" }}</dd>
+        <dt>SHA-256</dt><dd class="wrap">{{ e.sha256 }}</dd>
+        {% if e.instruction_count %}<dt>Code</dt><dd>{{ e.instruction_count }} instructions · {{ e.block_count }} blocks · {{ e.function_count }} functions · {{ e.indirect_calls }} indirect calls</dd>{% endif %}
+        {% if e.pe %}<dt>PE image</dt><dd>{{ e.pe.machine }}{% if e.pe.is_dll %} DLL{% endif %} · entry {{ e.pe.entry_point }} · base {{ e.pe.image_base }}</dd>{% endif %}
+      </dl>
+
+      {% if e.patterns %}
+      <div class="small"><strong>Indicators</strong>{% if e.pattern_severity %} <span class="sev-{{ e.pattern_severity }}">({{ e.pattern_severity }})</span>{% endif %}</div>
+      <ul class="rule-list small">
+        {% for p in e.patterns %}
+        <li>
+          {#- trim_blocks/lstrip_blocks strip the newlines between these spans,
+              so every separator has to be explicit or the line runs together. -#}
+          <span class="sev-{{ p.severity }}">{{ p.title }}</span>
+          {%- if p.occurrences %} <span class="muted">&times;{{ p.occurrences }}</span>{% endif %}
+          {%- if p.technique %} <span class="muted mono">{{ p.technique }}</span>{% endif %}
+          {%- if p.offsets %} <span class="muted">at {{ p.offsets | join(", ") }}{% if p.offset_overflow %} (+{{ p.offset_overflow }} more){% endif %}</span>{% endif %}
+          <div class="muted">{{ p.description }}</div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% if e.pattern_overflow %}<p class="small muted">{{ e.pattern_overflow }} further indicator(s) not shown.</p>{% endif %}
+      {% endif %}
+
+      {% if e.strings %}
+      <div class="small" style="margin-top:6px"><strong>Extracted strings</strong></div>
+      <ul class="rule-list small">
+        {% for s2 in e.strings %}
+        <li><span class="mono">{{ s2.value }}</span> <span class="muted">({{ s2.category }}, offset {{ s2.offset }})</span></li>
+        {% endfor %}
+      </ul>
+      {% if e.string_overflow %}<p class="small muted">{{ e.string_overflow }} further string(s) not shown.</p>{% endif %}
+      {% endif %}
+
+      {% if e.disassembly.available %}
+      <div class="small" style="margin-top:6px">
+        <strong>Disassembly</strong>
+        <span class="muted">{{ e.disassembly.arch }} &mdash; first {{ e.disassembly.shown }} of {{ e.disassembly.total }} instructions</span>
+      </div>
+      <pre class="asm">{% for i in e.disassembly.instructions %}{{ "%-12s" | format(i.address) }}{{ "%-18s" | format(i.bytes) }}{{ i.text }}
+{% endfor %}</pre>
+      {% elif e.disassembly.reason %}
+      <p class="small muted">Disassembly unavailable: {{ e.disassembly.reason }}</p>
+      {% endif %}
+
+      {% if e.caveat %}<p class="small muted" style="margin-top:6px">{{ e.caveat }}</p>{% endif %}
+      {% if e.analyst_note %}
+      <div class="analyst"><span class="who">Analyst</span>{{ e.analyst_note }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+  {% elif s.id == "attack" %}
+    <div class="scroll-x"><table>
+      <thead><tr><th style="width:6em">Technique</th><th>Name</th><th style="width:10em">Tactic</th><th style="width:5em">Objects</th></tr></thead>
+      <tbody>
+        {% for t in doc.attack %}
+        <tr>
+          <td class="mono">{{ t.technique_id }}</td>
+          <td>{{ t.name }}{% if t.evidence %}<div class="small muted">{{ t.evidence }}</div>{% endif %}</td>
+          <td>{{ t.tactic }}</td>
+          <td class="mono">{{ t.object_count }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table></div>
+
+  {% elif s.id == "deepdives" %}
+    {% for a in doc.deep_dives %}
+    <h3 style="margin-top:12px">{{ a.process_name }} <span class="mono muted">(PID {{ a.pid }})</span></h3>
+    <p class="small">
+      {% if not a.model_loaded %}
+        No classifier checkpoint was loaded for this process, so no family label was produced.
+      {% elif a.placeholder %}
+        Classified by an <strong>untrained placeholder model</strong>. The label
+        {% if a.family %}(<span class="mono">{{ a.family }}</span>){% endif %} is not
+        evidence of anything and is reproduced here only to record what the tool emitted.
+      {% else %}
+        Classified as <span class="mono">{{ a.family }}</span>{% if a.confidence is not none %}
+        at {{ "%.0f" | format(a.confidence * 100) }}% confidence{% endif %}.
+      {% endif %}
+      {{ a.region_count or 0 }} VAD region(s) assembled{% if a.chosen_dump_ordinal is not none %}
+      from snapshot {{ a.chosen_dump_ordinal }}{% endif %};
+      {{ a.attribution_count }} attention attribution(s) recorded.
+    </p>
+    {% if a.regions %}
+    <div class="scroll-x"><table>
+      <thead><tr><th style="width:9em">Address</th><th style="width:5em">Size</th><th style="width:7em">Protection</th><th style="width:5em">Entropy</th><th>Category</th><th>SHA-256</th></tr></thead>
+      <tbody>
+        {% for r in a.regions %}
+        <tr>
+          <td class="mono">{{ r.addr }}</td>
+          <td class="mono">{{ r.size | filesize }}</td>
+          <td class="mono">{{ r.protection }}</td>
+          <td class="mono">{{ "%.2f" | format(r.entropy) if r.entropy is not none else "—" }}</td>
+          <td class="small">{{ r.category }}{% if r.flags %} <span class="muted">({{ r.flags | join(", ") }})</span>{% endif %}</td>
+          <td class="mono wrap small">{{ r.sha256 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table></div>
+    {% if a.regions_truncated %}
+    <p class="small muted">{{ a.regions_truncated }} further region(s) not shown; ranked by attention.</p>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+
+  {% elif s.id == "recommendations" %}
+    <div class="analyst">
+      <span class="who">Analyst recommendations</span>
+      {{ doc.analyst.recommendations }}
+    </div>
+
+  {% elif s.id == "limitations" %}
+    {% if doc.limitations.summary %}<p>{{ doc.limitations.summary }}</p>{% endif %}
+    {% if doc.limitations.points %}
+    <ul class="rule-list">{% for pt in doc.limitations.points %}<li>{{ pt }}</li>{% endfor %}</ul>
+    {% endif %}
+  {% endif %}
+</section>
+{% endfor %}
+{% endblock %}

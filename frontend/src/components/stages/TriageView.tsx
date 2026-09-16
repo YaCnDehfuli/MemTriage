@@ -3,6 +3,7 @@ import { EmptyState, Panel } from "../primitives";
 import { ExtractionNotice } from "../triage/ExtractionNotice";
 import { FeatureExplorer } from "../triage/FeatureExplorer";
 import { IoCTable } from "../triage/IoCTable";
+import { TimelinePanel } from "../triage/TimelinePanel";
 import { AttackPanel, RiskSummaryPanel } from "../triage/Summary";
 import { TuningBar } from "../triage/TuningBar";
 import { VolatilityWorkbench } from "../triage/VolatilityWorkbench";
@@ -48,6 +49,8 @@ export function TriageView() {
               <AttackPanel techniques={attack} />
             </div>
           </div>
+
+          <TimelinePanel />
 
           <FeatureExplorer features={triage.dashboard?.features ?? {}} />
         </>

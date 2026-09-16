@@ -9,6 +9,9 @@ from sqlalchemy.orm import Session
 
 from ..db import get_session
 from ..models import Investigation
+from ..pipeline import volmemlyzer_adapter as vml
+from ..pipeline.timeline import build_timeline
+from ..security.sanitize import sanitize_obj
 from ..storage import InvestigationPaths, ProcessPaths, safe_within
 
 router = APIRouter(prefix="/api", tags=["results"])
@@ -31,6 +34,37 @@ def get_result(investigation_id: str, session: Session = Depends(get_session)) -
     if not paths.result.exists():
         raise HTTPException(status_code=409, detail="Result not ready")
     return JSONResponse(json.loads(paths.result.read_text()))
+
+
+@router.get("/investigations/{investigation_id}/timeline")
+def get_timeline(investigation_id: str, session: Session = Depends(get_session)) -> JSONResponse:
+    """The image's events on one clock, correlated with the scored findings.
+
+    Built on demand from the cached plugin records triage already wrote, so it
+    works for existing investigations without re-running Volatility, and always
+    reflects the current scoring profile.
+    """
+    _require_investigation(investigation_id, session)
+    paths = InvestigationPaths(investigation_id)
+    if not paths.triage.exists():
+        raise HTTPException(status_code=409, detail="Triage not complete")
+    triage = json.loads(paths.triage.read_text())
+    manifest = triage.get("artifacts") or {}
+    if not manifest:
+        raise HTTPException(
+            status_code=409,
+            detail="Triage predates cached artifacts; re-run triage to build a timeline.",
+        )
+    try:
+        records = vml.load_cached_records(paths.volmemlyzer, manifest)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=409,
+            detail="A cached plugin artifact is missing or invalid; re-run triage.",
+        ) from exc
+    scored = (triage.get("dashboard") or {}).get("scored_objects") or []
+    # Command lines, paths and task arguments come straight out of the image.
+    return JSONResponse(sanitize_obj(build_timeline(records, scored)))
 
 
 @router.get("/investigations/{investigation_id}/export")

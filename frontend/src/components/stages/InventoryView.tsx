@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useApp } from "../../state/store";
 import { pct } from "../../lib/format";
 import { Chip, Panel, RiskBadge } from "../primitives";
+import { EvidenceToggle } from "../report/EvidenceToggle";
+import { useReport } from "../../state/reportStore";
 
 export function InventoryView() {
-  const { processes, selectProcess } = useApp();
+  const { processes, selectProcess, unevaluatedSources } = useApp();
   const [q, setQ] = useState("");
   const [flaggedOnly, setFlaggedOnly] = useState(false);
 
@@ -22,6 +24,18 @@ export function InventoryView() {
           Every process the census surfaced, ranked by engine score. Pick one to run the VADViT
           deep-dive. Non-analyzable system processes (no user VADs) are marked.
         </p>
+        <p className="mt-1 max-w-2xl text-[12px] text-ink-400">
+          A process is flagged only when a scored finding names its PID — a process or injection
+          finding. UserAssist and scheduled-task findings describe a program or task, not a running
+          process, so they stay in the VolMemLyzer table and are not flags here.
+        </p>
+        {unevaluatedSources.length > 0 && (
+          <p className="mt-1 max-w-2xl text-[12px] text-risk-medium">
+            Not evaluated: {unevaluatedSources.join(", ")}. Rules reading{" "}
+            {unevaluatedSources.length === 1 ? "this plugin" : "these plugins"} had no evidence to
+            read and could not fire for any process — that is not the same as those checks passing.
+          </p>
+        )}
       </header>
 
       <Panel
@@ -75,32 +89,45 @@ export function InventoryView() {
                   </td>
                   <td className="px-3 py-2.5 font-mono text-[12px] text-ink-400">{p.ppid ?? "—"}</td>
                   <td className="px-3 py-2.5">
-                    <RiskBadge risk={p.risk} />
+                    {p.risk ? <RiskBadge risk={p.risk} /> : <span className="text-ink-400">—</span>}
                   </td>
                   <td className="px-3 py-2.5 font-mono text-[12px] text-ink-300">
-                    {p.score != null ? p.score.toFixed(1) : "—"}
+                    {p.score != null ? p.score.toFixed(1) : "n/a"}
                     {p.confidence != null && (
                       <span className="ml-1 text-ink-400">({pct(p.confidence)})</span>
                     )}
                   </td>
                   <td className="px-3 py-2.5">
                     <div className="flex max-w-xs flex-wrap gap-1">
-                      {p.flags.slice(0, 3).map((f) => (
-                        <Chip key={f} tone="mono">
-                          {f}
-                        </Chip>
-                      ))}
-                      {p.flags.length > 3 && <Chip>+{p.flags.length - 3}</Chip>}
+                      {p.flags.length > 0 ? (
+                        <>
+                          {p.flags.slice(0, 3).map((f) => (
+                            <Chip key={f} tone="mono">
+                              {f}
+                            </Chip>
+                          ))}
+                          {p.flags.length > 3 && <Chip>+{p.flags.length - 3}</Chip>}
+                        </>
+                      ) : (
+                        <span className="text-[11px] text-ink-400">
+                          {p.evaluation === "not_evaluated"
+                            ? "not evaluated"
+                            : "no indicator fired"}
+                        </span>
+                      )}
                     </div>
                   </td>
                   <td className="px-3 py-2.5 text-right">
-                    <button
-                      className="btn-ghost text-xs disabled:opacity-30"
-                      disabled={!p.analyzable}
-                      onClick={() => selectProcess(p.pid)}
-                    >
-                      Analyze
-                    </button>
+                    <div className="flex items-center justify-end gap-1">
+                      <ProcessPin pid={p.pid} />
+                      <button
+                        className="btn-ghost text-xs disabled:opacity-30"
+                        disabled={!p.analyzable}
+                        onClick={() => selectProcess(p.pid)}
+                      >
+                        Analyze
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -110,4 +137,19 @@ export function InventoryView() {
       </Panel>
     </div>
   );
+}
+
+
+/**
+ * Pin a process to the report from the inventory.
+ *
+ * Only processes the scoring engine actually surfaced can be pinned: the
+ * report's identity for a finding comes from the assembled document, and a
+ * process with no scored object has no finding to attach a note to.
+ */
+function ProcessPin({ pid }: { pid: number }) {
+  const { refForProcess } = useReport();
+  const found = refForProcess(pid);
+  if (!found) return null;
+  return <EvidenceToggle evidenceRef={found.ref} label={found.label} pid={pid} compact />;
 }

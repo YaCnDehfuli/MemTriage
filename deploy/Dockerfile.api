@@ -1,7 +1,9 @@
-# --- MemTriage API image (lightweight) ---
-# The API only accepts uploads, tracks jobs, streams progress, and serves
-# reports. It enqueues work by task name, so it needs none of the worker's
-# forensics/ML dependencies.
+# --- MemTriage API image ---
+# The API accepts uploads, tracks jobs, streams progress, serves reports, and
+# re-scores cached triage output live. It enqueues heavy work by task name, so it
+# needs none of the worker's ML dependencies. It does install VolMemLyzer: live
+# re-scoring must use the same bounded scorer triage used, or moving the
+# sensitivity preset reads scores on a different scale. It never runs Volatility.
 FROM python:3.11-slim AS base
 
 ENV PYTHONUNBUFFERED=1 \
@@ -16,8 +18,14 @@ RUN groupadd --system app && useradd --system --gid app --home /app app
 COPY backend/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Installed as a real package, not editable: an editable install leaves the
+# image importing from /opt/components, so the running code is whatever is on
+# that path rather than what was built into the layer.
+COPY components/volmemlyzer /opt/components/volmemlyzer
+RUN pip install --no-cache-dir /opt/components/volmemlyzer
+
 COPY backend/ /app/
-RUN pip install --no-cache-dir -e . && chown -R app:app /app
+RUN pip install --no-cache-dir -e . && chown -R app:app /app /opt/components
 
 USER app
 EXPOSE 8000

@@ -77,15 +77,29 @@ _ADDITIVE_COLUMNS: dict[str, tuple[tuple[str, str], ...]] = {
         ("concurrency", "INTEGER"),
         ("events", "JSON"),
         ("cache_source", "VARCHAR(1024)"),
+        ("triage_token", "VARCHAR(36)"),
+        ("cancel_requested", "BOOLEAN"),
+        ("worker_seen_at", "TIMESTAMP WITH TIME ZONE"),
     ),
     "plugin_runs": (
         ("artifacts", "JSON"),
         ("failed_plugins", "JSON"),
+        ("cancel_requested", "BOOLEAN"),
+        ("worker_seen_at", "TIMESTAMP WITH TIME ZONE"),
     ),
     "dumps": (
         ("sha256", "VARCHAR(64)"),
     ),
 }
+
+
+# Columns the model no longer writes. ``create_all`` never drops them, so a
+# volume created before their removal keeps the NOT NULL constraint and rejects
+# every insert. Relaxing it is non-destructive: the legacy values stay in place.
+_RETIRED_NOT_NULL = (
+    # The report became pins-strict: a row existing is what includes it.
+    ("report_evidence", "included"),
+)
 
 
 def ensure_schema() -> None:
@@ -108,6 +122,21 @@ def ensure_schema() -> None:
                     ))
                 except SQLAlchemyError:
                     logger.warning("could not add %s.%s", table, column)
+
+        for table, column in _RETIRED_NOT_NULL:
+            if table not in tables:
+                continue
+            legacy = next((c for c in schema.get_columns(table) if c["name"] == column), None)
+            if legacy is None or legacy["nullable"]:
+                continue
+            try:
+                # table/column are closed constants in _RETIRED_NOT_NULL, never input.
+                # nosemgrep: avoid-sqlalchemy-text
+                conn.execute(text(
+                    f"ALTER TABLE {table} ALTER COLUMN {column} DROP NOT NULL"
+                ))
+            except SQLAlchemyError:
+                logger.warning("could not relax NOT NULL on %s.%s", table, column)
 
         if engine.dialect.name == "postgresql":
             for table, column in _WIDENED_TO_BIGINT:

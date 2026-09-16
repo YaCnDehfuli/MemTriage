@@ -200,6 +200,40 @@ def _load_renderable_json(target: Path) -> object:
         raise HTTPException(status_code=409, detail="Plugin output is unreadable") from None
 
 
+@router.post(
+    "/investigations/{investigation_id}/plugins/runs/{run_id}/stop",
+    response_model=PluginRunState,
+)
+def stop_plugin_run(
+    investigation_id: str, run_id: str, session: Session = Depends(get_session),
+) -> PluginRunState:
+    """Stop a queued or running manual plugin run (see stop_triage)."""
+    from .routes_investigations import worker_is_alive
+
+    run = session.scalars(
+        select(PluginRun).where(PluginRun.id == run_id).with_for_update()
+    ).one_or_none()
+    if run is None or run.investigation_id != investigation_id:
+        raise HTTPException(status_code=404, detail="Plugin run not found")
+    if run.status not in (PluginRunStatus.QUEUED, PluginRunStatus.RUNNING):
+        raise HTTPException(status_code=409, detail="This plugin run is not running.")
+
+    run.cancel_requested = True
+    if run.status == PluginRunStatus.QUEUED or not worker_is_alive(run.worker_seen_at):
+        queued = run.status == PluginRunStatus.QUEUED
+        run.status = PluginRunStatus.CANCELLED
+        run.stage = "stopped"
+        run.message = ("Stopped before it started" if queued
+                       else "Stopped — no worker was still running it")
+    else:
+        run.stage = "stopping"
+        run.message = "Stopping — terminating Volatility processes"
+    session.add(run)
+    session.commit()
+    session.refresh(run)
+    return PluginRunState.from_orm_obj(run)
+
+
 @router.get("/investigations/{investigation_id}/plugins/runs/{run_id}/outputs/{plugin}")
 def preview_plugin_output(
     investigation_id: str,

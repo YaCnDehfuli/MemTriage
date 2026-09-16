@@ -62,7 +62,9 @@ REGISTRY: tuple[Provider, ...] = (
         transport=OPENAI_COMPATIBLE,
         base_url="https://api.openai.com/v1",
         default_model="gpt-4.1",
-        models=("gpt-4.1", "gpt-4.1-mini", "o4-mini"),
+        # Suggestions; "Load models" returns what the key really has, including
+        # any fine-tune or preview model only that account can see.
+        models=("gpt-4.1", "gpt-4.1-mini", "gpt-4o", "gpt-4o-mini", "o4-mini"),
         key_env="OPENAI_API_KEY",
         docs_url="https://platform.openai.com/docs/api-reference/chat",
         prompt_cache="automatic",
@@ -73,11 +75,18 @@ REGISTRY: tuple[Provider, ...] = (
         transport=OPENAI_COMPATIBLE,
         base_url="https://api.groq.com/openai/v1",
         default_model="llama-3.3-70b-versatile",
+        # Starting points only — Groq's line-up and its free tier both change.
+        # "Load models" asks the key what it can actually reach, and that answer
+        # is the authoritative one.
         models=("llama-3.3-70b-versatile", "llama-3.1-8b-instant",
+                "openai/gpt-oss-120b", "openai/gpt-oss-20b",
                 "deepseek-r1-distill-llama-70b"),
         key_env="GROQ_API_KEY",
         docs_url="https://console.groq.com/docs/api-reference",
         prompt_cache="none",
+        note=("Free-tier keys are rate-limited per minute. A report briefing is "
+              "large, so a big model may return 429 where a smaller one "
+              "succeeds; the limit is per-minute, so retrying works."),
     ),
     Provider(
         id="openrouter",

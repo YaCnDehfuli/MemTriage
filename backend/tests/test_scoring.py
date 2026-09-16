@@ -4,7 +4,7 @@ persistence + sanitization)."""
 import json
 
 from memtriage.scoring import diff_scored, score_records
-from memtriage.scoring import heuristics as H
+from volmemlyzer.scoring import heuristics as H
 from memtriage.storage import InvestigationPaths
 
 # --------------------------------------------------------------------------
@@ -241,6 +241,31 @@ def test_correlation_escalates_multisignal_object():
     assert proc["confidence"] >= 0.9
 
 
+def test_confidence_rises_with_independent_corroboration():
+    """The retired bounded scorer pinned confidence at 0.75 for every finding and
+    0.9 for any corroborated one — two possible values in the whole product.
+    The merged engine derives it by noisy-OR over the rules that fired, so a
+    second independent signal moves it by an amount that depends on the rules."""
+    lone = score_records({
+        "pslist": [{"PID": 900, "PPID": 600, "ImageFileName": "svchost.exe"}],
+        "cmdline": [{"PID": 900, "Process": "svchost.exe",
+                     "Args": r"C:\Users\v\AppData\Local\Temp\svchost.exe"}],
+    })
+    corroborated = score_records({
+        "pslist": [{"PID": 900, "PPID": 600, "ImageFileName": "svchost.exe"}],
+        "cmdline": [{"PID": 900, "Process": "svchost.exe",
+                     "Args": r"C:\Users\v\AppData\Local\Temp\svchost.exe"}],
+        "malfind": [{"PID": 900, "Process": "svchost.exe", "Start VPN": 4096,
+                     "Protection": "PAGE_EXECUTE_READWRITE", "PrivateMemory": 1,
+                     "Hexdump": "4d 5a 90 00 03 00 00 00"}],
+    })
+    lone_c = lone["process_risk"][900]["confidence"]
+    corr_c = corroborated["process_risk"][900]["confidence"]
+    assert corr_c > lone_c
+    # Not a two-valued step function any more.
+    assert {lone_c, corr_c} != {0.75, 0.9}
+
+
 def test_confidence_floor_suppresses():
     recs = {"pslist": [{"PID": 10, "PPID": 4, "ImageFileName": "a.exe"}],
             "psscan": [{"PID": 10, "PPID": 4, "ImageFileName": "a.exe"},
@@ -364,6 +389,26 @@ def test_rescore_endpoint_diff_persist_and_sanitize(client, monkeypatch):
     # profile is persisted on the investigation's triage.json
     triage = json.loads(InvestigationPaths(inv_id).triage.read_text())
     assert triage["profile"]["preset"] == "conservative"
+    # ...and in result.json, which a reloaded page reads.
+    result = client.get(f"/api/investigations/{inv_id}/result").json()
+    assert result["triage"]["profile"]["preset"] == "conservative"
+
+
+def test_rescore_stays_on_the_bounded_triage_scale(client, monkeypatch):
+    """Every preset re-scores with the triage scorer, so no score leaves 0..30."""
+    inv_id = _triaged_investigation(client, monkeypatch)
+    by_preset = {}
+    for preset in ("aggressive", "conservative", "balanced"):
+        body = client.post(f"/api/investigations/{inv_id}/rescore",
+                           json={"profile": {"preset": preset}}).json()
+        for obj in body["scored_objects"]:
+            assert obj["score_max"] == 30
+            assert 0 <= obj["score"] <= 30
+        by_preset[preset] = {o["key"]: o["score"] for o in body["scored_objects"]}
+    # A preset moves cut-offs, never the score an object earns.
+    for key, score in by_preset["conservative"].items():
+        assert by_preset["aggressive"].get(key) == score
+    assert set(by_preset["conservative"]) <= set(by_preset["balanced"]) <= set(by_preset["aggressive"])
 
 
 def test_rescore_rejects_a_corrupt_cached_artifact(client, monkeypatch):
@@ -388,3 +433,86 @@ def test_rescore_requires_triage(client):
     inv_id = client.post("/api/investigations").json()["investigation_id"]
     r = client.post(f"/api/investigations/{inv_id}/rescore", json={"profile": {}})
     assert r.status_code == 409
+
+
+def test_inventory_reports_a_verdict_for_every_evaluated_process():
+    """The inventory is the census, not the shortlist.
+
+    It used to carry risk only for processes that cleared the surfacing floor;
+    every other row had its score and confidence deleted and rendered as a bare
+    dash. That made "the rules ran and nothing fired" indistinguishable from
+    "this was never evaluated" — a distinction docs/METHODOLOGY.md insists on.
+    """
+    records = {
+        "pslist": [
+            {"PID": 4, "PPID": 0, "ImageFileName": "System"},
+            {"PID": 600, "PPID": 4, "ImageFileName": "smss.exe"},
+            # Wrong path for a core process: scores, and should surface.
+            {"PID": 900, "PPID": 600, "ImageFileName": "svchost.exe",
+             "Path": r"C:\Users\v\AppData\Local\Temp\svchost.exe"},
+        ],
+        "pstree": [],
+    }
+    out = score_records(records, plugins=("pslist", "pstree"))
+    risk = out["process_risk"]
+
+    # Every process the scorer evaluated has a verdict, not just the flagged one.
+    assert set(risk) == {4, 600, 900}
+    assert {v["state"] for v in risk.values()} <= {"scored", "no_indicator_fired"}
+
+    quiet = risk[4]
+    assert quiet["state"] == "no_indicator_fired"
+    assert quiet["risk"] is None and quiet["flags"] == []
+
+    # Plugins nobody selected are reported as a gap in the run, once — not as a
+    # blank cell on every row.
+    gaps = set(out["unevaluated_sources"])
+    assert {"malfind", "handles", "netscan"} <= gaps
+    assert "pslist" not in gaps
+
+
+def test_inventory_rows_say_which_kind_of_blank_they_are():
+    """_apply_scoring must label the three cases distinctly."""
+    from memtriage.pipeline import volmemlyzer_adapter as vml
+
+    processes = [{"pid": 1, "flags": [], "risk": None},
+                 {"pid": 2, "flags": [], "risk": None},
+                 {"pid": 3, "flags": ["stale"], "risk": "High", "score": 9.0}]
+    scoring = {
+        "process_risk": {
+            1: {"state": "scored", "risk": "Medium", "score": 11, "confidence": 0.9,
+                "techniques": ["T1036"], "flags": ["core_proc_wrong_path"]},
+            2: {"state": "no_indicator_fired", "risk": None, "score": 0,
+                "confidence": None, "techniques": [], "flags": []},
+        },
+        "scored_objects": [], "risk_summary": {}, "attack_techniques": [], "profile": {},
+        "unevaluated_sources": ["handles"],
+    }
+    dashboard: dict = {}
+    vml._apply_scoring(dashboard, processes, scoring)
+
+    assert processes[0]["evaluation"] == "scored"
+    assert processes[1]["evaluation"] == "no_indicator_fired"
+    # PID 3 dropped out of the scoring entirely: stale enrichment must not persist.
+    assert processes[2]["evaluation"] == "not_evaluated"
+    assert processes[2]["flags"] == [] and "score" not in processes[2]
+    assert dashboard["unevaluated_sources"] == ["handles"]
+
+
+def test_a_process_named_by_two_findings_keeps_both_sets_of_flags():
+    """An injected region and a process anomaly on one PID are both inventory
+    flags. The row used to keep only the higher-scoring object's rule ids and
+    silently drop the other's."""
+    records = {
+        "pslist": [{"PID": 900, "PPID": 600, "ImageFileName": "svchost.exe"}],
+        "cmdline": [{"PID": 900, "Process": "svchost.exe",
+                     "Args": r"C:\Users\v\AppData\Local\Temp\svchost.exe"}],
+        "malfind": [{"PID": 900, "Process": "svchost.exe", "Start VPN": 4096,
+                     "Protection": "PAGE_EXECUTE_READWRITE", "PrivateMemory": 1,
+                     "Hexdump": "4d 5a 90 00 03 00 00 00"}],
+    }
+    out = score_records(records, plugins=("pslist", "cmdline", "malfind"))
+    entry = out["process_risk"][900]
+    assert entry["state"] == "scored"
+    # Union of what fired, not just the strongest object's contributions.
+    assert len(entry["flags"]) >= 2

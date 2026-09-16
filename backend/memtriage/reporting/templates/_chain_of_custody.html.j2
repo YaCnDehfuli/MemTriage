@@ -1,0 +1,22 @@
+{#
+  Every acquired snapshot, unconditionally. A curated custody list is not a
+  custody list, so nothing filters this table and a missing hash is stated
+  rather than quietly omitted.
+#}
+<div class="scroll-x"><table>
+  <thead>
+    <tr><th style="width:3em">#</th><th>Filename</th><th style="width:7em">Size</th><th>SHA-256</th></tr>
+  </thead>
+  <tbody>
+    {% for d in doc.custody %}
+    <tr>
+      <td class="mono">{{ d.ordinal }}</td>
+      <td>{{ d.filename }}</td>
+      <td class="mono">{{ d.size_bytes | filesize }}</td>
+      <td class="mono wrap {% if d.sha256_missing %}muted{% endif %}">
+        {%- if d.sha256_missing -%}not recorded{%- else -%}{{ d.sha256 }}{%- endif -%}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table></div>

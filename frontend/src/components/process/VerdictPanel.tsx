@@ -17,7 +17,7 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
           </div>
           <p className="mt-3 text-sm text-ink-400">{verdict.note}</p>
           <button className="btn-ghost mt-3 text-[12px]" onClick={() => setRequesting(true)}>
-            Request the trained weights
+            Load or request weights
           </button>
         </div>
         {requesting && <ModelAccessForm onClose={() => setRequesting(false)} />}
@@ -41,8 +41,15 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
               className="btn-ghost mt-2 text-[11px]"
               onClick={() => setRequesting(true)}
             >
-              Request the trained weights
+              Load or request the trained weights
             </button>
+          </div>
+        )}
+        {verdict.model_source === "uploaded" && (
+          <div className="mb-3 rounded-md border border-risk-low/30 bg-risk-low/10 px-3 py-2 text-[12px] text-ink-300">
+            Produced by <b>operator-supplied weights</b> uploaded into this
+            deployment. Their provenance is the uploader&apos;s to vouch for — this
+            application did not train or verify them.
           </div>
         )}
         <div className="flex items-baseline justify-between">

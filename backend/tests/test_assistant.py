@@ -265,3 +265,77 @@ def test_script_language_is_validated(client, investigation):
     res = client.post(f"/api/investigations/{investigation}/assistant/script",
                       json={"provider": "openai", "language": "brainfuck"})
     assert res.status_code == 422
+
+
+# --------------------------------------------------------------------------
+# live model listing
+# --------------------------------------------------------------------------
+
+class _ModelLister:
+    """A transport that reports what the key can reach."""
+
+    def __init__(self, models=("b-model", "a-model"), raises=None):
+        self.models = list(models)
+        self.raises = raises
+        self.calls: list[dict] = []
+
+    def list_models(self, **kwargs):
+        self.calls.append(kwargs)
+        if self.raises:
+            raise self.raises
+        return sorted(self.models)
+
+
+def test_models_come_from_the_provider_not_from_the_registry(client, monkeypatch):
+    """Which models exist — and which are free — changes without warning.
+
+    A hardcoded list ages into offering the analyst a model that 404s at the
+    moment they try to use it, so the key is asked instead.
+    """
+    lister = _ModelLister(["llama-3.3-70b-versatile", "openai/gpt-oss-20b"])
+    monkeypatch.setattr(svc, "transport_for", lambda _p: lister)
+    body = client.post("/api/assistant/models",
+                       json={"provider": "groq", "api_key": "gsk_secret1234"}).json()
+    assert body["models"] == ["llama-3.3-70b-versatile", "openai/gpt-oss-20b"]
+    assert lister.calls[0]["base_url"] == "https://api.groq.com/openai/v1"
+
+
+def test_listing_models_needs_a_key_for_a_hosted_provider(client):
+    response = client.post("/api/assistant/models", json={"provider": "groq"})
+    assert response.status_code == 400
+    assert "key" in response.text.lower()
+
+
+def test_listing_models_needs_no_key_for_a_local_provider(client, monkeypatch):
+    lister = _ModelLister(["llama3.1"])
+    monkeypatch.setattr(svc, "transport_for", lambda _p: lister)
+    response = client.post("/api/assistant/models", json={"provider": "ollama"})
+    assert response.status_code == 200
+
+
+def test_listing_models_rejects_an_unknown_provider(client):
+    assert client.post("/api/assistant/models",
+                       json={"provider": "not-a-provider"}).status_code == 422
+
+
+def test_a_listing_failure_does_not_echo_the_key(client, monkeypatch):
+    """Listing is the first call an analyst makes, so it is the first chance to
+    leak the key. It goes through the same classifier the chat path uses."""
+    key = "sk-ant-verysecretkey0002"
+    monkeypatch.setattr(svc, "transport_for", lambda _p: _ModelLister(
+        raises=aerr.classify_exception(
+            RuntimeError(f"401 unauthorized for key {key}"), key)))
+    response = client.post("/api/assistant/models",
+                           json={"provider": "openai", "api_key": key})
+    assert response.status_code >= 400
+    assert key not in response.text
+    assert "[redacted]" in response.json()["error"]["message"]
+
+
+def test_the_registry_still_offers_a_starting_point_before_any_key(client):
+    """The static list is suggestions, not a contract — but it must not be empty
+    for a hosted provider, or the field opens with nothing to pick from."""
+    providers = {p["id"]: p for p in client.get("/api/assistant/providers").json()["providers"]}
+    assert providers["groq"]["models"]
+    assert providers["openai"]["models"]
+    assert providers["groq"]["note"], "free-tier rate limits must be stated"

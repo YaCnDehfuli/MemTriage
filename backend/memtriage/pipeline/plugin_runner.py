@@ -42,7 +42,12 @@ from collections.abc import Callable
 from contextlib import contextmanager
 from typing import Any
 
-from .volmemlyzer_adapter import DEEP_TRIAGE_PLUGINS, LIGHT_TRIAGE_PLUGINS
+from .volmemlyzer_adapter import (
+    DEEP_TRIAGE_PLUGINS,
+    LIGHT_TRIAGE_PLUGINS,
+    run_symbol_resilient,
+    warm_kernel_symbols,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +59,11 @@ CATEGORY_PROCESS = "Process & object census"
 CATEGORY_REGISTRY = "Registry & persistence"
 CATEGORY_SCANNERS = "Physical-layer scanners"
 
+# ``cost`` is measured, not inferred. "fast" means the plugin completed in under
+# four minutes on the reference image; every plugin that was labelled fast on
+# structural grounds but did not finish in that budget is "heavy", however cheap
+# its implementation looks. The Light preset is exactly the "fast" set.
+#
 # name -> (category, cost, deps). Mirrors volmemlyzer/src/volmemlyzer/plugins.py
 # PLUGIN_SPECIFICS as of the pinned submodule commit (e60f260) — display
 # metadata only; VolMemLyzer's own registry remains the runtime source of
@@ -69,17 +79,17 @@ _PLUGINS: dict[str, tuple[str, str, tuple[str, ...]]] = {
     "amcache": (CATEGORY_PROCESS, "fast", ("info",)),
     "bigpools": (CATEGORY_PROCESS, "scan", ()),
     "cmdline": (CATEGORY_PROCESS, "fast", ()),
-    "cmdscan": (CATEGORY_PROCESS, "fast", ()),
+    "cmdscan": (CATEGORY_PROCESS, "heavy", ()),
     "consoles": (CATEGORY_PROCESS, "fast", ()),
     "dlllist": (CATEGORY_PROCESS, "scan", ()),
-    "envars": (CATEGORY_PROCESS, "fast", ()),
-    "getservicesids": (CATEGORY_PROCESS, "fast", ()),
+    "envars": (CATEGORY_PROCESS, "heavy", ()),
+    "getservicesids": (CATEGORY_PROCESS, "heavy", ()),
     "getsids": (CATEGORY_PROCESS, "fast", ()),
     "handles": (CATEGORY_PROCESS, "heavy", ()),
     "iat": (CATEGORY_PROCESS, "heavy", ()),
-    "joblinks": (CATEGORY_PROCESS, "fast", ()),
+    "joblinks": (CATEGORY_PROCESS, "heavy", ()),
     "ldrmodules": (CATEGORY_PROCESS, "scan", ()),
-    "malfind": (CATEGORY_PROCESS, "heavy", ()),
+    "malfind": (CATEGORY_PROCESS, "fast", ()),
     "mbrscan": (CATEGORY_PROCESS, "scan", ()),
     "modules": (CATEGORY_PROCESS, "fast", ()),
     "netstat": (CATEGORY_PROCESS, "fast", ()),
@@ -91,22 +101,22 @@ _PLUGINS: dict[str, tuple[str, str, tuple[str, ...]]] = {
     "registry.certificates": (CATEGORY_REGISTRY, "fast", ()),
     "registry.userassist": (CATEGORY_REGISTRY, "fast", ()),
     "shimcache": (CATEGORY_REGISTRY, "scan", ()),
-    "skeleton_key": (CATEGORY_REGISTRY, "fast", ()),
+    "skeleton_key": (CATEGORY_REGISTRY, "heavy", ()),
     "ssdt": (CATEGORY_PROCESS, "fast", ()),
     "statistics": (CATEGORY_PROCESS, "scan", ()),
     "svcscan": (CATEGORY_REGISTRY, "scan", ()),
     "svclist": (CATEGORY_REGISTRY, "fast", ()),
-    "timers": (CATEGORY_REGISTRY, "fast", ()),
+    "timers": (CATEGORY_REGISTRY, "heavy", ()),
     "vadinfo": (CATEGORY_PROCESS, "heavy", ()),
     "vadwalk": (CATEGORY_PROCESS, "scan", ()),
     "verinfo": (CATEGORY_PROCESS, "heavy", ()),
     "virtmap": (CATEGORY_PROCESS, "scan", ()),
-    "windows": (CATEGORY_PROCESS, "fast", ()),
-    "windowstations": (CATEGORY_PROCESS, "fast", ()),
-    "callbacks": (CATEGORY_SCANNERS, "fast", ()),
+    "windows": (CATEGORY_PROCESS, "heavy", ()),
+    "windowstations": (CATEGORY_PROCESS, "heavy", ()),
+    "callbacks": (CATEGORY_SCANNERS, "heavy", ()),
     "devicetree": (CATEGORY_SCANNERS, "scan", ()),
-    "driverirp": (CATEGORY_SCANNERS, "fast", ()),
-    "drivermodule": (CATEGORY_SCANNERS, "fast", ()),
+    "driverirp": (CATEGORY_SCANNERS, "heavy", ()),
+    "drivermodule": (CATEGORY_SCANNERS, "heavy", ()),
     "driverscan": (CATEGORY_SCANNERS, "scan", ()),
     "filescan": (CATEGORY_SCANNERS, "heavy", ()),
     "modscan": (CATEGORY_SCANNERS, "scan", ()),
@@ -332,11 +342,34 @@ def run_selected_plugins(
         plan = [selected]
     on_event({"type": "plan", "at": time.time(), "layers": plan, "concurrency": concurrency})
 
+    def run(enable: set[str], workers: int, cached: bool) -> Any:
+        return pipe.run_plugin_raw(
+            image_path=image_path, enable=enable, outdir=outdir,
+            concurrency=workers, use_cache=cached,
+        )
+
+    def failures_of(result: Any) -> dict:
+        return ((result.artifacts if result else None) or {}).get("failed_plugins") or {}
+
+    # Same symbol-race protection as triage: the analyst's own batch hits the
+    # identical cold-cache race on a fresh worker. The probe runs before event
+    # capture starts, so it never shows in the run transcript as a plugin the
+    # analyst did not choose.
+    try:
+        resolvable = warm_kernel_symbols(
+            pipe, run, failures_of, selected, concurrency=concurrency, use_cache=True,
+        )
+    except Exception:
+        # The probe is an optimisation. If it cannot run, the batch still can,
+        # and the serial symbol retries remain the backstop.
+        logger.exception("kernel symbol warm-up failed; running the batch regardless")
+        resolvable = True
+
     with capture_plugin_events(on_event) as handler:
         try:
-            result = pipe.run_plugin_raw(
-                image_path=image_path, enable=set(selected), outdir=outdir,
-                concurrency=max(1, int(concurrency)), use_cache=True,
+            result = run_symbol_resilient(
+                pipe, run, failures_of, selected,
+                concurrency=concurrency, use_cache=True, symbols_resolvable=resolvable,
             )
         except Exception as exc:
             reason = f"Manual run stopped after {type(exc).__name__}"

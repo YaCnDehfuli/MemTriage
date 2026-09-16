@@ -28,6 +28,18 @@ export interface InvestigationState {
   concurrency: number;
   events: PluginEvent[];
   cache_source: string | null;
+  /** Present only while queued: what the single analysis worker is busy with. */
+  queue?: QueueContext | null;
+}
+
+export interface QueueContext {
+  running: {
+    kind: "triage" | "process_analysis" | "plugin_run";
+    investigation_id: string;
+    mode?: string;
+    message: string;
+  }[];
+  waiting_ahead: number;
 }
 
 export interface RiskSummaryEnvelope {
@@ -119,6 +131,8 @@ export interface Dashboard {
   profile: TuningProfile;
   disclaimer?: TriageDisclaimer;
   extraction?: ExtractionHealth;
+  /** Selected-plan gaps: rules reading these plugins could not fire for any process. */
+  unevaluated_sources?: string[];
 }
 
 export interface Triage {
@@ -128,6 +142,15 @@ export interface Triage {
   processes: ProcessItem[];
   profile: TuningProfile;
 }
+
+/**
+ * What the scoring engine did with this process.
+ *
+ * An empty risk cell is ambiguous on its own, so the verdict says which of the
+ * three it is: a real score, a rule pass that fired nothing, or a process the
+ * scorer never evaluated.
+ */
+export type ProcessEvaluation = "scored" | "no_indicator_fired" | "not_evaluated";
 
 export interface ProcessItem {
   pid: number;
@@ -139,6 +162,7 @@ export interface ProcessItem {
   score?: number | null;
   confidence?: number | null;
   techniques: string[];
+  evaluation?: ProcessEvaluation;
 }
 
 export interface Diff {
@@ -163,7 +187,9 @@ export interface RescoreResponse {
   attack_techniques: AttackTechnique[];
   scored_objects: ScoredObject[];
   suspicious_processes: unknown[];
+  processes: ProcessItem[];
   diff: Diff;
+  unevaluated_sources?: string[];
 }
 
 export interface Verdict {
@@ -173,7 +199,7 @@ export interface Verdict {
   probabilities: Record<string, number>;
   placeholder: boolean;
   note: string;
-  model_source?: "trained" | "placeholder" | "none";
+  model_source?: "trained" | "uploaded" | "placeholder" | "none";
 }
 
 export interface Attribution {
@@ -513,7 +539,7 @@ export interface PluginEvent {
 export interface PluginRunState {
   plugin_run_id: string;
   investigation_id: string;
-  status: "queued" | "running" | "done" | "failed";
+  status: "queued" | "running" | "done" | "failed" | "cancelled";
   stage: string;
   progress: number;
   message: string;
@@ -546,15 +572,38 @@ export interface ModelAccessPolicy {
   intended_use_options: { value: string; label: string }[];
   policy: string;
   terms: string;
-  model: {
-    trained_weights_present: boolean;
-    placeholder_active: boolean;
-    placeholder_cached: boolean;
-    auto_placeholder: boolean;
-    runtime_available: boolean;
-    contact: string;
-    note: string;
-  };
+  model: ModelState;
+}
+
+/** Which weights this deployment is actually running, and what an upload needs. */
+export interface ModelState {
+  active_source: "trained" | "uploaded" | "placeholder";
+  trained_weights_present: boolean;
+  uploaded_weights_present: boolean;
+  uploaded_weights: {
+    filename: string;
+    size_bytes: number;
+    uploaded_at: string;
+    labels_uploaded: boolean;
+    /** Stored, but a mounted checkpoint outranks it. */
+    superseded_by_mount: boolean;
+  } | null;
+  placeholder_active: boolean;
+  placeholder_cached: boolean;
+  auto_placeholder: boolean;
+  runtime_available: boolean;
+  labels: string[];
+  max_upload_bytes: number;
+  expected_filename: string;
+  contact: string;
+  note: string;
+}
+
+export interface ModelUploadResult {
+  stored: boolean;
+  size_bytes: number;
+  labels_stored: boolean;
+  model: ModelState;
 }
 
 export interface ModelAccessRequest {
@@ -577,4 +626,214 @@ export interface ModelAccessResponse {
   email_body: string;
   mailto: string;
   note: string;
+}
+
+// --- Report / evidence curation -------------------------------------------
+
+export type ConfidenceLevel =
+  | "confirmed"
+  | "high_confidence"
+  | "medium_confidence"
+  | "low_confidence"
+  | "insufficient_evidence";
+
+/** What the analyst concluded a finding *is*. */
+export type Disposition =
+  | "undetermined"
+  | "attacker_activity"
+  | "examiner_artifact"
+  | "benign";
+
+export type EvidenceKind = "finding" | "region" | "stage";
+
+export type NarrativeSection =
+  | "hypothesis"
+  | "executive_summary"
+  | "scope_objectives"
+  | "recommendations"
+  | "examiner_info";
+
+export interface ReportEvidence {
+  id: string;
+  evidence_kind: EvidenceKind;
+  /** The report's stable identity for this evidence — never the raw scored key. */
+  ref: string;
+  pid: number | null;
+  label: string;
+  analyst_note: string;
+  analyst_confidence: ConfidenceLevel | null;
+  disposition: Disposition | null;
+  sort_order: number;
+  /** Optimistic-concurrency token; send it back with the next write. */
+  version: number;
+  updated_at: string | null;
+}
+
+export interface NarrativeEntry {
+  content: string;
+  source: "analyst" | "drafted";
+  updated_at: string | null;
+}
+
+export interface ReportFinding {
+  ref: string;
+  object: ScoredObject;
+  headline: string;
+  rationale: string;
+  techniques: string;
+  analyst_note?: string;
+  /** Prose a model wrote about this finding. Never merged with analyst_note:
+   *  a reader has to be able to tell which sentences a human stands behind. */
+  drafted_note?: string;
+  disposition?: Disposition;
+  analyst_confidence?: ConfidenceLevel;
+}
+
+export interface ReportStage {
+  tactic: string;
+  blurb: string;
+  findings: ReportFinding[];
+  count: number;
+  techniques: string[];
+  highest_risk: string;
+  analyst_note?: string;
+  drafted_note?: string;
+}
+
+/** One memory region as the document renders it (subset of the backend exhibit). */
+export interface ReportExhibit {
+  ref: string;
+  pid: number;
+  process_name: string;
+  addr: string;
+  protection: string;
+  headline: string;
+  analyst_note?: string;
+}
+
+export interface ReportDocument {
+  investigation_id: string;
+  audience: "technical" | "executive";
+  generated_at: string;
+  overview: string;
+  progression: string;
+  findings: ReportFinding[];
+  examiner_artifacts: ReportFinding[];
+  /** True once the analyst has pinned anything: the document is then their selection. */
+  curated: boolean;
+  scored_total: number;
+  /** Identity for every scored object, independent of what the document renders. */
+  refs: { object_type: string; key: string; label: string; ref: string }[];
+  stages: ReportStage[];
+  exhibits: ReportExhibit[];
+  notices: string[];
+  sections: { id: string; number: number; title: string }[];
+  /** Present once a narrative has been drafted; `attached` counts the passages
+   *  that bound to evidence still in this document. */
+  narration?: {
+    stages?: Record<string, string>;
+    findings?: Record<string, string>;
+    provider?: string;
+    model?: string;
+    drafted_at?: string | null;
+    attached?: number;
+    dropped?: number;
+  };
+}
+
+// --- Timeline / correlation -------------------------------------------------
+
+export type TimelineEventKind =
+  | "process_start"
+  | "process_exit"
+  | "connection"
+  | "task_created"
+  | "task_last_success"
+  | "task_last_run"
+  | "program_run";
+
+export interface TimelineFinding {
+  ref: string;
+  risk: Risk;
+  label: string;
+  object_type: string;
+}
+
+export interface TimelineEvent {
+  id: string;
+  at: string;
+  kind: TimelineEventKind;
+  source: string;
+  detail: string;
+  process_id: string | null;
+  pid: number | null;
+  name: string;
+  findings: TimelineFinding[];
+  links: { type: string; text: string; process_id?: string }[];
+  reasons: string[];
+  relevant: boolean;
+  risk: Risk | null;
+}
+
+export interface TimelineProcess {
+  id: string;
+  pid: number;
+  ppid: number | null;
+  name: string;
+  created: string | null;
+  exited: string | null;
+  cmd: string;
+  path: string;
+  sources: string[];
+  parent_id: string | null;
+  parent_recovered: boolean;
+  children_ids: string[];
+  unlinked: boolean;
+  ancestors: string[];
+  findings: TimelineFinding[];
+  risk: Risk | null;
+}
+
+export interface Timeline {
+  events: TimelineEvent[];
+  processes: Record<string, TimelineProcess>;
+  flagged: string[];
+  sources: { present: string[]; missing: string[] };
+}
+
+
+/** One provider the drafted narrative (or the assistant) may be sent to. */
+export interface AssistantProvider {
+  id: string;
+  label: string;
+  default_model: string;
+  models: string[];
+  needs_key: boolean;
+  local?: boolean;
+  note?: string;
+}
+
+export interface AssistantProviders {
+  providers: AssistantProvider[];
+  custom_endpoints_enabled: boolean;
+  consent_notice: string;
+}
+
+export interface DraftNarrativeRequest {
+  provider: string;
+  model?: string;
+  api_key?: string;
+  base_url?: string | null;
+  write_executive_summary?: boolean;
+}
+
+export interface DraftedNarrative {
+  stored: number;
+  provider: string;
+  model: string;
+  executive_summary: string;
+  stages: Record<string, string>;
+  findings: Record<string, string>;
+  /** Refs the model returned that this document does not contain. */
+  unmatched: string[];
 }

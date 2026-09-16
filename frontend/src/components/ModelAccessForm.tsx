@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useApp } from "../state/store";
 import { useFocusTrap } from "../lib/a11y";
+import { ModelWeightsPanel } from "./ModelWeightsPanel";
 import type { ModelAccessPolicy, ModelAccessResponse } from "../types";
 
 const EMPTY = {
@@ -59,13 +60,13 @@ export function ModelAccessForm({ onClose }: { onClose(): void }) {
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4"
-         role="dialog" aria-modal="true" aria-label="Request the trained VADViT weights">
+         role="dialog" aria-modal="true" aria-label="VADViT weights">
       <div ref={dialogRef} className="panel max-h-[90vh] w-full max-w-2xl overflow-y-auto">
         <div className="panel-head sticky top-0 z-10 bg-surface-850">
           <div>
             <div className="eyebrow">VADViT</div>
             <h2 className="text-sm font-semibold text-ink-100">
-              Request the trained weights
+              VADViT weights
             </h2>
           </div>
           <button className="btn-ghost text-[12px]" onClick={onClose}>Close</button>
@@ -103,6 +104,24 @@ export function ModelAccessForm({ onClose }: { onClose(): void }) {
           </div>
         ) : (
           <div className="space-y-4 p-5">
+            {/* Upload first: someone who already holds the weights should not
+                have to read the request form to find out they can skip it. */}
+            <section className="rounded-md border border-surface-700/60 bg-surface-900/40">
+              <div className="border-b border-surface-700/60 px-4 py-2">
+                <div className="eyebrow">Already have them?</div>
+                <h3 className="text-[13px] font-semibold text-ink-100">
+                  Load weights into this deployment
+                </h3>
+              </div>
+              <ModelWeightsPanel />
+            </section>
+
+            <div className="border-t border-surface-700 pt-4">
+              <div className="eyebrow">Do not have them?</div>
+              <h3 className="text-[13px] font-semibold text-ink-100">
+                Request the trained weights
+              </h3>
+            </div>
             {policy && <p className="text-[12px] text-ink-300">{policy.policy}</p>}
 
             <div className="grid gap-3 sm:grid-cols-2">

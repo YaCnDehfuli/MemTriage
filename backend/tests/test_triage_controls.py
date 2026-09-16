@@ -23,7 +23,7 @@ def _new_with_dump(client, content: bytes | None = None) -> str:
 
 
 def _empty_view(plugins=None) -> dict:
-    from memtriage.scoring.profile import TuningProfile
+    from memtriage.scoring import TuningProfile
 
     profile = TuningProfile.from_preset("balanced").to_dict()
     return {
@@ -72,7 +72,18 @@ def test_start_triage_persists_the_server_owned_light_plan(client, monkeypatch):
     assert state["triage_mode"] == "light"
     assert state["requested_plugins"] == list(LIGHT_TRIAGE_PLUGINS)
     assert state["concurrency"] == 2
-    assert sent == [("memtriage.run_triage", [inv_id, True])]
+    # The message carries the token of the triage just requested, so a stale
+    # message from an earlier, stopped run can be told apart and skipped.
+    from memtriage.db import SessionLocal
+    from memtriage.models import Investigation
+
+    session = SessionLocal()
+    try:
+        token = session.get(Investigation, inv_id).triage_token
+    finally:
+        session.close()
+    assert token
+    assert sent == [("memtriage.run_triage", [inv_id, True, token])]
 
 
 def test_enqueue_failure_is_visible_and_does_not_permanently_block_triage(

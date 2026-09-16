@@ -96,6 +96,10 @@ class Settings(BaseSettings):
     model_auto_placeholder: bool = True
     placeholder_seed: int = 20250817
     model_contact: str = "dehfouliyasin@gmail.com"
+    # Ceiling for a checkpoint supplied through the UI. vit_base_patch32_224 is
+    # ~350 MB at fp32; 1 GiB leaves room for an optimizer state or fp64 without
+    # letting an upload fill the data volume.
+    max_model_upload_bytes: int = 1024 * 1024 * 1024
 
     # --- grid geometry (VADViT preprocessing; see pipeline/grid_render.py) ---
     # Default matches the vit_base_patch32_224 model + the "32_224" dataset.
@@ -121,6 +125,18 @@ class Settings(BaseSettings):
     def model_cache_dir(self) -> Path:
         """Writable home for a generated placeholder checkpoint."""
         return self.data_dir / "model_cache"
+
+    @property
+    def model_upload_dir(self) -> Path:
+        """Writable home for weights supplied through the UI.
+
+        Separate from model_cache_dir so deleting an upload can never remove the
+        generated placeholder, and so "someone uploaded this" stays
+        distinguishable from "we generated this". Lives under data_dir because
+        that volume is shared with the worker, which is the process that
+        actually loads the weights.
+        """
+        return self.data_dir / "model_uploads"
 
 
 @lru_cache
