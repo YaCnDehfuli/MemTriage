@@ -63,3 +63,33 @@ def chat(*, api_key: str, model: str, system: str, messages: list[dict],
             "cache_creation_input_tokens": None,
         },
     }
+
+
+def list_models(*, api_key: str, base_url: str, timeout_s: float = 30.0) -> list[str]:
+    """Model ids this key can actually reach, from the provider's own catalogue.
+
+    Asked rather than hardcoded because a provider's line-up — and which part of
+    it is free — changes faster than this file does. A stale built-in list is
+    worse than none: it offers the analyst a model that 404s at the moment they
+    try to use it.
+    """
+    try:
+        import openai
+    except Exception as exc:
+        raise AssistantError(
+            "The OpenAI SDK is not installed in this environment. `pip install openai`.",
+            code="sdk_missing",
+        ) from exc
+
+    client = openai.OpenAI(
+        api_key=api_key or "not-required",
+        base_url=base_url,
+        timeout=timeout_s,
+        max_retries=1,
+    )
+    try:
+        page = client.models.list()
+    except Exception as exc:
+        raise classify_exception(exc, api_key) from None
+    ids = [str(getattr(m, "id", "")) for m in page]
+    return sorted(i for i in ids if i)

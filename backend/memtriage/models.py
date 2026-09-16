@@ -24,6 +24,7 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -53,6 +54,156 @@ class PluginRunStatus(str, enum.Enum):
     RUNNING = "running"        # VolMemLyzer executing the selected plugin set
     DONE = "done"
     FAILED = "failed"
+    CANCELLED = "cancelled"    # stopped by the analyst
+
+
+class ConfidenceLevel(str, enum.Enum):
+    """Graded confidence, applied per finding rather than as one blanket caveat."""
+
+    CONFIRMED = "confirmed"
+    HIGH = "high_confidence"
+    MEDIUM = "medium_confidence"
+    LOW = "low_confidence"
+    INSUFFICIENT = "insufficient_evidence"
+
+
+class Disposition(str, enum.Enum):
+    """What the analyst concluded a finding *is*.
+
+    ``EXAMINER_ARTIFACT`` is the one that earns its place. Acquisition harnesses
+    leave traces that the rule engine correctly flags — a scheduled task that
+    launches a sample after logon is real persistence, and the engine is right
+    to score it. What makes a report wrong is presenting that as adversary
+    activity. Excluding it instead would be worse: the finding is genuinely in
+    the image, and a report that silently omits scored evidence is not one
+    anybody should trust. So it is kept, labelled, and told apart.
+    """
+
+    UNDETERMINED = "undetermined"
+    ATTACKER = "attacker_activity"
+    EXAMINER_ARTIFACT = "examiner_artifact"
+    BENIGN = "benign"
+
+
+class ReportEvidence(Base):
+    """One piece of evidence the analyst pinned to the report, with their judgement.
+
+    A row exists only for pinned evidence, and the report follows pins strictly:
+    unpinning deletes the row. An investigation with no pins at all renders the
+    complete, uncurated triage record instead of an empty document.
+    """
+
+    __tablename__ = "report_evidence"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    investigation_id: Mapped[str] = mapped_column(
+        ForeignKey("investigations.id", ondelete="CASCADE"), index=True
+    )
+
+    # ``ref`` is the report's own stable identity for a piece of evidence — see
+    # reporting.assembly.evidence_ref. Scored-object keys collide (two scheduled
+    # tasks both key as "task:powershell"), so a note bound to the raw key would
+    # attach to the wrong finding.
+    evidence_kind: Mapped[str] = mapped_column(String(32), index=True)
+    ref: Mapped[str] = mapped_column(String(512))
+    pid: Mapped[int | None] = mapped_column(Integer, nullable=True, index=True)
+    label: Mapped[str] = mapped_column(String(512), default="")
+
+    analyst_note: Mapped[str] = mapped_column(Text, default="")
+    analyst_confidence: Mapped[ConfidenceLevel | None] = mapped_column(
+        Enum(ConfidenceLevel, native_enum=False, length=24), nullable=True
+    )
+    disposition: Mapped[Disposition] = mapped_column(
+        Enum(Disposition, native_enum=False, length=24),
+        default=Disposition.UNDETERMINED,
+    )
+    sort_order: Mapped[int] = mapped_column(Integer, default=0)
+    # Optimistic concurrency. A timestamp cannot do this job: DateTime(timezone=True)
+    # does not survive a SQLite round-trip with its offset intact, so comparing
+    # the isoformat a client was handed against the one read back rejects even a
+    # first write. A monotonic counter has no serialization ambiguity.
+    version: Mapped[int] = mapped_column(Integer, default=1)
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=_utcnow, onupdate=_utcnow
+    )
+
+    investigation: Mapped[Investigation] = relationship(back_populates="evidence")
+
+    __table_args__ = (
+        UniqueConstraint("investigation_id", "evidence_kind", "ref",
+                         name="uq_report_evidence_ref"),
+    )
+
+
+class ReportNarration(Base):
+    """One drafted passage, bound to the finding or stage it explains.
+
+    Separate from :class:`ReportEvidence` because a row there exists only for
+    evidence the analyst pinned, whereas narration covers the document as it
+    stands. Separate from :class:`ReportNarrative` because that holds the fixed
+    sections a human writes; these are anchored to a ``ref`` and there is one
+    per finding.
+
+    Held rather than regenerated because the report HTML is a plain GET that the
+    preview iframes: it cannot carry an API key, wait on a provider, or produce
+    different prose each time the analyst refreshes it.
+    """
+
+    __tablename__ = "report_narrations"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    investigation_id: Mapped[str] = mapped_column(
+        ForeignKey("investigations.id", ondelete="CASCADE"), index=True
+    )
+    # "finding" (ref from reporting.assembly.evidence_ref) or "stage" (tactic).
+    scope: Mapped[str] = mapped_column(String(16), index=True)
+    ref: Mapped[str] = mapped_column(String(512))
+    content: Mapped[str] = mapped_column(Text, default="")
+
+    # Which model wrote it. The document discloses this; a passage whose author
+    # is unknown cannot be shown as generated prose.
+    provider: Mapped[str] = mapped_column(String(64), default="")
+    model: Mapped[str] = mapped_column(String(128), default="")
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=_utcnow, onupdate=_utcnow
+    )
+
+    __table_args__ = (
+        UniqueConstraint("investigation_id", "scope", "ref",
+                         name="uq_report_narration_ref"),
+    )
+
+
+class ReportNarrative(Base):
+    """One fixed narrative slot the analyst writes (or has drafted for them)."""
+
+    __tablename__ = "report_narratives"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    investigation_id: Mapped[str] = mapped_column(
+        ForeignKey("investigations.id", ondelete="CASCADE"), index=True
+    )
+    section: Mapped[str] = mapped_column(String(32))
+    content: Mapped[str] = mapped_column(Text, default="")
+    # Whether these words were typed by the analyst or drafted from the evidence
+    # and then accepted. Recorded so the document can disclose it once, in the
+    # methodology appendix, rather than leaving it implicit.
+    source: Mapped[str] = mapped_column(String(16), default="analyst")
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=_utcnow, onupdate=_utcnow
+    )
+
+    investigation: Mapped[Investigation] = relationship(back_populates="narratives")
+
+    __table_args__ = (
+        UniqueConstraint("investigation_id", "section", name="uq_report_narrative_section"),
+    )
 
 
 class Investigation(Base):
@@ -87,6 +238,16 @@ class Investigation(Base):
     events: Mapped[list] = mapped_column(JSON, default=list)
     cache_source: Mapped[str | None] = mapped_column(String(1024), nullable=True)
 
+    # Stopping a triage (pipeline/cancellation.py). `triage_token` identifies the
+    # triage the analyst most recently requested; a queued task carrying any other
+    # token was stopped or superseded and must not run. `worker_seen_at` is written
+    # by the running task, so the API can tell a live job from an orphaned row.
+    triage_token: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    cancel_requested: Mapped[bool | None] = mapped_column(default=False, nullable=True)
+    worker_seen_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=_utcnow, onupdate=_utcnow
@@ -99,6 +260,12 @@ class Investigation(Base):
         back_populates="investigation", cascade="all, delete-orphan"
     )
     plugin_runs: Mapped[list[PluginRun]] = relationship(
+        back_populates="investigation", cascade="all, delete-orphan"
+    )
+    evidence: Mapped[list[ReportEvidence]] = relationship(
+        back_populates="investigation", cascade="all, delete-orphan"
+    )
+    narratives: Mapped[list[ReportNarrative]] = relationship(
         back_populates="investigation", cascade="all, delete-orphan"
     )
 
@@ -197,6 +364,11 @@ class PluginRun(Base):
     # these server-local paths to the browser.
     artifacts: Mapped[dict] = mapped_column(JSON, default=dict)
     failed_plugins: Mapped[dict] = mapped_column(JSON, default=dict)
+    # See Investigation: a stop request, and proof a worker is behind the run.
+    cancel_requested: Mapped[bool | None] = mapped_column(default=False, nullable=True)
+    worker_seen_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(

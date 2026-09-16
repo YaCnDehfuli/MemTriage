@@ -29,6 +29,7 @@ import json
 import logging
 import threading
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from functools import lru_cache
 from pathlib import Path
 
@@ -148,7 +149,7 @@ class VADViTClassifier:
     def __init__(self, checkpoint_path, labels_path, model_name: str,
                  num_classes: int, image_size: int, device: str = "cpu",
                  *, cache_dir=None, auto_placeholder: bool = False,
-                 placeholder_seed: int = 0) -> None:
+                 placeholder_seed: int = 0, upload_dir=None) -> None:
         self.checkpoint_path = Path(checkpoint_path)
         self.labels_path = Path(labels_path)
         self.model_name = model_name
@@ -156,16 +157,50 @@ class VADViTClassifier:
         self.image_size = image_size
         self.device = device
         self.cache_dir = Path(cache_dir) if cache_dir else None
+        self.upload_dir = Path(upload_dir) if upload_dir else None
         self.auto_placeholder = auto_placeholder
         self.placeholder_seed = placeholder_seed
         self._model = None
         self._labels: list[str] | None = None
         self._resolved: Path | None = None
+        # Which file the loaded model came from, and the version of it. The
+        # uploader is the API process and the loader is the worker, so an upload
+        # is never an in-process event the cache could be told about — the only
+        # thing both sides share is the file. See _stamp.
+        self._model_stamp: tuple | None = None
+        self._labels_stamp: tuple | None = None
         self._lock = threading.Lock()
+
+    @staticmethod
+    def _stamp(path: Path | None) -> tuple | None:
+        """Identity of a file's current contents, cheap enough to check per call.
+
+        Path alone is not enough: replacing an upload keeps the name. Size and
+        mtime move whenever the bytes do, which is what a cross-process cache
+        needs to notice.
+        """
+        if path is None:
+            return None
+        try:
+            st = path.stat()
+        except OSError:
+            return None
+        return (str(path), st.st_mtime_ns, st.st_size)
 
     @property
     def trained_checkpoint_present(self) -> bool:
         return self.checkpoint_path.exists()
+
+    @property
+    def uploaded_checkpoint_path(self) -> Path | None:
+        if self.upload_dir is None:
+            return None
+        return self.upload_dir / self.checkpoint_path.name
+
+    @property
+    def uploaded_checkpoint_present(self) -> bool:
+        path = self.uploaded_checkpoint_path
+        return bool(path and path.exists())
 
     @property
     def cached_placeholder_path(self) -> Path | None:
@@ -175,7 +210,7 @@ class VADViTClassifier:
 
     def _checkpoint_obtainable(self) -> bool:
         """A checkpoint exists, or one can be generated once torch is importable."""
-        if self.trained_checkpoint_present:
+        if self.trained_checkpoint_present or self.uploaded_checkpoint_present:
             return True
         cached = self.cached_placeholder_path
         if cached is not None and cached.exists():
@@ -187,6 +222,7 @@ class VADViTClassifier:
         """True when a checkpoint is loadable right now."""
         return self._checkpoint_obtainable() and (
             self.trained_checkpoint_present
+            or self.uploaded_checkpoint_present
             or (self.cached_placeholder_path or Path()).exists()
             or torch_available()
         )
@@ -194,24 +230,51 @@ class VADViTClassifier:
     def available(self) -> bool:
         return self.checkpoint_present and torch_available()
 
+    def resolve_labels_path(self) -> Path:
+        """Labels beside the weights that are actually in use."""
+        candidates = [self.labels_path]
+        if self.upload_dir is not None:
+            candidates.insert(0, self.upload_dir / self.labels_path.name)
+        if self.cache_dir is not None:
+            candidates.append(self.cache_dir / self.labels_path.name)
+        # Uploaded labels only apply while uploaded weights are the ones loaded;
+        # otherwise a stale upload would rename the placeholder's classes.
+        if not self.uploaded_checkpoint_present and self.upload_dir is not None:
+            candidates.pop(0)
+        for path in candidates:
+            if path.exists():
+                return path
+        return self.labels_path
+
     @property
     def labels(self) -> list[str]:
-        if self._labels is None:
-            path = self.labels_path
-            if not path.exists() and self.cache_dir is not None:
-                cached_labels = self.cache_dir / self.labels_path.name
-                if cached_labels.exists():
-                    path = cached_labels
+        path = self.resolve_labels_path()
+        stamp = self._stamp(path)
+        if self._labels is None or stamp != self._labels_stamp:
             self._labels = load_labels(path, self.num_classes)
+            self._labels_stamp = stamp
         return self._labels
 
     def resolve_checkpoint(self) -> Path | None:
-        """Trained weights if mounted, else a cached placeholder, else generate one."""
-        if self._resolved is not None and self._resolved.exists():
-            return self._resolved
+        """Mounted weights, else uploaded weights, else a placeholder.
+
+        Recomputed on every call rather than memoized. The weights can change
+        underneath a long-lived worker -- someone uploads a checkpoint through
+        the UI, or deletes one -- and a cached answer would keep that worker
+        classifying with the file it happened to see first, with nothing in the
+        output saying so. The checks are a few stat() calls; only generating a
+        placeholder is expensive, and that stays guarded.
+        """
+        # A deliberate read-only mount outranks a runtime upload: it is the
+        # deployment's own configuration. model_status reports which one won, so
+        # an upload can never be silently ignored.
         if self.trained_checkpoint_present:
             self._resolved = self.checkpoint_path
             return self._resolved
+        uploaded = self.uploaded_checkpoint_path
+        if uploaded is not None and uploaded.exists():
+            self._resolved = uploaded
+            return uploaded
 
         cached = self.cached_placeholder_path
         if cached is None:
@@ -251,8 +314,23 @@ class VADViTClassifier:
         except (ValueError, OSError):
             return False
 
+    def source_of(self, checkpoint: Path) -> str:
+        """Where the weights behind a verdict came from: mounted, uploaded, or generated.
+
+        "trained" is a claim about provenance, so an uploaded file does not get
+        to borrow it. The operator supplied those weights; the report says so and
+        lets the reader judge them.
+        """
+        if self._is_placeholder(checkpoint):
+            return "placeholder"
+        uploaded = self.uploaded_checkpoint_path
+        if uploaded is not None and checkpoint == uploaded:
+            return "uploaded"
+        return "trained"
+
     def _ensure_model(self, checkpoint: Path):
-        if self._model is not None:
+        stamp = self._stamp(checkpoint)
+        if self._model is not None and stamp == self._model_stamp:
             return self._model
         import torch
 
@@ -268,6 +346,7 @@ class VADViTClassifier:
         model.load_state_dict(state)
         model.to(self.device).eval()
         self._model = model
+        self._model_stamp = stamp
         return model
 
     def classify(self, grid_png_path) -> Verdict:
@@ -309,16 +388,23 @@ class VADViTClassifier:
             (labels[i] if i < len(labels) else f"class_{i}"): round(probs_list[i], 6)
             for i in range(len(probs_list))
         }
-        placeholder = self._is_placeholder(checkpoint)
-        note = (PLACEHOLDER_VERDICT_NOTE if placeholder else "VADViT classification.")
+        source = self.source_of(checkpoint)
+        placeholder = source == "placeholder"
+        notes = {
+            "placeholder": PLACEHOLDER_VERDICT_NOTE,
+            "uploaded": ("VADViT classification using operator-supplied weights "
+                         "(uploaded through the UI, not the checkpoint shipped "
+                         "with this deployment)."),
+            "trained": "VADViT classification.",
+        }
         return Verdict(
             model_loaded=True,
             family=labels[idx] if idx < len(labels) else f"class_{idx}",
             confidence=round(probs_list[idx], 6),
             probabilities=prob_map,
             placeholder=placeholder,
-            note=note,
-            model_source="placeholder" if placeholder else "trained",
+            note=notes[source],
+            model_source=source,
         )
 
     def attention_map(self, grid_png_path) -> list[float] | None:
@@ -380,6 +466,7 @@ def get_classifier() -> VADViTClassifier:
         cache_dir=s.model_cache_dir,
         auto_placeholder=s.model_auto_placeholder,
         placeholder_seed=s.placeholder_seed,
+        upload_dir=s.model_upload_dir,
     )
 
 
@@ -388,13 +475,42 @@ def model_status() -> dict:
     s = get_settings()
     clf = get_classifier()
     trained = clf.trained_checkpoint_present
+    uploaded = clf.uploaded_checkpoint_present
     cached = clf.cached_placeholder_path
+    active = "trained" if trained else ("uploaded" if uploaded else "placeholder")
+    notes = {
+        "trained": "Trained VADViT weights in use.",
+        "uploaded": ("Operator-supplied weights in use. Provenance is the "
+                     "uploader's to vouch for; this deployment did not train "
+                     "or verify them."),
+        "placeholder": PLACEHOLDER_VERDICT_NOTE,
+    }
+    uploaded_path = clf.uploaded_checkpoint_path
+    detail = None
+    if uploaded and uploaded_path is not None:
+        stat = uploaded_path.stat()
+        detail = {
+            "filename": uploaded_path.name,
+            "size_bytes": stat.st_size,
+            "uploaded_at": datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc)
+                                   .isoformat().replace("+00:00", "Z"),
+            "labels_uploaded": (clf.upload_dir / clf.labels_path.name).exists(),
+            # An upload that a mount outranks is still stored, and saying so is
+            # the difference between "ignored" and "silently ignored".
+            "superseded_by_mount": trained,
+        }
     return {
+        "active_source": active,
         "trained_weights_present": trained,
-        "placeholder_active": not trained,
+        "uploaded_weights_present": uploaded,
+        "uploaded_weights": detail,
+        "placeholder_active": active == "placeholder",
         "placeholder_cached": bool(cached and cached.exists()),
         "auto_placeholder": s.model_auto_placeholder,
         "runtime_available": torch_available(),
+        "labels": clf.labels,
+        "max_upload_bytes": s.max_model_upload_bytes,
+        "expected_filename": clf.checkpoint_path.name,
         "contact": s.model_contact,
-        "note": PLACEHOLDER_VERDICT_NOTE if not trained else "Trained VADViT weights in use.",
+        "note": notes[active],
     }

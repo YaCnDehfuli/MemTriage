@@ -2,16 +2,16 @@ import { useApp } from "../../state/store";
 import { ExtractionNotice } from "../triage/ExtractionNotice";
 import { bytes, RISK_ORDER } from "../../lib/format";
 import { EmptyState, Panel, RiskBadge } from "../primitives";
+import { ReportBuilder } from "../report/ReportBuilder";
 
 export function ReportView() {
   const {
-    scored, riskSummary, attack, analysis, triage, investigationId,
+    riskSummary, attack, analysis, triage, investigationId,
     profile, disclaimer, triageProgress, pluginRun,
   } = useApp();
 
   if (!triage) return <EmptyState title="Nothing to report yet" hint="Run triage first." />;
 
-  const top = scored.slice(0, 6);
   const exportHref =
     !investigationId ? undefined : `/api/investigations/${investigationId}/export`;
   const requestedPlugins = triageProgress?.requested_plugins ?? pluginRun?.requested_plugins ?? [];
@@ -28,8 +28,8 @@ export function ReportView() {
           </p>
         </div>
         {exportHref ? (
-          <a className="btn-accent text-xs" href={exportHref} target="_blank" rel="noreferrer">
-            Export JSON
+          <a className="btn-ghost text-xs" href={exportHref} target="_blank" rel="noreferrer">
+            Export raw JSON
           </a>
         ) : (
           <span className="btn-ghost cursor-default text-xs opacity-60">Export (live only)</span>
@@ -122,26 +122,7 @@ export function ReportView() {
         </Panel>
       </div>
 
-      <Panel eyebrow="Findings" title="Top indicators">
-        <ul className="divide-y divide-surface-800/70">
-          {top.map((o) => (
-            <li key={o.key} className="flex items-center gap-3 px-4 py-2.5">
-              <RiskBadge risk={o.risk} />
-              <span className="font-mono text-[13px] text-ink-100">{o.label}</span>
-              <span className="ml-auto flex flex-wrap gap-1">
-                {o.techniques.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded bg-surface-800 px-1.5 py-0.5 font-mono text-[11px] text-ink-400 ring-1 ring-inset ring-surface-600"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </Panel>
+      <ReportBuilder />
 
       {analysis && (
         <Panel eyebrow="Model classification" title={`${analysis.process_name} (PID ${analysis.pid})`}>

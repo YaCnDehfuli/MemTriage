@@ -15,6 +15,8 @@ from pathlib import Path
 
 import pytest
 
+from memtriage.pipeline import volmemlyzer_adapter as vml
+
 FIXTURES = Path(__file__).parent / "fixtures" / "dumps_2580_5"
 STANDIN_IMAGE = FIXTURES / "2580_5.vmem"
 STANDIN_SIZE = 4096
@@ -65,13 +67,16 @@ def test_live_triage_from_cached_artifacts_produces_a_populated_dashboard(client
     assert summary["persistence"] > 0
     assert summary["process_count"] > 0
 
-    # extraction_health() now measures only the selected Deep preset. This
-    # trimmed fixture covers 11 of its 17 plugins, so the missing six report an
-    # honest degraded warning while the cached results still populate the
-    # dashboard. Light/Custom runs likewise measure only what was requested.
+    # extraction_health() measures only the selected Deep preset. This trimmed
+    # fixture covers 11 of its 26 plugins, so most of the set has no artifact and
+    # the shortfall reads as critical rather than as a warning — which is the
+    # honest reading: when the majority of a run produces nothing, the likely
+    # cause is one shared problem, not fifteen separate ones. The cached results
+    # still populate the dashboard, which is what the assertions above check.
     extraction = summary["extraction"]
     assert extraction["degraded"] is True
-    assert extraction["severity"] == "warning"
+    assert extraction["severity"] == "critical"
+    assert extraction["plugins_attempted"] == len(vml.DEEP_TRIAGE_PLUGINS)
 
     inv = client.get(f"/api/investigations/{summary['investigation_id']}").json()
     assert inv["status"] == "triaged"

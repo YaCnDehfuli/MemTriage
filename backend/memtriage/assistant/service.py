@@ -101,3 +101,23 @@ def chat(*, investigation_id: str, provider_id: str, model: str, api_key: str,
         "prompt_cache": provider.prompt_cache,
     }
     return result
+
+
+def list_models(*, provider_id: str, api_key: str, base_url: str | None = None,
+                timeout_s: float = 30.0) -> list[str]:
+    """What this key can actually reach at this provider, asked at the time.
+
+    The registry's ``models`` tuple is a set of suggestions that ages; this is
+    the live answer. Which models are free, and which exist at all, is the
+    provider's business and changes without warning, so the analyst picks from
+    what their own key returns rather than from what this file believed.
+    """
+    provider = get_provider(provider_id)
+    url = resolve_base_url(provider, base_url)
+    if provider.needs_key and not api_key:
+        raise AssistantError(
+            f"{provider.label} needs an API key to list its models. It is used "
+            "for this request only — MemTriage never stores or logs it.",
+            code="key_required", status=400)
+    return transport_for(provider).list_models(
+        api_key=api_key, base_url=url, timeout_s=timeout_s)

@@ -58,6 +58,8 @@ interface AppState {
   riskSummary: RiskSummary | null;
   attack: AttackTechnique[];
   disclaimer: TriageDisclaimerType | null;
+  /** Selected-plan gaps: rules reading these plugins could not fire for any process. */
+  unevaluatedSources: string[];
   diff: Diff | null;
   selectedPid: number | null;
   analysis: AnalysisResult | null;
@@ -79,6 +81,8 @@ interface AppActions {
   selectProcess(pid: number): Promise<void>;
   uploadDumps(files: File[]): Promise<void>;
   startTriage(options: TriageOptions): Promise<void>;
+  stopTriage(): Promise<void>;
+  stopPluginRun(): Promise<void>;
   clearError(): void;
   loadPluginCatalog(): Promise<void>;
   runPlugins(plugins: string[], concurrency: number): Promise<void>;
@@ -108,6 +112,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [riskSummary, setRiskSummary] = useState<RiskSummary | null>(null);
   const [attack, setAttack] = useState<AttackTechnique[]>([]);
   const [disclaimer, setDisclaimer] = useState<TriageDisclaimerType | null>(null);
+  const [unevaluatedSources, setUnevaluatedSources] = useState<string[]>([]);
   const [diff, setDiff] = useState<Diff | null>(null);
   const [selectedPid, setSelectedPid] = useState<number | null>(null);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
@@ -152,6 +157,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setRiskSummary(t.dashboard?.risk_summary ?? null);
     setAttack(t.dashboard?.attack_techniques ?? []);
     setDisclaimer(t.dashboard?.disclaimer ?? null);
+    setUnevaluatedSources(t.dashboard?.unevaluated_sources ?? []);
   }, []);
 
   const loadResult = useCallback(
@@ -165,14 +171,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("investigation");
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("investigation");
     if (!id) return;
+    const VALID_STAGES: Stage[] = ["ingest", "triage", "inventory", "deepdive", "report"];
+    const stageParam = params.get("stage") as Stage | null;
     let cancelled = false;
     (async () => {
       setLoading(true);
       clearError();
       try {
         setInvestigationId(id);
+        if (stageParam && VALID_STAGES.includes(stageParam)) setStage(stageParam);
         const state = await client.getInvestigation(id);
         if (cancelled) return;
         setTriageProgress(state);
@@ -198,6 +208,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
       cancelled = true;
     };
   }, [client, loadResult, fail, clearError]);
+
+  // Reflect the live investigation + stage into the URL (replace, not push, so
+  // clicking through the workflow does not spam browser history). Without this,
+  // a page refresh has no ?investigation= to restore from — the effect above
+  // finds nothing and the whole workflow appears to vanish even though the
+  // investigation and its report are intact on the server.
+  useEffect(() => {
+    if (!investigationId) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("investigation") === investigationId && params.get("stage") === stage) return;
+    params.set("investigation", investigationId);
+    params.set("stage", stage);
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}?${params.toString()}`,
+    );
+  }, [investigationId, stage]);
 
   const bootstrap = useCallback(async () => {
     setLoading(true);
@@ -270,6 +298,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setRiskSummary(null);
       setAttack([]);
       setDisclaimer(null);
+      setUnevaluatedSources([]);
       setDiff(null);
       setTriageProgress(state);
       if (state.status === "triaged") {
@@ -311,7 +340,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       try {
         const state = await client.runPlugins(investigationId, plugins, concurrency);
         setPluginRun(state);
-        if (state.status !== "done" && state.status !== "failed") {
+        if (state.status === "queued" || state.status === "running") {
           track(followPluginRun("", investigationId, state.plugin_run_id, setPluginRun));
         }
       } catch (e) {
@@ -328,7 +357,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       const [latest] = await client.listPluginRuns(investigationId);
       setPluginRun(latest ?? null);
-      if (latest && latest.status !== "done" && latest.status !== "failed") {
+      if (latest && (latest.status === "queued" || latest.status === "running")) {
         track(followPluginRun("", investigationId, latest.plugin_run_id, setPluginRun));
       }
     } catch (e) {
@@ -338,6 +367,30 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const newPluginRun = useCallback(() => setPluginRun(null), []);
 
+  // A stop is honoured by the worker, which terminates the run's Volatility
+  // processes; the live stream then carries the run to its stopped state. When
+  // nothing was running it (still queued, or its worker died) the API finishes
+  // it at once and returns the final state here.
+  const stopTriage = useCallback(async () => {
+    if (!investigationId) return;
+    try {
+      const state = await client.stopTriage(investigationId);
+      setTriageProgress(state);
+      if (state.status === "triaged") await loadResult(investigationId);
+    } catch (e) {
+      fail(e, stopTriage);
+    }
+  }, [client, investigationId, loadResult, fail]);
+
+  const stopPluginRun = useCallback(async () => {
+    if (!investigationId || !pluginRun) return;
+    try {
+      setPluginRun(await client.stopPluginRun(investigationId, pluginRun.plugin_run_id));
+    } catch (e) {
+      fail(e, stopPluginRun);
+    }
+  }, [client, investigationId, pluginRun, fail]);
+
   const rescore = useCallback(
     async (patch: Partial<TuningProfile>) => {
       if (!investigationId) return;
@@ -345,10 +398,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       try {
         const r = await client.rescore(id, patch);
         setScored(r.scored_objects);
+        setProcesses(r.processes);
         setProfile(r.profile);
         setRiskSummary(r.risk_summary);
         setAttack(r.attack_techniques);
         if (r.disclaimer) setDisclaimer(r.disclaimer);
+        setUnevaluatedSources(r.unevaluated_sources ?? []);
         setDiff(r.diff);
       } catch (e) {
         fail(e, () => rescore(patch));
@@ -410,16 +465,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       client, stage, loading, error, retryLast, investigationId, triage, processes,
-      scored, profile, riskSummary, attack, disclaimer, diff, selectedPid, analysis, lowlevel,
+      scored, profile, riskSummary, attack, disclaimer, unevaluatedSources, diff, selectedPid, analysis, lowlevel,
       triageProgress, triageRunSeq, triageStarting, analysisProgress, uploads, pluginCatalog, pluginRun, pluginRunStarting,
-      setStage, bootstrap, rescore, selectProcess, uploadDumps, startTriage,
+      setStage, bootstrap, rescore, selectProcess, uploadDumps, startTriage, stopTriage,
       clearError, loadPluginCatalog, runPlugins, restoreLatestPluginRun, newPluginRun,
+      stopPluginRun,
     }),
     [client, stage, loading, error, retryLast, investigationId, triage, processes,
-      scored, profile, riskSummary, attack, disclaimer, diff, selectedPid, analysis, lowlevel,
+      scored, profile, riskSummary, attack, disclaimer, unevaluatedSources, diff, selectedPid, analysis, lowlevel,
       triageProgress, triageRunSeq, triageStarting, analysisProgress, uploads, pluginCatalog, pluginRun, pluginRunStarting,
-      setStage, bootstrap, rescore, selectProcess, uploadDumps, startTriage, clearError,
-      loadPluginCatalog, runPlugins, restoreLatestPluginRun, newPluginRun],
+      setStage, bootstrap, rescore, selectProcess, uploadDumps, startTriage, stopTriage,
+      clearError, loadPluginCatalog, runPlugins, restoreLatestPluginRun, newPluginRun,
+      stopPluginRun],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

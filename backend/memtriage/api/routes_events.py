@@ -22,9 +22,10 @@ from ..schemas import AnalysisState, InvestigationState, PluginRunState
 router = APIRouter(prefix="/api", tags=["events"])
 settings = get_settings()
 
-_INV_TERMINAL = {"triaged", "failed"}
+# "received" is where a stopped triage with no earlier results comes to rest.
+_INV_TERMINAL = {"triaged", "failed", "received"}
 _ANALYSIS_TERMINAL = {"done", "failed"}
-_PLUGIN_RUN_TERMINAL = {"done", "failed"}
+_PLUGIN_RUN_TERMINAL = {"done", "failed", "cancelled"}
 
 
 async def _stream(request: Request, initial_json: str, initial_status: str,

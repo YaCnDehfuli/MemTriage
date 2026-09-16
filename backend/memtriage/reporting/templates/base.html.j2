@@ -1,0 +1,212 @@
+{#
+  Standalone report layout.
+
+  The exported file has to survive being emailed or archived with the app shut
+  down, so every style is embedded here and no asset is fetched over the network.
+  Colours are the *light* values of the app's custom properties, hand-copied from
+  frontend/src/index.css, so output is print-safe whatever theme the analyst is
+  using when they export.
+#}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Investigation report{% endblock %}</title>
+<style>
+  :root {
+    --surface-950: rgb(247 245 240);
+    --surface-900: rgb(240 238 229);
+    --surface-800: rgb(221 215 198);
+    --surface-700: rgb(199 191 168);
+    --ink-400: rgb(117 110 87);
+    --ink-300: rgb(86 79 59);
+    --ink-200: rgb(58 51 31);
+    --ink-100: rgb(33 29 16);
+    --accent-soft: rgb(74 110 96);
+    --risk-critical: rgb(200 57 79);
+    --risk-high: rgb(189 106 30);
+    --risk-medium: rgb(161 127 22);
+    --risk-low: rgb(63 99 184);
+    --risk-none: rgb(111 104 87);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px;
+    background: var(--surface-950);
+    color: var(--ink-200);
+    font: 13px/1.55 ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .doc { max-width: 900px; margin: 0 auto; }
+  h1, h2, h3 { color: var(--ink-100); font-weight: 600; margin: 0 0 6px; }
+  h1 { font-size: 22px; letter-spacing: -0.01em; }
+  h2 { font-size: 15px; margin-top: 0; }
+  h3 { font-size: 13px; }
+  p { margin: 0 0 8px; }
+  .eyebrow {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-400); margin-bottom: 2px;
+  }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .muted { color: var(--ink-400); }
+  .small { font-size: 11px; }
+
+  .cover {
+    border: 1px solid var(--surface-700);
+    background: var(--surface-900);
+    padding: 20px 22px; margin-bottom: 18px;
+  }
+  .cover dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 16px; margin: 12px 0 0; }
+  .cover dt { color: var(--ink-400); font-size: 11px; }
+  .cover dd { margin: 0; font-size: 11px; }
+
+  section { margin-bottom: 20px; break-inside: auto; }
+  section > header { border-bottom: 1px solid var(--surface-700); padding-bottom: 5px; margin-bottom: 10px; }
+  .sec-num { color: var(--ink-400); font-family: ui-monospace, monospace; margin-right: 6px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  thead { display: table-header-group; }
+  th {
+    text-align: left; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ink-400); font-weight: 600;
+    border-bottom: 1px solid var(--surface-700); padding: 5px 8px;
+  }
+  td { padding: 5px 8px; border-bottom: 1px solid var(--surface-800); vertical-align: top; }
+  tr { break-inside: avoid; }
+  .wrap { word-break: break-all; }
+
+  /* Everything interpolated into this document came out of a memory image:
+     command lines, registry paths, service names, hashes. None of it has a
+     space to wrap at, so without this a single long token sets the table's
+     minimum width and pushes the page past the printed margin. `anywhere`
+     rather than `break-word` because only `anywhere` lets the break shrink an
+     element's min-content width, which is what a table cell is sized from. */
+  td, th, li, p, dd, .label, .finding, .exhibit { overflow-wrap: anywhere; }
+  /* A table's own min-content width still wins over the cells' once the
+     columns have fixed widths, so cap it at the text column explicitly. */
+  table { table-layout: fixed; }
+
+  .badge {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.02em;
+    border: 1px solid currentColor;
+  }
+  .risk-Critical { color: var(--risk-critical); }
+  .risk-High     { color: var(--risk-high); }
+  .risk-Medium   { color: var(--risk-medium); }
+  .risk-Low      { color: var(--risk-low); }
+
+  .finding {
+    border: 1px solid var(--surface-800); background: var(--surface-900);
+    padding: 10px 12px; margin-bottom: 10px; break-inside: avoid;
+  }
+  .finding-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+  .finding-head .label { font-family: ui-monospace, monospace; color: var(--ink-100); font-weight: 600; }
+  .rule-list { margin: 6px 0 0; padding-left: 16px; }
+  .rule-list li { margin-bottom: 3px; }
+
+  /* The analyst's own words are visually distinct from generated text on
+     purpose: a report that blends measured output with human judgement is the
+     one thing docs/METHODOLOGY.md is careful to avoid. */
+  .analyst {
+    border-left: 3px solid var(--accent-soft); background: var(--surface-950);
+    padding: 7px 11px; margin: 8px 0 0; break-inside: avoid;
+  }
+  .analyst .who {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--accent-soft); font-weight: 700; display: block; margin-bottom: 2px;
+  }
+
+  /* A third voice, and it has to look like one. Generated prose sits beside
+     measured findings and the analyst's own judgement, so it carries its own
+     rule, its own label and no fill — a reader glancing at a page can tell
+     which sentences a human stands behind without reading the labels. */
+  .drafted {
+    border-left: 3px dotted var(--ink-400); padding: 6px 11px; margin: 8px 0 0;
+    break-inside: avoid;
+  }
+  .drafted .who {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-400); font-weight: 700; display: block; margin-bottom: 2px;
+  }
+  .drafted p { margin: 0; }
+
+  .stage { margin-bottom: 16px; }
+  .stage-head {
+    display: flex; align-items: baseline; gap: 8px;
+    border-bottom: 1px solid var(--surface-800); padding-bottom: 3px; margin-bottom: 6px;
+  }
+  .stage-head h3 { margin: 0; font-size: 13px; }
+  .stage-blurb { font-size: 11px; color: var(--ink-400); margin: 0 0 8px; }
+
+  .exhibit {
+    border: 1px solid var(--surface-700); background: var(--surface-900);
+    padding: 12px 14px; margin-bottom: 14px; break-inside: avoid;
+  }
+  .exhibit h3 { font-family: ui-monospace, monospace; font-size: 13px; }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 1px 14px; font-size: 11px; margin: 6px 0; }
+  .kv dt { color: var(--ink-400); }
+  .kv dd { margin: 0; font-family: ui-monospace, monospace; }
+  pre.asm {
+    background: var(--surface-950); border: 1px solid var(--surface-800);
+    padding: 8px 10px; margin: 6px 0 0; font-size: 10.5px; line-height: 1.45;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    overflow-x: auto; white-space: pre; break-inside: avoid;
+  }
+  .sev-high, .sev-critical { color: var(--risk-critical); font-weight: 600; }
+  .sev-medium { color: var(--risk-medium); font-weight: 600; }
+  .sev-low { color: var(--risk-low); }
+
+  .notice {
+    border-left: 3px solid var(--risk-high); background: var(--surface-900);
+    padding: 8px 12px; margin-bottom: 8px; break-inside: avoid;
+  }
+  .toc ol { margin: 0; padding-left: 20px; }
+  .toc li { margin-bottom: 2px; }
+
+  .print-hint {
+    border: 1px dashed var(--surface-600, var(--surface-700));
+    padding: 8px 12px; margin-bottom: 16px; font-size: 11px; color: var(--ink-300);
+    background: var(--surface-900);
+  }
+
+  /* Wide tables scroll on a narrow screen rather than forcing the page to. */
+  .scroll-x { overflow-x: auto; }
+
+  @page { size: A4; margin: 18mm; }
+  @media print {
+    body { padding: 0; background: #fff; }
+    .print-hint { display: none; }
+    /* Nothing may be clipped on paper, so scrollers open up. They can only do
+       that safely because the wrapping rules above make the content fit. */
+    .scroll-x { overflow-x: visible; }
+    /* A scrollbar is not available on paper either: wrap the disassembly at
+       the margin rather than losing the tail of a long instruction. */
+    pre.asm { overflow-x: visible; white-space: pre-wrap; }
+    /* Only the long sections start a page. Breaking before every section
+       stranded two-line sections like the overview on a page of their own. */
+    section.pagebreak { break-before: page; }
+    section.first, .cover { break-before: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+  <div class="print-hint">
+    <strong>Printing to PDF:</strong> in the browser print dialog, untick
+    <em>Headers and footers</em> and tick <em>Background graphics</em>. This notice
+    is not printed.
+  </div>
+  {% block content %}{% endblock %}
+  <footer class="small muted" style="margin-top:24px;border-top:1px solid var(--surface-700);padding-top:8px">
+    Generated by MemTriage on {{ doc.generated_at }} · investigation
+    <span class="mono">{{ doc.investigation_id }}</span> ·
+    {{ doc.audience }} audience.
+    MemTriage produces leads and observations; it does not establish that a host
+    was compromised.
+  </footer>
+</div>
+</body>
+</html>

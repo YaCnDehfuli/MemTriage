@@ -62,3 +62,24 @@ def chat(*, api_key: str, model: str, system: str, messages: list[dict],
             "cache_creation_input_tokens": getattr(usage, "cache_creation_input_tokens", None),
         },
     }
+
+
+def list_models(*, api_key: str, base_url: str, timeout_s: float = 30.0) -> list[str]:
+    """Model ids this key can reach. Same contract as the OpenAI transport's."""
+    try:
+        import anthropic
+    except Exception as exc:
+        raise AssistantError(
+            "The Anthropic SDK is not installed in this environment. "
+            "`pip install anthropic`, or choose an OpenAI-compatible provider.",
+            code="sdk_missing",
+        ) from exc
+
+    client = anthropic.Anthropic(api_key=api_key, base_url=base_url,
+                                 timeout=timeout_s, max_retries=1)
+    try:
+        page = client.models.list()
+    except Exception as exc:
+        raise classify_exception(exc, api_key) from None
+    ids = [str(getattr(m, "id", "")) for m in page.data]
+    return sorted(i for i in ids if i)

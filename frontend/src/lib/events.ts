@@ -6,9 +6,10 @@ export interface Subscription {
   close(): void;
 }
 
-const TERMINAL_INVESTIGATION = new Set(["triaged", "failed"]);
+// "received" is where a stopped triage with no earlier results comes to rest.
+const TERMINAL_INVESTIGATION = new Set(["triaged", "failed", "received"]);
 const TERMINAL_ANALYSIS = new Set(["done", "failed"]);
-const TERMINAL_PLUGIN_RUN = new Set(["done", "failed"]);
+const TERMINAL_PLUGIN_RUN = new Set(["done", "failed", "cancelled"]);
 
 /**
  * Follow a long-running job.

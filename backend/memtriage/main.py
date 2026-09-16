@@ -15,6 +15,7 @@ from .api import (
     routes_model_access,
     routes_plugins,
     routes_processes,
+    routes_report,
     routes_results,
     routes_scoring,
 )
@@ -49,7 +50,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
     allow_credentials=False,
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE"],
     allow_headers=["*"],
 )
 
@@ -64,7 +65,7 @@ async def security_headers(request: Request, call_next):
     response = await call_next(request)
     response.headers.setdefault(REQUEST_ID_HEADER, rid)
     response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "DENY"
+    response.headers.setdefault("X-Frame-Options", "DENY")
     response.headers["Referrer-Policy"] = "no-referrer"
     response.headers.setdefault(
         "Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'"
@@ -93,3 +94,4 @@ app.include_router(routes_scoring.router)
 app.include_router(routes_model_access.router)
 app.include_router(routes_assistant.router)
 app.include_router(routes_plugins.router)
+app.include_router(routes_report.router)

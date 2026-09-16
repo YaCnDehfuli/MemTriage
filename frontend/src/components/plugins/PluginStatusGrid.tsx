@@ -29,6 +29,13 @@ const CARD: Record<Status, string> = {
   failed: "border-risk-critical/30 bg-risk-critical/5 text-ink-100",
 };
 
+/**
+ * The plugin the backend runs alone before any concurrent batch: it resolves the
+ * kernel symbol table once, so parallel plugins do not race to download it.
+ * Mirrors ``KERNEL_SYMBOL_PROBE`` in the VolMemLyzer adapter.
+ */
+const SYMBOL_PROBE = "info";
+
 const LABEL: Record<Status, string> = {
   queued: "queued",
   dispatched: "dispatched",
@@ -109,6 +116,7 @@ export function PluginStatusGrid({
   const plan = planEvent?.layers ?? [requested];
   const derived = useMemo(() => derive(requested, events), [requested, events]);
   const byName = useMemo(() => new Map(derived.map((d) => [d.name, d])), [derived]);
+  const concurrent = (planEvent?.concurrency ?? 1) > 1 && requested.length > 1;
 
   return (
     <div className="space-y-4">
@@ -130,16 +138,31 @@ export function PluginStatusGrid({
               return (
                 <div
                   key={name}
-                  className={`rounded-md border px-2.5 py-2 transition-colors ${CARD[d.status]}`}
+                  // min-w-0: a grid item defaults to min-width:auto, so a detail
+                  // containing one long unbreakable token — a failure's artifact
+                  // path — widens the track and spills over the neighbouring card.
+                  className={`min-w-0 rounded-md border px-2.5 py-2 transition-colors ${CARD[d.status]}`}
                 >
                   <div className="flex items-center gap-1.5">
                     <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${DOT[d.status]}`} />
                     <span className="min-w-0 flex-1 truncate font-mono text-[12px]">{name}</span>
                   </div>
-                  <div className="mt-1 flex items-center justify-between text-[10px] text-ink-400">
-                    <span className="uppercase tracking-wide">{LABEL[d.status]}</span>
-                    {d.detail && <span className="font-mono">{d.detail}</span>}
+                  {/* A duration sits beside the status; a failure explanation is a
+                      sentence and wraps onto its own line. flex-wrap picks between
+                      them by measurement rather than by guessing at the length. */}
+                  <div className="mt-1 flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5 text-[10px] text-ink-400">
+                    <span className="shrink-0 uppercase tracking-wide">{LABEL[d.status]}</span>
+                    {d.detail && (
+                      <span className="max-w-full break-words font-mono leading-snug">
+                        {d.detail}
+                      </span>
+                    )}
                   </div>
+                  {concurrent && name === SYMBOL_PROBE && (
+                    <p className="mt-1 text-[10px] leading-snug text-ink-400">
+                      Runs alone first to resolve kernel symbols; the concurrent plugins start after it.
+                    </p>
+                  )}
                 </div>
               );
             })}

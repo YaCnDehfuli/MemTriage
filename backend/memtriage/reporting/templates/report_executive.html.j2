@@ -1,0 +1,112 @@
+{#
+  The executive document is a *subset*, never a second set of facts. It shows
+  only Critical/High findings and drops rule ids, weights and region tables —
+  everything an executive cannot act on. It keeps the notices and the
+  limitations, because those are exactly what a non-specialist reader is most
+  likely to misread if they are left out.
+#}
+{% extends "base.html.j2" %}
+{% block title %}Executive summary — {{ doc.investigation_id }}{% endblock %}
+{% block content %}
+
+<div class="cover">
+  <div class="eyebrow">MemTriage · memory forensics</div>
+  <h1>Executive summary</h1>
+  <dl>
+    <dt>Investigation</dt><dd class="mono">{{ doc.case.investigation_id }}</dd>
+    <dt>Generated</dt><dd class="mono">{{ doc.generated_at }}</dd>
+    <dt>Snapshots</dt><dd class="mono">{{ doc.case.dump_count }} ({{ doc.case.total_bytes | filesize }})</dd>
+  </dl>
+</div>
+
+{% for s in doc.sections %}
+<section class="{% if loop.first %}first{% elif s.id in PAGE_BREAK_SECTIONS %}pagebreak{% endif %}">
+  <header><h2><span class="sec-num">{{ s.number }}</span>{{ s.title }}</h2></header>
+
+  {% if s.id == "overview" %}
+    {% if doc.analyst.executive_summary %}
+    {% set drafted = doc.analyst.narrative_sources.executive_summary == "drafted" %}
+    <div class="{{ "drafted" if drafted else "analyst" }}">
+      <span class="who">{{ "Drafted summary" if drafted else "Analyst summary" }}</span>
+      <p>{{ doc.analyst.executive_summary }}</p>
+    </div>
+    {% endif %}
+    <p>{{ doc.overview }}</p>
+    {% if doc.curated %}
+    <p class="small">
+      This report presents the {{ doc.findings | length + doc.examiner_artifacts | length }}
+      finding(s){% if doc.exhibits %} and {{ doc.exhibits | length }} memory region(s){% endif %}
+      the analyst selected as evidence, out of {{ doc.scored_total }} object(s) scored by
+      triage. Unselected leads remain in the investigation record; they are not part of
+      this report's findings.
+    </p>
+    {% endif %}
+    <p class="small muted">
+      This summary lists only items that scored Critical or High. The full
+      technical report records every scored object, the rules behind it, and the
+      deep-dive observations.
+    </p>
+
+  {% elif s.id == "notices" %}
+    {% for n in doc.notices %}<div class="notice">{{ n }}</div>{% endfor %}
+
+  {% elif s.id == "custody" %}
+    {% include "_chain_of_custody.html.j2" %}
+
+  {% elif s.id == "hypothesis" %}
+    <div class="analyst">
+      <span class="who">Analyst assessment</span>
+      {{ doc.analyst.hypothesis }}
+    </div>
+
+  {% elif s.id == "narrative" %}
+    {% if not doc.stages %}
+      <p>No item scored Critical or High.</p>
+    {% endif %}
+    {% for stage in doc.stages %}
+    <div class="stage">
+      <div class="stage-head">
+        <h3>{{ stage.tactic }}</h3>
+        {% if stage.highest_risk %}<span class="badge risk-{{ stage.highest_risk }}">{{ stage.highest_risk }}</span>{% endif %}
+      </div>
+      <p class="stage-blurb">{{ stage.blurb }}</p>
+      {% if stage.drafted_note %}
+      <div class="drafted"><span class="who">Drafted narrative</span><p>{{ stage.drafted_note }}</p></div>
+      {% endif %}
+      {% if stage.analyst_note %}
+      <div class="analyst"><span class="who">Analyst</span>{{ stage.analyst_note }}</div>
+      {% endif %}
+      <ul class="rule-list">
+        {% for f in stage.findings %}
+        <li><span class="mono">{{ f.object.label }}</span> — {{ f.rationale }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+
+  {% elif s.id == "artifacts" %}
+    <p class="small">
+      The following were flagged by the tooling but attributed by the analyst to
+      the evidence-collection process rather than to an attacker.
+    </p>
+    <ul class="rule-list">
+      {% for f in doc.examiner_artifacts %}
+      <li><span class="mono">{{ f.object.label }}</span>{% if f.analyst_note %} — {{ f.analyst_note }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+
+  {% elif s.id == "recommendations" %}
+    <div class="analyst">
+      <span class="who">Recommended next steps</span>
+      {{ doc.analyst.recommendations }}
+    </div>
+
+  {% elif s.id == "limitations" %}
+    {% if doc.limitations.summary %}<p>{{ doc.limitations.summary }}</p>{% endif %}
+    {% if doc.limitations.points %}
+    <ul class="rule-list">{% for pt in doc.limitations.points %}<li>{{ pt }}</li>{% endfor %}</ul>
+    {% endif %}
+  {% endif %}
+</section>
+{% endfor %}
+{% endblock %}

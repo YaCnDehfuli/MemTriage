@@ -6,6 +6,8 @@ import { Disassembly } from "./Disassembly";
 import { CallGraph, ControlFlowGraph } from "./GraphView";
 import { HexDump, Patterns, Strings, Structure } from "./RegionPanels";
 import { RegionList } from "./RegionList";
+import { EvidenceToggle } from "../report/EvidenceToggle";
+import { regionRef } from "../../lib/evidenceRef";
 
 const TABS = ["disasm", "cfg", "calls", "patterns", "strings", "structure", "hex"] as const;
 type Tab = (typeof TABS)[number];
@@ -26,9 +28,12 @@ const TAB_LABEL: Record<Tab, string> = {
 export function RegionDeepDive({
   regions,
   lowlevel,
+  pid,
 }: {
   regions: RegionRecord[];
   lowlevel: LowLevelReport | null;
+  /** Needed to identify a region: patch_index is only unique within one manifest. */
+  pid: number;
 }) {
   const analyses = lowlevel?.regions ?? [];
   const analyzed = useMemo(
@@ -64,11 +69,21 @@ export function RegionDeepDive({
       eyebrow="Phase 2 · Region analysis"
       title="Attention-ranked VAD regions"
       right={
-        lowlevel ? (
-          <span className="font-mono text-[11px] text-ink-400">
-            {lowlevel.ranked_regions} ranked · {analyses.length} analyzed
-          </span>
-        ) : undefined
+        <div className="flex items-center gap-2">
+          {lowlevel && (
+            <span className="font-mono text-[11px] text-ink-400">
+              {lowlevel.ranked_regions} ranked · {analyses.length} analyzed
+            </span>
+          )}
+          {current && (
+            <EvidenceToggle
+              evidenceKind="region"
+              evidenceRef={regionRef(pid, current.region.sha256)}
+              label={`${current.region.addr} · ${current.region.protection}`}
+              pid={pid}
+            />
+          )}
+        </div>
       }
     >
       <div className="grid gap-0 lg:grid-cols-[260px_1fr_280px]">

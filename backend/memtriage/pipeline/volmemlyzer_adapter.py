@@ -17,6 +17,7 @@ import json
 import logging
 import re
 import sys
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -72,21 +73,29 @@ QUICK_TRIAGE_PLUGINS: tuple[str, ...] = (
     "registry.userassist", "registry.hivelist",
 )
 
-# A genuinely quick preset: linked-list/metadata reads only. Whole-image scans
-# and internally repeated scans are deliberately absent, so choosing Light has
-# a predictable material effect rather than being a cosmetic label.
+# A genuinely quick preset. This list is measured, not reasoned: every plugin
+# here completed in under four minutes on the reference image, and the ones that
+# were previously assumed cheap on structural grounds — cmdscan, envars,
+# getservicesids, joblinks, skeleton_key, timers, windows, windowstations,
+# callbacks, driverirp, drivermodule — did not, so they were moved out. A preset
+# whose members are chosen by how the plugin is implemented rather than by how
+# long it takes is a guess wearing a measurement's clothes.
 LIGHT_TRIAGE_PLUGINS: tuple[str, ...] = (
-    "info", "pslist", "pstree", "cmdline", "malfind", "privileges",
+    "info", "pslist", "pstree", "cmdline", "consoles", "getsids", "malfind",
+    "modules", "netstat", "privileges", "amcache", "ssdt", "svclist",
     "scheduled_tasks", "registry.userassist", "registry.hivelist",
+    "registry.printkey", "registry.certificates",
 )
 
-# The full rule-engine evidence set. This includes whole-image scanners and the
-# expensive psxview cross-check, so the UI labels it as potentially long-running.
-DEEP_TRIAGE_PLUGINS: tuple[str, ...] = (
-    "info", "pslist", "pstree", "psscan", "psxview", "cmdline", "malfind", "ldrmodules",
-    "handles", "privileges", "threads", "netscan", "svcscan", "scheduled_tasks",
-    "registry.userassist", "registry.hivelist", "registry.hivescan",
+# The full rule-engine evidence set: everything Light reads, plus the whole-image
+# scanners and cross-checks that pay for their cost in coverage. Defined from
+# LIGHT so the two cannot drift — Deep is Light plus the complement, by
+# construction rather than by two lists being edited in step.
+_DEEP_ONLY_PLUGINS: tuple[str, ...] = (
+    "psscan", "psxview", "ldrmodules", "handles", "threads", "netscan",
+    "svcscan", "registry.hivescan",
 )
+DEEP_TRIAGE_PLUGINS: tuple[str, ...] = LIGHT_TRIAGE_PLUGINS + _DEEP_ONLY_PLUGINS
 
 # Backwards-compatible name used by scoring/tests and older clients.
 TRIAGE_PLUGINS = DEEP_TRIAGE_PLUGINS
@@ -210,17 +219,25 @@ def _apply_scoring(dashboard: dict, processes: list[dict], scoring: dict) -> Non
     for item in processes:
         pr = process_risk.get(item["pid"])
         if pr:
+            # "scored" carries a real verdict; "no_indicator_fired" means the
+            # rules ran against this process and none of them fired, which is a
+            # measured result and not the same as an empty cell.
+            item["evaluation"] = pr.get("state", "scored")
             item["risk"] = pr["risk"]
             item["flags"] = list(pr["flags"])
             item["score"] = pr["score"]
             item["confidence"] = pr["confidence"]
             item["techniques"] = list(pr["techniques"])
         else:
-            # Clear stale enrichment when a PID drops out on re-score.
+            # No verdict at all: the scorer never saw this PID (it reached the
+            # inventory from pslist but not the census), or a re-score dropped
+            # it. Either way the previous run's enrichment must not persist.
+            item["evaluation"] = "not_evaluated"
             item["risk"] = None
             item["flags"] = []
             for k in ("score", "confidence", "techniques"):
                 item.pop(k, None)
+    dashboard["unevaluated_sources"] = list(scoring.get("unevaluated_sources") or [])
 
     scored = scoring["scored_objects"]
     name_by_pid = {p["pid"]: p.get("name", "") for p in processes}
@@ -251,223 +268,19 @@ def _plugin_records(records: dict[str, list[dict]], *names: str) -> list[dict]:
     return []
 
 
-def _overview_contribution(rule_id: str, title: str, weight: int, evidence: str,
-                           technique_id: str, technique_name: str, tactic: str) -> dict:
-    return {
-        "rule_id": rule_id,
-        "title": title,
-        "weight": int(weight),
-        "evidence": evidence,
-        "mitre": {
-            "technique_id": technique_id,
-            "technique_name": technique_name,
-            "tactic": tactic,
-        },
-        "severity": 3,
-        "confidence": 0.75,
-    }
-
-
-def overview_scoring_from_records(records: dict[str, list[dict]], *,
-                                  plugins: list[str] | tuple[str, ...] | None = None) -> dict:
-    """Score cached plugin records with VolMemLyzer's bounded OverviewAnalysis.
-
-    This is the live-triage path: 30-point ordinal evidence, not MemTriage's
-    unbounded catalog sum. Pool-scan plugins are consulted only when they were
-    actually selected for the run.
-    """
-    from volmemlyzer.analysis import OverviewAnalysis
-
-    eng = OverviewAnalysis(min_risk="low")
-    selected = {normalize_plugin_key(p) for p in (plugins or ())}
-    objects: list[dict] = []
-    process_risk: dict[int, dict] = {}
-
-    def _remember_pid(obj: dict) -> None:
-        pid = obj.get("pid")
-        if pid is None:
-            return
-        pid = int(pid)
-        previous = process_risk.get(pid)
-        if previous is None or obj["score"] > previous["score"]:
-            process_risk[pid] = {
-                "risk": obj["risk"],
-                "score": obj["score"],
-                "confidence": obj["confidence"],
-                "techniques": list(obj["techniques"]),
-                "flags": [c["rule_id"] for c in obj["contributions"]],
-            }
-
-    census = eng._build_census(
-        _plugin_records(records, "pslist"),
-        _plugin_records(records, "pstree"),
-    )
-    psscan = _plugin_records(records, "psscan") if "psscan" in selected else None
-    psxview = _plugin_records(records, "psxview") if "psxview" in selected else None
-    captured_process_rows: list[tuple] = []
-    _orig_score_map = OverviewAnalysis._score_map
-
-    @classmethod
-    def _capturing_score_map(cls, row, index):
-        captured_process_rows.append(row)
-        return _orig_score_map.__func__(cls, row, index)
-
-    OverviewAnalysis._score_map = _capturing_score_map
-    try:
-        _summary, _susp = eng._score_processes(census, psscan, psxview)
-    finally:
-        OverviewAnalysis._score_map = _orig_score_map
-    for pid, name, _ppid, score, flag_str, rationale in captured_process_rows:
-        if int(score) < eng._threshold("process"):
-            continue
-        evidence = str(rationale).strip()
-        flags = [flag.strip() for flag in str(flag_str).split(",") if flag.strip()]
-        contribs = [_overview_contribution(
-            (flags[0] if flags else "process"), "Process evidence", int(score),
-            evidence or "—", "T1036", "Masquerading", "Defense Evasion",
-        )]
-        obj = {
-            "object_type": "process",
-            "key": str(pid),
-            "label": f"{name} ({pid})",
-            "pid": int(pid),
-            "score": int(score),
-            "score_max": OverviewAnalysis.MAX_RISK_SCORE,
-            "risk": eng._risk_from_score(int(score)),
-            "confidence": 0.75,
-            "tactics": ["Defense Evasion"],
-            "techniques": ["T1036"],
-            "contributions": contribs,
-        }
-        objects.append(obj)
-        _remember_pid(obj)
-
-    # Presence-only would revive cache for an analysis the user excluded.
-    if "malfind" in selected:
-        regions: dict[tuple, dict] = {}
-        for row in _plugin_records(records, "malfind"):
-            score, flags, rationale = eng._score_injections(row)
-            if score < eng._threshold("malfind"):
-                continue
-            pid = row.get("PID")
-            start_vpn = row.get("Start VPN")
-            region_key = (pid, start_vpn)
-            finding = {
-                "object_type": "injection",
-                "key": f"{pid}:{start_vpn}",
-                "label": f"{row.get('Process') or 'process'} ({pid})",
-                "pid": int(pid) if pid is not None else None,
-                "score": int(score),
-                "score_max": OverviewAnalysis.MAX_RISK_SCORE,
-                "risk": eng._risk_from_score(int(score)),
-                "confidence": 0.75,
-                "tactics": ["Defense Evasion"],
-                "techniques": ["T1055"],
-                "contributions": [_overview_contribution(
-                    (str(flags).split(",")[0].strip() or "malfind"),
-                    "Injection evidence", int(score), str(rationale),
-                    "T1055", "Process Injection", "Defense Evasion",
-                )],
-            }
-            previous = regions.get(region_key)
-            if previous is None or finding["score"] > previous["score"]:
-                regions[region_key] = finding
-        for obj in regions.values():
-            objects.append(obj)
-            _remember_pid(obj)
-
-    if "scheduled_tasks" in selected:
-        for task in _plugin_records(records, "scheduled_tasks"):
-            score, why = eng._score_scheduled_task(task)
-            if score < eng._threshold("scheduled_tasks"):
-                continue
-            name = str(task.get("Task Name") or "")
-            act = str(task.get("Action") or "")
-            args = str(task.get("Action Arguments") or "")
-            evidence = " | ".join([w for w in why if w]) if isinstance(why, list) else str(why)
-            key = f"task:{(name.strip().lower() or act.strip().lower() or 'unknown')}"
-            objects.append({
-                "object_type": "persistence",
-                "key": key,
-                "label": f"{name} :: {act} {args}".strip(),
-                "pid": None,
-                "score": int(score),
-                "score_max": OverviewAnalysis.MAX_RISK_SCORE,
-                "risk": eng._risk_from_score(int(score)),
-                "confidence": 0.75,
-                "tactics": ["Persistence"],
-                "techniques": ["T1053.005"],
-                "contributions": [_overview_contribution(
-                    "scheduled_task", "Scheduled task evidence", int(score),
-                    evidence or "—", "T1053.005", "Scheduled Task/Job", "Persistence",
-                )],
-            })
-
-    if "userassist" in selected:
-        ua_tree = _plugin_records(records, "userassist", "registry.userassist")
-        ua_vals = [r for r in eng._flatten_UA_with_context(ua_tree) if r.get("Type") == "Value"]
-        for row in ua_vals:
-            name = str(row.get("Name") or "")
-            if name.startswith("UEME_") and not eng._seems_pathlike(name):
-                continue
-            score, why = eng._score_userassist_name(name)
-            if score < eng._threshold("userassist") or not eng._seems_pathlike(name):
-                continue
-            evidence = " | ".join([w for w in why if w]) if isinstance(why, list) else str(why)
-            objects.append({
-                "object_type": "persistence",
-                "key": f"ua:{name.strip().lower()}",
-                "label": name,
-                "pid": None,
-                "score": int(score),
-                "score_max": OverviewAnalysis.MAX_RISK_SCORE,
-                "risk": eng._risk_from_score(int(score)),
-                "confidence": 0.75,
-                "tactics": ["Execution"],
-                "techniques": ["T1204"],
-                "contributions": [_overview_contribution(
-                    "userassist", "UserAssist evidence", int(score),
-                    evidence or "—", "T1204", "User Execution", "Execution",
-                )],
-            })
-
-    objects.sort(key=lambda o: (o["score"], o["confidence"]), reverse=True)
-
-    bands = {"Critical": 0, "High": 0, "Medium": 0, "Low": 0}
-    types: dict[str, int] = {}
-    attack: dict[str, dict] = {}
-    for obj in objects:
-        bands[obj["risk"]] = bands.get(obj["risk"], 0) + 1
-        types[obj["object_type"]] = types.get(obj["object_type"], 0) + 1
-        for contrib in obj["contributions"]:
-            tid = contrib["mitre"]["technique_id"]
-            entry = attack.setdefault(tid, {
-                "technique_id": tid,
-                "name": contrib["mitre"]["technique_name"],
-                "tactic": contrib["mitre"]["tactic"],
-                "object_count": 0,
-                "evidence": contrib["evidence"],
-            })
-            entry["object_count"] += 1
-
-    from ..scoring.profile import TuningProfile
-    return {
-        "scored_objects": objects,
-        "attack_techniques": sorted(attack.values(), key=lambda t: t["object_count"], reverse=True),
-        "risk_summary": {"total": len(objects), "by_risk": bands, "by_type": types},
-        "profile": TuningProfile.from_preset("balanced").to_dict(),
-        "process_risk": process_risk,
-    }
-
-
 def assemble_triage(features_flat: dict, records: dict[str, list[dict]], *,
-                    vol_version: Any = None, profile: dict | None = None) -> dict:
+                    vol_version: Any = None, profile: dict | None = None,
+                    plugins: list[str] | tuple[str, ...] | None = None) -> dict:
     """Shape parsed plugin records into the triage view (pure, engine-scored).
 
     This is the whole non-Volatility half of triage — unit-testable with canned
     records and reused by ``/rescore``.
+
+    ``plugins`` is the selected extraction plan. The engine needs it to separate
+    "this rule ran and nothing fired" from "this rule had nothing to read",
+    which the inventory reports per row and per run respectively.
     """
-    scoring = score_records(records, profile)
+    scoring = score_records(records, profile, plugins=plugins)
     injections = injections_from_malfind(records.get("malfind") or [])
     network = network_from_netscan(records.get("netscan") or [])
     inventory = inventory_from_pslist(records.get("pslist") or [],
@@ -549,6 +362,25 @@ def _valid_empty_json_cache(
     except (OSError, ValueError):
         return None
     return {"ok": True, "path": str(path), "format": "json"}
+
+
+def load_cached_records(volmemlyzer_dir: Path, manifest: dict) -> dict[str, list[dict]]:
+    """Reload the cached raw plugin records a triage manifest names.
+
+    Raises ``ValueError`` when an artifact is missing or fails cache validation,
+    so callers can tell the analyst to re-run triage rather than silently
+    working from partial evidence.
+    """
+    from ..storage import safe_within
+
+    records: dict[str, list[dict]] = {}
+    for key, fname in (manifest or {}).items():
+        vdir = Path(volmemlyzer_dir)
+        fp = vdir / Path(str(fname)).name  # basename only — never trust for traversal
+        if not safe_within(vdir, fp) or not valid_json_cache_artifact(fp):
+            raise ValueError(f"cached artifact is missing or invalid: {key}")
+        records[str(key)] = _load_records(str(fp))
+    return records
 
 
 def valid_json_cache_artifact(path: str | Path) -> bool:
@@ -666,6 +498,117 @@ def _registry_has(pipe, name: str) -> bool:
         return bool(pipe.registry.has(name))
     except Exception:
         return True
+
+
+# Volatility resolves a Windows image's kernel symbol table the first time any
+# windows.* plugin runs: it fetches the PDB (through symbolproxy in the compose
+# deployment) and rebuilds its on-disk symbol cache. Every plugin process does
+# that independently. Launched together against a cold cache, several processes
+# download the same PDB and write the same cache at once, and the ones that lose
+# the race fail with an unsatisfied ``symbol_table_name`` requirement — a
+# different, random subset on each run. ``windows.info`` needs nothing but the
+# symbol table, which makes it the cheapest way to resolve it exactly once.
+KERNEL_SYMBOL_PROBE = "info"
+SYMBOL_RETRY_PASSES = 2
+_SYMBOL_FAILURE_MARKERS = (
+    "kernel symbol table",
+    "symbol_table_name",
+    "Symbol file could not be downloaded",
+)
+
+
+def symbol_failures(failures: dict | None) -> set[str]:
+    """Plugins whose failure was kernel-symbol resolution, not the plugin itself."""
+    return {
+        name for name, reason in (failures or {}).items()
+        if any(marker in str(reason) for marker in _SYMBOL_FAILURE_MARKERS)
+    }
+
+
+def warm_kernel_symbols(
+    pipe,
+    run: Callable[[set[str], int, bool], Any],
+    failures_of: Callable[[Any], dict],
+    selected,
+    *,
+    concurrency: int,
+    use_cache: bool,
+) -> bool:
+    """Resolve the kernel symbol table alone, before anything runs concurrently.
+
+    Returns whether symbols resolved. A failed probe is retried: the probe is
+    serial, so a failure there is the network or the proxy, and a transient one
+    should not cost the whole batch. Skipped (reported as resolvable) when the
+    batch would run serially anyway, because a serial batch cannot race.
+
+    Kept separate from the batch so a caller that records a run transcript can
+    warm the cache first: the probe is housekeeping, not a plugin the analyst
+    asked for, and must not appear as one.
+    """
+    if max(1, int(concurrency)) <= 1 or len(set(selected)) <= 1:
+        return True
+    if not _registry_has(pipe, KERNEL_SYMBOL_PROBE):
+        return True
+    for attempt in range(SYMBOL_RETRY_PASSES + 1):
+        probe = run({KERNEL_SYMBOL_PROBE}, 1, use_cache or attempt > 0)
+        if not symbol_failures(failures_of(probe)):
+            return True
+    logger.error(
+        "Kernel symbols could not be resolved for this image after %d attempts; "
+        "Windows plugins will fail. Check symbolproxy's outbound access or provide "
+        "pre-fetched symbols (docs/SYMBOLS.md).",
+        SYMBOL_RETRY_PASSES + 1,
+    )
+    return False
+
+
+def run_symbol_resilient(
+    pipe,
+    run: Callable[[set[str], int, bool], Any],
+    failures_of: Callable[[Any], dict],
+    selected,
+    *,
+    concurrency: int,
+    use_cache: bool,
+    symbols_resolvable: bool | None = None,
+) -> Any:
+    """Run a plugin batch so kernel-symbol resolution cannot race.
+
+    ``run(enable, concurrency, use_cache)`` executes one pipeline pass and
+    ``failures_of`` reads that pass's ``{plugin: reason}`` failures.
+
+    1. Warm the symbol cache alone (:func:`warm_kernel_symbols`), unless the
+       caller already did and passes ``symbols_resolvable``.
+    2. Run the batch at the requested concurrency against the warm cache.
+    3. Re-run, one at a time, whatever still failed on symbol resolution.
+       Successful plugins are cache hits, so only the failures execute again.
+
+    When symbols never resolve they are genuinely unavailable for this image (no
+    route out, or no pre-fetched PDB); retrying every plugin would only multiply
+    the wait, so the batch runs once and reports that plainly.
+    """
+    names = set(selected)
+    workers = max(1, int(concurrency))
+    if symbols_resolvable is None:
+        symbols_resolvable = warm_kernel_symbols(
+            pipe, run, failures_of, names, concurrency=workers, use_cache=use_cache,
+        )
+
+    result = run(names, workers, use_cache)
+    if not symbols_resolvable:
+        return result
+
+    for attempt in range(1, SYMBOL_RETRY_PASSES + 1):
+        failed = symbol_failures(failures_of(result)) & names
+        if not failed:
+            break
+        logger.warning(
+            "%d plugin(s) lost kernel symbol resolution (%s); re-running them one at "
+            "a time, pass %d of %d", len(failed), ", ".join(sorted(failed)),
+            attempt, SYMBOL_RETRY_PASSES,
+        )
+        result = run(names, 1, True)
+    return result
 
 
 def collect_records(
@@ -813,9 +756,15 @@ def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
 
     # Aggregate IoC features and canonical raw JSON in one selected, concurrent
     # pass. Light therefore never launches a plugin that belongs only to Deep.
-    row = pipe.run_extract_features(image_path=image_path, artifacts_dir=artifacts_dir,
-                                    enable=set(selected), concurrency=concurrency,
-                                    use_cache=use_cache)
+    row = run_symbol_resilient(
+        pipe,
+        lambda enable, workers, cached: pipe.run_extract_features(
+            image_path=image_path, artifacts_dir=artifacts_dir,
+            enable=enable, concurrency=workers, use_cache=cached,
+        ),
+        lambda result: getattr(result, "failed_plugins", None) or {},
+        selected, concurrency=concurrency, use_cache=use_cache,
+    )
     features_flat = _flatten_dict(asdict(row).get("features") or {})
     vol_version = getattr(row, "vol_version", None)
     failures = dict(getattr(row, "failed_plugins", {}) or {})
@@ -831,15 +780,8 @@ def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
     elif health["degraded"]:
         logger.warning("triage extraction degraded: %s", health["message"])
 
-    view = assemble_triage(features_flat, records, vol_version=vol_version, profile=profile)
-    overview = overview_scoring_from_records(records, plugins=selected)
-    _apply_scoring(view["dashboard"], view["processes"], overview)
-    view["profile"] = overview["profile"]
-    view["dashboard"]["scoring"] = {
-        "kind": "bounded ordinal evidence",
-        "maximum": 30,
-        "not_a_probability": True,
-    }
+    view = assemble_triage(features_flat, records, vol_version=vol_version,
+                           profile=profile, plugins=tuple(selected))
     view["manifest"] = manifest
     view["plugins"] = list(selected)
     view["extraction"] = health
@@ -847,8 +789,75 @@ def run_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
     return view
 
 
+def salvage_triage(image_path: str, artifacts_dir: str, *, vol_path: str | None,
+                   timeout_s: int, profile: dict | None = None,
+                   symbol_dirs: list[str] | None = None, offline: bool = False,
+                   volmemlyzer_src: str | Path | None = None,
+                   plugins: list[str] | tuple[str, ...] | None = None) -> dict | None:
+    """Assemble a triage from the artifacts a halted run already wrote.
+
+    A stop, or an error that takes the whole run down, still leaves every plugin
+    that finished on disk with its JSON intact. That evidence is as good as it
+    was ever going to be, and discarding it makes the analyst re-run the
+    expensive half to learn what the cheap half already said.
+
+    The plan handed to the engine is the set that actually produced evidence,
+    not the set that was requested. That is the difference that keeps this
+    honest: a rule keyed to a plugin which never ran is reported as unevaluated,
+    rather than as a rule that ran and found nothing. Returns ``None`` when
+    nothing parseable was written, which is the case where there is genuinely
+    nothing to show.
+
+    Touches no Volatility: it only reads files the halted run left behind.
+    """
+    pipe = build_pipeline(vol_path, timeout_s, symbol_dirs=symbol_dirs, offline=offline,
+                          volmemlyzer_src=volmemlyzer_src)
+    selected = tuple(dict.fromkeys(
+        p.lower() for p in (plugins or DEEP_TRIAGE_PLUGINS) if _registry_has(pipe, p.lower())
+    ))
+    if not selected:
+        return None
+
+    records, manifest, failures = records_from_feature_cache(
+        pipe, image_path, artifacts_dir, selected)
+    # manifest holds only the plugins whose artifact parsed, so it is the
+    # evidence boundary; records also carries empty entries for the ones that
+    # never wrote anything, and feeding those in would claim coverage we
+    # do not have.
+    evidence = {key: rows for key, rows in records.items() if key in manifest}
+    if not evidence:
+        return None
+
+    # records_from_feature_cache assumes a completed run, where a missing
+    # artifact means the plugin ran and wrote nothing usable. After a halt the
+    # commoner case is that it never started, and reporting that as "produced no
+    # parseable output" invents a failure the plugin never had.
+    image_name = Path(image_path).name
+    for name in selected:
+        if name in manifest or normalize_plugin_key(name) in manifest:
+            continue
+        artifact = Path(artifacts_dir) / f"{image_name}_{name}.json"
+        if not artifact.exists():
+            failures[name] = "did not run before the triage halted"
+
+    view = assemble_triage({}, evidence, profile=profile, plugins=tuple(evidence))
+    health = extraction_health(len(selected), failures)
+    view["manifest"] = manifest
+    view["plugins"] = list(selected)
+    view["completed_plugins"] = sorted(evidence)
+    view["extraction"] = health
+    view["dashboard"]["extraction"] = health
+    return view
+
+
 def rescore_from_records(records: dict[str, list[dict]], features_flat: dict | None,
-                         *, vol_version: Any = None, profile: dict | None = None) -> dict:
-    """Re-score cached records under a new profile (no Volatility). Used by /rescore."""
+                         *, vol_version: Any = None, profile: dict | None = None,
+                         plugins: list[str] | tuple[str, ...] | None = None) -> dict:
+    """Re-score cached records under a new profile (no Volatility). Used by /rescore.
+
+    Runs the same engine as :func:`run_triage`, so moving the sensitivity preset
+    changes cut-offs, not the scale a score is read on. ``plugins`` is the
+    triage's selection; without it, the cached records stand in for it.
+    """
     return assemble_triage(features_flat or {}, records, vol_version=vol_version,
-                           profile=profile)
+                           profile=profile, plugins=tuple(plugins or records))

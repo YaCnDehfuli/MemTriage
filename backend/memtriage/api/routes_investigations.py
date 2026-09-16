@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import uuid
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from sqlalchemy import select, update
@@ -17,6 +18,7 @@ from sqlalchemy.orm import Session
 from ..config import get_settings
 from ..db import SessionLocal, get_session
 from ..models import Dump, Investigation, InvestigationStatus, PluginRun, PluginRunStatus
+from ..pipeline.cancellation import STALE_AFTER_SECONDS
 from ..pipeline.plugin_runner import plugin_catalog
 from ..pipeline.volmemlyzer_adapter import DEEP_TRIAGE_PLUGINS, LIGHT_TRIAGE_PLUGINS
 from ..schemas import InvestigationCreatedResponse, InvestigationState, StartTriageRequest
@@ -214,11 +216,17 @@ def start_triage(
     inv.concurrency = body.concurrency
     inv.events = []
     inv.cache_source = None
+    # A new token makes every earlier queued message for this investigation stale.
+    inv.triage_token = str(uuid.uuid4())
+    inv.cancel_requested = False
+    inv.worker_seen_at = None
     session.add(inv)
     session.commit()
     session.refresh(inv)
     try:
-        celery_app.send_task("memtriage.run_triage", args=[investigation_id, body.force])
+        celery_app.send_task(
+            "memtriage.run_triage", args=[investigation_id, body.force, inv.triage_token],
+        )
     except Exception as exc:
         inv.status = InvestigationStatus.FAILED
         inv.stage = "failed"
@@ -232,6 +240,60 @@ def start_triage(
             status_code=503,
             detail="Triage could not be queued; retry when the worker broker is available.",
         ) from exc
+    return InvestigationState.from_orm_obj(inv)
+
+
+def worker_is_alive(seen_at: datetime | None) -> bool:
+    """Whether a worker has recently proven it is running this job."""
+    if seen_at is None:
+        return False
+    if seen_at.tzinfo is None:  # SQLite drops the offset on the way back
+        seen_at = seen_at.replace(tzinfo=UTC)
+    return datetime.now(UTC) - seen_at < timedelta(seconds=STALE_AFTER_SECONDS)
+
+
+@router.post("/investigations/{investigation_id}/triage/stop",
+             response_model=InvestigationState)
+def stop_triage(investigation_id: str,
+                session: Session = Depends(get_session)) -> InvestigationState:
+    """Stop a queued or running triage.
+
+    A running triage is stopped by the worker itself, which terminates its
+    Volatility processes and records the stop (pipeline/cancellation.py). When no
+    worker is behind the job — it is still queued, or the worker that took it
+    died — there is nothing that could honour the request, so it is finished here
+    instead of leaving the investigation stuck.
+    """
+    inv = session.scalars(
+        select(Investigation).where(Investigation.id == investigation_id).with_for_update()
+    ).one_or_none()
+    if inv is None:
+        raise HTTPException(status_code=404, detail="Investigation not found")
+    if inv.status != InvestigationStatus.TRIAGING:
+        raise HTTPException(status_code=409, detail="No triage is running.")
+
+    # Stays set even when finished here: if the worker picked the job up in the
+    # same instant, its watcher still sees the request and stops.
+    inv.cancel_requested = True
+    queued = inv.stage == "queued"
+    if queued or not worker_is_alive(inv.worker_seen_at):
+        previous = InvestigationPaths(investigation_id).triage.exists()
+        inv.triage_token = None
+        inv.status = InvestigationStatus.TRIAGED if previous else InvestigationStatus.RECEIVED
+        inv.stage = "stopped"
+        inv.progress = 100 if previous else 0
+        inv.error = None
+        inv.message = (
+            ("Triage stopped before it started" if queued
+             else "Triage stopped — no worker was still running it")
+            + (" — showing the previous results" if previous else "")
+        )
+    else:
+        inv.stage = "stopping"
+        inv.message = "Stopping — terminating Volatility processes"
+    session.add(inv)
+    session.commit()
+    session.refresh(inv)
     return InvestigationState.from_orm_obj(inv)
 
 

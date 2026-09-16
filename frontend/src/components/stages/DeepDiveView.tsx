@@ -113,7 +113,7 @@ export function DeepDiveView() {
         </div>
       </div>
 
-      <RegionDeepDive regions={analysis.regions ?? []} lowlevel={lowlevel} />
+      <RegionDeepDive regions={analysis.regions ?? []} lowlevel={lowlevel} pid={analysis.pid} />
 
       {(analysis.notes?.length ?? 0) > 0 && (
         <Panel eyebrow="Reading this" title="What these results do and do not establish">

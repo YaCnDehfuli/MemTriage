@@ -75,17 +75,38 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt: str, *args) -> None:
         logger.info("%s %s", self.client_address[0], fmt % args)
 
+    def _write_safely(self, fn) -> bool:
+        """Run a response-writing callback, swallowing an already-gone client.
+
+        The worker's Volatility client can time out and close its socket before
+        this proxy finishes reporting a failure (slow or blocked upstream). Left
+        unguarded, that ordinary disconnect surfaces as an unhandled
+        BrokenPipeError/ConnectionResetError that ThreadingHTTPServer logs as a
+        crash, burying the real upstream error underneath it.
+        """
+        try:
+            fn()
+            return True
+        except (BrokenPipeError, ConnectionResetError) as exc:
+            logger.warning("client disconnected before the response could be sent: %s",
+                            type(exc).__name__)
+            return False
+
     def _refuse(self, host: str, reason: str = "not on the allowlist") -> None:
         logger.warning("DENY %s %s (%s)", self.command, host, reason)
         body = (
             f"memtriage-symbolproxy refused {host!r}: {reason}.\n"
             f"Allowed: {', '.join(sorted(ALLOWED_HOSTS))}\n"
         ).encode()
-        self.send_response(403)
-        self.send_header("Content-Type", "text/plain; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+
+        def _send() -> None:
+            self.send_response(403)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        self._write_safely(_send)
 
     # -- plain HTTP: upgraded to HTTPS upstream ----------------------------
 
@@ -120,39 +141,46 @@ class Handler(BaseHTTPRequestHandler):
         except urllib.error.HTTPError as exc:
             logger.warning("upstream %s for %s", exc.code, target)
             body = f"upstream returned {exc.code}\n".encode()
-            self.send_response(exc.code)
-            self.send_header("Content-Type", "text/plain; charset=utf-8")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
+
+            def _send() -> None:
+                self.send_response(exc.code)
+                self.send_header("Content-Type", "text/plain; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            self._write_safely(_send)
         except Exception as exc:
             logger.error("upstream failure for %s: %s", target, type(exc).__name__)
-            self.send_error(502, "upstream fetch failed")
+            self._write_safely(lambda: self.send_error(502, "upstream fetch failed"))
 
     def _relay(self, upstream) -> None:
         length = upstream.headers.get("Content-Length")
         if length and int(length) > MAX_BYTES:
             self._refuse(upstream.geturl(), "response exceeds the size cap")
             return
-        self.send_response(200)
-        for header in ("Content-Type", "Content-Length", "Last-Modified", "ETag"):
-            value = upstream.headers.get(header)
-            if value:
-                self.send_header(header, value)
-        if not length:
-            self.send_header("Connection", "close")
-        self.end_headers()
+        def _send() -> None:
+            self.send_response(200)
+            for header in ("Content-Type", "Content-Length", "Last-Modified", "ETag"):
+                value = upstream.headers.get(header)
+                if value:
+                    self.send_header(header, value)
+            if not length:
+                self.send_header("Connection", "close")
+            self.end_headers()
 
-        sent = 0
-        while True:
-            chunk = upstream.read(CHUNK)
-            if not chunk:
-                break
-            sent += len(chunk)
-            if sent > MAX_BYTES:
-                logger.error("aborting %s: exceeded the size cap", upstream.geturl())
-                break
-            self.wfile.write(chunk)
+            sent = 0
+            while True:
+                chunk = upstream.read(CHUNK)
+                if not chunk:
+                    break
+                sent += len(chunk)
+                if sent > MAX_BYTES:
+                    logger.error("aborting %s: exceeded the size cap", upstream.geturl())
+                    break
+                self.wfile.write(chunk)
+
+        self._write_safely(_send)
 
     # -- CONNECT: tunnelled, allowlisted, 443 only -------------------------
 
@@ -170,11 +198,16 @@ class Handler(BaseHTTPRequestHandler):
             upstream = socket.create_connection((host, 443), timeout=UPSTREAM_TIMEOUT_S)
         except OSError as exc:
             logger.error("CONNECT to %s failed: %s", host, type(exc).__name__)
-            self.send_error(502, "upstream connect failed")
+            self._write_safely(lambda: self.send_error(502, "upstream connect failed"))
             return
 
-        self.send_response(200, "Connection Established")
-        self.end_headers()
+        def _send() -> None:
+            self.send_response(200, "Connection Established")
+            self.end_headers()
+
+        if not self._write_safely(_send):
+            upstream.close()
+            return
         self._tunnel(self.connection, upstream)
 
     @staticmethod

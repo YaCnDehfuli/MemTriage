@@ -27,11 +27,12 @@ import threading
 import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import ExitStack
 from datetime import UTC, datetime
 from pathlib import Path
 
 from celery.utils.log import get_task_logger
-from sqlalchemy import select
+from sqlalchemy import select, update
 
 from ..config import get_settings
 from ..db import SessionLocal
@@ -44,20 +45,21 @@ from ..models import (
     PluginRunStatus,
     ProcessAnalysis,
 )
+from ..pipeline.cancellation import CancelWatch, JobStopped
 from ..pipeline.progress import (
     append_plugin_event,
     append_triage_event,
     set_plugin_run_state,
     set_state,
 )
-from ..scoring.profile import TuningProfile
+from ..scoring import TuningProfile
 from ..security.sanitize import sanitize_obj, sanitize_text
 from ..storage import InvestigationPaths, ProcessPaths
 from .celery_app import celery_app
 
 logger = get_task_logger(__name__)
 settings = get_settings()
-TRIAGE_SCHEMA_VERSION = 3
+TRIAGE_SCHEMA_VERSION = 4
 
 
 # How many regions get the low-level treatment. The top-ranked one gets the full
@@ -188,6 +190,8 @@ def _reusable_triage(paths: InvestigationPaths, primary_sha: str | None,
     if recorded_sha != primary_sha:
         return None
     if config.get("schema_version") != TRIAGE_SCHEMA_VERSION:
+        return None
+    if config.get("partial"):
         return None
     if list(config.get("plugins") or []) != list(plugins):
         return None
@@ -431,14 +435,171 @@ def _restore_cached_triage(
               progress=100, message="Triage restored from matching analysis cache")
 
 
-@celery_app.task(name="memtriage.run_triage", bind=True)
-def run_triage(self, investigation_id: str, force: bool = False) -> str:
+def _triage_stop_requested(investigation_id: str, token: str | None) -> bool:
+    """A stop was requested, or a newer triage replaced the one this task runs."""
     session = SessionLocal()
+    try:
+        inv = session.get(Investigation, investigation_id)
+        return (
+            inv is None
+            or bool(inv.cancel_requested)
+            or (token is not None and inv.triage_token != token)
+        )
+    finally:
+        session.close()
+
+
+def _mark_worker_alive(model, row_id: str) -> None:
+    session = SessionLocal()
+    try:
+        session.execute(
+            update(model).where(model.id == row_id).values(worker_seen_at=datetime.now(UTC))
+        )
+        session.commit()
+    finally:
+        session.close()
+
+
+def _finish_stopped_triage(session, inv: Investigation, paths: InvestigationPaths) -> None:
+    """Leave the investigation usable after a stop, never stuck mid-triage.
+
+    If an earlier triage completed, its results are still on disk and still
+    valid, so the investigation returns to them; otherwise it returns to ready.
+    Plugin outputs that finished before the stop stay cached for the next run.
+    """
+    previous = paths.triage.exists()
+    inv.cancel_requested = False
+    append_triage_event(session, inv, {
+        "type": "stopped", "at": datetime.now(UTC).timestamp(),
+        "message": "Stopped by the analyst. Finished plugin outputs are kept for reuse.",
+    })
+    set_state(
+        session, inv,
+        status=InvestigationStatus.TRIAGED if previous else InvestigationStatus.RECEIVED,
+        stage="stopped", progress=100 if previous else 0,
+        message=("Triage stopped — showing the previous results" if previous
+                 else "Triage stopped — choose coverage and start again"),
+        error=None,
+    )
+
+
+def _salvage_partial_triage(session, inv: Investigation, paths: InvestigationPaths,
+                            dumps: list[Dump], selected: list[str], halted: str) -> bool:
+    """Score what finished before the run halted, labelled as partial.
+
+    Without this a stop three plugins from the end throws away everything the
+    run produced, and the analyst re-runs the whole set to see it. The reason
+    that was not done before is sound and is preserved here: a triage scored
+    from survivors must never read as a complete one. So the payload records
+    which plugins produced evidence and which did not, the engine is given only
+    the former as its plan, and the state message leads with the shortfall.
+    """
+    if not dumps or not selected:
+        return False
+    try:
+        from ..pipeline import volmemlyzer_adapter as vml
+
+        view = vml.salvage_triage(
+            str(paths.dump_path(dumps[0].ordinal)), str(paths.volmemlyzer),
+            vol_path=settings.vol_path, timeout_s=settings.vol_timeout_s,
+            symbol_dirs=settings.vol_symbol_dirs, offline=settings.vol_offline,
+            volmemlyzer_src=settings.volmemlyzer_src, plugins=list(selected),
+        )
+    except Exception:
+        # Salvage is best-effort by definition: the run already failed, and a
+        # failure to rescue it must leave the ordinary stop path intact.
+        logger.exception("could not salvage a partial triage for %s",
+                         getattr(inv, "id", "?"))
+        return False
+    if view is None:
+        return False
+
+    completed = list(view.get("completed_plugins") or [])
+    missing = [p for p in selected
+               if vml.normalize_plugin_key(p) not in set(completed)]
+    dashboard = view.get("dashboard") or {}
+    triage = {
+        "dumps": [
+            {"ordinal": d.ordinal, "filename": d.original_filename,
+             "size_bytes": d.size_bytes, "sha256": d.sha256}
+            for d in dumps
+        ],
+        "primary_dump_ordinal": dumps[0].ordinal,
+        "vol_version": view.get("vol_version"),
+        "dashboard": dashboard,
+        "processes": view.get("processes") or [],
+        "artifacts": view.get("manifest", {}),
+        "profile": view.get("profile") or dashboard.get("profile"),
+        "disclaimer": view.get("disclaimer") or dashboard.get("disclaimer"),
+        "extraction": view.get("extraction") or dashboard.get("extraction"),
+        "triage_config": {
+            "mode": inv.triage_mode, "plugins": list(selected),
+            "concurrency": inv.concurrency,
+            "schema_version": TRIAGE_SCHEMA_VERSION,
+            # Everything a reader needs to judge the coverage behind these rows.
+            "partial": True,
+            "halted": halted,
+            "completed_plugins": completed,
+            "missing_plugins": missing,
+        },
+        "cache_source": inv.cache_source,
+    }
+    inv.cancel_requested = False
+    _finish_triage(session, inv, paths, triage, dumps)
+    append_triage_event(session, inv, {
+        "type": "partial_triage", "at": datetime.now(UTC).timestamp(),
+        "completed": len(completed), "requested": len(selected),
+        "message": (f"Scored the {len(completed)} plugin(s) that finished before the run "
+                    f"{halted}. {len(missing)} did not run; their rules could not be "
+                    f"evaluated."),
+    })
+    set_state(
+        session, inv, status=InvestigationStatus.TRIAGED, stage="triaged", progress=100,
+        message=(f"Partial triage — {len(completed)} of {len(selected)} plugin(s) finished "
+                 f"before the run {halted}. Coverage is incomplete; re-run for the rest."),
+        error=None,
+    )
+    return True
+
+
+def _plugin_run_stop_requested(plugin_run_id: str) -> bool:
+    session = SessionLocal()
+    try:
+        run = session.get(PluginRun, plugin_run_id)
+        return run is None or bool(run.cancel_requested)
+    finally:
+        session.close()
+
+
+@celery_app.task(name="memtriage.run_triage", bind=True)
+def run_triage(self, investigation_id: str, force: bool = False,
+               token: str | None = None) -> str:
+    session = SessionLocal()
+    stack = ExitStack()
+    watch: CancelWatch | None = None
+    paths = InvestigationPaths(investigation_id)
+    # Read by the except blocks when they try to salvage a partial triage, so
+    # they must exist even if the run halts before either is assigned.
+    selected: list[str] = []
+    dumps: list[Dump] = []
     try:
         inv = session.get(Investigation, investigation_id)
         if inv is None:
             logger.error("run_triage: investigation %s not found", investigation_id)
             return "missing"
+        # A queued message outlives a stop and a restart. Only the triage the
+        # analyst most recently asked for may run: a stop leaves the request flag
+        # set, and a restart issues a new token. Status is deliberately not
+        # checked — seeding and other direct callers start from "received".
+        if inv.cancel_requested or (token is not None and inv.triage_token != token):
+            logger.info("run_triage: %s was stopped or superseded before it started",
+                        investigation_id)
+            return "superseded"
+
+        watch = stack.enter_context(CancelWatch(
+            lambda: _triage_stop_requested(investigation_id, token),
+            on_alive=lambda: _mark_worker_alive(Investigation, investigation_id),
+        ))
 
         paths = InvestigationPaths(investigation_id).ensure()
         from ..pipeline import volmemlyzer_adapter as vml
@@ -460,6 +621,7 @@ def run_triage(self, investigation_id: str, force: bool = False) -> str:
         for d in dumps:
             if not d.sha256:
                 d.sha256 = _sha256_streaming(paths.dump_path(d.ordinal))
+            watch.raise_if_cancelled()
         session.commit()
         primary_sha = dumps[0].sha256
         append_triage_event(session, inv, {
@@ -476,6 +638,7 @@ def run_triage(self, investigation_id: str, force: bool = False) -> str:
         def _cache_copy_event(event: dict) -> None:
             append_triage_event(session, inv, event)
 
+        watch.raise_if_cancelled()
         if not force:
             reused = _reusable_triage(paths, primary_sha, selected)
             if reused is not None and _manifest_is_local(paths, reused, selected):
@@ -536,9 +699,12 @@ def run_triage(self, investigation_id: str, force: bool = False) -> str:
 
         # VolMemLyzer runs on the primary (first) snapshot: aggregate IoC
         # features + per-object injections/network + the process/PID inventory.
+        # The first windows.* plugin resolves the kernel symbol table, which on a
+        # fresh worker means fetching the PDB through symbolproxy. Say so: that
+        # step can take a minute and otherwise looks like a stall.
         set_state(session, inv, stage="analyzing",
-                  message=(f"Volatility 3 is starting {len(selected)} plugin(s) "
-                           f"with {inv.concurrency} worker(s)"))
+                  message=(f"Resolving Windows kernel symbols, then running "
+                           f"{len(selected)} plugin(s) with {inv.concurrency} worker(s)"))
 
         primary = paths.dump_path(dumps[0].ordinal)
         from ..pipeline.plugin_runner import capture_plugin_events
@@ -577,6 +743,9 @@ def run_triage(self, investigation_id: str, force: bool = False) -> str:
             successful = {name: "cached" for name in selected if name not in failed}
             capture.ensure_terminal(selected, failures=failed, artifacts=successful)
 
+        # Plugins killed by a stop look like ordinary failures to VolMemLyzer; a
+        # triage scored from what survived would be presented as complete.
+        watch.raise_if_cancelled()
         session.refresh(inv)
 
         set_state(session, inv, stage="inventorying",
@@ -613,16 +782,45 @@ def run_triage(self, investigation_id: str, force: bool = False) -> str:
                   progress=100, message="Triage complete — select a process to analyze")
         return "triaged"
 
-    except Exception as exc:
-        logger.exception("run_triage failed for %s", investigation_id)
+    except JobStopped:
+        stack.close()
+        session.rollback()
         inv = session.get(Investigation, investigation_id)
         if inv is not None:
-            set_state(session, inv, status=InvestigationStatus.FAILED, stage="failed",
-                      message="Triage failed",
-                      error=sanitize_text(f"{type(exc).__name__}: {exc}", max_len=1000))
+            # The plugins that finished still hold evidence; score them rather
+            # than making the analyst re-run everything to see it.
+            if not _salvage_partial_triage(session, inv, paths, dumps, selected,
+                                           "was stopped"):
+                _finish_stopped_triage(session, inv, paths)
+        return "stopped"
+
+    except Exception as exc:
+        if watch is not None and watch.cancelled:
+            # Killing a plugin mid-scan can surface as any exception downstream.
+            stack.close()
+            session.rollback()
+            inv = session.get(Investigation, investigation_id)
+            if inv is not None:
+                if not _salvage_partial_triage(session, inv, paths, dumps, selected,
+                                               "was stopped"):
+                    _finish_stopped_triage(session, inv, paths)
+            return "stopped"
+        logger.exception("run_triage failed for %s", investigation_id)
+        session.rollback()
+        inv = session.get(Investigation, investigation_id)
+        if inv is not None:
+            # An error that takes the run down does not invalidate the plugins
+            # that already succeeded. Salvage reports the shortfall itself; only
+            # when there is nothing to show does this stay a plain failure.
+            halted = f"failed with {type(exc).__name__}"
+            if not _salvage_partial_triage(session, inv, paths, dumps, selected, halted):
+                set_state(session, inv, status=InvestigationStatus.FAILED, stage="failed",
+                          message="Triage failed",
+                          error=sanitize_text(f"{type(exc).__name__}: {exc}", max_len=1000))
         logger.debug("traceback: %s", traceback.format_exc())
         return "failed"
     finally:
+        stack.close()
         session.close()
 
 
@@ -763,11 +961,16 @@ def run_plugins(self, plugin_run_id: str) -> str:
     session = SessionLocal()
     snapshot_executor: ThreadPoolExecutor | None = None
     requested_plugins: list[str] = []
+    stack = ExitStack()
+    watch: CancelWatch | None = None
     try:
         run = session.get(PluginRun, plugin_run_id)
         if run is None:
             logger.error("run_plugins: plugin run %s not found", plugin_run_id)
             return "missing"
+        if run.status != PluginRunStatus.QUEUED or run.cancel_requested:
+            logger.info("run_plugins: %s was stopped before it started", plugin_run_id)
+            return "superseded"
 
         inv = session.get(Investigation, run.investigation_id)
         dumps = sorted(inv.dumps, key=lambda d: d.ordinal) if inv else []
@@ -782,6 +985,10 @@ def run_plugins(self, plugin_run_id: str) -> str:
         requested_plugins = list(run.requested_plugins or [])
         run_concurrency = run.concurrency
 
+        watch = stack.enter_context(CancelWatch(
+            lambda: _plugin_run_stop_requested(plugin_run_id),
+            on_alive=lambda: _mark_worker_alive(PluginRun, plugin_run_id),
+        ))
         set_plugin_run_state(session, run, status=PluginRunStatus.RUNNING, stage="running",
                              progress=0, message="Starting")
         session.close()
@@ -903,8 +1110,13 @@ def run_plugins(self, plugin_run_id: str) -> str:
         snapshot_executor = None
 
         ok = len(snapshots)
-        summary = (f"{ok} succeeded, {len(failed)} failed" if failed
-                   else f"{ok} plugin(s) complete")
+        stopped = watch.cancelled
+        if stopped:
+            stack.close()
+            summary = f"Stopped by the analyst — {ok} plugin(s) finished before the stop"
+        else:
+            summary = (f"{ok} succeeded, {len(failed)} failed" if failed
+                       else f"{ok} plugin(s) complete")
 
         session = SessionLocal()
         run = session.get(PluginRun, plugin_run_id)
@@ -914,12 +1126,19 @@ def run_plugins(self, plugin_run_id: str) -> str:
             run.artifacts = artifacts
             run.failed_plugins = sanitize_obj(failed, max_len=4096)
             session.add(run)
-            set_plugin_run_state(session, run, status=PluginRunStatus.DONE, stage="done",
-                                 progress=100, message=summary)
-        return "done"
+            run.cancel_requested = False
+            set_plugin_run_state(
+                session, run,
+                status=PluginRunStatus.CANCELLED if stopped else PluginRunStatus.DONE,
+                stage="stopped" if stopped else "done", progress=100, message=summary,
+            )
+        return "stopped" if stopped else "done"
 
     except Exception as exc:
-        logger.exception("run_plugins failed for %s", plugin_run_id)
+        stopped = watch is not None and watch.cancelled
+        stack.close()
+        if not stopped:
+            logger.exception("run_plugins failed for %s", plugin_run_id)
         if session is None:
             session = SessionLocal()
         run = session.get(PluginRun, plugin_run_id)
@@ -937,7 +1156,8 @@ def run_plugins(self, plugin_run_id: str) -> str:
                 if plugin in terminal_plugins:
                     continue
                 explanation = (
-                    f"Manual run stopped before completion ({type(exc).__name__})"
+                    "Stopped by the analyst" if stopped
+                    else f"Manual run stopped before completion ({type(exc).__name__})"
                 )
                 append_plugin_event(session, run, {
                     "type": "plugin_failed", "plugin": plugin,
@@ -957,12 +1177,20 @@ def run_plugins(self, plugin_run_id: str) -> str:
                 elif kind == "plugin_finished" and not event.get("ok"):
                     failures[plugin] = f"vol exited {event.get('rc', '?')}"
             run.failed_plugins = sanitize_obj(failures, max_len=4096)
-            set_plugin_run_state(session, run, status=PluginRunStatus.FAILED, stage="failed",
-                                 message="Plugin run failed",
-                                 error=sanitize_text(f"{type(exc).__name__}: {exc}", max_len=1000))
+            if stopped:
+                run.cancel_requested = False
+                set_plugin_run_state(session, run, status=PluginRunStatus.CANCELLED,
+                                     stage="stopped", message="Stopped by the analyst")
+            else:
+                set_plugin_run_state(
+                    session, run, status=PluginRunStatus.FAILED, stage="failed",
+                    message="Plugin run failed",
+                    error=sanitize_text(f"{type(exc).__name__}: {exc}", max_len=1000),
+                )
         logger.debug("traceback: %s", traceback.format_exc())
-        return "failed"
+        return "stopped" if stopped else "failed"
     finally:
+        stack.close()
         if snapshot_executor is not None:
             snapshot_executor.shutdown(wait=True)
         if session is not None:

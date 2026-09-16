@@ -1,10 +1,22 @@
 import type {
   AnalysisState,
+  AssistantProviders,
+  DraftNarrativeRequest,
+  DraftedNarrative,
+  Disposition,
+  ConfidenceLevel,
+  NarrativeEntry,
+  NarrativeSection,
+  ReportDocument,
+  ReportEvidence,
+  Timeline,
   InvestigationState,
   LowLevelReport,
   ModelAccessPolicy,
   ModelAccessRequest,
   ModelAccessResponse,
+  ModelState,
+  ModelUploadResult,
   PluginCatalogEntry,
   PluginOutputFormat,
   PluginOutputPreview,
@@ -33,6 +45,8 @@ export interface ApiClient {
     onProgress?: UploadProgress,
   ): Promise<{ ordinal: number; dump_count: number }>;
   startTriage(id: string, options: TriageOptions): Promise<InvestigationState>;
+  stopTriage(id: string): Promise<InvestigationState>;
+  stopPluginRun(id: string, runId: string): Promise<PluginRunState>;
   getInvestigation(id: string): Promise<InvestigationState>;
   getResult(id: string): Promise<ConsolidatedResult>;
   listProcesses(id: string): Promise<ProcessItem[]>;
@@ -44,6 +58,13 @@ export interface ApiClient {
   getLowLevel(id: string, pid: number): Promise<LowLevelReport>;
   getModelAccessPolicy(): Promise<ModelAccessPolicy>;
   requestModelAccess(body: ModelAccessRequest): Promise<ModelAccessResponse>;
+  getModelState(): Promise<ModelState>;
+  uploadModelWeights(
+    checkpoint: File,
+    labels: File | null,
+    onProgress?: (fraction: number) => void,
+  ): Promise<ModelUploadResult>;
+  deleteModelWeights(): Promise<{ removed: boolean; model: ModelState }>;
   getPluginCatalog(): Promise<PluginCatalogEntry[]>;
   runPlugins(id: string, plugins: string[], concurrency: number): Promise<PluginRunState>;
   getPluginRun(id: string, runId: string): Promise<PluginRunState>;
@@ -61,6 +82,41 @@ export interface ApiClient {
     plugin: string,
     format: PluginOutputFormat,
   ): string;
+
+  getTimeline(id: string): Promise<Timeline>;
+  getReport(id: string, audience?: "technical" | "executive"): Promise<ReportDocument>;
+  reportHtmlUrl(id: string, audience: "technical" | "executive"): string;
+  listReportEvidence(id: string): Promise<ReportEvidence[]>;
+  upsertReportEvidence(
+    id: string,
+    body: { ref: string; label?: string; pid?: number | null; evidence_kind?: string },
+  ): Promise<ReportEvidence>;
+  patchReportEvidence(
+    id: string,
+    evidenceId: string,
+    body: {
+      analyst_note?: string;
+      analyst_confidence?: ConfidenceLevel | null;
+      disposition?: Disposition;
+      if_version?: number;
+    },
+  ): Promise<ReportEvidence>;
+  deleteReportEvidence(id: string, evidenceId: string): Promise<{ deleted: string }>;
+  listAssistantProviders(): Promise<AssistantProviders>;
+  listProviderModels(body: {
+    provider: string;
+    api_key?: string;
+    base_url?: string | null;
+  }): Promise<{ provider: string; models: string[] }>;
+  draftNarrative(id: string, body: DraftNarrativeRequest): Promise<DraftedNarrative>;
+  clearDraftedNarrative(id: string): Promise<{ removed: number }>;
+  getNarrative(id: string): Promise<Record<NarrativeSection, NarrativeEntry>>;
+  putNarrative(
+    id: string,
+    section: NarrativeSection,
+    content: string,
+    source?: "analyst" | "drafted",
+  ): Promise<{ section: string; content: string; source: string }>;
 }
 
 export class ApiError extends Error {
@@ -139,6 +195,14 @@ export function createLiveClient(base = ""): ApiClient {
         xhr.send(file);
       });
     },
+    async stopTriage(id) {
+      return json(await fetch(`${api}/investigations/${id}/triage/stop`, { method: "POST" }));
+    },
+    async stopPluginRun(id, runId) {
+      return json(
+        await fetch(`${api}/investigations/${id}/plugins/runs/${runId}/stop`, { method: "POST" }),
+      );
+    },
     async startTriage(id, options) {
       return json(
         await fetch(`${api}/investigations/${id}/triage`, {
@@ -199,6 +263,46 @@ export function createLiveClient(base = ""): ApiClient {
         }),
       );
     },
+    async getModelState() {
+      return json(await fetch(`${api}/model`));
+    },
+    uploadModelWeights(checkpoint, labels, onProgress) {
+      // XHR, not fetch: a checkpoint is hundreds of megabytes and fetch cannot
+      // report upload progress, which is the same reason addDump uses it.
+      const body = new FormData();
+      body.append("checkpoint", checkpoint);
+      if (labels) body.append("labels", labels);
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `${api}/model/weights`);
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable && onProgress) onProgress(event.loaded / event.total);
+        };
+        xhr.onload = () => {
+          let parsed: unknown = null;
+          try {
+            parsed = JSON.parse(xhr.responseText);
+          } catch {
+            parsed = null;
+          }
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve(parsed as ModelUploadResult);
+            return;
+          }
+          const detail =
+            (parsed as { error?: { message?: string }; detail?: string } | null)?.error
+              ?.message ??
+            (parsed as { detail?: string } | null)?.detail ??
+            `Upload failed (HTTP ${xhr.status})`;
+          reject(new Error(detail));
+        };
+        xhr.onerror = () => reject(new Error("Upload failed: network error"));
+        xhr.send(body);
+      });
+    },
+    async deleteModelWeights() {
+      return json(await fetch(`${api}/model/weights`, { method: "DELETE" }));
+    },
     async getPluginCatalog() {
       return json(await fetch(`${api}/plugins/catalog`));
     },
@@ -229,6 +333,86 @@ export function createLiveClient(base = ""): ApiClient {
     pluginOutputDownloadUrl(id, runId, plugin, format) {
       const output = `${api}/investigations/${id}/plugins/runs/${runId}/outputs/${encodeURIComponent(plugin)}`;
       return `${output}/download?format=${encodeURIComponent(format)}`;
+    },
+
+    async getTimeline(id) {
+      return json(await fetch(`${api}/investigations/${id}/timeline`));
+    },
+    async getReport(id, audience = "technical") {
+      return json(
+        await fetch(`${api}/investigations/${id}/report/preview?audience=${audience}`),
+      );
+    },
+    reportHtmlUrl(id, audience) {
+      return `${api}/investigations/${id}/report.html?audience=${audience}`;
+    },
+    async listReportEvidence(id) {
+      return json(await fetch(`${api}/investigations/${id}/report/evidence`));
+    },
+    async upsertReportEvidence(id, body) {
+      return json(
+        await fetch(`${api}/investigations/${id}/report/evidence`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ evidence_kind: "finding", ...body }),
+        }),
+      );
+    },
+    async patchReportEvidence(id, evidenceId, body) {
+      return json(
+        await fetch(`${api}/investigations/${id}/report/evidence/${evidenceId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }),
+      );
+    },
+    async deleteReportEvidence(id, evidenceId) {
+      return json(
+        await fetch(`${api}/investigations/${id}/report/evidence/${evidenceId}`, {
+          method: "DELETE",
+        }),
+      );
+    },
+    async listAssistantProviders() {
+      return json(await fetch(`${api}/assistant/providers`));
+    },
+    async listProviderModels(body) {
+      return json(
+        await fetch(`${api}/assistant/models`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }),
+      );
+    },
+    async draftNarrative(id, body) {
+      return json(
+        await fetch(`${api}/investigations/${id}/report/narrative/draft`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }),
+      );
+    },
+    async clearDraftedNarrative(id) {
+      return json(
+        await fetch(`${api}/investigations/${id}/report/narrative/draft`, {
+          method: "DELETE",
+        }),
+      );
+    },
+    async getNarrative(id) {
+      return json(await fetch(`${api}/investigations/${id}/report/narrative`));
+    },
+    async putNarrative(id, section, content, source = "analyst") {
+      return json(
+        await fetch(`${api}/investigations/${id}/report/narrative/${section}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content, source }),
+        }),
+      );
     },
   };
 }

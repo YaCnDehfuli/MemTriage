@@ -2,6 +2,8 @@ import { Fragment, useState } from "react";
 import type { Diff, ScoredObject } from "../../types";
 import { Chip, Meter, RiskBadge } from "../primitives";
 import { pct } from "../../lib/format";
+import { EvidenceToggle } from "../report/EvidenceToggle";
+import { useReport } from "../../state/reportStore";
 
 const TYPE_LABEL: Record<string, string> = {
   process: "Process",
@@ -44,6 +46,9 @@ export function IoCTable({
             <th className="px-3 py-2 font-semibold">Score</th>
             <th className="w-40 px-3 py-2 font-semibold">Confidence</th>
             <th className="px-3 py-2 font-semibold">ATT&CK</th>
+            <th className="w-10 px-3 py-2 font-semibold">
+              <span className="sr-only">Add to report</span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -101,10 +106,13 @@ export function IoCTable({
                       ))}
                     </div>
                   </td>
+                  <td className="px-3 py-2.5 text-right">
+                    <ReportPin objectType={o.object_type} objectKey={o.key} label={o.label} pid={o.pid} />
+                  </td>
                 </tr>
                 {isOpen && (
                   <tr id={`ioc-detail-${id}`} className="border-b border-surface-800/70 bg-surface-900/40">
-                    <td colSpan={6} className="px-4 py-3">
+                    <td colSpan={7} className="px-4 py-3">
                       <div className="mb-2 flex items-center justify-between">
                         <div className="eyebrow">Why this fired — {o.contributions.length} signal(s)</div>
                         {o.pid != null && onInspectProcess && o.object_type === "process" && (
@@ -153,4 +161,27 @@ export function IoCTable({
       </table>
     </div>
   );
+}
+
+
+/**
+ * Pin a scored object to the report from the table the analyst is reading.
+ * Renders nothing until the report document is loaded, because the ref it needs
+ * is defined by the backend, not recomputed here.
+ */
+function ReportPin({
+  objectType,
+  objectKey,
+  label,
+  pid,
+}: {
+  objectType: string;
+  objectKey: string;
+  label: string;
+  pid: number | null;
+}) {
+  const { refForObject } = useReport();
+  const evidenceRef = refForObject(objectType, objectKey, label);
+  if (!evidenceRef) return null;
+  return <EvidenceToggle evidenceRef={evidenceRef} label={label} pid={pid} compact />;
 }

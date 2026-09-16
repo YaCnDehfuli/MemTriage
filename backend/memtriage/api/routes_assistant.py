@@ -20,7 +20,7 @@ from ..assistant.context_pack import cached_pack
 from ..assistant.errors import AssistantError
 from ..assistant.providers import ProviderError, catalogue, custom_base_url_allowed
 from ..assistant.scriptgen import generate
-from ..assistant.service import SUGGESTED_QUESTIONS, chat
+from ..assistant.service import SUGGESTED_QUESTIONS, chat, list_models
 from ..db import get_session
 from ..errors import MemTriageError, NotFound, UpstreamError, ValidationFailed
 from ..models import Investigation
@@ -49,6 +49,12 @@ class ChatRequest(BaseModel):
     base_url: str | None = Field(default=None, max_length=512)
     messages: list[ChatMessage] = Field(min_length=1, max_length=40)
     refresh_context: bool = False
+
+
+class ModelsRequest(BaseModel):
+    provider: str
+    api_key: str = Field(default="", max_length=512, repr=False)
+    base_url: str | None = Field(default=None, max_length=512)
 
 
 class ScriptRequest(BaseModel):
@@ -151,3 +157,24 @@ def assistant_script(
                         body.base_url, body.language)
     except ProviderError as exc:
         raise ValidationFailed(str(exc)) from None
+
+
+@router.post("/assistant/models")
+def assistant_models(body: ModelsRequest) -> dict:
+    """The models this key can reach, from the provider itself.
+
+    A POST because it carries a key, and the key must not end up in a URL, a
+    query string or an access log. Nothing is stored: the key is used for this
+    one upstream call, exactly as it is for a question.
+    """
+    try:
+        models = list_models(
+            provider_id=body.provider,
+            api_key=body.api_key,
+            base_url=body.base_url,
+        )
+    except ProviderError as exc:
+        raise ValidationFailed(str(exc)) from None
+    except AssistantError as exc:
+        raise _as_http(exc) from None
+    return {"provider": body.provider, "models": models}

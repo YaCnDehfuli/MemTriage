@@ -188,7 +188,13 @@ def test_run_selected_plugins_end_to_end_against_a_fake_pipeline():
     assert "plugin_finished" in kinds  # netscan (ok) and malfind (failed)
     finished = [e for e in events if e["type"] == "plugin_finished"]
     assert {e["plugin"]: e["ok"] for e in finished} == {"netscan": True, "malfind": False}
-    assert pipe.calls == [{"enable": {"pslist", "netscan", "malfind"}, "concurrency": 2}]
+    # Kernel symbols are resolved alone first, so the concurrent batch cannot race
+    # on a cold symbol cache; the probe is not part of the analyst's transcript.
+    assert pipe.calls == [
+        {"enable": {"info"}, "concurrency": 1},
+        {"enable": {"pslist", "netscan", "malfind"}, "concurrency": 2},
+    ]
+    assert all(e.get("plugin") != "info" for e in events)
 
 
 def test_raised_manual_batch_marks_every_nonterminal_plugin_failed():
