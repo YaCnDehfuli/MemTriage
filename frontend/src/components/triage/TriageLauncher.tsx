@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { PluginCatalogEntry, TriageMode, TriageOptions } from "../../types";
 
 const COST_TONE: Record<PluginCatalogEntry["cost"], string> = {
-  fast: "text-mist-400 ring-ink-600",
+  fast: "text-ink-400 ring-surface-600",
   scan: "text-risk-medium ring-risk-medium/30",
   heavy: "text-risk-high ring-risk-high/30",
 };
@@ -90,23 +90,24 @@ export function TriageLauncher({
 
   return (
     <div className="space-y-4 px-4 py-4">
-      <div className="grid gap-2 sm:grid-cols-3">
+      <div className="grid gap-2">
         {(Object.keys(MODE_COPY) as TriageMode[]).map((choice) => (
           <button
             key={choice}
             type="button"
             disabled={locked}
+            aria-pressed={mode === choice}
             onClick={() => chooseMode(choice)}
             className={`rounded-md border px-3 py-3 text-left transition-colors disabled:opacity-50 ${
               mode === choice
                 ? "border-accent/40 bg-accent/10 ring-1 ring-inset ring-accent/20"
-                : "border-ink-700/60 bg-ink-900/30 hover:bg-ink-800/60"
+                : "border-surface-700/60 bg-surface-900/30 hover:bg-surface-800/60"
             }`}
           >
-            <span className={`block text-sm font-semibold ${mode === choice ? "text-accent" : "text-mist-200"}`}>
+            <span className={`block text-sm font-semibold ${mode === choice ? "text-accent-soft" : "text-ink-200"}`}>
               {MODE_COPY[choice].label}
             </span>
-            <span className="mt-0.5 block text-[11px] text-mist-400">
+            <span className="mt-0.5 block text-[11px] text-ink-400">
               {MODE_COPY[choice].hint}
               {choice !== "custom" && ` · ${preset(catalog, choice).size} plugins`}
             </span>
@@ -114,30 +115,30 @@ export function TriageLauncher({
         ))}
       </div>
 
-      <details className="rounded-md border border-ink-700/60 bg-ink-900/20" open={mode === "custom"}>
-        <summary className="cursor-pointer px-3 py-2.5 text-[12px] font-medium text-mist-200">
-          Plugin selection <span className="ml-2 font-mono text-mist-400">{selected.size} selected</span>
+      <details className="rounded-md border border-surface-700/60 bg-surface-900/20" open={mode === "custom"}>
+        <summary className="cursor-pointer px-3 py-2.5 text-[12px] font-medium text-ink-200">
+          Plugin selection <span className="ml-2 font-mono text-ink-400">{selected.size} selected</span>
         </summary>
-        <div className="grid gap-3 border-t border-ink-700/60 p-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 border-t border-surface-700/60 p-3">
           {byCategory.map(([category, entries]) => {
             const allSelected = entries.every((entry) => selected.has(entry.name));
             return (
-              <div key={category} className="rounded-md border border-ink-700/60 bg-ink-950/30">
+              <div key={category} className="rounded-md border border-surface-700/60 bg-surface-950/30">
                 <button
                   type="button"
                   disabled={locked}
                   onClick={() => toggleCategory(entries)}
-                  className="flex w-full items-center justify-between border-b border-ink-700/60 px-3 py-2 text-left disabled:opacity-50"
+                  className="flex w-full items-center justify-between border-b border-surface-700/60 px-3 py-2 text-left disabled:opacity-50"
                 >
-                  <span className="text-[12px] font-semibold text-mist-200">{category}</span>
-                  <span className="font-mono text-[10px] text-accent">
+                  <span className="text-[12px] font-semibold text-ink-200">{category}</span>
+                  <span className="font-mono text-[10px] text-accent-soft">
                     {allSelected ? "clear" : "select all"}
                   </span>
                 </button>
                 <ul className="max-h-52 overflow-y-auto p-2">
                   {entries.map((entry) => (
                     <li key={entry.name}>
-                      <label className="flex items-center gap-2 rounded px-1.5 py-1 hover:bg-ink-800/60">
+                      <label className="flex items-center gap-2 rounded px-1.5 py-1 hover:bg-surface-800/60">
                         <input
                           type="checkbox"
                           className="accent-accent"
@@ -145,15 +146,15 @@ export function TriageLauncher({
                           disabled={locked}
                           onChange={() => toggle(entry.name)}
                         />
-                        <span className="min-w-0 flex-1 truncate font-mono text-[12px] text-mist-200">
+                        <span className="min-w-0 flex-1 truncate font-mono text-[12px] text-ink-200">
                           {entry.name}
                         </span>
-                        <span className={`rounded px-1 py-0.5 text-[9px] uppercase ring-1 ring-inset ${COST_TONE[entry.cost]}`}>
+                        <span className={`rounded px-1 py-0.5 text-[11px] uppercase ring-1 ring-inset ${COST_TONE[entry.cost]}`}>
                           {entry.cost}
                         </span>
                       </label>
                       {entry.deps.length > 0 && (
-                        <div className="pb-1 pl-7 font-mono text-[9px] text-mist-500">
+                        <div className="pb-1 pl-7 font-mono text-[10px] text-ink-400">
                           needs {entry.deps.join(", ")}
                         </div>
                       )}
@@ -166,7 +167,7 @@ export function TriageLauncher({
         </div>
       </details>
 
-      <div className="grid gap-4 rounded-md border border-ink-700/60 bg-ink-900/30 p-3 lg:grid-cols-[1fr_1fr_auto] lg:items-end">
+      <div className="grid gap-4 rounded-md border border-surface-700/60 bg-surface-900/30 p-3">
         <label className="block">
           <span className="eyebrow">Concurrency</span>
           <div className="mt-2 flex items-center gap-3">
@@ -178,9 +179,9 @@ export function TriageLauncher({
               value={concurrency}
               disabled={locked}
               onChange={(event) => setConcurrency(Number(event.target.value))}
-              className="w-36 accent-accent"
+              className="w-full accent-accent"
             />
-            <span className="font-mono text-xs text-mist-300">
+            <span className="shrink-0 font-mono text-xs text-ink-300">
               {concurrency === 1 ? "sequential" : `${concurrency} workers`}
             </span>
           </div>
@@ -192,6 +193,7 @@ export function TriageLauncher({
             <button
               type="button"
               disabled={locked}
+              aria-pressed={!force}
               className={force ? "btn-ghost text-xs" : "btn-accent text-xs"}
               onClick={() => setForce(false)}
             >
@@ -200,13 +202,14 @@ export function TriageLauncher({
             <button
               type="button"
               disabled={locked}
+              aria-pressed={force}
               className={force ? "btn-accent text-xs" : "btn-ghost text-xs"}
               onClick={() => setForce(true)}
             >
               Force refresh
             </button>
           </div>
-          <p className="mt-1.5 text-[10px] text-mist-400">
+          <p className="mt-1.5 text-[10px] text-ink-400">
             {force ? "Ignore compatible cached analysis and rerun Volatility." : "Reuse compatible analysis and run only missing work."}
           </p>
         </div>
@@ -216,7 +219,7 @@ export function TriageLauncher({
           disabled={locked || !hasInvestigation || selected.size === 0}
           onClick={() => onRun({ mode, plugins: [...selected], concurrency, force })}
         >
-          {starting ? "Starting…" : disabled ? (disabledLabel ?? "Triage running…") : `Run ${MODE_COPY[mode].label} triage →`}
+          {starting ? "Starting…" : disabled ? (disabledLabel ?? "Triage running…") : `Run ${MODE_COPY[mode].label} triage`}
         </button>
       </div>
 

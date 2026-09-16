@@ -21,6 +21,7 @@ export function UploadPanel() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [rejected, setRejected] = useState<string[]>([]);
+  const [excess, setExcess] = useState(0);
 
   const accept = useCallback(
     (list: FileList | null) => {
@@ -28,8 +29,10 @@ export function UploadPanel() {
       const files = Array.from(list);
       const bad = files.filter((f) => !ALLOWED.includes(extensionOf(f.name)));
       const good = files.filter((f) => ALLOWED.includes(extensionOf(f.name)));
+      const accepted = good.slice(0, MAX_DUMPS);
       setRejected(bad.map((f) => f.name));
-      if (good.length) void uploadDumps(good.slice(0, MAX_DUMPS));
+      setExcess(good.length - accepted.length);
+      if (accepted.length) void uploadDumps(accepted);
     },
     [uploadDumps],
   );
@@ -58,13 +61,13 @@ export function UploadPanel() {
         className={`grid cursor-pointer place-items-center rounded-lg border border-dashed px-6 py-10 text-center transition-colors ${
           dragging
             ? "border-accent/60 bg-accent/5"
-            : "border-ink-600 hover:border-ink-500 hover:bg-ink-800/40"
+            : "border-surface-600 hover:border-surface-500 hover:bg-surface-800/40"
         }`}
       >
-        <div className="text-sm font-medium text-mist-100">
+        <div className="text-sm font-medium text-ink-100">
           Drop memory images here, or click to choose
         </div>
-        <p className="mt-1 max-w-md text-[12px] text-mist-400">
+        <p className="mt-1 max-w-md text-[12px] text-ink-400">
           Up to {MAX_DUMPS} interval snapshots of the same host. Accepted:{" "}
           <span className="font-mono">{ALLOWED.join(" ")}</span>
         </p>
@@ -86,21 +89,27 @@ export function UploadPanel() {
           extension: <span className="font-mono">{rejected.join(", ")}</span>
         </p>
       )}
+      {excess > 0 && (
+        <p className="text-[12px] text-risk-medium">
+          Only the first {MAX_DUMPS} snapshots are accepted at once; {excess} additional file
+          {excess > 1 ? "s were" : " was"} not uploaded. Select the rest separately.
+        </p>
+      )}
 
       {uploads.length > 0 && (
         <ul className="space-y-2">
-          {uploads.map((u) => (
-            <li key={u.name} className="rounded-md border border-ink-700/60 px-3 py-2">
+          {uploads.map((u, i) => (
+            <li key={`${u.name}-${i}`} className="rounded-md border border-surface-700/60 px-3 py-2">
               <div className="flex items-baseline justify-between gap-3">
-                <span className="truncate text-[13px] text-mist-100">{u.name}</span>
-                <span className="shrink-0 font-mono text-[11px] text-mist-400">
+                <span className="truncate text-[13px] text-ink-100">{u.name}</span>
+                <span className="shrink-0 font-mono text-[11px] text-ink-400">
                   {bytes(u.size)}
                 </span>
               </div>
               <div className="mt-2">
                 <Meter value={u.progress / 100} />
               </div>
-              <div className="mt-1 text-[11px] text-mist-400">
+              <div className="mt-1 text-[11px] text-ink-400">
                 {u.status === "failed"
                   ? <span className="text-risk-critical">{u.error ?? "Upload failed"}</span>
                   : u.status === "done"
@@ -117,7 +126,7 @@ export function UploadPanel() {
         disabled={loading || !done || !investigationId}
         onClick={() => setStage("triage")}
       >
-        {loading ? "Uploading…" : "Configure VolMemLyzer triage →"}
+        {loading ? "Uploading…" : "Configure VolMemLyzer triage"}
       </button>
     </div>
   );

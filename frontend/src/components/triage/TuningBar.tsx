@@ -18,17 +18,19 @@ export function TuningBar({
   const preset = profile?.preset ?? "balanced";
 
   return (
-    <div className="border-b border-ink-700/60 bg-ink-900/40 px-4 py-3">
+    <div className="border-b border-surface-700/60 bg-surface-900/40 px-4 py-3">
       <div className="flex flex-wrap items-center gap-3">
         <span className="eyebrow">Sensitivity</span>
-        <div className="flex rounded-md bg-ink-850 p-0.5 ring-1 ring-inset ring-ink-600">
+        <div className="flex rounded-md bg-surface-850 p-0.5 ring-1 ring-inset ring-surface-600">
           {PRESETS.map((p) => (
             <button
               key={p.id}
+              type="button"
               title={p.hint}
+              aria-pressed={preset === p.id}
               onClick={() => onChange({ preset: p.id })}
               className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
-                preset === p.id ? "bg-accent/20 text-accent" : "text-mist-400 hover:text-mist-200"
+                preset === p.id ? "bg-accent/20 text-accent-soft" : "text-ink-400 hover:text-ink-200"
               }`}
             >
               {p.label}
@@ -36,7 +38,7 @@ export function TuningBar({
           ))}
         </div>
 
-        <label className="ml-1 flex items-center gap-2 text-xs text-mist-300">
+        <label className="ml-1 flex items-center gap-2 text-xs text-ink-300">
           <input
             type="checkbox"
             className="accent-accent"
@@ -52,7 +54,7 @@ export function TuningBar({
       </div>
 
       {advanced && profile && (
-        <div className="mt-3 grid gap-4 rounded-md border border-ink-700/50 bg-ink-850/50 p-3 sm:grid-cols-2">
+        <div className="mt-3 grid gap-4 rounded-md border border-surface-700/50 bg-surface-850/50 p-3 sm:grid-cols-2">
           <div>
             <div className="eyebrow mb-2">Confidence floor</div>
             <div className="flex items-center gap-3">
@@ -67,24 +69,24 @@ export function TuningBar({
                 }
                 className="w-full accent-accent"
               />
-              <span className="w-12 text-right font-mono text-xs text-mist-300">
+              <span className="w-12 text-right font-mono text-xs text-ink-300">
                 {(profile.confidence_floor * 100).toFixed(0)}%
               </span>
             </div>
-            <p className="mt-1 text-[11px] text-mist-400">
+            <p className="mt-1 text-[11px] text-ink-400">
               Suppress objects whose corroborated confidence is below this.
             </p>
           </div>
           <div>
             <div className="eyebrow mb-2">Risk-band cut-offs</div>
-            <div className="flex flex-wrap gap-2 font-mono text-[11px] text-mist-300">
+            <div className="flex flex-wrap gap-2 font-mono text-[11px] text-ink-300">
               {Object.entries(profile.risk_bands).map(([k, v]) => (
-                <span key={k} className="rounded bg-ink-800 px-2 py-1 ring-1 ring-inset ring-ink-600">
+                <span key={k} className="rounded bg-surface-800 px-2 py-1 ring-1 ring-inset ring-surface-600">
                   {k} ≥ {v}
                 </span>
               ))}
             </div>
-            <p className="mt-1 text-[11px] text-mist-400">
+            <p className="mt-1 text-[11px] text-ink-400">
               Per-category surfacing thresholds & rule weights re-score from cache — no
               Volatility re-run.
             </p>

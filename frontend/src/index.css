@@ -3,7 +3,54 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light;
+  --color-surface-950: 247 245 240;
+  --color-surface-900: 240 238 229;
+  --color-surface-850: 232 228 216;
+  --color-surface-800: 221 215 198;
+  --color-surface-700: 199 191 168;
+  --color-surface-600: 168 158 130;
+  --color-surface-500: 138 128 103;
+  --color-ink-400: 117 110 87;
+  --color-ink-300: 86 79 59;
+  --color-ink-200: 58 51 31;
+  --color-ink-100: 33 29 16;
+  --color-accent: 139 175 160;
+  --color-accent-soft: 74 110 96;
+  --color-accent-dim: 47 72 62;
+  --color-risk-critical: 200 57 79;
+  --color-risk-high: 189 106 30;
+  --color-risk-medium: 161 127 22;
+  --color-risk-low: 63 99 184;
+  --color-risk-none: 111 104 87;
+  --shadow-panel: 0 1px 2px 0 rgba(33, 29, 16, 0.05), 0 6px 16px -6px rgba(33, 29, 16, 0.12);
+}
+
+.dark {
   color-scheme: dark;
+  /* Literal inversion of the light theme's warm bone/taupe ramp — never a
+     separate cool/navy palette. Dark ink-100 lands near light surface-950
+     and vice versa, so both themes read as the same instrument. */
+  --color-surface-950: 26 24 20;
+  --color-surface-900: 34 31 25;
+  --color-surface-850: 43 39 31;
+  --color-surface-800: 54 49 39;
+  --color-surface-700: 74 67 53;
+  --color-surface-600: 99 90 71;
+  --color-surface-500: 128 117 94;
+  --color-ink-400: 158 148 128;
+  --color-ink-300: 196 187 165;
+  --color-ink-200: 222 216 199;
+  --color-ink-100: 241 238 230;
+  --color-accent: 139 175 160;
+  --color-accent-soft: 157 194 179;
+  --color-accent-dim: 47 72 62;
+  --color-risk-critical: 240 97 109;
+  --color-risk-high: 242 153 74;
+  --color-risk-medium: 231 193 75;
+  --color-risk-low: 91 141 239;
+  --color-risk-none: 91 107 128;
+  --shadow-panel: 0 1px 0 0 rgba(255, 255, 255, 0.03) inset, 0 8px 24px -12px rgba(0, 0, 0, 0.6);
 }
 
 html,
@@ -13,31 +60,30 @@ body,
 }
 
 body {
-  @apply bg-ink-950 text-mist-200 font-sans antialiased;
-  background-image:
-    radial-gradient(1200px 600px at 78% -10%, rgba(56, 198, 217, 0.06), transparent 60%),
-    radial-gradient(900px 500px at -10% 110%, rgba(91, 141, 239, 0.05), transparent 55%);
+  @apply bg-surface-950 text-ink-200 font-sans antialiased;
 }
 
 @layer components {
   .panel {
-    @apply rounded-lg border border-ink-700/70 bg-ink-850/80 shadow-panel;
+    @apply rounded-lg border border-surface-700/70 bg-surface-850/80 shadow-panel;
   }
   .panel-head {
-    @apply flex items-center justify-between border-b border-ink-700/60 px-4 py-3;
+    @apply flex items-center justify-between border-b border-surface-700/60 px-4 py-3;
   }
+  /* Section/phase label. Sentence case, not the tiny uppercase "eyebrow"
+     dashboard convention — this is a research instrument, not a SaaS panel. */
   .eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-mist-400;
+    @apply text-[12px] font-medium normal-case tracking-normal text-ink-400;
   }
   .btn {
     @apply inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium
       transition-colors disabled:cursor-not-allowed disabled:opacity-40;
   }
   .btn-accent {
-    @apply btn bg-accent/15 text-accent ring-1 ring-inset ring-accent/30 hover:bg-accent/25;
+    @apply btn bg-accent/15 text-accent-soft ring-1 ring-inset ring-accent/30 hover:bg-accent/25;
   }
   .btn-ghost {
-    @apply btn text-mist-300 ring-1 ring-inset ring-ink-600 hover:bg-ink-800;
+    @apply btn text-ink-300 ring-1 ring-inset ring-surface-600 hover:bg-surface-800;
   }
   .mono {
     @apply font-mono text-[13px] tabular-nums;
@@ -47,13 +93,39 @@ body {
 /* Thin, unobtrusive scrollbars that suit a dense analyst UI. */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #293648 transparent;
+  scrollbar-color: rgb(var(--color-surface-600)) transparent;
 }
 *::-webkit-scrollbar {
   width: 9px;
   height: 9px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #293648;
+  background: rgb(var(--color-surface-600));
   border-radius: 6px;
+}
+
+/* A single, consistent keyboard-focus treatment. Uses box-shadow (not
+   outline) so it still renders even where a component sets outline-none. */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--color-surface-950)), 0 0 0 4px rgb(var(--color-accent));
+  border-radius: 4px;
+}
+
+/* box-shadow does not render on SVG <g>, which has no CSS box of its own —
+   ring the node's rect directly instead. */
+g.graph-node:focus-visible rect {
+  stroke: rgb(var(--color-accent));
+  stroke-width: 2.5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

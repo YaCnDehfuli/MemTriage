@@ -22,10 +22,10 @@ export function RiskBadge({ risk }: { risk: Risk | null | undefined }) {
 export function Chip({ children, tone = "default" }: { children: ReactNode; tone?: "default" | "accent" | "mono" }) {
   const cls =
     tone === "accent"
-      ? "bg-accent/10 text-accent ring-accent/25"
+      ? "bg-accent/10 text-accent-soft ring-accent/25"
       : tone === "mono"
-        ? "bg-ink-800 text-mist-300 ring-ink-600 font-mono text-[11px]"
-        : "bg-ink-800 text-mist-300 ring-ink-600";
+        ? "bg-surface-800 text-ink-300 ring-surface-600 font-mono text-[11px]"
+        : "bg-surface-800 text-ink-300 ring-surface-600";
   return (
     <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-[11px] ring-1 ring-inset ${cls}`}>
       {children}
@@ -33,7 +33,24 @@ export function Chip({ children, tone = "default" }: { children: ReactNode; tone
   );
 }
 
-export function Meter({ value, tone = "accent" }: { value: number; tone?: "accent" | "risk" }) {
+/**
+ * `risk` scales hue with severity and must stay reserved for values that are
+ * actually risk scores. `neutral` is for confidence/attention: magnitude
+ * shown as intensity of one hue, not borrowed severity color. `progress`
+ * exposes real progressbar semantics — pass it only for literal job/upload
+ * completion, not for confidence or attention measurements.
+ */
+export function Meter({
+  value,
+  tone = "accent",
+  progress = false,
+  label,
+}: {
+  value: number;
+  tone?: "accent" | "risk" | "neutral";
+  progress?: boolean;
+  label?: string;
+}) {
   const pctv = Math.max(0, Math.min(1, value)) * 100;
   const color =
     tone === "risk"
@@ -42,9 +59,18 @@ export function Meter({ value, tone = "accent" }: { value: number; tone?: "accen
         : value > 0.6
           ? "bg-risk-high"
           : "bg-risk-medium"
-      : "bg-accent";
+      : tone === "neutral"
+        ? "bg-ink-300"
+        : "bg-accent";
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink-700">
+    <div
+      className="h-1.5 w-full overflow-hidden rounded-full bg-surface-700"
+      role={progress ? "progressbar" : undefined}
+      aria-valuemin={progress ? 0 : undefined}
+      aria-valuemax={progress ? 100 : undefined}
+      aria-valuenow={progress ? Math.round(pctv) : undefined}
+      aria-label={progress ? label : undefined}
+    >
       <div className={`h-full rounded-full ${color}`} style={{ width: `${pctv}%` }} />
     </div>
   );
@@ -69,7 +95,7 @@ export function Panel({
         <header className="panel-head">
           <div>
             {eyebrow && <div className="eyebrow">{eyebrow}</div>}
-            {title && <h2 className="text-sm font-semibold text-mist-100">{title}</h2>}
+            {title && <h2 className="text-sm font-semibold text-ink-100">{title}</h2>}
           </div>
           {right}
         </header>
@@ -82,9 +108,9 @@ export function Panel({
 export function EmptyState({ icon = "◈", title, hint }: { icon?: string; title: string; hint?: string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-2 px-6 py-12 text-center">
-      <div className="text-2xl text-ink-500">{icon}</div>
-      <div className="text-sm font-medium text-mist-300">{title}</div>
-      {hint && <div className="max-w-sm text-xs text-mist-400">{hint}</div>}
+      <div className="text-2xl text-surface-500">{icon}</div>
+      <div className="text-sm font-medium text-ink-300">{title}</div>
+      {hint && <div className="max-w-sm text-xs text-ink-400">{hint}</div>}
     </div>
   );
 }

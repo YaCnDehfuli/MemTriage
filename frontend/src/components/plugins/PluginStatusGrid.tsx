@@ -10,23 +10,23 @@ interface Derived {
 }
 
 const DOT: Record<Status, string> = {
-  queued: "bg-ink-600",
+  queued: "bg-surface-600",
   dispatched: "bg-accent animate-pulse",
   running: "bg-accent animate-pulse",
   done: "bg-accent",
-  cached: "bg-mist-300",
+  cached: "bg-ink-300",
   timed_out: "bg-risk-high",
   failed: "bg-risk-critical",
 };
 
 const CARD: Record<Status, string> = {
-  queued: "border-ink-700/60 bg-ink-900/30 text-mist-400",
-  dispatched: "border-accent/30 bg-accent/5 text-mist-100",
-  running: "border-accent/40 bg-accent/10 text-mist-100",
-  done: "border-ink-700/60 bg-ink-900/40 text-mist-100",
-  cached: "border-ink-700/60 bg-ink-900/40 text-mist-200",
-  timed_out: "border-risk-high/30 bg-risk-high/5 text-mist-100",
-  failed: "border-risk-critical/30 bg-risk-critical/5 text-mist-100",
+  queued: "border-surface-700/60 bg-surface-900/30 text-ink-400",
+  dispatched: "border-accent/30 bg-accent/5 text-ink-100",
+  running: "border-accent/40 bg-accent/10 text-ink-100",
+  done: "border-surface-700/60 bg-surface-900/40 text-ink-100",
+  cached: "border-surface-700/60 bg-surface-900/40 text-ink-200",
+  timed_out: "border-risk-high/30 bg-risk-high/5 text-ink-100",
+  failed: "border-risk-critical/30 bg-risk-critical/5 text-ink-100",
 };
 
 const LABEL: Record<Status, string> = {
@@ -117,7 +117,7 @@ export function PluginStatusGrid({
           <div className="mb-1.5 flex items-center gap-2">
             <span className="eyebrow">Batch {i + 1}</span>
             {layer.length > 1 && (
-              <span className="rounded bg-ink-800 px-1.5 py-0.5 text-[10px] text-mist-400 ring-1 ring-inset ring-ink-600">
+              <span className="rounded bg-surface-800 px-1.5 py-0.5 text-[10px] text-ink-400 ring-1 ring-inset ring-surface-600">
                 {planEvent?.concurrency && planEvent.concurrency > 1
                   ? `up to ${Math.min(planEvent.concurrency, layer.length)} concurrent`
                   : "dependency group"}
@@ -136,7 +136,7 @@ export function PluginStatusGrid({
                     <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${DOT[d.status]}`} />
                     <span className="min-w-0 flex-1 truncate font-mono text-[12px]">{name}</span>
                   </div>
-                  <div className="mt-1 flex items-center justify-between text-[10px] text-mist-400">
+                  <div className="mt-1 flex items-center justify-between text-[10px] text-ink-400">
                     <span className="uppercase tracking-wide">{LABEL[d.status]}</span>
                     {d.detail && <span className="font-mono">{d.detail}</span>}
                   </div>

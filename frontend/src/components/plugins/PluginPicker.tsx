@@ -4,7 +4,7 @@ import { Chip } from "../primitives";
 
 const COST_LABEL: Record<string, string> = { fast: "fast", scan: "scan", heavy: "heavy" };
 const COST_TONE: Record<string, string> = {
-  fast: "text-mist-400 ring-ink-600",
+  fast: "text-ink-400 ring-surface-600",
   scan: "text-risk-medium ring-risk-medium/30",
   heavy: "text-risk-high ring-risk-high/30",
 };
@@ -74,40 +74,40 @@ export function PluginPicker({
         <button className="btn-ghost text-xs" onClick={() => setSelected(new Set())}>
           Clear
         </button>
-        <span className="ml-auto font-mono text-[11px] text-mist-400">
+        <span className="ml-auto font-mono text-[11px] text-ink-400">
           {selected.size} selected
         </span>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4">
         {byCategory.map(([category, entries]) => {
           const allOn = entries.every((e) => selected.has(e.name));
           return (
-            <div key={category} className="rounded-md border border-ink-700/60 bg-ink-900/30">
+            <div key={category} className="rounded-md border border-surface-700/60 bg-surface-900/30">
               <button
                 onClick={() => toggleCategory(entries)}
-                className="flex w-full items-center justify-between border-b border-ink-700/60 px-3 py-2 text-left"
+                className="flex w-full items-center justify-between border-b border-surface-700/60 px-3 py-2 text-left"
               >
-                <span className="text-[12px] font-semibold text-mist-200">{category}</span>
-                <span className="font-mono text-[10px] text-accent">
+                <span className="text-[12px] font-semibold text-ink-200">{category}</span>
+                <span className="font-mono text-[10px] text-accent-soft">
                   {allOn ? "clear" : "select all"}
                 </span>
               </button>
               <ul className="max-h-64 space-y-0.5 overflow-y-auto p-2">
                 {entries.map((entry) => (
                   <li key={entry.name}>
-                    <label className="flex items-center gap-2 rounded px-1.5 py-1 hover:bg-ink-800/60">
+                    <label className="flex items-center gap-2 rounded px-1.5 py-1 hover:bg-surface-800/60">
                       <input
                         type="checkbox"
                         className="accent-accent"
                         checked={selected.has(entry.name)}
                         onChange={() => toggle(entry.name)}
                       />
-                      <span className="min-w-0 flex-1 truncate font-mono text-[12px] text-mist-200">
+                      <span className="min-w-0 flex-1 truncate font-mono text-[12px] text-ink-200">
                         {entry.name}
                       </span>
                       <span
-                        className={`shrink-0 rounded px-1 py-0.5 text-[9px] uppercase ring-1 ring-inset ${COST_TONE[entry.cost]}`}
+                        className={`shrink-0 rounded px-1 py-0.5 text-[11px] uppercase ring-1 ring-inset ${COST_TONE[entry.cost]}`}
                       >
                         {COST_LABEL[entry.cost]}
                       </span>
@@ -120,31 +120,33 @@ export function PluginPicker({
         })}
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 rounded-md border border-ink-700/60 bg-ink-900/30 px-4 py-3">
-        <div className="flex items-center gap-3">
+      <div className="space-y-3 rounded-md border border-surface-700/60 bg-surface-900/30 px-4 py-3">
+        <div>
           <span className="eyebrow">Concurrency</span>
-          <input
-            type="range"
-            min={1}
-            max={8}
-            step={1}
-            value={concurrency}
-            onChange={(e) => setConcurrency(Number(e.target.value))}
-            className="w-36 accent-accent"
-          />
-          <span className="w-24 font-mono text-xs text-mist-300">
-            {concurrency === 1 ? "sequential" : `${concurrency} workers`}
-          </span>
+          <div className="mt-2 flex items-center gap-3">
+            <input
+              type="range"
+              min={1}
+              max={8}
+              step={1}
+              value={concurrency}
+              onChange={(e) => setConcurrency(Number(e.target.value))}
+              className="w-full accent-accent"
+            />
+            <span className="shrink-0 font-mono text-xs text-ink-300">
+              {concurrency === 1 ? "sequential" : `${concurrency} workers`}
+            </span>
+          </div>
+          <p className="mt-1.5 text-[11px] text-ink-400">
+            Independent plugins in the same dependency batch run at once, up to this many at a time.
+          </p>
         </div>
-        <p className="text-[11px] text-mist-400">
-          Independent plugins in the same dependency batch run at once, up to this many at a time.
-        </p>
         <button
-          className="btn-accent ml-auto"
+          className="btn-accent w-full justify-center"
           disabled={selected.size === 0 || starting || blocked}
           onClick={() => onRun([...selected], concurrency)}
         >
-          {starting ? "Starting…" : blocked ? "Volatility busy…" : `Run ${selected.size || ""} plugin${selected.size === 1 ? "" : "s"} →`}
+          {starting ? "Starting…" : blocked ? "Volatility busy…" : `Run ${selected.size || ""} plugin${selected.size === 1 ? "" : "s"}`}
         </button>
       </div>
       {blockedReason && <p className="text-[11px] text-risk-medium">{blockedReason}</p>}

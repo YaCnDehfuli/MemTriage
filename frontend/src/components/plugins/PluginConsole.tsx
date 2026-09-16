@@ -4,8 +4,8 @@ import type { PluginEvent } from "../../types";
 const LEVEL_CLASS: Record<string, string> = {
   ERROR: "text-risk-critical",
   WARNING: "text-risk-medium",
-  INFO: "text-mist-300",
-  DEBUG: "text-mist-400",
+  INFO: "text-ink-300",
+  DEBUG: "text-ink-400",
 };
 
 function timestamp(at: number): string {
@@ -17,25 +17,38 @@ export function PluginConsole({ events }: { events: PluginEvent[] }) {
   const lines = events.filter((e) => e.type === "log");
   const consoleRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const followingRef = useRef(true);
 
   useEffect(() => {
-    const consoleElement = consoleRef.current;
-    if (consoleElement) consoleElement.scrollTop = consoleElement.scrollHeight;
+    const el = consoleRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      followingRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 32;
+    };
+    el.addEventListener("scroll", onScroll);
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = consoleRef.current;
+    // Only snap to the newest line if the analyst was already reading the
+    // live edge — scrolling up to read earlier output should not be undone.
+    if (el && followingRef.current) el.scrollTop = el.scrollHeight;
   }, [lines.length]);
 
   return (
-    <div ref={consoleRef} className="h-[420px] overflow-y-auto rounded-md border border-ink-700/60 bg-ink-950 p-3 font-mono text-[12px] leading-relaxed">
+    <div ref={consoleRef} className="h-[420px] overflow-y-auto rounded-md border border-surface-700/60 bg-surface-950 p-3 font-mono text-[12px] leading-relaxed">
       {lines.length === 0 ? (
-        <p className="text-mist-400">Waiting for output…</p>
+        <p className="text-ink-400">Waiting for output…</p>
       ) : (
         lines.map((e, i) => (
           <div key={i} className="whitespace-pre-wrap break-all">
-            <span className="text-mist-500">[{timestamp(e.at)}]</span>{" "}
-            <span className={LEVEL_CLASS[e.level ?? "INFO"] ?? "text-mist-300"}>
+            <span className="text-ink-400">[{timestamp(e.at)}]</span>{" "}
+            <span className={LEVEL_CLASS[e.level ?? "INFO"] ?? "text-ink-300"}>
               {(e.level ?? "INFO").padEnd(7)}
             </span>{" "}
-            <span className="text-mist-400">{e.logger?.replace("volmemlyzer.", "")}:</span>{" "}
-            <span className="text-mist-200">{e.line}</span>
+            <span className="text-ink-400">{e.logger?.replace("volmemlyzer.", "")}:</span>{" "}
+            <span className="text-ink-200">{e.line}</span>
           </div>
         ))
       )}

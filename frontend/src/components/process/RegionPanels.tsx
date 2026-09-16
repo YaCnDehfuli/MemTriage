@@ -8,7 +8,7 @@ const SEVERITY_CLASS: Record<string, string> = {
   high: "text-risk-high ring-risk-high/30 bg-risk-high/10",
   medium: "text-risk-medium ring-risk-medium/30 bg-risk-medium/10",
   low: "text-risk-low ring-risk-low/30 bg-risk-low/10",
-  info: "text-mist-400 ring-ink-600 bg-ink-800/40",
+  info: "text-ink-400 ring-surface-600 bg-surface-800/40",
 };
 
 const CATEGORY_TONE: Record<string, "accent" | "default" | "mono"> = {
@@ -35,8 +35,8 @@ function EntropySparkline({ windows, peak }: { windows: number[]; peak: number }
     <svg viewBox={`0 0 ${width} ${height}`} className="h-20 w-full" role="img"
          aria-label={`Entropy profile, peak ${peak}`}>
       <line x1="0" y1={threshold} x2={width} y2={threshold}
-            stroke="#f2994a" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
-      <polyline points={points} fill="none" stroke="#38c6d9" strokeWidth="1.5" />
+            stroke="#bd6a1e" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
+      <polyline points={points} fill="none" stroke="#8bafa0" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -46,32 +46,46 @@ export function Structure({ analysis }: { analysis: RegionAnalysis }) {
   const pe = s.pe;
   if (s.error) {
     return (
-      <p className="text-[13px] text-mist-400">
+      <p className="text-[13px] text-ink-400">
         Structural analysis failed for this region ({s.error}).
       </p>
     );
   }
   return (
     <div className="space-y-5">
-      <div className="grid gap-3 sm:grid-cols-4">
-        <Stat label="Size" value={bytes(s.size)} />
-        <Stat label="Entropy" value={s.entropy.overall.toFixed(2)} />
-        <Stat label="Peak entropy" value={`${s.entropy.peak.toFixed(2)} @ ${s.entropy.peak_offset_hex}`} />
-        <Stat label="Printable" value={`${(s.printable_ratio * 100).toFixed(0)}%`} />
+      <div className="font-mono text-[13px] text-ink-200">
+        Size {bytes(s.size)} · Entropy {s.entropy.overall.toFixed(2)} · Peak{" "}
+        {s.entropy.peak.toFixed(2)} @ {s.entropy.peak_offset_hex} · Printable{" "}
+        {(s.printable_ratio * 100).toFixed(0)}%
       </div>
 
       <div>
         <div className="eyebrow mb-1">Entropy profile</div>
         <EntropySparkline windows={s.entropy.windows} peak={s.entropy.peak} />
-        <p className="text-[11px] text-mist-400">
+        <p className="text-[11px] text-ink-400">
           {s.entropy.window_bytes} bytes per window. The dashed line is 7.2 — above it,
           contents look packed, compressed or encrypted rather than plain code.
         </p>
+        <table className="sr-only">
+          <caption>Entropy by window offset</caption>
+          <thead>
+            <tr><th>Window</th><th>Offset</th><th>Entropy</th></tr>
+          </thead>
+          <tbody>
+            {s.entropy.windows.map((v, i) => (
+              <tr key={i}>
+                <td>{i}</td>
+                <td>{`0x${(i * s.entropy.window_bytes).toString(16)}`}</td>
+                <td>{v.toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <div>
         <div className="eyebrow mb-2">Byte distribution</div>
-        <div className="flex h-16 items-end gap-0.5">
+        <div className="flex h-16 items-end gap-0.5" aria-hidden="true">
           {s.histogram.map((count, i) => {
             const max = Math.max(...s.histogram, 1);
             return (
@@ -84,6 +98,20 @@ export function Structure({ analysis }: { analysis: RegionAnalysis }) {
             );
           })}
         </div>
+        <table className="sr-only">
+          <caption>Byte value distribution by range</caption>
+          <thead>
+            <tr><th>Range</th><th>Count</th></tr>
+          </thead>
+          <tbody>
+            {s.histogram.map((count, i) => (
+              <tr key={i}>
+                <td>{`0x${(i * 8).toString(16)}–0x${(i * 8 + 7).toString(16)}`}</td>
+                <td>{count}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <div>
@@ -101,7 +129,7 @@ export function Structure({ analysis }: { analysis: RegionAnalysis }) {
             {pe.sections.length > 0 && (
               <table className="w-full font-mono text-[11px]">
                 <thead>
-                  <tr className="border-b border-ink-700/60 text-left text-mist-400">
+                  <tr className="border-b border-surface-700/60 text-left text-ink-400">
                     <th className="py-1 pr-3">Section</th>
                     <th className="py-1 pr-3">RVA</th>
                     <th className="py-1 pr-3">Virtual</th>
@@ -111,12 +139,12 @@ export function Structure({ analysis }: { analysis: RegionAnalysis }) {
                 </thead>
                 <tbody>
                   {pe.sections.map((sec) => (
-                    <tr key={sec.name + sec.virtual_address} className="border-b border-ink-800/50">
-                      <td className="py-1 pr-3 text-mist-200">{sec.name}</td>
-                      <td className="py-1 pr-3 text-mist-400">{sec.virtual_address}</td>
-                      <td className="py-1 pr-3 text-mist-400">{sec.virtual_size}</td>
-                      <td className="py-1 pr-3 text-mist-400">{sec.raw_size}</td>
-                      <td className={`py-1 ${sec.entropy > 7.2 ? "text-risk-medium" : "text-mist-400"}`}>
+                    <tr key={sec.name + sec.virtual_address} className="border-b border-surface-800/50">
+                      <td className="py-1 pr-3 text-ink-200">{sec.name}</td>
+                      <td className="py-1 pr-3 text-ink-400">{sec.virtual_address}</td>
+                      <td className="py-1 pr-3 text-ink-400">{sec.virtual_size}</td>
+                      <td className="py-1 pr-3 text-ink-400">{sec.raw_size}</td>
+                      <td className={`py-1 ${sec.entropy > 7.2 ? "text-risk-medium" : "text-ink-400"}`}>
                         {sec.entropy.toFixed(2)}
                       </td>
                     </tr>
@@ -130,11 +158,11 @@ export function Structure({ analysis }: { analysis: RegionAnalysis }) {
               </div>
             )}
             {pe.parser === "builtin" && (
-              <p className="text-[11px] text-mist-400">{pe.reason}</p>
+              <p className="text-[11px] text-ink-400">{pe.reason}</p>
             )}
           </div>
         ) : (
-          <p className="text-[12px] text-mist-400">{pe.reason}</p>
+          <p className="text-[12px] text-ink-400">{pe.reason}</p>
         )}
       </div>
     </div>
@@ -144,24 +172,31 @@ export function Structure({ analysis }: { analysis: RegionAnalysis }) {
 export function HexDump({ analysis }: { analysis: RegionAnalysis }) {
   const rows = analysis.structure.hexdump ?? [];
   if (!rows.length) {
-    return <p className="text-[13px] text-mist-400">No bytes to show for this region.</p>;
+    return <p className="text-[13px] text-ink-400">No bytes to show for this region.</p>;
   }
   return (
     <div className="space-y-2">
-      <p className="text-[12px] text-mist-400">
+      <p className="text-[12px] text-ink-400">
         First {rows.length * 16} bytes. Region contents are shown as a dump only — MemTriage
         never serves the raw bytes for download.
       </p>
-      <div className="max-h-[520px] overflow-auto rounded-md border border-ink-700/60">
+      <div className="max-h-[520px] overflow-auto rounded-md border border-surface-700/60">
         <table className="w-full font-mono text-[11px]">
+          <thead>
+            <tr className="border-b border-surface-700/60 text-left text-[10px] uppercase tracking-wider text-ink-400">
+              <th className="px-3 py-1 font-semibold">Address</th>
+              <th className="px-3 py-1 font-semibold">Bytes</th>
+              <th className="px-3 py-1 font-semibold">ASCII</th>
+            </tr>
+          </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.offset} className="border-b border-ink-800/50 last:border-0">
-                <td className="whitespace-nowrap px-3 py-0.5 text-mist-400">{row.address}</td>
-                <td className="whitespace-nowrap px-3 py-0.5 text-mist-200">
+              <tr key={row.offset} className="border-b border-surface-800/50 last:border-0">
+                <td className="whitespace-nowrap px-3 py-0.5 text-ink-400">{row.address}</td>
+                <td className="whitespace-nowrap px-3 py-0.5 text-ink-200">
                   {(row.bytes.match(/../g) ?? []).join(" ")}
                 </td>
-                <td className="whitespace-pre px-3 py-0.5 text-mist-400">{row.ascii}</td>
+                <td className="whitespace-pre px-3 py-0.5 text-ink-400">{row.ascii}</td>
               </tr>
             ))}
           </tbody>
@@ -175,7 +210,7 @@ export function Strings({ analysis }: { analysis: RegionAnalysis }) {
   const report = analysis.strings;
   const [onlyInteresting, setOnlyInteresting] = useState(true);
   if (report.error) {
-    return <p className="text-[13px] text-mist-400">String extraction failed ({report.error}).</p>;
+    return <p className="text-[13px] text-ink-400">String extraction failed ({report.error}).</p>;
   }
   const rows: ExtractedString[] = onlyInteresting ? report.interesting : report.strings;
   return (
@@ -185,38 +220,38 @@ export function Strings({ analysis }: { analysis: RegionAnalysis }) {
         {Object.entries(report.by_category).slice(0, 6).map(([k, v]) => (
           <Chip key={k} tone="mono">{k} {v}</Chip>
         ))}
-        <label className="ml-auto flex items-center gap-2 text-[12px] text-mist-300">
+        <label className="ml-auto flex items-center gap-2 text-[12px] text-ink-300">
           <input
             type="checkbox"
             checked={onlyInteresting}
             onChange={(e) => setOnlyInteresting(e.target.checked)}
-            className="accent-[#38c6d9]"
+            className="accent-[#8bafa0]"
           />
           Notable only
         </label>
       </div>
       {rows.length === 0 ? (
-        <p className="text-[13px] text-mist-400">
+        <p className="text-[13px] text-ink-400">
           {onlyInteresting
             ? "No URLs, addresses, paths, registry keys or commands in this region."
             : "No printable strings in this region."}
         </p>
       ) : (
-        <ul className="divide-y divide-ink-800/70 rounded-md border border-ink-700/60">
+        <ul className="divide-y divide-surface-800/70 rounded-md border border-surface-700/60">
           {rows.map((s, i) => (
             <li key={`${s.offset}-${i}`} className="flex items-baseline gap-3 px-3 py-2">
-              <span className="shrink-0 font-mono text-[11px] text-mist-400">{s.offset_hex}</span>
+              <span className="shrink-0 font-mono text-[11px] text-ink-400">{s.offset_hex}</span>
               <Chip tone={CATEGORY_TONE[s.category] ?? "default"}>{s.category}</Chip>
-              <span className="min-w-0 flex-1 break-all font-mono text-[12px] text-mist-100">
+              <span className="min-w-0 flex-1 break-all font-mono text-[12px] text-ink-100">
                 {s.value}
               </span>
-              <span className="shrink-0 font-mono text-[10px] text-mist-400">{s.encoding}</span>
+              <span className="shrink-0 font-mono text-[10px] text-ink-400">{s.encoding}</span>
             </li>
           ))}
         </ul>
       )}
       {report.truncated && (
-        <p className="text-[11px] text-mist-400">
+        <p className="text-[11px] text-ink-400">
           Capped at the string budget; notable categories were kept first.
         </p>
       )}
@@ -229,9 +264,9 @@ export function Patterns({ analysis }: { analysis: RegionAnalysis }) {
   const hits: PatternHit[] = report.hits ?? [];
   return (
     <div className="space-y-3">
-      {report.note && <p className="text-[12px] text-mist-400">{report.note}</p>}
+      {report.note && <p className="text-[12px] text-ink-400">{report.note}</p>}
       {hits.length === 0 ? (
-        <p className="text-[13px] text-mist-400">
+        <p className="text-[13px] text-ink-400">
           No catalogued pattern matched this region. That is not a clean bill of health —
           the catalogue covers known shapes only.
         </p>
@@ -248,20 +283,20 @@ export function Patterns({ analysis }: { analysis: RegionAnalysis }) {
                 <span className="text-[10px] font-semibold uppercase tracking-wider">
                   {hit.severity}
                 </span>
-                <span className="text-[13px] font-medium text-mist-100">{hit.title}</span>
+                <span className="text-[13px] font-medium text-ink-100">{hit.title}</span>
                 {hit.technique && (
                   <Chip tone="mono">
                     {hit.technique}
                     {hit.technique_name ? ` · ${hit.technique_name}` : ""}
                   </Chip>
                 )}
-                <span className="ml-auto font-mono text-[11px] text-mist-400">
+                <span className="ml-auto font-mono text-[11px] text-ink-400">
                   {hit.occurrences}×
                 </span>
               </div>
-              <p className="mt-1.5 text-[12px] text-mist-300">{hit.description}</p>
+              <p className="mt-1.5 text-[12px] text-ink-300">{hit.description}</p>
               {(hit.offsets.length > 0 || hit.evidence) && (
-                <div className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[11px] text-mist-400">
+                <div className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[11px] text-ink-400">
                   {hit.offsets.slice(0, 8).map((o) => <span key={o}>{o}</span>)}
                   {hit.evidence && <span className="break-all">· {hit.evidence}</span>}
                 </div>
@@ -270,15 +305,6 @@ export function Patterns({ analysis }: { analysis: RegionAnalysis }) {
           ))}
         </ul>
       )}
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border border-ink-700/60 px-3 py-2">
-      <div className="eyebrow">{label}</div>
-      <div className="mt-0.5 font-mono text-[13px] text-mist-100">{value}</div>
     </div>
   );
 }

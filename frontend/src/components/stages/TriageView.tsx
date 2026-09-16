@@ -16,8 +16,8 @@ export function TriageView() {
       <header className="flex items-end justify-between">
         <div>
           <div className="eyebrow">Phase 1 · VolMemLyzer</div>
-          <h1 className="text-lg font-semibold text-mist-100">VolMemLyzer workbench</h1>
-          <p className="mt-1 max-w-2xl text-sm text-mist-400">
+          <h1 className="text-lg font-semibold text-ink-100">VolMemLyzer workbench</h1>
+          <p className="mt-1 max-w-2xl text-sm text-ink-400">
             Control automated triage coverage, run the manual Volatility suite, follow every
             plugin live, and inspect the resulting artifacts and extracted features in one place.
           </p>
@@ -36,7 +36,7 @@ export function TriageView() {
               title="Scored objects"
               className="overflow-hidden"
               right={
-                loading ? <span className="text-[11px] text-mist-400">scoring…</span> : undefined
+                loading ? <span className="text-[11px] text-ink-400">scoring…</span> : undefined
               }
             >
               <TuningBar profile={profile} onChange={rescore} />
