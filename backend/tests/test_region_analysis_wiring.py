@@ -121,7 +121,7 @@ def test_single_region_route_selects_by_patch_index(analyzed, client):
 
 
 def test_analysis_json_carries_the_manifest_and_caveats(analyzed, client):
-    inv_id, pid = analyzed
+    inv_id, _pid = analyzed
     result = client.get(f"/api/investigations/{inv_id}/result").json()
     analysis = result["process_analyses"][0]
     assert analysis["explainability"]["region_count_ranked"] == 2

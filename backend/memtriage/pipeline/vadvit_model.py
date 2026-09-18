@@ -29,7 +29,7 @@ import json
 import logging
 import threading
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from functools import lru_cache
 from pathlib import Path
 
@@ -492,7 +492,7 @@ def model_status() -> dict:
         detail = {
             "filename": uploaded_path.name,
             "size_bytes": stat.st_size,
-            "uploaded_at": datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc)
+            "uploaded_at": datetime.fromtimestamp(stat.st_mtime, tz=UTC)
                                    .isoformat().replace("+00:00", "Z"),
             "labels_uploaded": (clf.upload_dir / clf.labels_path.name).exists(),
             # An upload that a mount outranks is still stored, and saying so is

@@ -35,21 +35,21 @@ def _utcnow() -> datetime:
     return datetime.now(UTC)
 
 
-class InvestigationStatus(str, enum.Enum):
+class InvestigationStatus(enum.StrEnum):
     RECEIVED = "received"      # dumps written to disk, triage not yet started
     TRIAGING = "triaging"      # VolMemLyzer running
     TRIAGED = "triaged"        # dashboard + process inventory ready for selection
     FAILED = "failed"
 
 
-class AnalysisStatus(str, enum.Enum):
+class AnalysisStatus(enum.StrEnum):
     QUEUED = "queued"
     ANALYZING = "analyzing"    # dumping/assembling/rendering/classifying/explaining
     DONE = "done"
     FAILED = "failed"
 
 
-class PluginRunStatus(str, enum.Enum):
+class PluginRunStatus(enum.StrEnum):
     QUEUED = "queued"
     RUNNING = "running"        # VolMemLyzer executing the selected plugin set
     DONE = "done"
@@ -57,7 +57,7 @@ class PluginRunStatus(str, enum.Enum):
     CANCELLED = "cancelled"    # stopped by the analyst
 
 
-class ConfidenceLevel(str, enum.Enum):
+class ConfidenceLevel(enum.StrEnum):
     """Graded confidence, applied per finding rather than as one blanket caveat."""
 
     CONFIRMED = "confirmed"
@@ -67,7 +67,7 @@ class ConfidenceLevel(str, enum.Enum):
     INSUFFICIENT = "insufficient_evidence"
 
 
-class Disposition(str, enum.Enum):
+class Disposition(enum.StrEnum):
     """What the analyst concluded a finding *is*.
 
     ``EXAMINER_ARTIFACT`` is the one that earns its place. Acquisition harnesses

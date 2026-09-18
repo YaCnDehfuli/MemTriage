@@ -786,12 +786,11 @@ def run_triage(self, investigation_id: str, force: bool = False,
         stack.close()
         session.rollback()
         inv = session.get(Investigation, investigation_id)
-        if inv is not None:
+        if inv is not None and not _salvage_partial_triage(session, inv, paths, dumps, selected,
+                                                           "was stopped"):
             # The plugins that finished still hold evidence; score them rather
             # than making the analyst re-run everything to see it.
-            if not _salvage_partial_triage(session, inv, paths, dumps, selected,
-                                           "was stopped"):
-                _finish_stopped_triage(session, inv, paths)
+            _finish_stopped_triage(session, inv, paths)
         return "stopped"
 
     except Exception as exc:
@@ -800,10 +799,9 @@ def run_triage(self, investigation_id: str, force: bool = False,
             stack.close()
             session.rollback()
             inv = session.get(Investigation, investigation_id)
-            if inv is not None:
-                if not _salvage_partial_triage(session, inv, paths, dumps, selected,
-                                               "was stopped"):
-                    _finish_stopped_triage(session, inv, paths)
+            if inv is not None and not _salvage_partial_triage(session, inv, paths, dumps,
+                                                               selected, "was stopped"):
+                _finish_stopped_triage(session, inv, paths)
             return "stopped"
         logger.exception("run_triage failed for %s", investigation_id)
         session.rollback()

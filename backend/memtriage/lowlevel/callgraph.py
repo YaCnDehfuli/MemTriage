@@ -207,7 +207,7 @@ def _layout(graph: CallGraph) -> None:
     if not roots and graph.nodes:
         roots = [graph.nodes[0].id]
 
-    depth: dict[int, int] = {r: 0 for r in roots}
+    depth: dict[int, int] = dict.fromkeys(roots, 0)
     frontier = list(roots)
     while frontier:
         node = frontier.pop(0)
