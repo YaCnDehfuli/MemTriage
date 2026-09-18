@@ -31,15 +31,14 @@ RUN pip install --no-cache-dir \
 COPY backend/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Wrapped components (NOT rewritten). VolMemLyzer is installed as a package
-# (pulls volatility3 + the `vol` console script); VADViT is made importable via
-# PYTHONPATH so its model class + preprocessing can be reused for inference.
+# Wrapped component (NOT rewritten). VolMemLyzer is installed as a package
+# (pulls volatility3 + the `vol` console script). MemTriage owns the VADViT
+# inference model and dump-to-grid preprocessing, so training code is not part
+# of the runtime image.
 COPY components/volmemlyzer /opt/components/volmemlyzer
-COPY components/vadvit /opt/components/vadvit
 # Not editable: the image must run the code in its own layer, not whatever
 # happens to be on /opt/components at container start.
 RUN pip install --no-cache-dir /opt/components/volmemlyzer
-ENV PYTHONPATH=/opt/components/vadvit
 
 COPY backend/ /app/
 RUN pip install --no-cache-dir -e .

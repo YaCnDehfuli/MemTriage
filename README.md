@@ -41,10 +41,12 @@ graphs, patterns, strings, structure, entropy, and a bounded hex view.
 ```bash
 git clone --recurse-submodules https://github.com/YaCnDehfuli/MemTriage.git
 cd MemTriage
-docker compose -f deploy/docker-compose.yml up --build
+./deploy/up.sh
 ```
 
-If the repository was cloned without submodules: `git submodule update --init --recursive`.
+`deploy/up.sh` initializes the pinned submodules when needed, then runs Docker
+Compose. This keeps a normal checkout from failing because the component
+directories are empty.
 
 Open `http://127.0.0.1:5173`. Upload a memory image, leave Prefer cache selected, and run triage. Compatible VolMemLyzer artifacts next to the image, or from a prior investigation of the same SHA-256, are reused.
 
