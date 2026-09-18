@@ -49,7 +49,7 @@ class Region:
 
     @property
     def size(self) -> int:
-        return int(len(self.data))
+        return len(self.data)
 
 
 # --------------------------------------------------------------------------

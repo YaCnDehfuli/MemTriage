@@ -150,13 +150,13 @@ def test_a_mounted_checkpoint_outranks_an_upload_and_says_so(client):
 # --- the classifier's own resolution, without the HTTP layer ----------------
 
 def _classifier(tmp_path, **over):
-    kwargs = dict(
-        checkpoint_path=tmp_path / "mount" / "m.pt",
-        labels_path=tmp_path / "mount" / "labels.json",
-        model_name="vit_base_patch32_224", num_classes=9, image_size=224,
-        cache_dir=tmp_path / "cache", upload_dir=tmp_path / "uploads",
-        auto_placeholder=False,
-    )
+    kwargs = {
+        "checkpoint_path": tmp_path / "mount" / "m.pt",
+        "labels_path": tmp_path / "mount" / "labels.json",
+        "model_name": "vit_base_patch32_224", "num_classes": 9, "image_size": 224,
+        "cache_dir": tmp_path / "cache", "upload_dir": tmp_path / "uploads",
+        "auto_placeholder": False,
+    }
     kwargs.update(over)
     return vadvit_model.VADViTClassifier(**kwargs)
 

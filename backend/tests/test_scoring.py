@@ -3,8 +3,9 @@ heuristics (byte-pattern bug fixes), and the live /rescore endpoint (diff +
 persistence + sanitization)."""
 import json
 
-from memtriage.scoring import diff_scored, score_records
 from volmemlyzer.scoring import heuristics as H
+
+from memtriage.scoring import diff_scored, score_records
 from memtriage.storage import InvestigationPaths
 
 # --------------------------------------------------------------------------

@@ -9,14 +9,13 @@ worker deliberately has no egress at all.
 from __future__ import annotations
 
 import json
+import logging
 import re
 import time
 import uuid
 from datetime import UTC, datetime
 from pathlib import Path
 from threading import Lock
-
-import logging
 
 from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from pydantic import BaseModel, Field, field_validator
