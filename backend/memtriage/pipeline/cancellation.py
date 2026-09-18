@@ -67,7 +67,7 @@ def _process_table() -> dict[int, int]:
         return table
     # No /proc (macOS development): ps is always present there.
     try:
-        lister = subprocess.Popen(
+        lister = subprocess.Popen(  # noqa: S603
             ["ps", "-Ao", "pid=,ppid="],  # noqa: S607
             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
         )
