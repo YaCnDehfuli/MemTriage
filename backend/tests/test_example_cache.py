@@ -91,7 +91,11 @@ def test_filename_without_a_recorded_hash_cannot_load_demo(client):
 
 
 def test_matching_hash_copies_plugin_json_and_does_not_enqueue_triage(client, monkeypatch):
-    content = b"RAWMEMORYIMAGE-not-a-deny-magic"
+    # Keep this payload distinct from the ordinary upload used by test_api.
+    # That earlier lifecycle test leaves a completed investigation in the
+    # shared test database, which should not turn this first-load case into a
+    # cache-reuse case merely because this test patches the example hash.
+    content = b"RAWMEMORYIMAGE-example-cache-seed"
     digest = hashlib.sha256(content).hexdigest()
     _patch_example_hash(monkeypatch, digest)
 
@@ -119,7 +123,7 @@ def test_matching_hash_copies_plugin_json_and_does_not_enqueue_triage(client, mo
 
 
 def test_completed_example_investigation_is_reopened(client, monkeypatch):
-    content = b"RAWMEMORYIMAGE-not-a-deny-magic"
+    content = b"RAWMEMORYIMAGE-example-cache-seed"
     digest = hashlib.sha256(content).hexdigest()
     _patch_example_hash(monkeypatch, digest)
 
