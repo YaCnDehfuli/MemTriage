@@ -1,20 +1,23 @@
 <div align="center">
 
-   # MemTriage
+# MemTriage
+
+**ML-guided memory analysis, down to the bytes.**
 
 MemTriage is a local workspace for investigating captured Windows memory: a
 snapshot of the programs, connections, and data present on a computer at a
-particular moment. It turns a large memory image into ranked leads, lets you
-inspect the evidence inside a process, and helps you document your assessment
-in a report.
+particular moment. It combines evidence-based triage with a trained model to
+help you decide where to look, inspect the memory behind a prediction, and
+record an assessment you can check against the evidence.
 
-Use it to work from “what deserves a closer look?” to specific memory addresses
-and an assessment you can check against the evidence.
+**[Read the technical project report →](https://yacndehfuli.github.io/MemTriage/)**
+Explore the complete pipeline, model input, implementation, current UI, and a
+worked investigation with downloadable reports.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 [![CI](https://github.com/YaCnDehfuli/MemTriage/actions/workflows/ci.yml/badge.svg)](https://github.com/YaCnDehfuli/MemTriage/actions/workflows/ci.yml)
-</div>
 
+</div>
 
 ## Demos
 
@@ -34,8 +37,7 @@ for PDF export.
 
 https://github.com/user-attachments/assets/1dc84e09-0c3a-4b10-abdc-d67300101d7e
 
-[Full-resolution recording](report_demo.mp4) · [Project report](https://yacndehfuli.github.io/MemTriage/)
-with the worked investigation, current UI, and downloadable report examples.
+[Full-resolution recording](report_demo.mp4) · [Example technical PDF](docs/reports/MemTriage-technical-report.pdf) · [Example executive PDF](docs/reports/MemTriage-executive-report.pdf)
 
 ## Quickstart
 
