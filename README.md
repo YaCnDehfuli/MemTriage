@@ -14,16 +14,24 @@ and an assessment you can check against the evidence.
 
 ## Demos
 
-### [▶ Investigate captured memory](demo.mov)
+### Investigate captured memory
 
 A 2-minute walkthrough, from ranked leads to process classification and
 inspection of individual memory regions.
 
-### [▶ Turn evidence into a report](report_demo.mp4)
+https://github.com/user-attachments/assets/eb122be7-c674-4c17-a2e8-ec319ab92d43
+
+[Full-resolution recording](demo.mov)
+
+### Turn evidence into a report
 
 Select findings, annotate evidence, and preview technical or executive reports
-for PDF export. Read the [project report](https://yacndehfuli.github.io/MemTriage/)
-for the worked investigation, current UI, and downloadable report examples.
+for PDF export.
+
+https://github.com/user-attachments/assets/1dc84e09-0c3a-4b10-abdc-d67300101d7e
+
+[Full-resolution recording](report_demo.mp4) · [Project report](https://yacndehfuli.github.io/MemTriage/)
+with the worked investigation, current UI, and downloadable report examples.
 
 ## Quickstart
 

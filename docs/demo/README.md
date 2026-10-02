@@ -1,8 +1,12 @@
 # Demo assets
 
-The current README uses the original root recordings:
+The current README embeds playable GitHub video attachments, with links to the
+original root recordings:
 [analysis demo](../../demo.mov) and [report demo](../../report_demo.mp4).
-Neither recording is re-encoded. Both are tracked with Git LFS.
+Both originals are tracked with Git LFS and remain unchanged. The inline
+players use separate H.264 playback copies (12 fps, 1280 pixels wide, under
+10 MB each) uploaded as GitHub attachments. Repository/LFS video links do not
+produce a player in the README; the standalone attachment URLs do.
 The [project report](../index.html) includes current UI captures and the
 [supplied PDF examples](../reports/README.md).
 
