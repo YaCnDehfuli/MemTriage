@@ -180,7 +180,7 @@ def test_placeholder_generation_and_inference(tmp_path):
 
 
 # --------------------------------------------------------------------------
-# placeholder resolution (the trained checkpoint is not distributed)
+# legacy opt-in placeholder resolution
 # --------------------------------------------------------------------------
 
 def _auto_clf(tmp_path, *, auto=True):
@@ -256,12 +256,12 @@ def test_placeholder_note_states_it_is_not_a_detection():
     assert verdict.to_dict()["model_source"] == "placeholder"
 
 
-def test_model_status_reports_the_contact_when_untrained(monkeypatch, tmp_path):
-    monkeypatch.setattr(vm, "get_classifier", lambda: _auto_clf(tmp_path))
+def test_model_status_reports_missing_checkpoint_without_random_fallback(monkeypatch, tmp_path):
+    monkeypatch.setattr(vm, "get_classifier", lambda: _auto_clf(tmp_path, auto=False))
     status = vm.model_status()
     assert status["trained_weights_present"] is False
-    assert status["placeholder_active"] is True
-    assert "@" in status["contact"]
+    assert status["active_source"] == "none"
+    assert status["placeholder_active"] is False
 
 
 def test_placeholder_labels_cover_every_class():

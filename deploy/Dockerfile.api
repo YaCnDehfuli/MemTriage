@@ -25,7 +25,8 @@ COPY components/volmemlyzer /opt/components/volmemlyzer
 RUN pip install --no-cache-dir /opt/components/volmemlyzer
 
 COPY backend/ /app/
-RUN pip install --no-cache-dir -e . && chown -R app:app /app /opt/components
+COPY examples/Plugin_Outputs /examples/Plugin_Outputs
+RUN pip install --no-cache-dir -e . && chown -R app:app /app /opt/components /examples
 
 USER app
 EXPOSE 8000

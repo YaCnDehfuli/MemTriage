@@ -19,6 +19,11 @@ from ..config import get_settings
 from ..db import SessionLocal, get_session
 from ..models import Dump, Investigation, InvestigationStatus, PluginRun, PluginRunStatus
 from ..pipeline.cancellation import STALE_AFTER_SECONDS
+from ..pipeline.example_cache import (
+    EXAMPLE_DUMP_SHA256,
+    dump_matches_example,
+    seed_example_artifacts,
+)
 from ..pipeline.plugin_runner import plugin_catalog
 from ..pipeline.volmemlyzer_adapter import DEEP_TRIAGE_PLUGINS, LIGHT_TRIAGE_PLUGINS
 from ..schemas import InvestigationCreatedResponse, InvestigationState, StartTriageRequest
@@ -29,6 +34,88 @@ from ..workers.celery_app import celery_app
 
 router = APIRouter(prefix="/api", tags=["investigations"])
 settings = get_settings()
+
+
+def _completed_example_investigation(
+    session: Session, *, exclude_id: str | None = None,
+) -> Investigation | None:
+    """A finished investigation of the example dump that can be reopened as-is."""
+    rows = session.scalars(
+        select(Investigation)
+        .join(Dump, Dump.investigation_id == Investigation.id)
+        .where(Dump.sha256 == EXAMPLE_DUMP_SHA256)
+        .where(Investigation.status == InvestigationStatus.TRIAGED)
+        .order_by(Investigation.created_at.desc())
+    )
+    for existing in rows:
+        if exclude_id is not None and existing.id == exclude_id:
+            continue
+        paths = InvestigationPaths(existing.id)
+        if paths.result.is_file() and paths.dump_path(0).is_file():
+            return existing
+    return None
+
+
+@router.post("/investigations/{investigation_id}/example-cache")
+def seed_example_cache(
+    investigation_id: str,
+    session: Session = Depends(get_session),
+) -> dict[str, object]:
+    """Seed captured example-dump plugin JSON into this investigation's cache.
+
+    Does not run Volatility. The client starts ordinary (prefer-cache) triage
+    afterwards, or reopens an already completed investigation of the same dump.
+    """
+    inv = session.get(Investigation, investigation_id)
+    if inv is None:
+        raise HTTPException(status_code=404, detail="Investigation not found")
+    if inv.status == InvestigationStatus.TRIAGING:
+        raise HTTPException(status_code=409, detail="Triage is already running.")
+
+    dumps = sorted(inv.dumps, key=lambda item: item.ordinal)
+    example_dump = next(
+        (item for item in dumps
+         if item.sha256 and item.sha256.lower() == EXAMPLE_DUMP_SHA256),
+        None,
+    )
+    if example_dump is None:
+        if any(dump_matches_example(sha256=item.sha256, filename=item.original_filename)
+               for item in dumps):
+            raise HTTPException(
+                status_code=409,
+                detail=("The uploaded example dump's hash does not match the cached sample. "
+                        "Start a new investigation and upload the original 2580_5.vmem, "
+                        "or run a fresh analysis of this file."),
+            )
+        raise HTTPException(
+            status_code=409,
+            detail="Precomputed results are only available for the documented example dump.",
+        )
+    completed = _completed_example_investigation(session)
+    if completed is not None:
+        return {
+            "investigation_id": completed.id,
+            "reused": True,
+            "plugins": list(completed.requested_plugins or []),
+            "artifacts": 0,
+        }
+
+    try:
+        plugins = seed_example_artifacts(investigation_id, example_dump.ordinal)
+    except FileNotFoundError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Precomputed example artifacts are not available in this deployment.",
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    return {
+        "investigation_id": investigation_id,
+        "reused": False,
+        "plugins": plugins,
+        "artifacts": len(plugins),
+    }
 
 
 @router.post("/investigations", response_model=InvestigationCreatedResponse, status_code=201)
@@ -148,7 +235,8 @@ async def add_dump(
         session.add(dump)
         session.commit()
         return {"investigation_id": investigation_id, "ordinal": ordinal,
-                "dump_count": int(new_count), "size_bytes": total}
+                "dump_count": int(new_count), "size_bytes": total,
+                "sha256": dump.sha256}
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)

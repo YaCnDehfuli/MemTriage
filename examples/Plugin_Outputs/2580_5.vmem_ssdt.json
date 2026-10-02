@@ -1,0 +1,6758 @@
+
+[
+  {
+    "Address": 272687950968384,
+    "Index": 0,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAccessCheck",
+    "__children": []
+  },
+  {
+    "Address": 272687951017616,
+    "Index": 1,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWorkerFactoryWorkerReady",
+    "__children": []
+  },
+  {
+    "Address": 272687955797344,
+    "Index": 2,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAcceptConnectPort",
+    "__children": []
+  },
+  {
+    "Address": 272687958322560,
+    "Index": 3,
+    "Module": "ntoskrnl",
+    "Symbol": "NtMapUserPhysicalPagesScatter",
+    "__children": []
+  },
+  {
+    "Address": 272687954677616,
+    "Index": 4,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitForSingleObject",
+    "__children": []
+  },
+  {
+    "Address": 272687951879040,
+    "Index": 5,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCallbackReturn",
+    "__children": []
+  },
+  {
+    "Address": 272687954840704,
+    "Index": 6,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReadFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954645600,
+    "Index": 7,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeviceIoControlFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954835712,
+    "Index": 8,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWriteFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954708016,
+    "Index": 9,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRemoveIoCompletion",
+    "__children": []
+  },
+  {
+    "Address": 272687955414912,
+    "Index": 10,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReleaseSemaphore",
+    "__children": []
+  },
+  {
+    "Address": 272687955081456,
+    "Index": 11,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReplyWaitReceivePort",
+    "__children": []
+  },
+  {
+    "Address": 272687955755824,
+    "Index": 12,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReplyPort",
+    "__children": []
+  },
+  {
+    "Address": 272687954684496,
+    "Index": 13,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationThread",
+    "__children": []
+  },
+  {
+    "Address": 272687955596272,
+    "Index": 14,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687954640016,
+    "Index": 15,
+    "Module": "ntoskrnl",
+    "Symbol": "NtClose",
+    "__children": []
+  },
+  {
+    "Address": 272687954852512,
+    "Index": 16,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryObject",
+    "__children": []
+  },
+  {
+    "Address": 272687954697808,
+    "Index": 17,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955592784,
+    "Index": 18,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenKey",
+    "__children": []
+  },
+  {
+    "Address": 272687955583440,
+    "Index": 19,
+    "Module": "ntoskrnl",
+    "Symbol": "NtEnumerateValueKey",
+    "__children": []
+  },
+  {
+    "Address": 272687954845648,
+    "Index": 20,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFindAtom",
+    "__children": []
+  },
+  {
+    "Address": 272687955703200,
+    "Index": 21,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryDefaultLocale",
+    "__children": []
+  },
+  {
+    "Address": 272687954470912,
+    "Index": 22,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryKey",
+    "__children": []
+  },
+  {
+    "Address": 272687954472480,
+    "Index": 23,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryValueKey",
+    "__children": []
+  },
+  {
+    "Address": 272687955586736,
+    "Index": 24,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAllocateVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955515344,
+    "Index": 25,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687955687296,
+    "Index": 26,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitForMultipleObjects32",
+    "__children": []
+  },
+  {
+    "Address": 272687955830016,
+    "Index": 27,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWriteFileGather",
+    "__children": []
+  },
+  {
+    "Address": 272687954728336,
+    "Index": 28,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687954956432,
+    "Index": 29,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateKey",
+    "__children": []
+  },
+  {
+    "Address": 272687955534320,
+    "Index": 30,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFreeVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687957492912,
+    "Index": 31,
+    "Module": "ntoskrnl",
+    "Symbol": "NtImpersonateClientOfPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955601024,
+    "Index": 32,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReleaseMutant",
+    "__children": []
+  },
+  {
+    "Address": 272687954507392,
+    "Index": 33,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationToken",
+    "__children": []
+  },
+  {
+    "Address": 272687955080144,
+    "Index": 34,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRequestWaitReplyPort",
+    "__children": []
+  },
+  {
+    "Address": 272687954668864,
+    "Index": 35,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687954600416,
+    "Index": 36,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenThreadToken",
+    "__children": []
+  },
+  {
+    "Address": 272687955567888,
+    "Index": 37,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationThread",
+    "__children": []
+  },
+  {
+    "Address": 272687954543136,
+    "Index": 38,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687949878784,
+    "Index": 39,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954582256,
+    "Index": 40,
+    "Module": "ntoskrnl",
+    "Symbol": "NtMapViewOfSection",
+    "__children": []
+  },
+  {
+    "Address": 272687955290720,
+    "Index": 41,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAccessCheckAndAuditAlarm",
+    "__children": []
+  },
+  {
+    "Address": 272687955085520,
+    "Index": 42,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUnmapViewOfSection",
+    "__children": []
+  },
+  {
+    "Address": 272687955081488,
+    "Index": 43,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReplyWaitReceivePortEx",
+    "__children": []
+  },
+  {
+    "Address": 272687954925424,
+    "Index": 44,
+    "Module": "ntoskrnl",
+    "Symbol": "NtTerminateProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687958030848,
+    "Index": 45,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetEventBoostPriority",
+    "__children": []
+  },
+  {
+    "Address": 272687955825504,
+    "Index": 46,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReadFileScatter",
+    "__children": []
+  },
+  {
+    "Address": 272687954600448,
+    "Index": 47,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenThreadTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687954602560,
+    "Index": 48,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenProcessTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955637504,
+    "Index": 49,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryPerformanceCounter",
+    "__children": []
+  },
+  {
+    "Address": 272687954704112,
+    "Index": 50,
+    "Module": "ntoskrnl",
+    "Symbol": "NtEnumerateKey",
+    "__children": []
+  },
+  {
+    "Address": 272687955901376,
+    "Index": 51,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954447296,
+    "Index": 52,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDelayExecution",
+    "__children": []
+  },
+  {
+    "Address": 272687955719888,
+    "Index": 53,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryDirectoryFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954709936,
+    "Index": 54,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySystemInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687955372704,
+    "Index": 55,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenSection",
+    "__children": []
+  },
+  {
+    "Address": 272687958030320,
+    "Index": 56,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryTimer",
+    "__children": []
+  },
+  {
+    "Address": 272687955635872,
+    "Index": 57,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFsControlFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955024928,
+    "Index": 58,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWriteVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955676032,
+    "Index": 59,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCloseObjectAuditAlarm",
+    "__children": []
+  },
+  {
+    "Address": 272687954722928,
+    "Index": 60,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDuplicateObject",
+    "__children": []
+  },
+  {
+    "Address": 272687954409600,
+    "Index": 61,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryAttributesFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955608912,
+    "Index": 62,
+    "Module": "ntoskrnl",
+    "Symbol": "NtClearEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687955024976,
+    "Index": 63,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReadVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955372496,
+    "Index": 64,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687954418720,
+    "Index": 65,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustPrivilegesToken",
+    "__children": []
+  },
+  {
+    "Address": 272687954691856,
+    "Index": 66,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDuplicateToken",
+    "__children": []
+  },
+  {
+    "Address": 272687951861024,
+    "Index": 67,
+    "Module": "ntoskrnl",
+    "Symbol": "NtContinue",
+    "__children": []
+  },
+  {
+    "Address": 272687955929488,
+    "Index": 68,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryDefaultUILanguage",
+    "__children": []
+  },
+  {
+    "Address": 272687955843648,
+    "Index": 69,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueueApcThread",
+    "__children": []
+  },
+  {
+    "Address": 272687951544864,
+    "Index": 70,
+    "Module": "ntoskrnl",
+    "Symbol": "NtYieldExecution",
+    "__children": []
+  },
+  {
+    "Address": 272687958055456,
+    "Index": 71,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAddAtom",
+    "__children": []
+  },
+  {
+    "Address": 272687954589264,
+    "Index": 72,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687954832464,
+    "Index": 73,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryVolumeInformationFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954725904,
+    "Index": 74,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateSection",
+    "__children": []
+  },
+  {
+    "Address": 272687955652464,
+    "Index": 75,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushBuffersFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955380560,
+    "Index": 76,
+    "Module": "ntoskrnl",
+    "Symbol": "NtApphelpCacheControl",
+    "__children": []
+  },
+  {
+    "Address": 272687957711664,
+    "Index": 77,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateProcessEx",
+    "__children": []
+  },
+  {
+    "Address": 272687957711824,
+    "Index": 78,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateThread",
+    "__children": []
+  },
+  {
+    "Address": 272687955750336,
+    "Index": 79,
+    "Module": "ntoskrnl",
+    "Symbol": "NtIsProcessInJob",
+    "__children": []
+  },
+  {
+    "Address": 272687954674128,
+    "Index": 80,
+    "Module": "ntoskrnl",
+    "Symbol": "NtProtectVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955737104,
+    "Index": 81,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySection",
+    "__children": []
+  },
+  {
+    "Address": 272687955656768,
+    "Index": 82,
+    "Module": "ntoskrnl",
+    "Symbol": "NtResumeThread",
+    "__children": []
+  },
+  {
+    "Address": 272687955696832,
+    "Index": 83,
+    "Module": "ntoskrnl",
+    "Symbol": "NtTerminateThread",
+    "__children": []
+  },
+  {
+    "Address": 272687957493168,
+    "Index": 84,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReadRequestData",
+    "__children": []
+  },
+  {
+    "Address": 272687954536224,
+    "Index": 85,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955742416,
+    "Index": 86,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687957493552,
+    "Index": 87,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWriteRequestData",
+    "__children": []
+  },
+  {
+    "Address": 272687955372848,
+    "Index": 88,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenDirectoryObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955282336,
+    "Index": 89,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAccessCheckByTypeAndAuditAlarm",
+    "__children": []
+  },
+  {
+    "Address": 272687958016752,
+    "Index": 90,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySystemTime",
+    "__children": []
+  },
+  {
+    "Address": 272687954806000,
+    "Index": 91,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitForMultipleObjects",
+    "__children": []
+  },
+  {
+    "Address": 272687955538224,
+    "Index": 92,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955670080,
+    "Index": 93,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCancelIoFile",
+    "__children": []
+  },
+  {
+    "Address": 272687949851712,
+    "Index": 94,
+    "Module": "ntoskrnl",
+    "Symbol": "NtTraceEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687955251456,
+    "Index": 95,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPowerInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687955113664,
+    "Index": 96,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetValueKey",
+    "__children": []
+  },
+  {
+    "Address": 272687949688528,
+    "Index": 97,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCancelTimer",
+    "__children": []
+  },
+  {
+    "Address": 272687951432144,
+    "Index": 98,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetTimer",
+    "__children": []
+  },
+  {
+    "Address": 272687951022160,
+    "Index": 99,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAccessCheckByType",
+    "__children": []
+  },
+  {
+    "Address": 272687953562944,
+    "Index": 100,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAccessCheckByTypeResultList",
+    "__children": []
+  },
+  {
+    "Address": 272687957843488,
+    "Index": 101,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAccessCheckByTypeResultListAndAuditAlarm",
+    "__children": []
+  },
+  {
+    "Address": 272687957843664,
+    "Index": 102,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAccessCheckByTypeResultListAndAuditAlarmByHandle",
+    "__children": []
+  },
+  {
+    "Address": 272687958071568,
+    "Index": 103,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAcquireCrossVmMutant",
+    "__children": []
+  },
+  {
+    "Address": 272687955948848,
+    "Index": 104,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAcquireProcessActivityReference",
+    "__children": []
+  },
+  {
+    "Address": 272687955730512,
+    "Index": 105,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAddAtomEx",
+    "__children": []
+  },
+  {
+    "Address": 272687958042800,
+    "Index": 106,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAddBootEntry",
+    "__children": []
+  },
+  {
+    "Address": 272687958042848,
+    "Index": 107,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAddDriverEntry",
+    "__children": []
+  },
+  {
+    "Address": 272687955698032,
+    "Index": 108,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustGroupsToken",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 109,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687957744896,
+    "Index": 110,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlertResumeThread",
+    "__children": []
+  },
+  {
+    "Address": 272687957745184,
+    "Index": 111,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlertThread",
+    "__children": []
+  },
+  {
+    "Address": 272687955618848,
+    "Index": 112,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlertThreadByThreadId",
+    "__children": []
+  },
+  {
+    "Address": 272687955585248,
+    "Index": 113,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAllocateLocallyUniqueId",
+    "__children": []
+  },
+  {
+    "Address": 272687955753664,
+    "Index": 114,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAllocateReserveObject",
+    "__children": []
+  },
+  {
+    "Address": 272687958320432,
+    "Index": 115,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAllocateUserPhysicalPages",
+    "__children": []
+  },
+  {
+    "Address": 272687958320464,
+    "Index": 116,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAllocateUserPhysicalPagesEx",
+    "__children": []
+  },
+  {
+    "Address": 272687954385664,
+    "Index": 117,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAllocateUuids",
+    "__children": []
+  },
+  {
+    "Address": 272687954751696,
+    "Index": 118,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAllocateVirtualMemoryEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955064240,
+    "Index": 119,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcAcceptConnectPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955805568,
+    "Index": 120,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcCancelMessage",
+    "__children": []
+  },
+  {
+    "Address": 272687955060336,
+    "Index": 121,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcConnectPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955061264,
+    "Index": 122,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcConnectPortEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955703632,
+    "Index": 123,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcCreatePort",
+    "__children": []
+  },
+  {
+    "Address": 272687954764832,
+    "Index": 124,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcCreatePortSection",
+    "__children": []
+  },
+  {
+    "Address": 272687955724960,
+    "Index": 125,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcCreateResourceReserve",
+    "__children": []
+  },
+  {
+    "Address": 272687954765248,
+    "Index": 126,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcCreateSectionView",
+    "__children": []
+  },
+  {
+    "Address": 272687954768944,
+    "Index": 127,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcCreateSecurityContext",
+    "__children": []
+  },
+  {
+    "Address": 272687954764592,
+    "Index": 128,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcDeletePortSection",
+    "__children": []
+  },
+  {
+    "Address": 272687956620304,
+    "Index": 129,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcDeleteResourceReserve",
+    "__children": []
+  },
+  {
+    "Address": 272687954764160,
+    "Index": 130,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcDeleteSectionView",
+    "__children": []
+  },
+  {
+    "Address": 272687954770592,
+    "Index": 131,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcDeleteSecurityContext",
+    "__children": []
+  },
+  {
+    "Address": 272687955747088,
+    "Index": 132,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcDisconnectPort",
+    "__children": []
+  },
+  {
+    "Address": 272687957494128,
+    "Index": 133,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcImpersonateClientContainerOfPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955083344,
+    "Index": 134,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcImpersonateClientOfPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955072800,
+    "Index": 135,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcOpenSenderProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687955637680,
+    "Index": 136,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcOpenSenderThread",
+    "__children": []
+  },
+  {
+    "Address": 272687955577808,
+    "Index": 137,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcQueryInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687955077360,
+    "Index": 138,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcQueryInformationMessage",
+    "__children": []
+  },
+  {
+    "Address": 272687957494720,
+    "Index": 139,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcRevokeSecurityContext",
+    "__children": []
+  },
+  {
+    "Address": 272687954529488,
+    "Index": 140,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcSendWaitReceivePort",
+    "__children": []
+  },
+  {
+    "Address": 272687955248000,
+    "Index": 141,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAlpcSetInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687956417344,
+    "Index": 142,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAreMappedFilesTheSame",
+    "__children": []
+  },
+  {
+    "Address": 272687954904656,
+    "Index": 143,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAssignProcessToJobObject",
+    "__children": []
+  },
+  {
+    "Address": 272687949739792,
+    "Index": 144,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAssociateWaitCompletionPacket",
+    "__children": []
+  },
+  {
+    "Address": 272687951904912,
+    "Index": 145,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCallEnclave",
+    "__children": []
+  },
+  {
+    "Address": 272687955670512,
+    "Index": 146,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCancelIoFileEx",
+    "__children": []
+  },
+  {
+    "Address": 272687957294640,
+    "Index": 147,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCancelSynchronousIoFile",
+    "__children": []
+  },
+  {
+    "Address": 272687951112176,
+    "Index": 148,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCancelTimer2",
+    "__children": []
+  },
+  {
+    "Address": 272687950980880,
+    "Index": 149,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCancelWaitCompletionPacket",
+    "__children": []
+  },
+  {
+    "Address": 272687957720032,
+    "Index": 150,
+    "Module": "ntoskrnl",
+    "Symbol": "NtChangeProcessState",
+    "__children": []
+  },
+  {
+    "Address": 272687957720544,
+    "Index": 151,
+    "Module": "ntoskrnl",
+    "Symbol": "NtChangeThreadState",
+    "__children": []
+  },
+  {
+    "Address": 272687951583360,
+    "Index": 152,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCommitComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951583392,
+    "Index": 153,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCommitEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687958103216,
+    "Index": 154,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCommitRegistryTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951583424,
+    "Index": 155,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCommitTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687958103504,
+    "Index": 156,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCompactKeys",
+    "__children": []
+  },
+  {
+    "Address": 272687955829456,
+    "Index": 157,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCompareObjects",
+    "__children": []
+  },
+  {
+    "Address": 272687955825328,
+    "Index": 158,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCompareSigningLevels",
+    "__children": []
+  },
+  {
+    "Address": 272687955680128,
+    "Index": 159,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCompareTokens",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "ArbPreprocessEntry",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "ArbQueryArbitrate",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "EmFalseCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "FsRtlSyncVolumes",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "IommupPasidDevicePowerCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "IopPnPAddDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCompleteConnectPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushInstructionCache",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushWriteBuffer",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "PopPowerAggregatorVoidStateHandler",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "TtmpCalloutLiveDumpSecondaryCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAcpiGetMultiNode",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAddInterruptRemapping",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalGetInterruptTranslator",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPowerSetRebootHandler",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 160,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalTimerQueryCycleCounter",
+    "__children": []
+  },
+  {
+    "Address": 272687958104224,
+    "Index": 161,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCompressKey",
+    "__children": []
+  },
+  {
+    "Address": 272687954757920,
+    "Index": 162,
+    "Module": "ntoskrnl",
+    "Symbol": "NtConnectPort",
+    "__children": []
+  },
+  {
+    "Address": 272687951861040,
+    "Index": 163,
+    "Module": "ntoskrnl",
+    "Symbol": "NtContinueEx",
+    "__children": []
+  },
+  {
+    "Address": 272687958066400,
+    "Index": 164,
+    "Module": "ntoskrnl",
+    "Symbol": "NtConvertBetweenAuxiliaryCounterAndPerformanceCounter",
+    "__children": []
+  },
+  {
+    "Address": 272687955579808,
+    "Index": 165,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCopyFileChunk",
+    "__children": []
+  },
+  {
+    "Address": 272687957721056,
+    "Index": 166,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateCpuPartition",
+    "__children": []
+  },
+  {
+    "Address": 272687958030672,
+    "Index": 167,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateCrossVmEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687958071776,
+    "Index": 168,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateCrossVmMutant",
+    "__children": []
+  },
+  {
+    "Address": 272687957230592,
+    "Index": 169,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateDebugObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955339904,
+    "Index": 170,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateDirectoryObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955339872,
+    "Index": 171,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateDirectoryObjectEx",
+    "__children": []
+  },
+  {
+    "Address": 272687958306048,
+    "Index": 172,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEnclave",
+    "__children": []
+  },
+  {
+    "Address": 272687951583456,
+    "Index": 173,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 174,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955842448,
+    "Index": 175,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateIRTimer",
+    "__children": []
+  },
+  {
+    "Address": 272687955160992,
+    "Index": 176,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateIoCompletion",
+    "__children": []
+  },
+  {
+    "Address": 272687957303296,
+    "Index": 177,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateIoRing",
+    "__children": []
+  },
+  {
+    "Address": 272687954922656,
+    "Index": 178,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateJobObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "ArbAddReserved",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "HalpAssignSlotResourcesStub",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "HalpGetMceInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "LpcReplyWaitReplyPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "MmConfigureGraphicsPtes",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateJobSet",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAllocatePmcCounterSet",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAllocatePmcCounterSetEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalDpReplaceBegin",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalGetProcessorId",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalQueryBusSlots",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalRegisterBusHandler",
+    "__children": []
+  },
+  {
+    "Address": 272687955934928,
+    "Index": 179,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalStartMirroring",
+    "__children": []
+  },
+  {
+    "Address": 272687954956080,
+    "Index": 180,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateKeyTransacted",
+    "__children": []
+  },
+  {
+    "Address": 272687956270736,
+    "Index": 181,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateKeyedEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687955343856,
+    "Index": 182,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateLowBoxToken",
+    "__children": []
+  },
+  {
+    "Address": 272687957306016,
+    "Index": 183,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateMailslotFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955625616,
+    "Index": 184,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateMutant",
+    "__children": []
+  },
+  {
+    "Address": 272687955727152,
+    "Index": 185,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateNamedPipeFile",
+    "__children": []
+  },
+  {
+    "Address": 272687956183328,
+    "Index": 186,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreatePagingFile",
+    "__children": []
+  },
+  {
+    "Address": 272687957746656,
+    "Index": 187,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreatePartition",
+    "__children": []
+  },
+  {
+    "Address": 272687955703552,
+    "Index": 188,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreatePort",
+    "__children": []
+  },
+  {
+    "Address": 272687955691312,
+    "Index": 189,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreatePrivateNamespace",
+    "__children": []
+  },
+  {
+    "Address": 272687957711520,
+    "Index": 190,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687957721120,
+    "Index": 191,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateProcessStateChange",
+    "__children": []
+  },
+  {
+    "Address": 272687958066704,
+    "Index": 192,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateProfile",
+    "__children": []
+  },
+  {
+    "Address": 272687958066928,
+    "Index": 193,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateProfileEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955731552,
+    "Index": 194,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateRegistryTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951583488,
+    "Index": 195,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687958243776,
+    "Index": 196,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateSectionEx",
+    "__children": []
+  },
+  {
+    "Address": 272687954589568,
+    "Index": 197,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateSemaphore",
+    "__children": []
+  },
+  {
+    "Address": 272687955346688,
+    "Index": 198,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateSymbolicLinkObject",
+    "__children": []
+  },
+  {
+    "Address": 272687954824560,
+    "Index": 199,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateThreadEx",
+    "__children": []
+  },
+  {
+    "Address": 272687957721648,
+    "Index": 200,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateThreadStateChange",
+    "__children": []
+  },
+  {
+    "Address": 272687955683280,
+    "Index": 201,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateTimer",
+    "__children": []
+  },
+  {
+    "Address": 272687955250448,
+    "Index": 202,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateTimer2",
+    "__children": []
+  },
+  {
+    "Address": 272687957848352,
+    "Index": 203,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateToken",
+    "__children": []
+  },
+  {
+    "Address": 272687955053648,
+    "Index": 204,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687951583520,
+    "Index": 205,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951583552,
+    "Index": 206,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687954410528,
+    "Index": 207,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateUserProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687955633904,
+    "Index": 208,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateWaitCompletionPacket",
+    "__children": []
+  },
+  {
+    "Address": 272687955703472,
+    "Index": 209,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateWaitablePort",
+    "__children": []
+  },
+  {
+    "Address": 272687955037728,
+    "Index": 210,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateWnfStateName",
+    "__children": []
+  },
+  {
+    "Address": 272687955248928,
+    "Index": 211,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateWorkerFactory",
+    "__children": []
+  },
+  {
+    "Address": 272687957231120,
+    "Index": 212,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDebugActiveProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687957231664,
+    "Index": 213,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDebugContinue",
+    "__children": []
+  },
+  {
+    "Address": 272687955721872,
+    "Index": 214,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeleteAtom",
+    "__children": []
+  },
+  {
+    "Address": 272687958042896,
+    "Index": 215,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeleteBootEntry",
+    "__children": []
+  },
+  {
+    "Address": 272687958043296,
+    "Index": 216,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeleteDriverEntry",
+    "__children": []
+  },
+  {
+    "Address": 272687956428752,
+    "Index": 217,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeleteFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954985184,
+    "Index": 218,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeleteKey",
+    "__children": []
+  },
+  {
+    "Address": 272687957843856,
+    "Index": 219,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeleteObjectAuditAlarm",
+    "__children": []
+  },
+  {
+    "Address": 272687956493680,
+    "Index": 220,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeletePrivateNamespace",
+    "__children": []
+  },
+  {
+    "Address": 272687954979232,
+    "Index": 221,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeleteValueKey",
+    "__children": []
+  },
+  {
+    "Address": 272687956325568,
+    "Index": 222,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeleteWnfStateData",
+    "__children": []
+  },
+  {
+    "Address": 272687955694448,
+    "Index": 223,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDeleteWnfStateName",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 224,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687956489616,
+    "Index": 225,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDisableLastKnownGood",
+    "__children": []
+  },
+  {
+    "Address": 272687958018864,
+    "Index": 226,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDisplayString",
+    "__children": []
+  },
+  {
+    "Address": 272687953886224,
+    "Index": 227,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDrawText",
+    "__children": []
+  },
+  {
+    "Address": 272687956485264,
+    "Index": 228,
+    "Module": "ntoskrnl",
+    "Symbol": "NtEnableLastKnownGood",
+    "__children": []
+  },
+  {
+    "Address": 272687956221664,
+    "Index": 229,
+    "Module": "ntoskrnl",
+    "Symbol": "NtEnumerateBootEntries",
+    "__children": []
+  },
+  {
+    "Address": 272687958043696,
+    "Index": 230,
+    "Module": "ntoskrnl",
+    "Symbol": "NtEnumerateDriverEntries",
+    "__children": []
+  },
+  {
+    "Address": 272687958044912,
+    "Index": 231,
+    "Module": "ntoskrnl",
+    "Symbol": "NtEnumerateSystemEnvironmentValuesEx",
+    "__children": []
+  },
+  {
+    "Address": 272687951583584,
+    "Index": 232,
+    "Module": "ntoskrnl",
+    "Symbol": "NtEnumerateTransactionObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955815872,
+    "Index": 233,
+    "Module": "ntoskrnl",
+    "Symbol": "NtExtendSection",
+    "__children": []
+  },
+  {
+    "Address": 272687957853632,
+    "Index": 234,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterBootOption",
+    "__children": []
+  },
+  {
+    "Address": 272687955340512,
+    "Index": 235,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterToken",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 236,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955652512,
+    "Index": 237,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushBuffersFileEx",
+    "__children": []
+  },
+  {
+    "Address": 272687956338192,
+    "Index": 238,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushInstallUILanguage",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "ArbPreprocessEntry",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "ArbQueryArbitrate",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "EmFalseCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "FsRtlSyncVolumes",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "IommupPasidDevicePowerCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "IopPnPAddDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCompleteConnectPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushInstructionCache",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushWriteBuffer",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "PopPowerAggregatorVoidStateHandler",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "TtmpCalloutLiveDumpSecondaryCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAcpiGetMultiNode",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAddInterruptRemapping",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalGetInterruptTranslator",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPowerSetRebootHandler",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 239,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalTimerQueryCycleCounter",
+    "__children": []
+  },
+  {
+    "Address": 272687955592896,
+    "Index": 240,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushKey",
+    "__children": []
+  },
+  {
+    "Address": 272687950422896,
+    "Index": 241,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushProcessWriteBuffers",
+    "__children": []
+  },
+  {
+    "Address": 272687955750640,
+    "Index": 242,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "ArbPreprocessEntry",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "ArbQueryArbitrate",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "EmFalseCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "FsRtlSyncVolumes",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "IommupPasidDevicePowerCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "IopPnPAddDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCompleteConnectPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushInstructionCache",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFlushWriteBuffer",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "PopPowerAggregatorVoidStateHandler",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "TtmpCalloutLiveDumpSecondaryCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAcpiGetMultiNode",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAddInterruptRemapping",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalGetInterruptTranslator",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPowerSetRebootHandler",
+    "__children": []
+  },
+  {
+    "Address": 272687955807328,
+    "Index": 243,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalTimerQueryCycleCounter",
+    "__children": []
+  },
+  {
+    "Address": 272687958320496,
+    "Index": 244,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFreeUserPhysicalPages",
+    "__children": []
+  },
+  {
+    "Address": 272687958104672,
+    "Index": 245,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFreezeRegistry",
+    "__children": []
+  },
+  {
+    "Address": 272687951583616,
+    "Index": 246,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFreezeTransactions",
+    "__children": []
+  },
+  {
+    "Address": 272687955689104,
+    "Index": 247,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetCachedSigningLevel",
+    "__children": []
+  },
+  {
+    "Address": 272687955040208,
+    "Index": 248,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetCompleteWnfStateSubscription",
+    "__children": []
+  },
+  {
+    "Address": 272687955800448,
+    "Index": 249,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetContextThread",
+    "__children": []
+  },
+  {
+    "Address": 272687957713968,
+    "Index": 250,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetCurrentProcessorNumber",
+    "__children": []
+  },
+  {
+    "Address": 272687957714064,
+    "Index": 251,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetCurrentProcessorNumberEx",
+    "__children": []
+  },
+  {
+    "Address": 272687957569856,
+    "Index": 252,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetDevicePowerState",
+    "__children": []
+  },
+  {
+    "Address": 272687955696944,
+    "Index": 253,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetMUIRegistryInfo",
+    "__children": []
+  },
+  {
+    "Address": 272687955735856,
+    "Index": 254,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetNextProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687955791136,
+    "Index": 255,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetNextThread",
+    "__children": []
+  },
+  {
+    "Address": 272687954774288,
+    "Index": 256,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetNlsSectionPtr",
+    "__children": []
+  },
+  {
+    "Address": 272687951583648,
+    "Index": 257,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetNotificationResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687950646096,
+    "Index": 258,
+    "Module": "ntoskrnl",
+    "Symbol": "NtGetWriteWatch",
+    "__children": []
+  },
+  {
+    "Address": 272687955336992,
+    "Index": 259,
+    "Module": "ntoskrnl",
+    "Symbol": "NtImpersonateAnonymousToken",
+    "__children": []
+  },
+  {
+    "Address": 272687955668640,
+    "Index": 260,
+    "Module": "ntoskrnl",
+    "Symbol": "NtImpersonateThread",
+    "__children": []
+  },
+  {
+    "Address": 272687958307296,
+    "Index": 261,
+    "Module": "ntoskrnl",
+    "Symbol": "NtInitializeEnclave",
+    "__children": []
+  },
+  {
+    "Address": 272687955722880,
+    "Index": 262,
+    "Module": "ntoskrnl",
+    "Symbol": "NtInitializeNlsFiles",
+    "__children": []
+  },
+  {
+    "Address": 272687955832528,
+    "Index": 263,
+    "Module": "ntoskrnl",
+    "Symbol": "NtInitializeRegistry",
+    "__children": []
+  },
+  {
+    "Address": 272687957570080,
+    "Index": 264,
+    "Module": "ntoskrnl",
+    "Symbol": "NtInitiatePowerAction",
+    "__children": []
+  },
+  {
+    "Address": 272687957570752,
+    "Index": 265,
+    "Module": "ntoskrnl",
+    "Symbol": "NtIsSystemResumeAutomatic",
+    "__children": []
+  },
+  {
+    "Address": 272687955835344,
+    "Index": 266,
+    "Module": "ntoskrnl",
+    "Symbol": "NtIsUILanguageComitted",
+    "__children": []
+  },
+  {
+    "Address": 272687956357984,
+    "Index": 267,
+    "Module": "ntoskrnl",
+    "Symbol": "NtListenPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955717920,
+    "Index": 268,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLoadDriver",
+    "__children": []
+  },
+  {
+    "Address": 272687958308032,
+    "Index": 269,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLoadEnclaveData",
+    "__children": []
+  },
+  {
+    "Address": 272687956361696,
+    "Index": 270,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLoadKey",
+    "__children": []
+  },
+  {
+    "Address": 272687956432688,
+    "Index": 271,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLoadKey2",
+    "__children": []
+  },
+  {
+    "Address": 272687955832064,
+    "Index": 272,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLoadKey3",
+    "__children": []
+  },
+  {
+    "Address": 272687954950976,
+    "Index": 273,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLoadKeyEx",
+    "__children": []
+  },
+  {
+    "Address": 272687954829424,
+    "Index": 274,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLockFile",
+    "__children": []
+  },
+  {
+    "Address": 272687956199424,
+    "Index": 275,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLockProductActivationKeys",
+    "__children": []
+  },
+  {
+    "Address": 272687956248144,
+    "Index": 276,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLockRegistryKey",
+    "__children": []
+  },
+  {
+    "Address": 272687950628304,
+    "Index": 277,
+    "Module": "ntoskrnl",
+    "Symbol": "NtLockVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687957502800,
+    "Index": 278,
+    "Module": "ntoskrnl",
+    "Symbol": "NtMakePermanentObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955797072,
+    "Index": 279,
+    "Module": "ntoskrnl",
+    "Symbol": "NtMakeTemporaryObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955734352,
+    "Index": 280,
+    "Module": "ntoskrnl",
+    "Symbol": "NtManageHotPatch",
+    "__children": []
+  },
+  {
+    "Address": 272687955864848,
+    "Index": 281,
+    "Module": "ntoskrnl",
+    "Symbol": "NtManagePartition",
+    "__children": []
+  },
+  {
+    "Address": 272687958062224,
+    "Index": 282,
+    "Module": "ntoskrnl",
+    "Symbol": "NtMapCMFModule",
+    "__children": []
+  },
+  {
+    "Address": 272687958321872,
+    "Index": 283,
+    "Module": "ntoskrnl",
+    "Symbol": "NtMapUserPhysicalPages",
+    "__children": []
+  },
+  {
+    "Address": 272687954749168,
+    "Index": 284,
+    "Module": "ntoskrnl",
+    "Symbol": "NtMapViewOfSectionEx",
+    "__children": []
+  },
+  {
+    "Address": 272687958045424,
+    "Index": 285,
+    "Module": "ntoskrnl",
+    "Symbol": "NtModifyBootEntry",
+    "__children": []
+  },
+  {
+    "Address": 272687958045472,
+    "Index": 286,
+    "Module": "ntoskrnl",
+    "Symbol": "NtModifyDriverEntry",
+    "__children": []
+  },
+  {
+    "Address": 272687955702240,
+    "Index": 287,
+    "Module": "ntoskrnl",
+    "Symbol": "NtNotifyChangeDirectoryFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955702336,
+    "Index": 288,
+    "Module": "ntoskrnl",
+    "Symbol": "NtNotifyChangeDirectoryFileEx",
+    "__children": []
+  },
+  {
+    "Address": 272687954837328,
+    "Index": 289,
+    "Module": "ntoskrnl",
+    "Symbol": "NtNotifyChangeKey",
+    "__children": []
+  },
+  {
+    "Address": 272687954837440,
+    "Index": 290,
+    "Module": "ntoskrnl",
+    "Symbol": "NtNotifyChangeMultipleKeys",
+    "__children": []
+  },
+  {
+    "Address": 272687955609136,
+    "Index": 291,
+    "Module": "ntoskrnl",
+    "Symbol": "NtNotifyChangeSession",
+    "__children": []
+  },
+  {
+    "Address": 272687957722176,
+    "Index": 292,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenCpuPartition",
+    "__children": []
+  },
+  {
+    "Address": 272687951583680,
+    "Index": 293,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 294,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687957293952,
+    "Index": 295,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenIoCompletion",
+    "__children": []
+  },
+  {
+    "Address": 272687955838352,
+    "Index": 296,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenJobObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955585392,
+    "Index": 297,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenKeyEx",
+    "__children": []
+  },
+  {
+    "Address": 272687958104864,
+    "Index": 298,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenKeyTransacted",
+    "__children": []
+  },
+  {
+    "Address": 272687954955616,
+    "Index": 299,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenKeyTransactedEx",
+    "__children": []
+  },
+  {
+    "Address": 272687958068240,
+    "Index": 300,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenKeyedEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687955370432,
+    "Index": 301,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenMutant",
+    "__children": []
+  },
+  {
+    "Address": 272687955792272,
+    "Index": 302,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenObjectAuditAlarm",
+    "__children": []
+  },
+  {
+    "Address": 272687956347280,
+    "Index": 303,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenPartition",
+    "__children": []
+  },
+  {
+    "Address": 272687955690848,
+    "Index": 304,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenPrivateNamespace",
+    "__children": []
+  },
+  {
+    "Address": 272687955681488,
+    "Index": 305,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenProcessToken",
+    "__children": []
+  },
+  {
+    "Address": 272687958104896,
+    "Index": 306,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenRegistryTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951583712,
+    "Index": 307,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687955372320,
+    "Index": 308,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenSemaphore",
+    "__children": []
+  },
+  {
+    "Address": 272687955363872,
+    "Index": 309,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenSession",
+    "__children": []
+  },
+  {
+    "Address": 272687955566896,
+    "Index": 310,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenSymbolicLinkObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955638224,
+    "Index": 311,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenThread",
+    "__children": []
+  },
+  {
+    "Address": 272687958030144,
+    "Index": 312,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenTimer",
+    "__children": []
+  },
+  {
+    "Address": 272687951583744,
+    "Index": 313,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951583776,
+    "Index": 314,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687955497920,
+    "Index": 315,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPlugPlayControl",
+    "__children": []
+  },
+  {
+    "Address": 272687951583808,
+    "Index": 316,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPrePrepareComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951583840,
+    "Index": 317,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPrePrepareEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951583872,
+    "Index": 318,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPrepareComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951583904,
+    "Index": 319,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPrepareEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687954420816,
+    "Index": 320,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPrivilegeCheck",
+    "__children": []
+  },
+  {
+    "Address": 272687956241408,
+    "Index": 321,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPrivilegeObjectAuditAlarm",
+    "__children": []
+  },
+  {
+    "Address": 272687955749680,
+    "Index": 322,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPrivilegedServiceAuditAlarm",
+    "__children": []
+  },
+  {
+    "Address": 272687951583936,
+    "Index": 323,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPropagationComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951583968,
+    "Index": 324,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPropagationFailed",
+    "__children": []
+  },
+  {
+    "Address": 272687958070416,
+    "Index": 325,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPssCaptureVaSpaceBulk",
+    "__children": []
+  },
+  {
+    "Address": 272687955160800,
+    "Index": 326,
+    "Module": "ntoskrnl",
+    "Symbol": "NtPulseEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687958067040,
+    "Index": 327,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryAuxiliaryCounterFrequency",
+    "__children": []
+  },
+  {
+    "Address": 272687956220528,
+    "Index": 328,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryBootEntryOrder",
+    "__children": []
+  },
+  {
+    "Address": 272687956221040,
+    "Index": 329,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryBootOptions",
+    "__children": []
+  },
+  {
+    "Address": 272687949695664,
+    "Index": 330,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryDebugFilterState",
+    "__children": []
+  },
+  {
+    "Address": 272687954830272,
+    "Index": 331,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryDirectoryFileEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955297888,
+    "Index": 332,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryDirectoryObject",
+    "__children": []
+  },
+  {
+    "Address": 272687958045520,
+    "Index": 333,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryDriverEntryOrder",
+    "__children": []
+  },
+  {
+    "Address": 272687955650976,
+    "Index": 334,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryEaFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954408944,
+    "Index": 335,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryFullAttributesFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955772848,
+    "Index": 336,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationAtom",
+    "__children": []
+  },
+  {
+    "Address": 272687954405728,
+    "Index": 337,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationByName",
+    "__children": []
+  },
+  {
+    "Address": 272687957722352,
+    "Index": 338,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationCpuPartition",
+    "__children": []
+  },
+  {
+    "Address": 272687951584000,
+    "Index": 339,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687954878800,
+    "Index": 340,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationJobObject",
+    "__children": []
+  },
+  {
+    "Address": 272687957492960,
+    "Index": 341,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationPort",
+    "__children": []
+  },
+  {
+    "Address": 272687951584032,
+    "Index": 342,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951584064,
+    "Index": 343,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951584096,
+    "Index": 344,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687953923152,
+    "Index": 345,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInformationWorkerFactory",
+    "__children": []
+  },
+  {
+    "Address": 272687955929520,
+    "Index": 346,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryInstallUILanguage",
+    "__children": []
+  },
+  {
+    "Address": 272687958067152,
+    "Index": 347,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryIntervalProfile",
+    "__children": []
+  },
+  {
+    "Address": 272687957294240,
+    "Index": 348,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryIoCompletion",
+    "__children": []
+  },
+  {
+    "Address": 272687957305312,
+    "Index": 349,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryIoRingCapabilities",
+    "__children": []
+  },
+  {
+    "Address": 272687955600192,
+    "Index": 350,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryLicenseValue",
+    "__children": []
+  },
+  {
+    "Address": 272687955101904,
+    "Index": 351,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryMultipleValueKey",
+    "__children": []
+  },
+  {
+    "Address": 272687958071952,
+    "Index": 352,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryMutant",
+    "__children": []
+  },
+  {
+    "Address": 272687958105216,
+    "Index": 353,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryOpenSubKeys",
+    "__children": []
+  },
+  {
+    "Address": 272687958105792,
+    "Index": 354,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryOpenSubKeysEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955934944,
+    "Index": 355,
+    "Module": "ntoskrnl",
+    "Symbol": "CmpCleanUpHigherLayerKcbCachesPreCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955934944,
+    "Index": 355,
+    "Module": "ntoskrnl",
+    "Symbol": "CmpInvalidateAllHigherLayerKcbsPreCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955934944,
+    "Index": 355,
+    "Module": "ntoskrnl",
+    "Symbol": "CmpPrepareToInvalidateAllHigherLayerKcbsPreCallback",
+    "__children": []
+  },
+  {
+    "Address": 272687955934944,
+    "Index": 355,
+    "Module": "ntoskrnl",
+    "Symbol": "HaliAcpiQueryFlags",
+    "__children": []
+  },
+  {
+    "Address": 272687955934944,
+    "Index": 355,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryPortInformationProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687957307840,
+    "Index": 356,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryQuotaInformationFile",
+    "__children": []
+  },
+  {
+    "Address": 272687954703536,
+    "Index": 357,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySecurityAttributesToken",
+    "__children": []
+  },
+  {
+    "Address": 272687955593696,
+    "Index": 358,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySecurityObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955790128,
+    "Index": 359,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySecurityPolicy",
+    "__children": []
+  },
+  {
+    "Address": 272687958054992,
+    "Index": 360,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySemaphore",
+    "__children": []
+  },
+  {
+    "Address": 272687955566240,
+    "Index": 361,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySymbolicLinkObject",
+    "__children": []
+  },
+  {
+    "Address": 272687958046336,
+    "Index": 362,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySystemEnvironmentValue",
+    "__children": []
+  },
+  {
+    "Address": 272687955413760,
+    "Index": 363,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySystemEnvironmentValueEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955671744,
+    "Index": 364,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQuerySystemInformationEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955807152,
+    "Index": 365,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryTimerResolution",
+    "__children": []
+  },
+  {
+    "Address": 272687955044560,
+    "Index": 366,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryWnfStateData",
+    "__children": []
+  },
+  {
+    "Address": 272687955705424,
+    "Index": 367,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueryWnfStateNameInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687955843712,
+    "Index": 368,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueueApcThreadEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955843792,
+    "Index": 369,
+    "Module": "ntoskrnl",
+    "Symbol": "NtQueueApcThreadEx2",
+    "__children": []
+  },
+  {
+    "Address": 272687951862192,
+    "Index": 370,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRaiseException",
+    "__children": []
+  },
+  {
+    "Address": 272687958054096,
+    "Index": 371,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRaiseHardError",
+    "__children": []
+  },
+  {
+    "Address": 272687951584128,
+    "Index": 372,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReadOnlyEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951113008,
+    "Index": 373,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReadVirtualMemoryEx",
+    "__children": []
+  },
+  {
+    "Address": 272687951584160,
+    "Index": 374,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRecoverEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951584192,
+    "Index": 375,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRecoverResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951584224,
+    "Index": 376,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRecoverTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951585536,
+    "Index": 377,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRegisterProtocolAddressInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687955810448,
+    "Index": 378,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRegisterThreadTerminatePort",
+    "__children": []
+  },
+  {
+    "Address": 272687958068496,
+    "Index": 379,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReleaseKeyedEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687949833712,
+    "Index": 380,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReleaseWorkerFactoryWorker",
+    "__children": []
+  },
+  {
+    "Address": 272687954703056,
+    "Index": 381,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRemoveIoCompletionEx",
+    "__children": []
+  },
+  {
+    "Address": 272687957232176,
+    "Index": 382,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRemoveProcessDebug",
+    "__children": []
+  },
+  {
+    "Address": 272687958106640,
+    "Index": 383,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRenameKey",
+    "__children": []
+  },
+  {
+    "Address": 272687951585568,
+    "Index": 384,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRenameTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687958107920,
+    "Index": 385,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReplaceKey",
+    "__children": []
+  },
+  {
+    "Address": 272687954357168,
+    "Index": 386,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReplacePartitionUnit",
+    "__children": []
+  },
+  {
+    "Address": 272687957493264,
+    "Index": 387,
+    "Module": "ntoskrnl",
+    "Symbol": "NtReplyWaitReplyPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955700848,
+    "Index": 388,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRequestPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955907872,
+    "Index": 389,
+    "Module": "ntoskrnl",
+    "Symbol": "NtResetEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687955148016,
+    "Index": 390,
+    "Module": "ntoskrnl",
+    "Symbol": "NtResetWriteWatch",
+    "__children": []
+  },
+  {
+    "Address": 272687958108784,
+    "Index": 391,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRestoreKey",
+    "__children": []
+  },
+  {
+    "Address": 272687957745312,
+    "Index": 392,
+    "Module": "ntoskrnl",
+    "Symbol": "NtResumeProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687953483184,
+    "Index": 393,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRevertContainerImpersonation",
+    "__children": []
+  },
+  {
+    "Address": 272687951584256,
+    "Index": 394,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRollbackComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951584288,
+    "Index": 395,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRollbackEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687958109424,
+    "Index": 396,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRollbackRegistryTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951584320,
+    "Index": 397,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRollbackTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951585664,
+    "Index": 398,
+    "Module": "ntoskrnl",
+    "Symbol": "NtRollforwardTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687958109712,
+    "Index": 399,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSaveKey",
+    "__children": []
+  },
+  {
+    "Address": 272687958109744,
+    "Index": 400,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSaveKeyEx",
+    "__children": []
+  },
+  {
+    "Address": 272687958110400,
+    "Index": 401,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSaveMergedKeys",
+    "__children": []
+  },
+  {
+    "Address": 272687954758000,
+    "Index": 402,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSecureConnectPort",
+    "__children": []
+  },
+  {
+    "Address": 272687956347472,
+    "Index": 403,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSerializeBoot",
+    "__children": []
+  },
+  {
+    "Address": 272687958047152,
+    "Index": 404,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetBootEntryOrder",
+    "__children": []
+  },
+  {
+    "Address": 272687958047680,
+    "Index": 405,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetBootOptions",
+    "__children": []
+  },
+  {
+    "Address": 272687955943008,
+    "Index": 406,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetCachedSigningLevel",
+    "__children": []
+  },
+  {
+    "Address": 272687955943056,
+    "Index": 407,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetCachedSigningLevel2",
+    "__children": []
+  },
+  {
+    "Address": 272687957736928,
+    "Index": 408,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetContextThread",
+    "__children": []
+  },
+  {
+    "Address": 272687956134032,
+    "Index": 409,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetDebugFilterState",
+    "__children": []
+  },
+  {
+    "Address": 272687956350176,
+    "Index": 410,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetDefaultHardErrorPort",
+    "__children": []
+  },
+  {
+    "Address": 272687955927488,
+    "Index": 411,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetDefaultLocale",
+    "__children": []
+  },
+  {
+    "Address": 272687955927456,
+    "Index": 412,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetDefaultUILanguage",
+    "__children": []
+  },
+  {
+    "Address": 272687958048224,
+    "Index": 413,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetDriverEntryOrder",
+    "__children": []
+  },
+  {
+    "Address": 272687957306288,
+    "Index": 414,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetEaFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 415,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 416,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687951120480,
+    "Index": 417,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetIRTimer",
+    "__children": []
+  },
+  {
+    "Address": 272687957722864,
+    "Index": 418,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationCpuPartition",
+    "__children": []
+  },
+  {
+    "Address": 272687957232544,
+    "Index": 419,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationDebugObject",
+    "__children": []
+  },
+  {
+    "Address": 272687951584352,
+    "Index": 420,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687957305456,
+    "Index": 421,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationIoRing",
+    "__children": []
+  },
+  {
+    "Address": 272687954890896,
+    "Index": 422,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationJobObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955594224,
+    "Index": 423,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationKey",
+    "__children": []
+  },
+  {
+    "Address": 272687951584384,
+    "Index": 424,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687957504768,
+    "Index": 425,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationSymbolicLink",
+    "__children": []
+  },
+  {
+    "Address": 272687955183440,
+    "Index": 426,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationToken",
+    "__children": []
+  },
+  {
+    "Address": 272687951584416,
+    "Index": 427,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951585600,
+    "Index": 428,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687954761600,
+    "Index": 429,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687950571456,
+    "Index": 430,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetInformationWorkerFactory",
+    "__children": []
+  },
+  {
+    "Address": 272687958067264,
+    "Index": 431,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetIntervalProfile",
+    "__children": []
+  },
+  {
+    "Address": 272687954542752,
+    "Index": 432,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetIoCompletion",
+    "__children": []
+  },
+  {
+    "Address": 272687955844736,
+    "Index": 433,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetIoCompletionEx",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "BvgaSetVirtualFrameBuffer",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "CcTestControl",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "HalpInterruptGetParkingPageInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "HalpPicRequestInterrupt",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "IommuSetDeviceFaultReportingEx",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLdtEntries",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "PspQueryDescriptorThread",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "PspQueryLdtInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "PspSetLdtInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "PspSetLdtSize",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "PspSetProcessIoHandlers",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "SeUnRegisterAndFreeAccessCheckDebugContext",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "SkIsSecureKernel",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAllocateMapRegisters",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalConvertAuxiliaryCounterToPerformanceCounter",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalConvertPerformanceCounterToAuxiliaryCounter",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalGetIommuInterface",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalGetIommuInterfaceEx",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuBeginDeviceReset",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuBlockDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuDevicePowerChange",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuDisableDevicePasid",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuEnableDevicePasid",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuFinalizeDeviceReset",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuFreeLibraryContext",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuGetLibraryContext",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuSetAddressSpace",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuUnblockDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuUnmapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalQueryAuxiliaryCounterFrequency",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalTimerWatchdogTriggerSystemReset",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xKdEnumerateDebuggingDevices",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xKdReleaseIntegratedDeviceForDebugging",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xKdReleasePciDeviceForDebugging",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xKdSetupIntegratedDeviceForDebugging",
+    "__children": []
+  },
+  {
+    "Address": 272687951449584,
+    "Index": 434,
+    "Module": "ntoskrnl",
+    "Symbol": "xKdSetupPciDeviceForDebugging",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 435,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 436,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687957309728,
+    "Index": 437,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetQuotaInformationFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955639632,
+    "Index": 438,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetSecurityObject",
+    "__children": []
+  },
+  {
+    "Address": 272687958048752,
+    "Index": 439,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetSystemEnvironmentValue",
+    "__children": []
+  },
+  {
+    "Address": 272687958049568,
+    "Index": 440,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetSystemEnvironmentValueEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955895856,
+    "Index": 441,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetSystemInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687958730576,
+    "Index": 442,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetSystemPowerState",
+    "__children": []
+  },
+  {
+    "Address": 272687958016880,
+    "Index": 443,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetSystemTime",
+    "__children": []
+  },
+  {
+    "Address": 272687954393760,
+    "Index": 444,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetThreadExecutionState",
+    "__children": []
+  },
+  {
+    "Address": 272687949738128,
+    "Index": 445,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetTimer2",
+    "__children": []
+  },
+  {
+    "Address": 272687949689424,
+    "Index": 446,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetTimerEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955910400,
+    "Index": 447,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetTimerResolution",
+    "__children": []
+  },
+  {
+    "Address": 272687956282064,
+    "Index": 448,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetUuidSeed",
+    "__children": []
+  },
+  {
+    "Address": 272687956475616,
+    "Index": 449,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetVolumeInformationFile",
+    "__children": []
+  },
+  {
+    "Address": 272687955725680,
+    "Index": 450,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetWnfProcessNotificationEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687953886608,
+    "Index": 451,
+    "Module": "ntoskrnl",
+    "Symbol": "NtShutdownSystem",
+    "__children": []
+  },
+  {
+    "Address": 272687951095952,
+    "Index": 452,
+    "Module": "ntoskrnl",
+    "Symbol": "NtShutdownWorkerFactory",
+    "__children": []
+  },
+  {
+    "Address": 272687953345568,
+    "Index": 453,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSignalAndWaitForSingleObject",
+    "__children": []
+  },
+  {
+    "Address": 272687951585632,
+    "Index": 454,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSinglePhaseReject",
+    "__children": []
+  },
+  {
+    "Address": 272687958067360,
+    "Index": 455,
+    "Module": "ntoskrnl",
+    "Symbol": "NtStartProfile",
+    "__children": []
+  },
+  {
+    "Address": 272687958067984,
+    "Index": 456,
+    "Module": "ntoskrnl",
+    "Symbol": "NtStopProfile",
+    "__children": []
+  },
+  {
+    "Address": 272687953178304,
+    "Index": 457,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSubmitIoRing",
+    "__children": []
+  },
+  {
+    "Address": 272687955043440,
+    "Index": 458,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSubscribeWnfStateChange",
+    "__children": []
+  },
+  {
+    "Address": 272687957745440,
+    "Index": 459,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSuspendProcess",
+    "__children": []
+  },
+  {
+    "Address": 272687955772416,
+    "Index": 460,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSuspendThread",
+    "__children": []
+  },
+  {
+    "Address": 272687955797824,
+    "Index": 461,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSystemDebugControl",
+    "__children": []
+  },
+  {
+    "Address": 272687958309616,
+    "Index": 462,
+    "Module": "ntoskrnl",
+    "Symbol": "NtTerminateEnclave",
+    "__children": []
+  },
+  {
+    "Address": 272687955782432,
+    "Index": 463,
+    "Module": "ntoskrnl",
+    "Symbol": "NtTerminateJobObject",
+    "__children": []
+  },
+  {
+    "Address": 272687955572480,
+    "Index": 464,
+    "Module": "ntoskrnl",
+    "Symbol": "NtTestAlert",
+    "__children": []
+  },
+  {
+    "Address": 272687958111072,
+    "Index": 465,
+    "Module": "ntoskrnl",
+    "Symbol": "NtThawRegistry",
+    "__children": []
+  },
+  {
+    "Address": 272687951584448,
+    "Index": 466,
+    "Module": "ntoskrnl",
+    "Symbol": "NtThawTransactions",
+    "__children": []
+  },
+  {
+    "Address": 272687954700736,
+    "Index": 467,
+    "Module": "ntoskrnl",
+    "Symbol": "NtTraceControl",
+    "__children": []
+  },
+  {
+    "Address": 272687956223328,
+    "Index": 468,
+    "Module": "ntoskrnl",
+    "Symbol": "NtTranslateFilePath",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "DefaultAddProfileSource",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "DefaultRemoveProfileSource",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "HalpDeallocateMsiLines",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "IommuQueryInputMappings",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "MiGraphicsProtectionAllowed",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "MmSetBankedSection",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUmsThreadYield",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "PoCancelDeviceNotify",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "PoRegisterDeviceNotify",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsAddLogContainer",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsCloseLogFileObject",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsCreateLogFile",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsCreateMarshallingArea",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsDeleteLogByPointer",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsDeleteMarshallingArea",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsFlushToLsn",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsGetLogFileInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsLsnDifference",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsMgmtDeregisterManagedClient",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsMgmtInstallPolicy",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsMgmtRegisterManagedClient",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsReadLogRecord",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsReadNextLogRecord",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsReadRestartArea",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsReserveAndAppendLog",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsTerminateReadLog",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_fs_clfs_l1_1_0_ClfsWriteRestartArea",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_clipsp_l1_1_0_ClipSpInitialize",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_globmerger_l1_1_0_CimfsMountBootVolume",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_kcminitcfg_l1_1_0_CmSetInitMachineConfig",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksecurity_l1_1_1_QueryUpdateFileEaAllowedExt",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksr_l1_1_4_KsrClaimPersistedMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksr_l1_1_4_KsrCleanupPageDatabase",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksr_l1_1_4_KsrEnumeratePersistedMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksr_l1_1_4_KsrGetFirmwareInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksr_l1_1_4_KsrInitPageDatabase",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksr_l1_1_4_KsrInitSystem",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksr_l1_1_4_KsrMdlToMemoryRuns",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksr_l1_1_4_KsrPersistMemoryWithMetadata",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ksr_l1_1_4_KsrQueryMetadata",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_runlevels_l1_1_0_ExpInitializeRunLevel0",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_stateseparation_l1_1_0_ExpInitializeStateSeparationPhase0",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_stateseparation_l1_1_0_ExpInitializeStateSeparationPhase1",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_stateseparation_l1_1_0_ExpInitializeStateSeparationPhase2",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtCommitComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtCommitEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtCommitTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtCreateEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtCreateResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtCreateTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtCreateTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtEnumerateTransactionObject",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtFreezeTransactions",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtGetNotificationResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtOpenEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtOpenResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtOpenTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtOpenTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtPrePrepareComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtPrePrepareEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtPrepareComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtPrepareEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtPropagationComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtPropagationFailed",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtQueryInformationEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtQueryInformationResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtQueryInformationTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtQueryInformationTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtReadOnlyEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtRecoverEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtRecoverResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtRecoverTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtRegisterProtocolAddressInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtRenameTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtRollbackComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtRollbackEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtRollbackTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtRollforwardTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtSetInformationEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtSetInformationResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtSetInformationTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtSetInformationTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtSinglePhaseReject",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_NtThawTransactions",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmCancelPropagationRequest",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmCommitComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmCommitEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmCommitTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmCreateEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmCurrentTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmDereferenceEnlistmentKey",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmEnableCallbacks",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmEndPropagationRequest",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmFreezeTransactions",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmInitSystem",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmInitializeTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmPrePrepareComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmPrePrepareEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmPrepareComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmPrepareEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmPropagationComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmPropagationFailed",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmReadOnlyEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmRecoverEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmRecoverResourceManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmRecoverTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmReferenceEnlistmentKey",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmRenameTransactionManager",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmRequestOutcomeEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmRollbackComplete",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmRollbackEnlistment",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmRollbackTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmSetCurrentTransaction",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmSinglePhaseReject",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_tm_l1_1_0_TmThawTransactions",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_trace_l1_1_0_TraceInitSystem",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ucode_l1_1_0_ExpMicrocodeInformationLoad",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ucode_l1_1_0_ExpMicrocodeInformationUnload",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_ucode_l1_1_0_ExpMicrocodeInitialization",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_werkernel_l1_1_1_WerLiveKernelCancelReport",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_werkernel_l1_1_1_WerLiveKernelCloseHandle",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_werkernel_l1_1_1_WerLiveKernelCreateReport",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_werkernel_l1_1_1_WerLiveKernelInitSystem",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_werkernel_l1_1_1_WerLiveKernelOpenDumpFile",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "ext_ms_win_ntos_werkernel_l1_1_1_WerLiveKernelSubmitReport",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAllocateGsivForSecondaryInterrupt",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalAllocateMessageTarget",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalCaptureLastBranchRecordStack",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalClockTimerArm",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalConfigureLastBranchRecord",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalConnectSyntheticInterrupt",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalConnectThermalInterrupt",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalDmaCheckAdapterToken",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalDmaLinkDeviceObjectByToken",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalEndMirroring",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalEnumerateEnvironmentVariablesWithFilter",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalEnumerateUnmaskedInterrupts",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalGetProcessorStats",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalGetVectorInput",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalInitPnpDriver",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalInitPowerManagement",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalInterruptGetHighestPriorityInterrupt",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalInterruptSetDestination",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalInterruptVectorDataToGsiv",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuCreateAtsDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuGetAtsSettings",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuGetDomainTransitionSupport",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalMaskInterrupt",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalMirrorPhysicalMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalMirrorVerify",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPrepareProcessorForIdle",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalProcessorFreeze",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalProcessorOff",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalProcessorOn",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalQueryCapsuleCapabilities",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalReadWheaPhysicalMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalRequestGenericErrorRecovery",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalRequestInterrupt",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalSecondaryInterruptQueryPrimaryInformation",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalStartLastBranchRecord",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalStartProfileInterruptEx",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalStopLastBranchRecord",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalTimerQueryHostPerformanceCounter",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalTopologyQueryProcessorRelationships",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnmaskInterrupt",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUpdateCapsule",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalWheaInitProcessorGenericSection",
+    "__children": []
+  },
+  {
+    "Address": 272687951172688,
+    "Index": 469,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalWriteWheaPhysicalMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687957334576,
+    "Index": 470,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUnloadDriver",
+    "__children": []
+  },
+  {
+    "Address": 272687955539872,
+    "Index": 471,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUnloadKey",
+    "__children": []
+  },
+  {
+    "Address": 272687955539744,
+    "Index": 472,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUnloadKey2",
+    "__children": []
+  },
+  {
+    "Address": 272687956434688,
+    "Index": 473,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUnloadKeyEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955619216,
+    "Index": 474,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUnlockFile",
+    "__children": []
+  },
+  {
+    "Address": 272687950240000,
+    "Index": 475,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUnlockVirtualMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955085552,
+    "Index": 476,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUnmapViewOfSectionEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955868000,
+    "Index": 477,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUnsubscribeWnfStateChange",
+    "__children": []
+  },
+  {
+    "Address": 272687955042016,
+    "Index": 478,
+    "Module": "ntoskrnl",
+    "Symbol": "NtUpdateWnfStateData",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 479,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955025696,
+    "Index": 480,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitForAlertByThreadId",
+    "__children": []
+  },
+  {
+    "Address": 272687957232944,
+    "Index": 481,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitForDebugEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687958069456,
+    "Index": 482,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitForKeyedEvent",
+    "__children": []
+  },
+  {
+    "Address": 272687950304240,
+    "Index": 483,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitForWorkViaWorkerFactory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 484,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "?GetPnpProperty@NT_DISK@@UEAAJPEAXPEAPEAX@Z",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtAdjustTokenClaimsAndDeviceGroups",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtCreateEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtDirectGraphicsCall",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtFilterTokenEx",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtOpenEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetHighWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtSetLowWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtVdmControl",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitHighEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "NtWaitLowEventPair",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "PsNotifyWriteToExecutableMemory",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "SeAdjustObjectSecurity",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalIommuMapDevice",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalLoadMicrocode",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalPostMicrocodeUpdate",
+    "__children": []
+  },
+  {
+    "Address": 272687955935104,
+    "Index": 485,
+    "Module": "ntoskrnl",
+    "Symbol": "xHalUnloadMicrocode",
+    "__children": []
+  }
+]

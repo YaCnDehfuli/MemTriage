@@ -1,0 +1,1711 @@
+{
+  "description": "Read-only evidence extract for the report-writing recording. No analysis was rerun and no report state was written.",
+  "investigation_id": "4ab70cc1-3819-417d-a34c-9aae27c9bb73",
+  "analysis_id": "65f1ffda-d96a-412a-9f13-6404576f899c",
+  "result_generated_at": "2026-10-01T23:36:12.863284+00:00",
+  "lowlevel_generated_at": "2026-10-01T23:36:11.850041+00:00",
+  "dump": {
+    "ordinal": 0,
+    "filename": "2580_5.vmem",
+    "size_bytes": 4412228315,
+    "sha256": "777d71d7106e5ded19592c075058da12049bfcd658221e70f0579ad4bbd9cff4"
+  },
+  "image_system_time": "2024-12-27T07:57:04+00:00",
+  "method": {
+    "vol_version": "Volatility 3 Framework 2.28.0",
+    "triage_mode": "custom",
+    "requested_plugins": [
+      "amcache",
+      "cmdline",
+      "consoles",
+      "getsids",
+      "info",
+      "malfind",
+      "modules",
+      "netscan",
+      "netstat",
+      "privileges",
+      "pslist",
+      "psscan",
+      "pstree",
+      "psxview",
+      "registry.certificates",
+      "registry.hivelist",
+      "registry.hivescan",
+      "registry.printkey",
+      "registry.userassist",
+      "scheduled_tasks",
+      "ssdt",
+      "svclist"
+    ],
+    "plugin_count": 22,
+    "concurrency": 4,
+    "preset": "aggressive",
+    "confidence_floor": 0.2,
+    "require_correlation": false,
+    "risk_bands": {
+      "critical": 16,
+      "high": 11,
+      "medium": 6
+    },
+    "rule_overrides": {}
+  },
+  "cache_source": "local artifacts",
+  "extraction": {
+    "plugins_attempted": 22,
+    "plugins_failed": 0,
+    "failed_plugins": {},
+    "degraded": false,
+    "severity": "ok",
+    "message": "All requested Volatility plugins produced output."
+  },
+  "process_name": "malware.exe",
+  "pid": 2580,
+  "verdict": {
+    "model_loaded": true,
+    "family": "Exploit",
+    "confidence": 0.804653,
+    "probabilities": {
+      "Backdoor": 0.007379,
+      "Benign": 0.012929,
+      "Exploit": 0.804653,
+      "HackTool": 0.093341,
+      "Hoax": 0.015525,
+      "Rootkit": 0.020307,
+      "Trojan": 0.010265,
+      "Virus": 0.022596,
+      "Worm": 0.013004
+    },
+    "placeholder": false,
+    "note": "VADViT classification.",
+    "model_source": "trained"
+  },
+  "counts": {
+    "extracted_vads": 80,
+    "ranked_grid_regions": 49,
+    "analyzed_regions": 5,
+    "scored_objects": 33
+  },
+  "selected_findings": [
+    {
+      "object": {
+        "object_type": "process",
+        "key": "5088",
+        "label": "powershell.exe (5088)",
+        "pid": 5088,
+        "score": 23.6,
+        "score_max": 30,
+        "risk": "Critical",
+        "confidence": 0.946,
+        "tactics": [
+          "Defense Evasion",
+          "Execution",
+          "Privilege Escalation",
+          "Credential Access"
+        ],
+        "techniques": [
+          "T1055",
+          "T1059",
+          "T1134",
+          "T1003.001"
+        ],
+        "contributions": [
+          {
+            "rule_id": "malfind_rwx_private",
+            "title": "RWX private memory region",
+            "weight": 8.4,
+            "evidence": "RWX private memory region at 2252274401280 (PAGE_EXECUTE_READWRITE)",
+            "subject": "2252274401280",
+            "mitre": {
+              "technique_id": "T1055",
+              "technique_name": "Process Injection",
+              "tactic": "Defense Evasion"
+            },
+            "severity": 4,
+            "confidence": 0.7,
+            "family": "memory_shape",
+            "context_only": false,
+            "superseded": false
+          },
+          {
+            "rule_id": "corr_credential_theft",
+            "title": "Corroborated credential access",
+            "weight": 6.0,
+            "evidence": "Corroborated credential access: independent signals ['malfind_rwx_private', 'token_sedebug'] corroborate",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1003.001",
+              "technique_name": "LSASS Memory",
+              "tactic": "Credential Access"
+            },
+            "severity": 4,
+            "confidence": 0.85,
+            "family": "",
+            "context_only": false,
+            "superseded": false
+          },
+          {
+            "rule_id": "lolbin_from_service_host",
+            "title": "Service host spawned a script interpreter",
+            "weight": 4.8,
+            "evidence": "svchost.exe spawned powershell.exe \u2014 service host spawning a script interpreter",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1059",
+              "technique_name": "Command and Scripting Interpreter",
+              "tactic": "Execution"
+            },
+            "severity": 3,
+            "confidence": 0.6,
+            "family": "lineage",
+            "context_only": false,
+            "superseded": false
+          },
+          {
+            "rule_id": "token_sedebug",
+            "title": "Sensitive privilege enabled",
+            "weight": 4.4,
+            "evidence": "powershell.exe has sedebugprivilege enabled",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1134",
+              "technique_name": "Access Token Manipulation",
+              "tactic": "Privilege Escalation"
+            },
+            "severity": 3,
+            "confidence": 0.55,
+            "family": "privilege",
+            "context_only": false,
+            "superseded": false
+          }
+        ]
+      },
+      "headline": "This process scored Critical and warrants immediate examination. Weighted score 23.6. Aggregate source confidence 95%.",
+      "rationale": "4 independent rules fired: RWX private memory region at 2252274401280 (PAGE_EXECUTE_READWRITE); Corroborated credential access: independent signals ['malfind_rwx_private', 'token_sedebug'] corroborate; svchost.exe spawned powershell.exe \u2014 service host spawning a script interpreter; and powershell.exe has sedebugprivilege enabled.",
+      "techniques": "The behaviour maps to T1055 (Process Injection), T1003.001 (LSASS Memory), T1059 (Command and Scripting Interpreter), T1134 (Access Token Manipulation).",
+      "ref": "process|5088|2498e67d"
+    },
+    {
+      "object": {
+        "object_type": "process",
+        "key": "3768",
+        "label": "powershell.exe (3768)",
+        "pid": 3768,
+        "score": 23.6,
+        "score_max": 30,
+        "risk": "Critical",
+        "confidence": 0.946,
+        "tactics": [
+          "Defense Evasion",
+          "Execution",
+          "Privilege Escalation",
+          "Credential Access"
+        ],
+        "techniques": [
+          "T1055",
+          "T1059",
+          "T1134",
+          "T1003.001"
+        ],
+        "contributions": [
+          {
+            "rule_id": "malfind_rwx_private",
+            "title": "RWX private memory region",
+            "weight": 8.4,
+            "evidence": "RWX private memory region at 2650696318976 (PAGE_EXECUTE_READWRITE)",
+            "subject": "2650696318976",
+            "mitre": {
+              "technique_id": "T1055",
+              "technique_name": "Process Injection",
+              "tactic": "Defense Evasion"
+            },
+            "severity": 4,
+            "confidence": 0.7,
+            "family": "memory_shape",
+            "context_only": false,
+            "superseded": false
+          },
+          {
+            "rule_id": "corr_credential_theft",
+            "title": "Corroborated credential access",
+            "weight": 6.0,
+            "evidence": "Corroborated credential access: independent signals ['malfind_rwx_private', 'token_sedebug'] corroborate",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1003.001",
+              "technique_name": "LSASS Memory",
+              "tactic": "Credential Access"
+            },
+            "severity": 4,
+            "confidence": 0.85,
+            "family": "",
+            "context_only": false,
+            "superseded": false
+          },
+          {
+            "rule_id": "lolbin_from_service_host",
+            "title": "Service host spawned a script interpreter",
+            "weight": 4.8,
+            "evidence": "svchost.exe spawned powershell.exe \u2014 service host spawning a script interpreter",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1059",
+              "technique_name": "Command and Scripting Interpreter",
+              "tactic": "Execution"
+            },
+            "severity": 3,
+            "confidence": 0.6,
+            "family": "lineage",
+            "context_only": false,
+            "superseded": false
+          },
+          {
+            "rule_id": "token_sedebug",
+            "title": "Sensitive privilege enabled",
+            "weight": 4.4,
+            "evidence": "powershell.exe has sedebugprivilege enabled",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1134",
+              "technique_name": "Access Token Manipulation",
+              "tactic": "Privilege Escalation"
+            },
+            "severity": 3,
+            "confidence": 0.55,
+            "family": "privilege",
+            "context_only": false,
+            "superseded": false
+          }
+        ]
+      },
+      "headline": "This process scored Critical and warrants immediate examination. Weighted score 23.6. Aggregate source confidence 95%.",
+      "rationale": "4 independent rules fired: RWX private memory region at 2650696318976 (PAGE_EXECUTE_READWRITE); Corroborated credential access: independent signals ['malfind_rwx_private', 'token_sedebug'] corroborate; svchost.exe spawned powershell.exe \u2014 service host spawning a script interpreter; and powershell.exe has sedebugprivilege enabled.",
+      "techniques": "The behaviour maps to T1055 (Process Injection), T1003.001 (LSASS Memory), T1059 (Command and Scripting Interpreter), T1134 (Access Token Manipulation).",
+      "ref": "process|3768|08c35798"
+    },
+    {
+      "object": {
+        "object_type": "process",
+        "key": "2580",
+        "label": "malware.exe (2580)",
+        "pid": 2580,
+        "score": 23.6,
+        "score_max": 30,
+        "risk": "Critical",
+        "confidence": 0.946,
+        "tactics": [
+          "Defense Evasion",
+          "Privilege Escalation",
+          "Credential Access"
+        ],
+        "techniques": [
+          "T1055",
+          "T1134",
+          "T1003.001"
+        ],
+        "contributions": [
+          {
+            "rule_id": "malfind_rwx_private",
+            "title": "RWX private memory region",
+            "weight": 8.4,
+            "evidence": "RWX private memory region at 48889856 (PAGE_EXECUTE_READWRITE)",
+            "subject": "48889856",
+            "mitre": {
+              "technique_id": "T1055",
+              "technique_name": "Process Injection",
+              "tactic": "Defense Evasion"
+            },
+            "severity": 4,
+            "confidence": 0.7,
+            "family": "memory_shape",
+            "context_only": false,
+            "superseded": false
+          },
+          {
+            "rule_id": "corr_credential_theft",
+            "title": "Corroborated credential access",
+            "weight": 6.0,
+            "evidence": "Corroborated credential access: independent signals ['malfind_rwx_private', 'token_sedebug'] corroborate",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1003.001",
+              "technique_name": "LSASS Memory",
+              "tactic": "Credential Access"
+            },
+            "severity": 4,
+            "confidence": 0.85,
+            "family": "",
+            "context_only": false,
+            "superseded": false
+          },
+          {
+            "rule_id": "malfind_peb_walk",
+            "title": "PEB loader-list walk",
+            "weight": 4.8,
+            "evidence": "Region at 48889856 walks the PEB loader lists, the way code with no import table finds its imports",
+            "subject": "48889856",
+            "mitre": {
+              "technique_id": "T1055",
+              "technique_name": "Process Injection",
+              "tactic": "Defense Evasion"
+            },
+            "severity": 3,
+            "confidence": 0.6,
+            "family": "loader_behavior",
+            "context_only": false,
+            "superseded": false
+          },
+          {
+            "rule_id": "token_sedebug",
+            "title": "Sensitive privilege enabled",
+            "weight": 4.4,
+            "evidence": "malware.exe has sedebugprivilege enabled",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1134",
+              "technique_name": "Access Token Manipulation",
+              "tactic": "Privilege Escalation"
+            },
+            "severity": 3,
+            "confidence": 0.55,
+            "family": "privilege",
+            "context_only": false,
+            "superseded": false
+          }
+        ]
+      },
+      "headline": "This process scored Critical and warrants immediate examination. Weighted score 23.6. Aggregate source confidence 95%.",
+      "rationale": "4 independent rules fired: RWX private memory region at 48889856 (PAGE_EXECUTE_READWRITE); Corroborated credential access: independent signals ['malfind_rwx_private', 'token_sedebug'] corroborate; Region at 48889856 walks the PEB loader lists, the way code with no import table finds its imports; and malware.exe has sedebugprivilege enabled.",
+      "techniques": "The behaviour maps to T1055 (Process Injection), T1003.001 (LSASS Memory), T1134 (Access Token Manipulation).",
+      "ref": "process|2580|50192989"
+    },
+    {
+      "object": {
+        "object_type": "connection",
+        "key": "TCPv4|192.168.124.219:49691|172.172.255.217:443",
+        "label": "TCPv4 192.168.124.219:49691 \u2192 172.172.255.217:443",
+        "pid": null,
+        "score": 8.4,
+        "score_max": 30,
+        "risk": "Medium",
+        "confidence": 0.7,
+        "tactics": [
+          "Command and Control"
+        ],
+        "techniques": [
+          "T1571"
+        ],
+        "contributions": [
+          {
+            "rule_id": "net_public_no_pid",
+            "title": "Public connection with no owning PID",
+            "weight": 8.4,
+            "evidence": "Public ESTABLISHED connection to 172.172.255.217 with no owning PID",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1571",
+              "technique_name": "Non-Standard Port",
+              "tactic": "Command and Control"
+            },
+            "severity": 4,
+            "confidence": 0.7,
+            "family": "attribution",
+            "context_only": false,
+            "superseded": false
+          }
+        ]
+      },
+      "headline": "This network connection scored Medium and is worth reviewing. Weighted score 8.4. Aggregate source confidence 70%.",
+      "rationale": "One rule fired: Public ESTABLISHED connection to 172.172.255.217 with no owning PID.",
+      "techniques": "The behaviour maps to T1571 (Non-Standard Port).",
+      "ref": "connection|TCPv4|192.168.124.219:49691|172.172.255.217:443|f73e86b1"
+    },
+    {
+      "object": {
+        "object_type": "persistence",
+        "key": "task:log",
+        "label": "LOG",
+        "pid": null,
+        "score": 5.6,
+        "score_max": 30,
+        "risk": "Low",
+        "confidence": 0.7,
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1053.005"
+        ],
+        "contributions": [
+          {
+            "rule_id": "scheduled_task_suspicious",
+            "title": "Suspicious scheduled task",
+            "weight": 5.6,
+            "evidence": "LOG: Script payload; LOLBIN action with risky content (PowerShell) [PowerShell]",
+            "subject": "",
+            "mitre": {
+              "technique_id": "T1053.005",
+              "technique_name": "Scheduled Task",
+              "tactic": "Persistence"
+            },
+            "severity": 3,
+            "confidence": 0.7,
+            "family": "task_payload",
+            "context_only": false,
+            "superseded": false
+          }
+        ]
+      },
+      "headline": "This persistence entry scored Low and is recorded for completeness. Weighted score 5.6. Aggregate source confidence 70%.",
+      "rationale": "One rule fired: LOG: Script payload; LOLBIN action with risky content (PowerShell) [PowerShell].",
+      "techniques": "The behaviour maps to T1053.005 (Scheduled Task).",
+      "ref": "persistence|task:log|77e86824"
+    }
+  ],
+  "raw_plugin_rows": {
+    "pslist": [
+      {
+        "CreateTime": "2024-12-27T07:50:59+00:00",
+        "ExitTime": null,
+        "File output": "Disabled",
+        "Handles": null,
+        "ImageFileName": "svchost.exe",
+        "Offset(V)": 201275930873984,
+        "PID": 1232,
+        "PPID": 640,
+        "SessionId": 0,
+        "Threads": 12,
+        "Wow64": false
+      },
+      {
+        "CreateTime": "2024-12-27T07:52:23+00:00",
+        "ExitTime": null,
+        "File output": "Disabled",
+        "Handles": null,
+        "ImageFileName": "powershell.exe",
+        "Offset(V)": 201275922157696,
+        "PID": 5088,
+        "PPID": 1232,
+        "SessionId": 1,
+        "Threads": 9,
+        "Wow64": false
+      },
+      {
+        "CreateTime": "2024-12-27T07:52:23+00:00",
+        "ExitTime": null,
+        "File output": "Disabled",
+        "Handles": null,
+        "ImageFileName": "powershell.exe",
+        "Offset(V)": 201275911971008,
+        "PID": 3768,
+        "PPID": 1232,
+        "SessionId": 1,
+        "Threads": 9,
+        "Wow64": false
+      },
+      {
+        "CreateTime": "2024-12-27T07:55:04+00:00",
+        "ExitTime": null,
+        "File output": "Disabled",
+        "Handles": null,
+        "ImageFileName": "malware.exe",
+        "Offset(V)": 201275979161728,
+        "PID": 2580,
+        "PPID": 3768,
+        "SessionId": 1,
+        "Threads": 9,
+        "Wow64": true
+      }
+    ],
+    "cmdline": [
+      {
+        "Args": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule",
+        "PID": 1232,
+        "Process": "svchost.exe"
+      },
+      {
+        "Args": "\"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE\" C:\\Workspace\\export_logs.ps1",
+        "PID": 5088,
+        "Process": "powershell.exe"
+      },
+      {
+        "Args": "\"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE\" C:\\Workspace\\log_pid.ps1",
+        "PID": 3768,
+        "Process": "powershell.exe"
+      },
+      {
+        "Args": "\"Z:\\malware.exe\"",
+        "PID": 2580,
+        "Process": "malware.exe"
+      }
+    ],
+    "scheduled_tasks": [
+      {
+        "Action": "PowerShell",
+        "Action Arguments": "C:\\Workspace\\export_logs.ps1",
+        "Action Context": "Author",
+        "Action Type": "Exe",
+        "Creation Time": "2024-12-27T07:52:23+00:00",
+        "Display Name": null,
+        "Enabled": true,
+        "Key Name": "{760C3ECF-7887-49D9-BD19-D44BF001A25E}",
+        "Last Run Time": "2024-12-18T03:12:22+00:00",
+        "Last Successful Run Time": "2024-12-25T06:03:27+00:00",
+        "Principal ID": "Author",
+        "Task Name": "LOG",
+        "Trigger Description": "BCCC-TESTBED\\John Smith: S-1-5-21-2515051972-3704521753-3160219359-1001 (SidType.User)",
+        "Trigger Type": "Logon",
+        "Working Directory": null
+      }
+    ]
+  },
+  "top_five": [
+    {
+      "evidence_ref": "2580|75f6c9b36948891d4955caf25da8321b6fc402154002f3a07e09b37d249a2ec4",
+      "region": {
+        "patch_index": 7,
+        "row": 1,
+        "col": 0,
+        "rank": 1,
+        "attention": 1.0,
+        "addr": "0x72ce0000",
+        "addr_int": 1926103040,
+        "end_addr": "0x72cf6fff",
+        "size": 94208,
+        "tag": "Vad",
+        "protection": "PAGE_EXECUTE_WRITECOPY",
+        "category": "dll",
+        "file_backing": "\\Windows\\SysWOW64\\dhcpcsvc.dll",
+        "private": false,
+        "snapshot_ordinal": null,
+        "sha256": "75f6c9b36948891d4955caf25da8321b6fc402154002f3a07e09b37d249a2ec4",
+        "entropy": 1.6066,
+        "executable": true,
+        "writable": true,
+        "flags": [
+          "rwx",
+          "mz-header"
+        ]
+      },
+      "structure": {
+        "size": 94208,
+        "analyzed_bytes": 94208,
+        "truncated": false,
+        "printable_ratio": 0.0722,
+        "pe": {
+          "present": true,
+          "reason": "",
+          "machine": "i386",
+          "is_dll": true,
+          "entry_point": "0x4400",
+          "image_base": "0x72ce0000",
+          "timestamp": 4130897439,
+          "subsystem": "console",
+          "characteristics": [
+            "dynamic-base",
+            "nx-compatible"
+          ],
+          "sections": [
+            {
+              "name": ".text",
+              "virtual_address": "0x1000",
+              "virtual_size": 60786,
+              "raw_size": 60928,
+              "entropy": 1.7753,
+              "characteristics": "0x60000020"
+            },
+            {
+              "name": ".wpp_sf",
+              "virtual_address": "0x10000",
+              "virtual_size": 4506,
+              "raw_size": 4608,
+              "entropy": -0.0,
+              "characteristics": "0x60000020"
+            },
+            {
+              "name": ".data",
+              "virtual_address": "0x12000",
+              "virtual_size": 1428,
+              "raw_size": 512,
+              "entropy": -0.0,
+              "characteristics": "0xc0000040"
+            },
+            {
+              "name": ".idata",
+              "virtual_address": "0x13000",
+              "virtual_size": 3700,
+              "raw_size": 4096,
+              "entropy": -0.0,
+              "characteristics": "0x40000040"
+            },
+            {
+              "name": ".didat",
+              "virtual_address": "0x14000",
+              "virtual_size": 64,
+              "raw_size": 512,
+              "entropy": -0.0,
+              "characteristics": "0xc0000040"
+            },
+            {
+              "name": ".rsrc",
+              "virtual_address": "0x15000",
+              "virtual_size": 1304,
+              "raw_size": 1536,
+              "entropy": -0.0,
+              "characteristics": "0x40000040"
+            },
+            {
+              "name": ".reloc",
+              "virtual_address": "0x16000",
+              "virtual_size": 3768,
+              "raw_size": 4096,
+              "entropy": 0.29,
+              "characteristics": "0x42000040"
+            }
+          ],
+          "imported_dlls": [],
+          "parser": "pefile"
+        }
+      },
+      "entropy": {
+        "overall": 1.6066,
+        "window_bytes": 368,
+        "peak": 6.1056,
+        "peak_offset": 21344,
+        "high_entropy_ratio": 0.0,
+        "peak_offset_hex": "0x5360"
+      },
+      "disassembly": {
+        "available": true,
+        "arch": "x86-64",
+        "reason": "",
+        "base_addr": "0x72ce0000",
+        "analyzed_bytes": 94208,
+        "truncated": false,
+        "invalid_bytes": 58447,
+        "coverage": 0.3796,
+        "entry_points": [
+          "0x72ce0000",
+          "0x72ce4400",
+          "0x72ce51e7",
+          "0x72ce5282",
+          "0x72ce531f",
+          "0x72ce537f",
+          "0x72ce53ea",
+          "0x72ce54db",
+          "0x72ce5680",
+          "0x72ce5773"
+        ],
+        "instruction_count": 17498
+      },
+      "patterns": {
+        "instruction_scan": true,
+        "note": "",
+        "hit_count": 5,
+        "highest_severity": "high",
+        "hits": [
+          {
+            "id": "decoder_loop",
+            "title": "In-place decoder loop",
+            "severity": "high",
+            "description": "A backward branch around arithmetic on moved bytes \u2014 the shape of a self-decoding or string-deobfuscating stub.",
+            "technique": "T1140",
+            "technique_name": "Deobfuscate/Decode Files or Information",
+            "occurrences": 3,
+            "offsets": [
+              "0x72ce5516",
+              "0x72ce5530",
+              "0x72ceca34"
+            ],
+            "evidence": ""
+          },
+          {
+            "id": "peb_walk_x86",
+            "title": "PEB walk (32-bit)",
+            "severity": "high",
+            "description": "Reads the Process Environment Block via fs:[0x30] \u2014 the standard way position-independent code locates loaded modules without imports.",
+            "technique": "T1106",
+            "technique_name": "Native API",
+            "occurrences": 4,
+            "offsets": [
+              "0x557b",
+              "0x5647",
+              "0x5738",
+              "0x5876"
+            ],
+            "evidence": "64a1300000005756ff7018ff150c31cf"
+          },
+          {
+            "id": "rwx_region",
+            "title": "Writable and executable region",
+            "severity": "high",
+            "description": "The allocation is both writable and executable. Legitimate code is rarely both; JIT runtimes are the usual exception.",
+            "technique": "T1055",
+            "technique_name": "Process Injection",
+            "occurrences": 1,
+            "offsets": [],
+            "evidence": "PAGE_EXECUTE_WRITECOPY"
+          },
+          {
+            "id": "indirect_call_heavy",
+            "title": "Predominantly indirect calls",
+            "severity": "medium",
+            "description": "Most calls go through a register or memory operand, which is what dynamically resolved imports look like.",
+            "technique": "T1027",
+            "technique_name": "Obfuscated Files or Information",
+            "occurrences": 44,
+            "offsets": [
+              "0x72ce5062",
+              "0x72ce5142",
+              "0x72ce514d",
+              "0x72ce5158",
+              "0x72ce5163",
+              "0x72ce516e",
+              "0x72ce5179",
+              "0x72ce5184",
+              "0x72ce5196",
+              "0x72ce51a1",
+              "0x72ce51ac",
+              "0x72ce51b7"
+            ],
+            "evidence": ""
+          },
+          {
+            "id": "int3_padding",
+            "title": "Breakpoint padding run",
+            "severity": "low",
+            "description": "A long run of int3 bytes. Normal between compiler-emitted functions; noted because it also marks scratch space in injected buffers.",
+            "technique": "",
+            "technique_name": "",
+            "occurrences": 1,
+            "offsets": [
+              "0xceec"
+            ],
+            "evidence": "cccccccccccccccccccccccccccccccc"
+          }
+        ]
+      },
+      "interesting_strings": [
+        {
+          "offset": 79894,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "InitializeCriticalSectionAndSpinCount",
+          "offset_hex": "0x13816"
+        },
+        {
+          "offset": 9880,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "MicrosoftTelemetryAssertTriggeredUM",
+          "offset_hex": "0x2698"
+        },
+        {
+          "offset": 80996,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "RtlSetOwnerSecurityDescriptor",
+          "offset_hex": "0x13c64"
+        },
+        {
+          "offset": 81028,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "RtlSetGroupSecurityDescriptor",
+          "offset_hex": "0x13c84"
+        },
+        {
+          "offset": 80476,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "InitializeSecurityDescriptor",
+          "offset_hex": "0x13a5c"
+        }
+      ],
+      "verified_listing_excerpt": [],
+      "interesting_string_count_in_source": 24
+    },
+    {
+      "evidence_ref": "2580|a4428fb76a495592f6698f14fd826f15e2c9b34c084d13d6286c6d0ce09255eb",
+      "region": {
+        "patch_index": 1,
+        "row": 0,
+        "col": 1,
+        "rank": 2,
+        "attention": 0.62957,
+        "addr": "0x2ea0000",
+        "addr_int": 48889856,
+        "end_addr": "0x2ea1fff",
+        "size": 8192,
+        "tag": "VadS",
+        "protection": "PAGE_EXECUTE_READWRITE",
+        "category": "exe",
+        "file_backing": "",
+        "private": true,
+        "snapshot_ordinal": null,
+        "sha256": "a4428fb76a495592f6698f14fd826f15e2c9b34c084d13d6286c6d0ce09255eb",
+        "entropy": 5.2964,
+        "executable": true,
+        "writable": true,
+        "flags": [
+          "rwx",
+          "private-executable",
+          "no-file-backing",
+          "vad-short"
+        ]
+      },
+      "structure": {
+        "size": 8192,
+        "analyzed_bytes": 8192,
+        "truncated": false,
+        "printable_ratio": 0.2063,
+        "pe": {
+          "present": false,
+          "reason": "No MZ signature at the start of the region.",
+          "machine": "",
+          "is_dll": false,
+          "entry_point": "",
+          "image_base": "",
+          "timestamp": 0,
+          "subsystem": "",
+          "characteristics": [],
+          "sections": [],
+          "imported_dlls": [],
+          "parser": ""
+        }
+      },
+      "entropy": {
+        "overall": 5.2964,
+        "window_bytes": 64,
+        "peak": 5.7812,
+        "peak_offset": 320,
+        "high_entropy_ratio": 0.0,
+        "peak_offset_hex": "0x140"
+      },
+      "disassembly": {
+        "available": true,
+        "arch": "x86",
+        "reason": "",
+        "base_addr": "0x2ea0000",
+        "analyzed_bytes": 8192,
+        "truncated": false,
+        "invalid_bytes": 4076,
+        "coverage": 0.5024,
+        "entry_points": [
+          "0x2ea0000",
+          "0x2ea0856",
+          "0x2ea0b31",
+          "0x2ea0b6e",
+          "0x2ea12cc",
+          "0x2ea12e3",
+          "0x2ea1330",
+          "0x2ea1598"
+        ],
+        "instruction_count": 1158
+      },
+      "patterns": {
+        "instruction_scan": true,
+        "note": "",
+        "hit_count": 6,
+        "highest_severity": "high",
+        "hits": [
+          {
+            "id": "decoder_loop",
+            "title": "In-place decoder loop",
+            "severity": "high",
+            "description": "A backward branch around arithmetic on moved bytes \u2014 the shape of a self-decoding or string-deobfuscating stub.",
+            "technique": "T1140",
+            "technique_name": "Deobfuscate/Decode Files or Information",
+            "occurrences": 2,
+            "offsets": [
+              "0x2ea0035",
+              "0x2ea152c"
+            ],
+            "evidence": ""
+          },
+          {
+            "id": "peb_walk_x86",
+            "title": "PEB walk (32-bit)",
+            "severity": "high",
+            "description": "Reads the Process Environment Block via fs:[0x30] \u2014 the standard way position-independent code locates loaded modules without imports.",
+            "technique": "T1106",
+            "technique_name": "Native API",
+            "occurrences": 1,
+            "offsets": [
+              "0xb79"
+            ],
+            "evidence": "64a1300000008b400c8985d8efffff8b"
+          },
+          {
+            "id": "private_executable",
+            "title": "Executable private memory",
+            "severity": "high",
+            "description": "Executable memory with no backing file on disk \u2014 code that cannot be attributed to a module the loader mapped.",
+            "technique": "T1055.001",
+            "technique_name": "Dynamic-link Library Injection",
+            "occurrences": 1,
+            "offsets": [],
+            "evidence": "PAGE_EXECUTE_READWRITE"
+          },
+          {
+            "id": "rwx_region",
+            "title": "Writable and executable region",
+            "severity": "high",
+            "description": "The allocation is both writable and executable. Legitimate code is rarely both; JIT runtimes are the usual exception.",
+            "technique": "T1055",
+            "technique_name": "Process Injection",
+            "occurrences": 1,
+            "offsets": [],
+            "evidence": "PAGE_EXECUTE_READWRITE"
+          },
+          {
+            "id": "http_c2",
+            "title": "Embedded HTTP endpoint",
+            "severity": "medium",
+            "description": "A URL is present in the region \u2014 worth correlating with the network artifacts surfaced during triage.",
+            "technique": "T1071.001",
+            "technique_name": "Web Protocols",
+            "occurrences": 1,
+            "offsets": [
+              "0x170b"
+            ],
+            "evidence": "687474703a2f2f68692e62616964752e"
+          },
+          {
+            "id": "indirect_call_heavy",
+            "title": "Predominantly indirect calls",
+            "severity": "medium",
+            "description": "Most calls go through a register or memory operand, which is what dynamically resolved imports look like.",
+            "technique": "T1027",
+            "technique_name": "Obfuscated Files or Information",
+            "occurrences": 59,
+            "offsets": [
+              "0x2ea0088",
+              "0x2ea01e7",
+              "0x2ea01f2",
+              "0x2ea0885",
+              "0x2ea0899",
+              "0x2ea08b6",
+              "0x2ea08ef",
+              "0x2ea08ff",
+              "0x2ea092b",
+              "0x2ea0965",
+              "0x2ea099d",
+              "0x2ea09cc"
+            ],
+            "evidence": ""
+          }
+        ]
+      },
+      "interesting_strings": [
+        {
+          "offset": 5899,
+          "encoding": "ascii",
+          "category": "url",
+          "value": "http://hi.baidu.com/aegifjftrggluze/item/be185dc989cae4f4984aa0df",
+          "offset_hex": "0x170b"
+        },
+        {
+          "offset": 5980,
+          "encoding": "ascii",
+          "category": "domain",
+          "value": "baidu.com",
+          "offset_hex": "0x175c"
+        }
+      ],
+      "verified_listing_excerpt": [
+        {
+          "address": 48892793,
+          "size": 6,
+          "bytes_hex": "64a130000000",
+          "mnemonic": "mov",
+          "op_str": "eax, dword ptr fs:[0x30]",
+          "kind": "normal",
+          "target": null,
+          "address_hex": "0x2ea0b79",
+          "text": "mov eax, dword ptr fs:[0x30]"
+        },
+        {
+          "address": 48892799,
+          "size": 3,
+          "bytes_hex": "8b400c",
+          "mnemonic": "mov",
+          "op_str": "eax, dword ptr [eax + 0xc]",
+          "kind": "normal",
+          "target": null,
+          "address_hex": "0x2ea0b7f",
+          "text": "mov eax, dword ptr [eax + 0xc]"
+        },
+        {
+          "address": 48892802,
+          "size": 6,
+          "bytes_hex": "8985d8efffff",
+          "mnemonic": "mov",
+          "op_str": "dword ptr [ebp - 0x1028], eax",
+          "kind": "normal",
+          "target": null,
+          "address_hex": "0x2ea0b82",
+          "text": "mov dword ptr [ebp - 0x1028], eax"
+        },
+        {
+          "address": 48892808,
+          "size": 3,
+          "bytes_hex": "8b400c",
+          "mnemonic": "mov",
+          "op_str": "eax, dword ptr [eax + 0xc]",
+          "kind": "normal",
+          "target": null,
+          "address_hex": "0x2ea0b88",
+          "text": "mov eax, dword ptr [eax + 0xc]"
+        },
+        {
+          "address": 48892811,
+          "size": 3,
+          "bytes_hex": "8b7018",
+          "mnemonic": "mov",
+          "op_str": "esi, dword ptr [eax + 0x18]",
+          "kind": "normal",
+          "target": null,
+          "address_hex": "0x2ea0b8b",
+          "text": "mov esi, dword ptr [eax + 0x18]"
+        },
+        {
+          "address": 48892814,
+          "size": 3,
+          "bytes_hex": "8b7820",
+          "mnemonic": "mov",
+          "op_str": "edi, dword ptr [eax + 0x20]",
+          "kind": "normal",
+          "target": null,
+          "address_hex": "0x2ea0b8e",
+          "text": "mov edi, dword ptr [eax + 0x20]"
+        },
+        {
+          "address": 48892817,
+          "size": 2,
+          "bytes_hex": "03fe",
+          "mnemonic": "add",
+          "op_str": "edi, esi",
+          "kind": "normal",
+          "target": null,
+          "address_hex": "0x2ea0b91",
+          "text": "add edi, esi"
+        }
+      ],
+      "interesting_string_count_in_source": 2
+    },
+    {
+      "evidence_ref": "2580|c3c6ce71b479e985f3230c87b830a5837986f6b204d8dea0dd25ed9ba0dd19ef",
+      "region": {
+        "patch_index": 11,
+        "row": 1,
+        "col": 4,
+        "rank": 3,
+        "attention": 0.429805,
+        "addr": "0x72d80000",
+        "addr_int": 1926758400,
+        "end_addr": "0x72d94fff",
+        "size": 86016,
+        "tag": "Vad",
+        "protection": "PAGE_EXECUTE_WRITECOPY",
+        "category": "dll",
+        "file_backing": "\\Windows\\SysWOW64\\cryptsp.dll",
+        "private": false,
+        "snapshot_ordinal": null,
+        "sha256": "c3c6ce71b479e985f3230c87b830a5837986f6b204d8dea0dd25ed9ba0dd19ef",
+        "entropy": 2.0856,
+        "executable": true,
+        "writable": true,
+        "flags": [
+          "rwx",
+          "mz-header"
+        ]
+      },
+      "structure": {
+        "size": 86016,
+        "analyzed_bytes": 65536,
+        "truncated": true,
+        "printable_ratio": 0.0924,
+        "pe": {
+          "present": true,
+          "reason": "",
+          "machine": "i386",
+          "is_dll": true,
+          "entry_point": "0x6bb0",
+          "image_base": "0x72d80000",
+          "timestamp": 215639438,
+          "subsystem": "console",
+          "characteristics": [
+            "dynamic-base",
+            "nx-compatible"
+          ],
+          "sections": [
+            {
+              "name": ".text",
+              "virtual_address": "0x1000",
+              "virtual_size": 60426,
+              "raw_size": 60928,
+              "entropy": 2.2712,
+              "characteristics": "0x60000020"
+            },
+            {
+              "name": ".data",
+              "virtual_address": "0x10000",
+              "virtual_size": 1712,
+              "raw_size": 512,
+              "entropy": -0.0,
+              "characteristics": "0xc0000040"
+            },
+            {
+              "name": ".idata",
+              "virtual_address": "0x11000",
+              "virtual_size": 3834,
+              "raw_size": 4096,
+              "entropy": 0.191,
+              "characteristics": "0x40000040"
+            },
+            {
+              "name": ".didat",
+              "virtual_address": "0x12000",
+              "virtual_size": 92,
+              "raw_size": 512,
+              "entropy": 0.4132,
+              "characteristics": "0xc0000040"
+            },
+            {
+              "name": ".rsrc",
+              "virtual_address": "0x13000",
+              "virtual_size": 1208,
+              "raw_size": 1536,
+              "entropy": -0.0,
+              "characteristics": "0x40000040"
+            },
+            {
+              "name": ".reloc",
+              "virtual_address": "0x14000",
+              "virtual_size": 2576,
+              "raw_size": 3072,
+              "entropy": 3.9984,
+              "characteristics": "0x42000040"
+            }
+          ],
+          "imported_dlls": [],
+          "parser": "pefile"
+        }
+      },
+      "entropy": {
+        "overall": 2.0856,
+        "window_bytes": 672,
+        "peak": 7.6272,
+        "peak_offset": 12768,
+        "high_entropy_ratio": 0.0156,
+        "peak_offset_hex": "0x31e0"
+      },
+      "disassembly": {
+        "available": true,
+        "arch": "x86-64",
+        "reason": "",
+        "base_addr": "0x72d80000",
+        "analyzed_bytes": 65536,
+        "truncated": false,
+        "invalid_bytes": 57490,
+        "coverage": 0.1228,
+        "entry_points": [
+          "0x72d80000",
+          "0x72d86bb0",
+          "0x72d83eb4",
+          "0x72d83f55",
+          "0x72d83fa2",
+          "0x72d840a2",
+          "0x72d84212",
+          "0x72d84402",
+          "0x72d84452",
+          "0x72d84532"
+        ],
+        "instruction_count": 4000
+      },
+      "patterns": {
+        "instruction_scan": true,
+        "note": "",
+        "hit_count": 1,
+        "highest_severity": "high",
+        "hits": [
+          {
+            "id": "rwx_region",
+            "title": "Writable and executable region",
+            "severity": "high",
+            "description": "The allocation is both writable and executable. Legitimate code is rarely both; JIT runtimes are the usual exception.",
+            "technique": "T1055",
+            "technique_name": "Process Injection",
+            "occurrences": 1,
+            "offsets": [],
+            "evidence": "PAGE_EXECUTE_WRITECOPY"
+          }
+        ]
+      },
+      "interesting_strings": [
+        {
+          "offset": 6856,
+          "encoding": "utf-16le",
+          "category": "base64",
+          "value": "ClientSideEventThrottlingMinutes",
+          "offset_hex": "0x1ac8"
+        },
+        {
+          "offset": 72630,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "WaitForThreadpoolWaitCallbacks",
+          "offset_hex": "0x11bb6"
+        },
+        {
+          "offset": 71034,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "RtlAnsiStringToUnicodeString",
+          "offset_hex": "0x1157a"
+        },
+        {
+          "offset": 71248,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "RtlUnicodeStringToAnsiString",
+          "offset_hex": "0x11650"
+        },
+        {
+          "offset": 71430,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "RtlUnhandledExceptionFilter",
+          "offset_hex": "0x11706"
+        }
+      ],
+      "verified_listing_excerpt": [],
+      "interesting_string_count_in_source": 10
+    },
+    {
+      "evidence_ref": "2580|71bfbe0ad694821754799c5a0d50e9b09475bddee6c106ba77ee8a0a81dc93cb",
+      "region": {
+        "patch_index": 5,
+        "row": 0,
+        "col": 5,
+        "rank": 4,
+        "attention": 0.40878,
+        "addr": "0x72c20000",
+        "addr_int": 1925316608,
+        "end_addr": "0x72c45fff",
+        "size": 155648,
+        "tag": "Vad",
+        "protection": "PAGE_EXECUTE_WRITECOPY",
+        "category": "dll",
+        "file_backing": "\\Windows\\SysWOW64\\ncrypt.dll",
+        "private": false,
+        "snapshot_ordinal": null,
+        "sha256": "71bfbe0ad694821754799c5a0d50e9b09475bddee6c106ba77ee8a0a81dc93cb",
+        "entropy": 1.6606,
+        "executable": true,
+        "writable": true,
+        "flags": [
+          "rwx",
+          "mz-header"
+        ]
+      },
+      "structure": {
+        "size": 155648,
+        "analyzed_bytes": 65536,
+        "truncated": true,
+        "printable_ratio": 0.1077,
+        "pe": {
+          "present": true,
+          "reason": "",
+          "machine": "i386",
+          "is_dll": true,
+          "entry_point": "0xcf00",
+          "image_base": "0x72c20000",
+          "timestamp": 3166865985,
+          "subsystem": "console",
+          "characteristics": [
+            "dynamic-base",
+            "nx-compatible"
+          ],
+          "sections": [
+            {
+              "name": ".text",
+              "virtual_address": "0x1000",
+              "virtual_size": 109003,
+              "raw_size": 109056,
+              "entropy": 1.9226,
+              "characteristics": "0x60000020"
+            },
+            {
+              "name": ".data",
+              "virtual_address": "0x1c000",
+              "virtual_size": 2556,
+              "raw_size": 512,
+              "entropy": -0.0,
+              "characteristics": "0xc0000040"
+            },
+            {
+              "name": ".idata",
+              "virtual_address": "0x1d000",
+              "virtual_size": 4216,
+              "raw_size": 4608,
+              "entropy": 0.1814,
+              "characteristics": "0x40000040"
+            },
+            {
+              "name": ".didat",
+              "virtual_address": "0x1f000",
+              "virtual_size": 124,
+              "raw_size": 512,
+              "entropy": -0.0,
+              "characteristics": "0xc0000040"
+            },
+            {
+              "name": ".rsrc",
+              "virtual_address": "0x20000",
+              "virtual_size": 15640,
+              "raw_size": 15872,
+              "entropy": 2.0183,
+              "characteristics": "0x40000040"
+            },
+            {
+              "name": ".reloc",
+              "virtual_address": "0x24000",
+              "virtual_size": 4996,
+              "raw_size": 5120,
+              "entropy": -0.0,
+              "characteristics": "0x42000040"
+            }
+          ],
+          "imported_dlls": [],
+          "parser": "pefile"
+        }
+      },
+      "entropy": {
+        "overall": 1.6606,
+        "window_bytes": 1216,
+        "peak": 6.3895,
+        "peak_offset": 68096,
+        "high_entropy_ratio": 0.0,
+        "peak_offset_hex": "0x10a00"
+      },
+      "disassembly": {
+        "available": true,
+        "arch": "x86-64",
+        "reason": "",
+        "base_addr": "0x72c20000",
+        "analyzed_bytes": 65536,
+        "truncated": false,
+        "invalid_bytes": 56556,
+        "coverage": 0.137,
+        "entry_points": [
+          "0x72c20000",
+          "0x72c2cf00",
+          "0x72c23a32",
+          "0x72c23ad3",
+          "0x72c23b12",
+          "0x72c23bb2",
+          "0x72c25002",
+          "0x72c255e2",
+          "0x72c25962",
+          "0x72c25cf2"
+        ],
+        "instruction_count": 4000
+      },
+      "patterns": {
+        "instruction_scan": true,
+        "note": "",
+        "hit_count": 5,
+        "highest_severity": "high",
+        "hits": [
+          {
+            "id": "decoder_loop",
+            "title": "In-place decoder loop",
+            "severity": "high",
+            "description": "A backward branch around arithmetic on moved bytes \u2014 the shape of a self-decoding or string-deobfuscating stub.",
+            "technique": "T1140",
+            "technique_name": "Deobfuscate/Decode Files or Information",
+            "occurrences": 1,
+            "offsets": [
+              "0x72c250b9"
+            ],
+            "evidence": ""
+          },
+          {
+            "id": "peb_walk_x86",
+            "title": "PEB walk (32-bit)",
+            "severity": "high",
+            "description": "Reads the Process Environment Block via fs:[0x30] \u2014 the standard way position-independent code locates loaded modules without imports.",
+            "technique": "T1106",
+            "technique_name": "Native API",
+            "occurrences": 28,
+            "offsets": [
+              "0x511b",
+              "0x516a",
+              "0x550c",
+              "0x5598",
+              "0x7960",
+              "0x796f",
+              "0x7c09",
+              "0x7d3f",
+              "0x7e38",
+              "0xb030",
+              "0xb052",
+              "0xb14e"
+            ],
+            "evidence": "64a130000000536a00ff7018ff15b4d1"
+          },
+          {
+            "id": "rwx_region",
+            "title": "Writable and executable region",
+            "severity": "high",
+            "description": "The allocation is both writable and executable. Legitimate code is rarely both; JIT runtimes are the usual exception.",
+            "technique": "T1055",
+            "technique_name": "Process Injection",
+            "occurrences": 1,
+            "offsets": [],
+            "evidence": "PAGE_EXECUTE_WRITECOPY"
+          },
+          {
+            "id": "indirect_call_heavy",
+            "title": "Predominantly indirect calls",
+            "severity": "medium",
+            "description": "Most calls go through a register or memory operand, which is what dynamically resolved imports look like.",
+            "technique": "T1027",
+            "technique_name": "Obfuscated Files or Information",
+            "occurrences": 12,
+            "offsets": [
+              "0x72c2507e",
+              "0x72c25084",
+              "0x72c25127",
+              "0x72c25150",
+              "0x72c25156",
+              "0x72c25179",
+              "0x72c2564d",
+              "0x72c25653",
+              "0x72c259dc",
+              "0x72c259e2",
+              "0x72c25d63",
+              "0x72c25d69"
+            ],
+            "evidence": ""
+          },
+          {
+            "id": "int3_padding",
+            "title": "Breakpoint padding run",
+            "severity": "low",
+            "description": "A long run of int3 bytes. Normal between compiler-emitted functions; noted because it also marks scratch space in injected buffers.",
+            "technique": "",
+            "technique_name": "",
+            "occurrences": 1,
+            "offsets": [
+              "0x3b8b"
+            ],
+            "evidence": "cccccccccccccccccccccccccccccccc"
+          }
+        ]
+      },
+      "interesting_strings": [
+        {
+          "offset": 120672,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "ConvertSecurityDescriptorToStringSecurityDescriptorW",
+          "offset_hex": "0x1d760"
+        },
+        {
+          "offset": 10171,
+          "encoding": "ascii",
+          "category": "domain",
+          "value": "Microsoft.Windows.Security.CertInUse",
+          "offset_hex": "0x27bb"
+        },
+        {
+          "offset": 8440,
+          "encoding": "utf-16le",
+          "category": "base64",
+          "value": "ClientSideEventThrottlingMinutes",
+          "offset_hex": "0x20f8"
+        },
+        {
+          "offset": 120226,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "LdrDisableThreadCalloutsForDll",
+          "offset_hex": "0x1d5a2"
+        },
+        {
+          "offset": 122264,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "WaitForThreadpoolWaitCallbacks",
+          "offset_hex": "0x1dd98"
+        }
+      ],
+      "verified_listing_excerpt": [],
+      "interesting_string_count_in_source": 15
+    },
+    {
+      "evidence_ref": "2580|4ad168714fb36ebf3f7d72d8c57603de9d1c94a40020edbaa6bfffdf0307c741",
+      "region": {
+        "patch_index": 3,
+        "row": 0,
+        "col": 3,
+        "rank": 5,
+        "attention": 0.389522,
+        "addr": "0x72bd0000",
+        "addr_int": 1924988928,
+        "end_addr": "0x72beffff",
+        "size": 131072,
+        "tag": "Vad",
+        "protection": "PAGE_EXECUTE_WRITECOPY",
+        "category": "dll",
+        "file_backing": "\\Windows\\SysWOW64\\ncryptsslp.dll",
+        "private": false,
+        "snapshot_ordinal": null,
+        "sha256": "4ad168714fb36ebf3f7d72d8c57603de9d1c94a40020edbaa6bfffdf0307c741",
+        "entropy": 0.8787,
+        "executable": true,
+        "writable": true,
+        "flags": [
+          "rwx"
+        ]
+      },
+      "structure": {
+        "size": 131072,
+        "analyzed_bytes": 65536,
+        "truncated": true,
+        "printable_ratio": 0.0481,
+        "pe": {
+          "present": false,
+          "reason": "No MZ signature at the start of the region.",
+          "machine": "",
+          "is_dll": false,
+          "entry_point": "",
+          "image_base": "",
+          "timestamp": 0,
+          "subsystem": "",
+          "characteristics": [],
+          "sections": [],
+          "imported_dlls": [],
+          "parser": ""
+        }
+      },
+      "entropy": {
+        "overall": 0.8787,
+        "window_bytes": 1024,
+        "peak": 6.1387,
+        "peak_offset": 21504,
+        "high_entropy_ratio": 0.0,
+        "peak_offset_hex": "0x5400"
+      },
+      "disassembly": {
+        "available": true,
+        "arch": "x86-64",
+        "reason": "",
+        "base_addr": "0x72bd0000",
+        "analyzed_bytes": 65536,
+        "truncated": false,
+        "invalid_bytes": 57481,
+        "coverage": 0.1229,
+        "entry_points": [
+          "0x72bd0000",
+          "0x72bd4b8c",
+          "0x72bd4d4a",
+          "0x72bd4ec3",
+          "0x72bd4f52",
+          "0x72bd5152",
+          "0x72bd52c2",
+          "0x72bd547f",
+          "0x72bd5542"
+        ],
+        "instruction_count": 4000
+      },
+      "patterns": {
+        "instruction_scan": true,
+        "note": "",
+        "hit_count": 2,
+        "highest_severity": "high",
+        "hits": [
+          {
+            "id": "peb_walk_x86",
+            "title": "PEB walk (32-bit)",
+            "severity": "high",
+            "description": "Reads the Process Environment Block via fs:[0x30] \u2014 the standard way position-independent code locates loaded modules without imports.",
+            "technique": "T1106",
+            "technique_name": "Native API",
+            "occurrences": 9,
+            "offsets": [
+              "0x4f91",
+              "0x512a",
+              "0x5378",
+              "0x545a",
+              "0x5713",
+              "0x5897",
+              "0x598a",
+              "0x5d21",
+              "0x5d84"
+            ],
+            "evidence": "64a1300000005651ff7018ff1520b1be"
+          },
+          {
+            "id": "rwx_region",
+            "title": "Writable and executable region",
+            "severity": "high",
+            "description": "The allocation is both writable and executable. Legitimate code is rarely both; JIT runtimes are the usual exception.",
+            "technique": "T1055",
+            "technique_name": "Process Injection",
+            "occurrences": 1,
+            "offsets": [],
+            "evidence": "PAGE_EXECUTE_WRITECOPY"
+          }
+        ]
+      },
+      "interesting_strings": [
+        {
+          "offset": 17968,
+          "encoding": "utf-16le",
+          "category": "registry",
+          "value": "\\Registry\\MACHINE\\System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft SSL Protocol Provider\\KeyExchange",
+          "offset_hex": "0x4630"
+        },
+        {
+          "offset": 17704,
+          "encoding": "utf-16le",
+          "category": "registry",
+          "value": "\\Registry\\MACHINE\\System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft SSL Protocol Provider\\Signature",
+          "offset_hex": "0x4528"
+        },
+        {
+          "offset": 17448,
+          "encoding": "utf-16le",
+          "category": "registry",
+          "value": "\\Registry\\MACHINE\\System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft SSL Protocol Provider\\Cipher",
+          "offset_hex": "0x4428"
+        },
+        {
+          "offset": 17128,
+          "encoding": "utf-16le",
+          "category": "registry",
+          "value": "\\Registry\\MACHINE\\System\\CurrentControlSet\\Control\\Cryptography\\Providers\\Microsoft SSL Protocol Provider\\Hash",
+          "offset_hex": "0x42e8"
+        },
+        {
+          "offset": 111976,
+          "encoding": "ascii",
+          "category": "base64",
+          "value": "LdrDisableThreadCalloutsForDll",
+          "offset_hex": "0x1b568"
+        }
+      ],
+      "verified_listing_excerpt": [],
+      "interesting_string_count_in_source": 17
+    }
+  ],
+  "provenance_confirmation": {
+    "source": "Dataset creator statement in this conversation",
+    "statement": "Windows Task Scheduler was used to launch the malware for dataset creation; the scheduler/logging mechanisms were part of that harness.",
+    "interpretation": "Attribute the matching scheduler and logging artifacts to dataset instrumentation. This does not establish the behavior of the sample private executable allocation."
+  }
+}

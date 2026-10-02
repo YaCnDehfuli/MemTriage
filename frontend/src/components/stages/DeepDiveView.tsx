@@ -15,11 +15,13 @@ export function DeepDiveView() {
       <Panel eyebrow="Phase 2 · VADViT" title="Process deep-dive">
         <EmptyState
           title={selectedPid ? `Analyzing PID ${selectedPid}…` : "No process selected"}
-          hint="Choose a process from the inventory to render its VAD grid, classify it, and attribute the model's attention back to VAD regions."
+          hint={selectedPid
+            ? "Dumping VAD regions, rendering the grid, and mapping attention. This usually takes about 5 minutes or more."
+            : "Choose a process from the inventory to render its VAD grid, classify it, and attribute the model's attention back to VAD regions."}
         />
         {analysisProgress && (
           <div className="mx-auto max-w-md px-6 pb-6">
-            <JobProgressBar job={analysisProgress} />
+            <JobProgressBar job={analysisProgress} eta="~5 min+" />
           </div>
         )}
         <div className="flex justify-center pb-6">

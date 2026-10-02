@@ -1,13 +1,26 @@
-# Live-path recording assets
+# Demo assets
 
-`memtriage-live.mp4` is the full-resolution source and `memtriage-live.gif` is
-its GitHub-README-compatible preview. Both show a live Docker run, not a mocked
-UI. The README preview links to the MP4 so the detailed workbench text remains
-readable.
+The current README uses the original root recordings:
+[analysis demo](../../demo.mov) and [report demo](../../report_demo.mp4).
+Neither recording is re-encoded. Both are tracked with Git LFS.
+The [project report](../index.html) includes current UI captures and the
+[supplied PDF examples](../reports/README.md).
+
+`memtriage-live.mp4`, `memtriage-live.gif`, the recording scripts, and
+`docs/figures/` are retained as historical live-path assets. The instructions
+below reproduce that older recording; they do not describe the current demos.
+
+The separate [report-writing recording guide](report-writing-demo.md) follows
+the completed `2580_5.vmem` experiment through evidence selection, harness
+attribution, per-region notes, analyst assessment, and technical/executive
+exports. Its [evidence extract](report-writing-evidence.json) records the saved
+results used to prepare the script.
 
 ## Stack
 
 ```bash
+git submodule update --init --recursive
+git lfs pull --include="models/Multi_32_224_6f_3u.pt"
 export MEMTRIAGE_SAMPLES_DIR="/absolute/path/to/Samples"
 docker compose -f deploy/docker-compose.yml -f docs/demo/compose.samples.yml up --build
 ```
@@ -45,7 +58,7 @@ MEMTRIAGE_INVESTIGATION=<id> npm run record
 ```
 
 Video lands under `docs/demo/test-results/`. Stills land under `docs/figures/`
-at 1280×800: `triage-board.png`, `evidence-expansion.png`, `attention-overlay.png`.
+at 1280×800: `triage-board.png` and `evidence-expansion.png`.
 
 ## Publish the recording
 

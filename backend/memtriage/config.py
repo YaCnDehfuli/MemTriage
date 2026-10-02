@@ -81,24 +81,23 @@ class Settings(BaseSettings):
     # egress: it turns a slow failure into an immediate, clearly-labelled one.
     vol_offline: bool = False
 
-    # --- VADViT model (brought-your-own weights) ---
-    model_checkpoint_path: Path = Path("/models/Multi_32_224_6f_3u.pt")
-    labels_path: Path = Path("/models/labels.json")
+    # --- Bundled trained VADViT model ---
+    # Docker sets /models explicitly; local development resolves the repository.
+    model_checkpoint_path: Path = (
+        Path(__file__).resolve().parents[2] / "models" / "Multi_32_224_6f_3u.pt"
+    )
+    labels_path: Path = Path(__file__).resolve().parents[2] / "models" / "labels.json"
     model_name: str = "vit_base_patch32_224"
     num_classes: int = 9  # Benign + 8 families
     device: str = "cpu"  # demo runs CPU-only; set "cuda" if a GPU is present
 
-    # The trained checkpoint is not distributed with the project. When it is
-    # absent an architecturally identical, untrained model is generated once
-    # into model_cache_dir (/models is a read-only mount) from a fixed seed, so
-    # the render -> classify -> attention -> region chain always runs and every
-    # verdict is labelled as a non-detection.
-    model_auto_placeholder: bool = True
+    # Legacy test fixtures may opt into random weights; normal deployments fail
+    # explicitly if their bundled checkpoint is missing or cannot be loaded.
+    model_auto_placeholder: bool = False
     placeholder_seed: int = 20250817
-    model_contact: str = "dehfouliyasin@gmail.com"
-    # Ceiling for a checkpoint supplied through the UI. vit_base_patch32_224 is
-    # ~350 MB at fp32; 1 GiB leaves room for an optimizer state or fp64 without
-    # letting an upload fill the data volume.
+    # Ceiling for an optional operator checkpoint supplied through the API.
+    # vit_base_patch32_224 is ~350 MB at fp32; 1 GiB leaves room for an optimizer
+    # state or fp64 without letting an upload fill the data volume.
     max_model_upload_bytes: int = 1024 * 1024 * 1024
 
     # --- grid geometry (VADViT preprocessing; see pipeline/grid_render.py) ---
@@ -128,7 +127,7 @@ class Settings(BaseSettings):
 
     @property
     def model_upload_dir(self) -> Path:
-        """Writable home for weights supplied through the UI.
+        """Writable home for optional operator weights supplied through the API.
 
         Separate from model_cache_dir so deleting an upload can never remove the
         generated placeholder, and so "someone uploaded this" stays

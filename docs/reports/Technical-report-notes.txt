@@ -1,0 +1,72 @@
+MEMTRIAGE - COPYABLE REPORT NOTES
+Prepared for Yasin Dehfouli | 1 October 2026 | Report v1.1
+Copyable notes corresponding to the companion PDF. They revise the saved examination; no new analysis run was performed.
+
+Scope
+-----
+Focused review of one memory image, five selected lead objects and five analysed regions. Selection follows observable triage and memory evidence; sample identity does not supply the conclusion. Collection attribution uses the matching artifacts and dataset creator confirmation.
+
+E1 | malware.exe, PID 2580 | process assessment
+-----------------------------------------------
+Private executable memory and a loader-walking sequence make this process a suitable candidate for deeper examination. The Critical score is shared with two PowerShell processes, so the allocation and instruction evidence provide the basis for prioritization. The filename is not treated as proof of maliciousness. Enabled SeDebugPrivilege indicates capability, not demonstrated token manipulation or credential access.
+
+E2 | powershell.exe, PID 3768 | collection artifact
+---------------------------------------------------
+The log_pid.ps1 command line and scheduler-service parent match the collection mechanism confirmed by the dataset creator. This accounts for the recorded launch of PID 2580 without establishing adversary persistence or execution. Collection context does not explain the purpose of the private executable allocation in the child process. The parent's RWX-memory and privilege indicators do not establish LSASS access.
+
+E3 | powershell.exe, PID 5088 | collection artifact
+---------------------------------------------------
+The export_logs.ps1 command line matches the confirmed dataset logging mechanism. This process shares scheduler-service parent PID 1232 with PID 3768; it is a sibling of the selected process's parent. Its Critical triage score does not establish malicious activity or credential dumping.
+
+E4 | LOG scheduled task | collection artifact
+---------------------------------------------
+The PowerShell action and export_logs.ps1 arguments match the logging process and confirmed collection configuration. The task is retained as collection instrumentation rather than adversary persistence. Its stored last-run fields predate the reported creation time and are unsuitable for reconstructing the sample execution order.
+
+R2 | 0x2ea0000 | principal memory exhibit
+-----------------------------------------
+The private RWX allocation has no backing file and is also identified by malfind. This is consistent with an executable buffer populated at runtime. At virtual address 0x2ea0b79, the x86 listing reads fs:[0x30]; the subsequent read at [eax + 0xc] is consistent with access to PEB loader structures. Together, these observations support a loader/payload-code interpretation at moderate confidence. The methods examine the same image, so their agreement is not independent ground truth. The branch at 0x2ea0035 appears within a traversal-like sequence; the automated decoder-loop label does not establish decryption. The embedded HTTP URL provides a network-correlation lead, but communication and C2 are unconfirmed. Legitimate runtime-generated code remains an alternative pending allocation and execution tracing.
+
+R1 | 0x72ce0000 | dhcpcsvc.dll mapping
+--------------------------------------
+Highest model attention falls on a file-backed DLL rather than the private allocation. The parsed PE identifies i386, while the saved listing uses x86-64. Instruction-level, loop, and call-count interpretations are therefore deferred pending correct decoding. High attention and PAGE_EXECUTE_WRITECOPY protection do not establish tampering. The reported backing path is not a verified publisher signature; compare executable pages with a trusted matching DLL.
+
+R3 | 0x72d80000 | cryptsp.dll mapping
+-------------------------------------
+The file-backed mapping and copy-on-write executable protection do not independently demonstrate injection. The parsed i386 metadata conflicts with the x86-64 listing. Structure analysis covers 65,536 of 86,016 bytes, limiting completeness. No malicious modification is established; correct decoding and comparison with the matching trusted DLL are required.
+
+R4 | 0x72c20000 | ncrypt.dll mapping
+------------------------------------
+Decoder-loop and indirect-call findings remain provisional because the x86-64 listing conflicts with i386 PE metadata. Structure analysis covers 65,536 of 155,648 bytes and the instruction listing is capped. Library strings and PEB-access signatures alone do not establish malicious cryptographic activity. Validate the architecture and mapped-page integrity before attributing the region to tampering.
+
+R5 | 0x72bd0000 | ncryptsslp.dll mapping
+----------------------------------------
+No MZ signature was found at the extracted region start. Image layout and byte availability need checking; deliberate header removal is not established. Structure analysis covers 65,536 of 131,072 bytes. Given the WOW64 process and reported SysWOW64 backing, the x86-64 listing requires architecture validation. Cryptography-provider registry strings provide module context, not evidence of registry modification or persistence.
+
+E5 | unattributed TCP connection | unresolved
+---------------------------------------------
+The ESTABLISHED connection has no owning PID and cannot be associated with PID 2580 or the embedded URL. A TCP destination port of 443 does not itself identify the application protocol. No protocol/port mismatch, C2 exchange, or exfiltration is established. The automatic T1571 association is unsupported by this observation and is excluded from the assessment.
+
+Working hypothesis
+------------------
+After review of the allocation properties, matching malfind address, and PEB/loader-access instructions, the private allocation at 0x2ea0000 appears consistent with loader or payload code operating within PID 2580. These observations support the interpretation at moderate confidence. The confirmed collection mechanism explains the process launch but not the allocation's origin or purpose. Legitimate runtime-generated code remains a testable alternative. The model's Exploit label does not establish a vulnerability or successful exploitation.
+
+Final assessment
+----------------
+The principal finding is an 8 KiB private executable allocation with an observable x86 PEB/loader-access sequence. Its properties support a loader/payload interpretation at moderate confidence; its allocating actor and execution behavior remain unresolved. The trained classifier's Exploit score is a prioritization aid. Successful exploitation, cross-process injection, credential theft, C2, and exfiltration are not established by this review. Scheduler and logging artifacts are accounted for as collection instrumentation, and highly attended DLL mappings require further validation.
+
+Recommendations
+---------------
+1. Preserve and document: Retain the memory image, recorded hashes, saved plugin outputs, region extracts, checkpoint/label versions, and collection scripts. Document the original acquisition and transfers if a custody history is required.
+2. Validate the private code: Reverse engineer 0x2ea0000 and trace allocation and execution in an isolated lab. Distinguish sample-generated loader/payload code, externally introduced code, and legitimate runtime behavior before assigning a mechanism.
+3. Correct and compare DLL mappings: Decode the i386/SysWOW64 mappings in the correct architecture. Compare relevant executable pages with trusted DLLs matching the host build, accounting for relocations, imports, and normal copy-on-write behavior.
+4. Resolve network ownership: Correlate the embedded URL and unattributed connection with process-specific network telemetry, DNS/proxy records, and packet capture. Establish ownership and actual traffic before making a C2 claim.
+5. Test specific allegations: Require direct LSASS-access or dumping evidence before alleging credential theft. Identify and validate an exploit mechanism before naming a vulnerability or claiming successful exploitation.
+
+Evidence hashes
+---------------
+0x72ce0000 | 75f6c9b36948891d4955caf25da8321b6fc402154002f3a07e09b37d249a2ec4
+0x2ea0000 | a4428fb76a495592f6698f14fd826f15e2c9b34c084d13d6286c6d0ce09255eb
+0x72d80000 | c3c6ce71b479e985f3230c87b830a5837986f6b204d8dea0dd25ed9ba0dd19ef
+0x72c20000 | 71bfbe0ad694821754799c5a0d50e9b09475bddee6c106ba77ee8a0a81dc93cb
+0x72bd0000 | 4ad168714fb36ebf3f7d72d8c57603de9d1c94a40020edbaa6bfffdf0307c741
+

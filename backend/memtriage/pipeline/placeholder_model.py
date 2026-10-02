@@ -1,20 +1,14 @@
 """Generate a structural placeholder VADViT checkpoint.
 
-Until the real ``Multi_32_224_6f_3u.pt`` + ``labels.json`` are provided, this
-writes a randomly-initialized checkpoint with the *exact* architecture, dims and
-I/O of the real model (``vit_base_patch32_224``, 9 classes), plus a ``labels.json``
-and a ``model_meta.json`` marker. The full pipeline — dump → consolidate → render →
-classify → explain — is therefore exercisable end to end, while the verdict is
-clearly flagged as a placeholder so it is never mistaken for a real detection.
-
-Swapping in the real weights is a drop-in: replace the ``.pt`` and ``labels.json``
-in the models directory (and remove or overwrite ``model_meta.json``); no code
-changes are required.
+Legacy test utility for creating random weights with the same architecture and
+I/O as VADViT. Normal MemTriage deployments use the bundled trained checkpoint
+and never invoke this fallback automatically. Generated verdicts are marked as
+untrained so test outputs cannot be mistaken for meaningful classifications.
 
 Run as::
 
-    python -m memtriage.pipeline.placeholder_model            # uses settings paths
-    python -m memtriage.pipeline.placeholder_model --out /models
+    python -m memtriage.pipeline.placeholder_model            # uses the test cache
+    python -m memtriage.pipeline.placeholder_model --out /tmp/vadvit-test
 """
 from __future__ import annotations
 
@@ -87,7 +81,7 @@ def _main(argv: list[str] | None = None) -> int:
     s = get_settings()
     parser = argparse.ArgumentParser(description="Generate a placeholder VADViT model")
     parser.add_argument("--out", default=None,
-                        help="Directory for the checkpoint/labels/meta (default: settings paths)")
+                        help="Directory for checkpoint/labels/meta (default: model_cache_dir)")
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args(argv)
 
@@ -96,8 +90,11 @@ def _main(argv: list[str] | None = None) -> int:
         ckpt = out / Path(s.model_checkpoint_path).name
         labels = out / Path(s.labels_path).name
     else:
-        ckpt = Path(s.model_checkpoint_path)
-        labels = Path(s.labels_path)
+        ckpt = s.model_cache_dir / Path(s.model_checkpoint_path).name
+        labels = s.model_cache_dir / Path(s.labels_path).name
+
+    if ckpt.resolve() == Path(s.model_checkpoint_path).resolve():
+        parser.error("Test weights must not overwrite the bundled trained checkpoint.")
 
     written = generate_placeholder(
         ckpt, labels, model_name=s.model_name, num_classes=s.num_classes, seed=args.seed

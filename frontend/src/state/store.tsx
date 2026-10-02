@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { ApiError, createLiveClient, type ApiClient } from "../api/client";
+import { isExampleDump } from "../lib/exampleDump";
 import { followAnalysis, followInvestigation, followPluginRun, type Subscription } from "../lib/events";
 import type {
   AnalysisResult,
@@ -72,6 +73,8 @@ interface AppState {
   pluginCatalog: PluginCatalogEntry[];
   pluginRun: PluginRunState | null;
   pluginRunStarting: boolean;
+  exampleFileDetected: boolean;
+  exampleDemoLoading: boolean;
 }
 
 interface AppActions {
@@ -88,6 +91,8 @@ interface AppActions {
   runPlugins(plugins: string[], concurrency: number): Promise<void>;
   restoreLatestPluginRun(): Promise<void>;
   newPluginRun(): void;
+  dismissExampleFile(): void;
+  loadPrecomputedDemo(): Promise<void>;
 }
 
 const Ctx = createContext<(AppState & AppActions) | null>(null);
@@ -125,6 +130,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [pluginCatalog, setPluginCatalog] = useState<PluginCatalogEntry[]>([]);
   const [pluginRun, setPluginRun] = useState<PluginRunState | null>(null);
   const [pluginRunStarting, setPluginRunStarting] = useState(false);
+  const [exampleFileDetected, setExampleFileDetected] = useState(false);
+  const [exampleDemoLoading, setExampleDemoLoading] = useState(false);
 
   const subscriptions = useRef<Subscription[]>([]);
 
@@ -170,6 +177,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [client, applyTriage],
   );
 
+  const hydrateInvestigation = useCallback(
+    async (id: string, nextStage?: Stage | null) => {
+      setInvestigationId(id);
+      if (nextStage) setStage(nextStage);
+      const state = await client.getInvestigation(id);
+      setTriageProgress(state);
+      const res = await loadResult(id);
+      const existing = res.process_analyses[0];
+      if (existing) {
+        setAnalysis(existing);
+        setSelectedPid(existing.pid);
+        try {
+          setLowlevel(await client.getLowLevel(id, existing.pid));
+        } catch {
+          setLowlevel(null);
+        }
+      }
+    },
+    [client, loadResult],
+  );
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("investigation");
@@ -181,23 +209,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setLoading(true);
       clearError();
       try {
-        setInvestigationId(id);
-        if (stageParam && VALID_STAGES.includes(stageParam)) setStage(stageParam);
-        const state = await client.getInvestigation(id);
+        const nextStage = stageParam && VALID_STAGES.includes(stageParam) ? stageParam : undefined;
+        await hydrateInvestigation(id, nextStage);
         if (cancelled) return;
-        setTriageProgress(state);
-        const res = await loadResult(id);
-        if (cancelled) return;
-        const existing = res.process_analyses[0];
-        if (existing) {
-          setAnalysis(existing);
-          setSelectedPid(existing.pid);
-          try {
-            setLowlevel(await client.getLowLevel(id, existing.pid));
-          } catch {
-            setLowlevel(null);
-          }
-        }
       } catch (e) {
         if (!cancelled) fail(e);
       } finally {
@@ -207,7 +221,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [client, loadResult, fail, clearError]);
+  }, [client, hydrateInvestigation, fail, clearError]);
 
   // Reflect the live investigation + stage into the URL (replace, not push, so
   // clicking through the workflow does not spam browser history). Without this,
@@ -246,6 +260,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     async (files: File[]) => {
       if (!files.length) return;
       clearError();
+      setExampleFileDetected(false);
       setUploads(files.map((f) => ({
         name: f.name, size: f.size, progress: 0, status: "pending" as const,
       })));
@@ -253,6 +268,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       try {
         const id = investigationId ?? (await client.createInvestigation()).investigation_id;
         setInvestigationId(id);
+        let exampleDetected = false;
         for (let index = 0; index < files.length; index += 1) {
           const file = files[index];
           const mark = (patch: Partial<UploadItem>) =>
@@ -260,14 +276,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
               current.map((item, i) => (i === index ? { ...item, ...patch } : item)));
           mark({ status: "uploading" });
           try {
-            await client.addDump(id, file, (fraction) =>
+            const uploaded = await client.addDump(id, file, (fraction) =>
               mark({ progress: Math.round(fraction * 100) }));
+            exampleDetected ||= isExampleDump({ name: file.name, sha256: uploaded.sha256 });
             mark({ status: "done", progress: 100 });
           } catch (e) {
             mark({ status: "failed", error: message(e) });
             throw e;
           }
         }
+        setExampleFileDetected(exampleDetected);
       } catch (e) {
         fail(e);
       } finally {
@@ -283,6 +301,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return;
     }
     clearError();
+    setExampleFileDetected(false);
     setStage("triage");
     setTriageStarting(true);
     setTriageRunSeq((n) => n + 1);
@@ -366,6 +385,40 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [client, investigationId, fail, track]);
 
   const newPluginRun = useCallback(() => setPluginRun(null), []);
+  const dismissExampleFile = useCallback(() => setExampleFileDetected(false), []);
+
+  const loadPrecomputedDemo = useCallback(async () => {
+    if (!investigationId) {
+      fail(new Error("Upload the example dump before loading precomputed results."));
+      return;
+    }
+    const id = investigationId;
+    clearError();
+    setExampleDemoLoading(true);
+    try {
+      const seeded = await client.seedExampleCache(id);
+      setExampleFileDetected(false);
+      if (seeded.reused) {
+        setLoading(true);
+        try {
+          await hydrateInvestigation(seeded.investigation_id, "triage");
+        } finally {
+          setLoading(false);
+        }
+        return;
+      }
+      await startTriage({
+        mode: "custom",
+        plugins: seeded.plugins,
+        concurrency: 4,
+        force: false,
+      });
+    } catch (e) {
+      fail(e, loadPrecomputedDemo);
+    } finally {
+      setExampleDemoLoading(false);
+    }
+  }, [client, investigationId, hydrateInvestigation, startTriage, fail, clearError]);
 
   // A stop is honoured by the worker, which terminates the run's Volatility
   // processes; the live stream then carries the run to its stopped state. When
@@ -467,16 +520,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
       client, stage, loading, error, retryLast, investigationId, triage, processes,
       scored, profile, riskSummary, attack, disclaimer, unevaluatedSources, diff, selectedPid, analysis, lowlevel,
       triageProgress, triageRunSeq, triageStarting, analysisProgress, uploads, pluginCatalog, pluginRun, pluginRunStarting,
+      exampleFileDetected, exampleDemoLoading,
       setStage, bootstrap, rescore, selectProcess, uploadDumps, startTriage, stopTriage,
       clearError, loadPluginCatalog, runPlugins, restoreLatestPluginRun, newPluginRun,
-      stopPluginRun,
+      stopPluginRun, dismissExampleFile, loadPrecomputedDemo,
     }),
     [client, stage, loading, error, retryLast, investigationId, triage, processes,
       scored, profile, riskSummary, attack, disclaimer, unevaluatedSources, diff, selectedPid, analysis, lowlevel,
       triageProgress, triageRunSeq, triageStarting, analysisProgress, uploads, pluginCatalog, pluginRun, pluginRunStarting,
+      exampleFileDetected, exampleDemoLoading,
       setStage, bootstrap, rescore, selectProcess, uploadDumps, startTriage, stopTriage,
       clearError, loadPluginCatalog, runPlugins, restoreLatestPluginRun, newPluginRun,
-      stopPluginRun],
+      stopPluginRun, dismissExampleFile, loadPrecomputedDemo],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

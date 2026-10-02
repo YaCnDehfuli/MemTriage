@@ -7,6 +7,26 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Changed
+
+- Bundled the trained nine-output VADViT checkpoint with Git LFS and connected it
+  to process classification, attention overlays, and region attribution.
+- Shared model configuration and mounts between API and worker, with repository
+  defaults for local Python runs and a checkpoint check in the launcher.
+- Replaced model-request and upload prompts with model status, disabled automatic
+  random-weight fallback, and removed unused binary checkpoints.
+- Restored the nine class names from the paper's multiclass confusion-matrix
+  legend and training order, including Benign at output index 1.
+
+### Fixed
+
+- Mounted checkpoints retain their own labels when a stale runtime upload exists.
+- Attention attribution now averages the final block's individual attention heads.
+- Selecting a process reruns cached untrained verdicts with the bundled model;
+  consolidated results list each PID once.
+- Example-dump banners use the completed upload's SHA-256 rather than its name;
+  a verified replacement takes precedence over an earlier same-name upload.
+
 ## [1.1.0] - 2026-09-10
 
 This release integrates VolMemLyzer's bounded evidence model and makes the
@@ -45,14 +65,14 @@ First public GitHub release of the stable MemTriage workspace.
 
 ### Added
 
-- FastAPI investigation API: create, multi-dump upload, triage, process inventory, SSE, export, artifacts, assistant, model-access.
+- FastAPI investigation API: create, multi-dump upload, triage, process inventory, SSE, export, artifacts, assistant, model status.
 - Celery worker, Redis progress, PostgreSQL investigation state, on-disk artifact layout.
 - VolMemLyzer adapter (features, injections, network, inventory) and ATT&CK alignment.
 - VAD dump / consolidate / grid render path and attention-ranked region analysis (disasm, CFG, FCG, patterns, strings, structure, hex).
 - Deterministic investigation briefing and provider-agnostic assistant (request-scoped keys).
 - Docker Compose stack (API, worker without egress, symbol proxy, nginx frontend).
 - Security scanning pipeline (Semgrep, Bandit, pip-audit, npm audit, gitleaks, Trivy, CodeQL, ZAP baseline).
-- Live cached-investigation GIF and restored region/VADViT stills; research-facility VADViT access wording.
+- Live cached-investigation GIF and restored region/VADViT stills.
 - MIT license.
 
 ### Changed

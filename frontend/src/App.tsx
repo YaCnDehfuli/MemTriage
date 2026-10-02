@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ErrorBanner } from "./components/ErrorBanner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { ExampleFileBanner } from "./components/ExampleFileBanner";
 import { TopNav } from "./components/TopNav";
 import { DeepDiveView } from "./components/stages/DeepDiveView";
 import { IngestView } from "./components/stages/IngestView";
@@ -10,7 +11,10 @@ import { TriageView } from "./components/stages/TriageView";
 import { useApp } from "./state/store";
 
 export default function App() {
-  const { stage, triageProgress, pluginRun, analysisProgress } = useApp();
+  const {
+    stage, triageProgress, pluginRun, analysisProgress,
+    exampleFileDetected, exampleDemoLoading, loadPrecomputedDemo, dismissExampleFile,
+  } = useApp();
   const allowNavigation = useRef(false);
   const workActive = (
     triageProgress?.status === "triaging"
@@ -56,6 +60,15 @@ export default function App() {
       <main className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
         <div className="mx-auto max-w-[1680px]">
           <ErrorBanner />
+          {exampleFileDetected && (
+            <div className="mb-5">
+              <ExampleFileBanner
+                loading={exampleDemoLoading}
+                onLoad={() => { void loadPrecomputedDemo(); }}
+                onRerun={() => dismissExampleFile()}
+              />
+            </div>
+          )}
           <ErrorBoundary key={stage}>
             {stage === "ingest" && <IngestView />}
             {stage === "triage" && <TriageView />}

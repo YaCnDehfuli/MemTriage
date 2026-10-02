@@ -13,6 +13,9 @@ x-common-env: &common-env
   MEMTRIAGE_DATABASE_URL: postgresql+psycopg://memtriage:memtriage@postgres:5432/memtriage
   MEMTRIAGE_REDIS_URL: redis://redis:6379/0
   MEMTRIAGE_DATA_DIR: /data
+  MEMTRIAGE_MODEL_CHECKPOINT_PATH: /models/Multi_32_224_6f_3u.pt
+  MEMTRIAGE_LABELS_PATH: /models/labels.json
+  MEMTRIAGE_MODEL_AUTO_PLACEHOLDER: "false"
 
 services:
   postgres:
@@ -48,6 +51,10 @@ services:
       MEMTRIAGE_CORS_ORIGINS: '["http://localhost:5173","http://localhost:8000"]'
     volumes:
       - data:/data
+      # Same trained checkpoint as the worker, for accurate model status.
+      - ../models:/models:ro
+      # Captured example-dump plugin JSON (and an optional local 2580_5.vmem).
+      - ../examples:/examples:ro
     ports:
       - "127.0.0.1:8000:8000"
     networks: [edge, internal]
@@ -79,8 +86,6 @@ services:
       dockerfile: deploy/Dockerfile.worker
     environment:
       <<: *common-env
-      MEMTRIAGE_MODEL_CHECKPOINT_PATH: /models/Multi_32_224_6f_3u.pt
-      MEMTRIAGE_LABELS_PATH: /models/labels.json
       # Volatility resolves Windows kernel symbols through symbolproxy, which
       # permits the symbol server and nothing else. The mount below still takes
       # precedence, and is what an air-gapped deployment uses on its own: set
@@ -95,7 +100,7 @@ services:
       NO_PROXY: postgres,redis,localhost,127.0.0.1
     volumes:
       - data:/data
-      # Drop the VADViT checkpoint + labels.json here to enable real verdicts.
+      # Bundled trained VADViT checkpoint, loaded without a network fetch.
       - ../models:/models:ro
       # Optional pre-fetched symbols for offline deployments. Online runs use
       # the persistent /data/symbols cache above instead.

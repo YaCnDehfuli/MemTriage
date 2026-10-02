@@ -12,7 +12,7 @@ from .api import (
     routes_assistant,
     routes_events,
     routes_investigations,
-    routes_model_access,
+    routes_model,
     routes_plugins,
     routes_processes,
     routes_report,
@@ -91,7 +91,7 @@ app.include_router(routes_processes.router)
 app.include_router(routes_events.router)
 app.include_router(routes_results.router)
 app.include_router(routes_scoring.router)
-app.include_router(routes_model_access.router)
+app.include_router(routes_model.router)
 app.include_router(routes_assistant.router)
 app.include_router(routes_plugins.router)
 app.include_router(routes_report.router)

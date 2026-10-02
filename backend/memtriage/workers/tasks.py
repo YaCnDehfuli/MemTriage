@@ -365,11 +365,15 @@ def _snapshot_plugin_artifact(
 
 
 def _write_consolidated(inv: Investigation, session) -> None:
-    """Rebuild result.json = triage + every completed process analysis."""
+    """Rebuild result.json = triage + the current result for each analyzed PID."""
     paths = InvestigationPaths(inv.id)
     triage = json.loads(paths.triage.read_text()) if paths.triage.exists() else {}
     analyses = []
+    seen_pids: set[int] = set()
     for a in inv.analyses:
+        if a.pid in seen_pids:
+            continue
+        seen_pids.add(a.pid)
         p = ProcessPaths(inv.id, a.pid).result
         if p.exists():
             analyses.append(json.loads(p.read_text()))

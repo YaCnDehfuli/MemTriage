@@ -18,7 +18,7 @@ frontend/dist/
 frontend/.vite/
 npm-debug.log*
 
-# --- MemTriage runtime data (never commit dumps, artifacts, models) ---
+# --- MemTriage runtime data (never commit dumps or derived artifacts) ---
 /Samples
 /samples
 /data/
@@ -35,12 +35,14 @@ data/
 grids/
 artifacts/
 
-# --- Model weights (large, licensed, brought-your-own) ---
+# --- Model weights (the bundled checkpoint is tracked with Git LFS) ---
 models/*.pt
+!models/Multi_32_224_6f_3u.pt
 models/*.pth
 models/*.safetensors
 models/model_meta.json
 labels.json
+!models/labels.json
 
 # --- Generated placeholder checkpoint + assistant context cache ---
 model_cache/

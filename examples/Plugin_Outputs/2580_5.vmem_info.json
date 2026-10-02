@@ -1,0 +1,108 @@
+
+[
+  {
+    "Value": "0xf8021c400000",
+    "Variable": "Kernel Base",
+    "__children": []
+  },
+  {
+    "Value": "0x1ae000",
+    "Variable": "DTB",
+    "__children": []
+  },
+  {
+    "Value": "file:///Users/yacn/Data/Portfolio%20files/volatility_workspace/volatility3/VolMemLyzer/.venv/lib/python3.12/site-packages/volatility3/symbols/windows/ntkrnlmp.pdb/9074FC2B82ED2B7E1CB3366B64BE62F9-1.json.xz",
+    "Variable": "Symbols",
+    "__children": []
+  },
+  {
+    "Value": "True",
+    "Variable": "Is64Bit",
+    "__children": []
+  },
+  {
+    "Value": "False",
+    "Variable": "IsPAE",
+    "__children": []
+  },
+  {
+    "Value": "0 WindowsIntel32e",
+    "Variable": "layer_name",
+    "__children": []
+  },
+  {
+    "Value": "1 Elf64Layer",
+    "Variable": "memory_layer",
+    "__children": []
+  },
+  {
+    "Value": "2 FileLayer",
+    "Variable": "base_layer",
+    "__children": []
+  },
+  {
+    "Value": "0xf8021d0099a0",
+    "Variable": "KdVersionBlock",
+    "__children": []
+  },
+  {
+    "Value": "15.22621",
+    "Variable": "Major/Minor",
+    "__children": []
+  },
+  {
+    "Value": "34404",
+    "Variable": "MachineType",
+    "__children": []
+  },
+  {
+    "Value": "1",
+    "Variable": "KeNumberProcessors",
+    "__children": []
+  },
+  {
+    "Value": "2024-12-27 07:57:04+00:00",
+    "Variable": "SystemTime",
+    "__children": []
+  },
+  {
+    "Value": "C:\\Windows",
+    "Variable": "NtSystemRoot",
+    "__children": []
+  },
+  {
+    "Value": "NtProductWinNt",
+    "Variable": "NtProductType",
+    "__children": []
+  },
+  {
+    "Value": "10",
+    "Variable": "NtMajorVersion",
+    "__children": []
+  },
+  {
+    "Value": "0",
+    "Variable": "NtMinorVersion",
+    "__children": []
+  },
+  {
+    "Value": "10",
+    "Variable": "PE MajorOperatingSystemVersion",
+    "__children": []
+  },
+  {
+    "Value": "0",
+    "Variable": "PE MinorOperatingSystemVersion",
+    "__children": []
+  },
+  {
+    "Value": "34404",
+    "Variable": "PE Machine",
+    "__children": []
+  },
+  {
+    "Value": "Fri Jul  2 05:18:00 1993",
+    "Variable": "PE TimeDateStamp",
+    "__children": []
+  }
+]

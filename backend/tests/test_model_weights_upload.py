@@ -1,10 +1,7 @@
 """Operator-supplied VADViT weights.
 
-The trained checkpoint is released on request rather than shipped, so whoever
-obtains it needs a way to load it into a running deployment without host shell
-access. These pin the parts that are easy to get quietly wrong: what gets
-accepted, which weights win when several exist, whether a long-lived worker
-notices a change, and whether a verdict still says where its weights came from.
+The bundled checkpoint takes precedence over optional operator uploads. These
+pin accepted inputs, precedence, reload behavior, and verdict provenance.
 """
 from __future__ import annotations
 
@@ -49,9 +46,9 @@ def _upload(client, *, checkpoint=None, name="weights.pt", labels=None):
     return client.post("/api/model/weights", files=files)
 
 
-def test_without_an_upload_the_placeholder_is_the_active_source(client):
+def test_without_any_checkpoint_the_model_is_unavailable(client):
     body = client.get("/api/model").json()
-    assert body["active_source"] == "placeholder"
+    assert body["active_source"] == "none"
     assert body["uploaded_weights_present"] is False
     assert body["uploaded_weights"] is None
 
@@ -115,12 +112,12 @@ def test_labels_that_are_not_a_list_of_names_are_refused(client, payload):
     assert _upload(client, labels=payload).status_code == 400
 
 
-def test_deleting_an_upload_reverts_to_the_placeholder(client):
+def test_deleting_an_upload_leaves_missing_model_explicit(client):
     _upload(client, labels=json.dumps(["A"] * 9).encode())
     assert client.get("/api/model").json()["active_source"] == "uploaded"
     removed = client.delete("/api/model/weights").json()
     assert removed["removed"] is True
-    assert removed["model"]["active_source"] == "placeholder"
+    assert removed["model"]["active_source"] == "none"
     assert not list(get_settings().model_upload_dir.iterdir())
 
 
@@ -161,8 +158,10 @@ def _classifier(tmp_path, **over):
     return vadvit_model.VADViTClassifier(**kwargs)
 
 
-def test_resolution_order_is_mount_then_upload_then_placeholder(tmp_path):
-    clf = _classifier(tmp_path)
+def test_resolution_order_is_mount_then_upload_then_placeholder(tmp_path, monkeypatch):
+    # Exercise file precedence without generating a full model in an empty cache.
+    monkeypatch.setattr(vadvit_model, "torch_available", lambda: False)
+    clf = _classifier(tmp_path, auto_placeholder=True)
     for directory in ("mount", "cache", "uploads"):
         (tmp_path / directory).mkdir()
     assert clf.resolve_checkpoint() is None
@@ -179,7 +178,7 @@ def test_resolution_order_is_mount_then_upload_then_placeholder(tmp_path):
 
 def test_resolution_is_not_memoized_across_a_deletion(tmp_path):
     """The worker is long-lived; weights can appear and vanish beneath it."""
-    clf = _classifier(tmp_path)
+    clf = _classifier(tmp_path, auto_placeholder=True)
     (tmp_path / "uploads").mkdir()
     (tmp_path / "cache").mkdir()
     uploaded = tmp_path / "uploads" / "m.pt"

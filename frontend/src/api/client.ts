@@ -12,9 +12,6 @@ import type {
   Timeline,
   InvestigationState,
   LowLevelReport,
-  ModelAccessPolicy,
-  ModelAccessRequest,
-  ModelAccessResponse,
   ModelState,
   ModelUploadResult,
   PluginCatalogEntry,
@@ -37,13 +34,21 @@ export interface ConsolidatedResult {
 
 export type UploadProgress = (fraction: number) => void;
 
+export interface ExampleCacheResult {
+  investigation_id: string;
+  reused: boolean;
+  plugins: string[];
+  artifacts: number;
+}
+
 export interface ApiClient {
   createInvestigation(): Promise<{ investigation_id: string }>;
+  seedExampleCache(id: string): Promise<ExampleCacheResult>;
   addDump(
     id: string,
     file: File,
     onProgress?: UploadProgress,
-  ): Promise<{ ordinal: number; dump_count: number }>;
+  ): Promise<{ ordinal: number; dump_count: number; sha256?: string }>;
   startTriage(id: string, options: TriageOptions): Promise<InvestigationState>;
   stopTriage(id: string): Promise<InvestigationState>;
   stopPluginRun(id: string, runId: string): Promise<PluginRunState>;
@@ -56,8 +61,6 @@ export interface ApiClient {
   artifactUrl(id: string, pid: number, kind: "grid" | "attention"): string;
   getRegions(id: string, pid: number): Promise<RegionRecord[]>;
   getLowLevel(id: string, pid: number): Promise<LowLevelReport>;
-  getModelAccessPolicy(): Promise<ModelAccessPolicy>;
-  requestModelAccess(body: ModelAccessRequest): Promise<ModelAccessResponse>;
   getModelState(): Promise<ModelState>;
   uploadModelWeights(
     checkpoint: File,
@@ -160,6 +163,9 @@ export function createLiveClient(base = ""): ApiClient {
     async createInvestigation() {
       return json(await fetch(`${api}/investigations`, { method: "POST" }));
     },
+    async seedExampleCache(id) {
+      return json(await fetch(`${api}/investigations/${id}/example-cache`, { method: "POST" }));
+    },
     addDump(id, file, onProgress) {
       // fetch cannot report upload progress; a multi-gigabyte image without a
       // progress bar looks like a hang, so this one call uses XHR.
@@ -179,7 +185,7 @@ export function createLiveClient(base = ""): ApiClient {
           }
           if (xhr.status >= 200 && xhr.status < 300) {
             onProgress?.(1);
-            resolve(body as { ordinal: number; dump_count: number });
+            resolve(body as { ordinal: number; dump_count: number; sha256?: string });
             return;
           }
           const envelope = body.error as { message?: string; code?: string } | undefined;
@@ -250,18 +256,6 @@ export function createLiveClient(base = ""): ApiClient {
     },
     async getLowLevel(id, pid) {
       return json(await fetch(`${api}/investigations/${id}/processes/${pid}/lowlevel`));
-    },
-    async getModelAccessPolicy() {
-      return json(await fetch(`${api}/model-access`));
-    },
-    async requestModelAccess(body) {
-      return json(
-        await fetch(`${api}/model-access-requests`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        }),
-      );
     },
     async getModelState() {
       return json(await fetch(`${api}/model`));

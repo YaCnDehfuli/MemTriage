@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useReport } from "../../state/reportStore";
 import type { EvidenceKind } from "../../types";
+import { EvidenceNoteEditor } from "./EvidenceNoteEditor";
 
 type Feedback = { tone: "ok" | "error"; text: string } | null;
 
@@ -20,7 +21,7 @@ const FEEDBACK_MS = 2500;
  * removed, or says why it failed. A silent control is indistinguishable from a
  * broken one.
  *
- * The note is written here too. Pinning opens a small box anchored to the star,
+ * The note is written here too. Pinning opens a writing panel near the star,
  * so the analyst records what the evidence means while still looking at it —
  * rather than losing the thread of the ranked findings and rebuilding the
  * context later on the Report page. The same note field is still editable there;
@@ -39,37 +40,21 @@ export function EvidenceToggle({
   pid?: number | null;
   compact?: boolean;
 }) {
-  const { evidenceByRef, pin, unpin, setNote } = useReport();
+  const { evidenceByRef, pin, unpin, setNote, saving, error } = useReport();
   const row = evidenceByRef.get(evidenceRef);
   const pinned = Boolean(row);
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [noteOpen, setNoteOpen] = useState(false);
-  const wrapRef = useRef<HTMLSpanElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const editorId = useId();
+  const closeNote = useCallback(() => setNoteOpen(false), []);
 
   useEffect(() => {
     if (feedback?.tone !== "ok") return;
     const timer = window.setTimeout(() => setFeedback(null), FEEDBACK_MS);
     return () => window.clearTimeout(timer);
   }, [feedback]);
-
-  // Dismiss on Escape or a click elsewhere. The note itself is already saved by
-  // then — setNote writes through on a debounce — so closing never discards it.
-  useEffect(() => {
-    if (!noteOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setNoteOpen(false);
-    };
-    const onDown = (e: MouseEvent) => {
-      if (!wrapRef.current?.contains(e.target as Node)) setNoteOpen(false);
-    };
-    document.addEventListener("keydown", onKey);
-    document.addEventListener("mousedown", onDown);
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.removeEventListener("mousedown", onDown);
-    };
-  }, [noteOpen]);
 
   const toggle = async () => {
     // A pinned star opens its note instead of silently unpinning: the note is
@@ -92,7 +77,7 @@ export function EvidenceToggle({
   };
 
   return (
-    <span ref={wrapRef} className="relative inline-flex shrink-0 items-center gap-1.5">
+    <span className="relative inline-flex shrink-0 items-center gap-1.5">
       {feedback && (
         <span
           role={feedback.tone === "error" ? "alert" : "status"}
@@ -105,10 +90,13 @@ export function EvidenceToggle({
         </span>
       )}
       <button
+        ref={buttonRef}
         type="button"
         aria-pressed={pinned}
         aria-busy={busy}
         aria-expanded={pinned ? noteOpen : undefined}
+        aria-haspopup="dialog"
+        aria-controls={noteOpen ? editorId : undefined}
         disabled={busy}
         title={pinned ? `Note on ${label}` : `Add ${label} to report`}
         onClick={(e) => {
@@ -124,39 +112,18 @@ export function EvidenceToggle({
       </button>
 
       {noteOpen && pinned && (
-        <div
-          role="group"
-          aria-label={`Note on ${label}`}
-          className="absolute right-0 top-full z-30 mt-1 w-64 rounded-md border border-surface-600 bg-surface-900 p-2 shadow-lg"
-        >
-          <textarea
-            autoFocus
-            rows={3}
-            value={row?.analyst_note ?? ""}
-            onChange={(e) => setNote(evidenceRef, label, e.target.value)}
-            placeholder="What this means here — the parent process, whether it is expected on this host, what would confirm it."
-            className="w-full resize-y rounded border border-surface-600 bg-surface-950 px-2 py-1 text-[12px] text-ink-200 placeholder:text-ink-400 focus:border-accent/50 focus:outline-none"
-          />
-          <div className="mt-1.5 flex items-center justify-between">
-            <button
-              type="button"
-              className="btn-ghost text-[11px] text-risk-critical"
-              onClick={() => {
-                setNoteOpen(false);
-                void toggle();
-              }}
-            >
-              Remove from report
-            </button>
-            <button
-              type="button"
-              className="btn-ghost text-[11px]"
-              onClick={() => setNoteOpen(false)}
-            >
-              Done
-            </button>
-          </div>
-        </div>
+        <EvidenceNoteEditor
+          id={editorId}
+          anchor={buttonRef}
+          label={label}
+          note={row?.analyst_note ?? ""}
+          saving={saving > 0}
+          error={error}
+          busy={busy}
+          onChange={(value) => setNote(evidenceRef, label, value)}
+          onClose={closeNote}
+          onRemove={() => void toggle()}
+        />
       )}
     </span>
   );

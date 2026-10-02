@@ -1,0 +1,5693 @@
+
+[
+  {
+    "Data": "",
+    "Hive Offset": 246870343905280,
+    "Key": "[NONAME]",
+    "Last Write Time": "2024-12-27T07:55:52+00:00",
+    "Name": "A",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343905280,
+    "Key": "[NONAME]",
+    "Last Write Time": "2024-12-27T07:51:06+00:00",
+    "Name": "MACHINE",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343905280,
+    "Key": "[NONAME]",
+    "Last Write Time": "2024-12-27T07:52:11+00:00",
+    "Name": "USER",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343905280,
+    "Key": "[NONAME]",
+    "Last Write Time": "2024-12-27T07:53:12+00:00",
+    "Name": "WC",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T05:25:15+00:00",
+    "Name": "ActivationBroker",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "ControlSet001",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2024-12-06T05:04:01+00:00",
+    "Name": "DriverDatabase",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2024-12-27T07:50:22+00:00",
+    "Name": "HardwareConfig",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "Input",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T06:01:48+00:00",
+    "Name": "Keyboard Layout",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "Maps",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2023-07-27T20:55:22+00:00",
+    "Name": "MountedDevices",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "ResourceManager",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "ResourcePolicyStore",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2024-12-27T07:50:22+00:00",
+    "Name": "RNG",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "Select",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2024-12-11T06:01:38+00:00",
+    "Name": "Setup",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "Software",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "State",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2023-07-12T14:11:47+00:00",
+    "Name": "WaaS",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2024-12-27T07:51:23+00:00",
+    "Name": "WPA",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870343987200,
+    "Key": "\\REGISTRY\\MACHINE\\SYSTEM",
+    "Last Write Time": "2024-12-27T07:50:22+00:00",
+    "Name": "CurrentControlSet",
+    "Type": "Key",
+    "Volatile": true,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870344417280,
+    "Key": "\\REGISTRY\\MACHINE\\HARDWARE",
+    "Last Write Time": "2024-12-27T07:50:22+00:00",
+    "Name": "ACPI",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870344417280,
+    "Key": "\\REGISTRY\\MACHINE\\HARDWARE",
+    "Last Write Time": "2024-12-27T07:50:22+00:00",
+    "Name": "DESCRIPTION",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870344417280,
+    "Key": "\\REGISTRY\\MACHINE\\HARDWARE",
+    "Last Write Time": "2024-12-27T07:50:57+00:00",
+    "Name": "DEVICEMAP",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870344417280,
+    "Key": "\\REGISTRY\\MACHINE\\HARDWARE",
+    "Last Write Time": "2024-12-27T07:50:22+00:00",
+    "Name": "RESOURCEMAP",
+    "Type": "Key",
+    "Volatile": true,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2024-12-18T02:52:31+00:00",
+    "Name": "Classes",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2023-07-13T02:14:16+00:00",
+    "Name": "Clients",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2023-07-13T08:13:29+00:00",
+    "Name": "CVSM",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2022-05-07T05:25:26+00:00",
+    "Name": "DefaultUserEnvironment",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2022-05-07T05:25:26+00:00",
+    "Name": "Google",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2022-05-07T05:25:26+00:00",
+    "Name": "Intel",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2024-12-27T07:51:14+00:00",
+    "Name": "Microsoft",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2024-12-18T02:52:30+00:00",
+    "Name": "MozillaPlugins",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2022-05-07T05:25:18+00:00",
+    "Name": "OEM",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2022-05-07T06:10:04+00:00",
+    "Name": "OpenSSH",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2022-05-07T05:25:18+00:00",
+    "Name": "Partner",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2024-12-11T06:05:08+00:00",
+    "Name": "Policies",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2023-07-27T21:02:16+00:00",
+    "Name": "Red Hat",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2023-07-27T21:01:45+00:00",
+    "Name": "RedHat",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2023-07-13T02:14:16+00:00",
+    "Name": "RegisteredApplications",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2024-12-18T02:52:31+00:00",
+    "Name": "SyncIntegrationClients",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357381120,
+    "Key": "\\SystemRoot\\System32\\Config\\SOFTWARE",
+    "Last Write Time": "2024-12-27T07:50:56+00:00",
+    "Name": "WOW6432Node",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357651456,
+    "Key": "\\Device\\HarddiskVolume1\\EFI\\Microsoft\\Boot\\BCD",
+    "Last Write Time": "2024-12-27T07:50:56+00:00",
+    "Name": "Description",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870357651456,
+    "Key": "\\Device\\HarddiskVolume1\\EFI\\Microsoft\\Boot\\BCD",
+    "Last Write Time": "2024-12-27T07:50:57+00:00",
+    "Name": "Objects",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870390341632,
+    "Key": "\\SystemRoot\\System32\\Config\\DEFAULT",
+    "Last Write Time": "2023-07-13T05:07:03+00:00",
+    "Name": "Console",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870390341632,
+    "Key": "\\SystemRoot\\System32\\Config\\DEFAULT",
+    "Last Write Time": "2022-05-07T06:01:48+00:00",
+    "Name": "Control Panel",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870390341632,
+    "Key": "\\SystemRoot\\System32\\Config\\DEFAULT",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "Environment",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870390341632,
+    "Key": "\\SystemRoot\\System32\\Config\\DEFAULT",
+    "Last Write Time": "2022-05-07T05:25:13+00:00",
+    "Name": "EUDC",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870390341632,
+    "Key": "\\SystemRoot\\System32\\Config\\DEFAULT",
+    "Last Write Time": "2023-07-13T05:10:34+00:00",
+    "Name": "Keyboard Layout",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870390341632,
+    "Key": "\\SystemRoot\\System32\\Config\\DEFAULT",
+    "Last Write Time": "2023-07-12T14:13:05+00:00",
+    "Name": "Printers",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870390341632,
+    "Key": "\\SystemRoot\\System32\\Config\\DEFAULT",
+    "Last Write Time": "2023-07-13T05:10:39+00:00",
+    "Name": "Software",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870390341632,
+    "Key": "\\SystemRoot\\System32\\Config\\DEFAULT",
+    "Last Write Time": "2023-07-13T05:09:51+00:00",
+    "Name": "System",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870392889344,
+    "Key": "\\SystemRoot\\System32\\Config\\SECURITY",
+    "Last Write Time": "2023-07-13T05:09:39+00:00",
+    "Name": "Policy",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870392889344,
+    "Key": "\\SystemRoot\\System32\\Config\\SECURITY",
+    "Last Write Time": "2024-12-18T01:59:00+00:00",
+    "Name": "RXACT",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870392889344,
+    "Key": "\\SystemRoot\\System32\\Config\\SECURITY",
+    "Last Write Time": "2024-12-27T07:50:57+00:00",
+    "Name": "SAM",
+    "Type": "Key",
+    "Volatile": true,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870393880576,
+    "Key": "\\SystemRoot\\System32\\Config\\SAM",
+    "Last Write Time": "2023-07-13T05:06:50+00:00",
+    "Name": "SAM",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870397218816,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:52+00:00",
+    "Name": "AppEvents",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870397218816,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:52+00:00",
+    "Name": "Console",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870397218816,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:52+00:00",
+    "Name": "Control Panel",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870397218816,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:52+00:00",
+    "Name": "Environment",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870397218816,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:52+00:00",
+    "Name": "EUDC",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870397218816,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:10:33+00:00",
+    "Name": "Keyboard Layout",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870397218816,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:52+00:00",
+    "Name": "Network",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870397218816,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-27T18:24:31+00:00",
+    "Name": "Software",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870397218816,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:52+00:00",
+    "Name": "System",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398873600,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:54+00:00",
+    "Name": "AppEvents",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398873600,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:54+00:00",
+    "Name": "Console",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398873600,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:54+00:00",
+    "Name": "Control Panel",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398873600,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:54+00:00",
+    "Name": "Environment",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398873600,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:54+00:00",
+    "Name": "EUDC",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398873600,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:10:33+00:00",
+    "Name": "Keyboard Layout",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398873600,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:54+00:00",
+    "Name": "Network",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398873600,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-27T18:24:31+00:00",
+    "Name": "Software",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398873600,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\LocalService\\NTUSER.DAT",
+    "Last Write Time": "2023-07-13T05:06:54+00:00",
+    "Name": "System",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870399102976,
+    "Key": "\\SystemRoot\\System32\\Config\\BBI",
+    "Last Write Time": "2024-12-25T06:01:03+00:00",
+    "Name": "Events",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870399102976,
+    "Key": "\\SystemRoot\\System32\\Config\\BBI",
+    "Last Write Time": "2024-12-25T06:01:03+00:00",
+    "Name": "WorkItems",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "3",
+    "Hive Offset": 246870399102976,
+    "Key": "\\SystemRoot\\System32\\Config\\BBI",
+    "Last Write Time": "2023-07-13T05:07:00+00:00",
+    "Name": "Version",
+    "Type": "REG_DWORD",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "2",
+    "Hive Offset": 246870399102976,
+    "Key": "\\SystemRoot\\System32\\Config\\BBI",
+    "Last Write Time": "2023-07-13T05:07:00+00:00",
+    "Name": "MinorVersion",
+    "Type": "REG_DWORD",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870409367552,
+    "Key": "\\??\\C:\\Windows\\AppCompat\\Programs\\Amcache.hve",
+    "Last Write Time": "2024-12-06T05:21:27+00:00",
+    "Name": "Root",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "\"\"C:\\Program Files (x86)\\Microsoft\\EdgeUpdate\\MicrosoftEdgeUpdate.exe\" /ua /installsource windowsupdate_zdp /critical\"",
+    "Hive Offset": 246870409367552,
+    "Key": "\\??\\C:\\Windows\\AppCompat\\Programs\\Amcache.hve",
+    "Last Write Time": "2023-07-12T14:11:54+00:00",
+    "Name": "CreatingCommand",
+    "Type": "REG_SZ",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "\"C:\\Windows\\SYSTEM32\\aepic.dll\"",
+    "Hive Offset": 246870409367552,
+    "Key": "\\??\\C:\\Windows\\AppCompat\\Programs\\Amcache.hve",
+    "Last Write Time": "2023-07-12T14:11:54+00:00",
+    "Name": "CreatingModule",
+    "Type": "REG_SZ",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2023-07-13T01:07:29+00:00",
+    "Name": "AppEvents",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2023-07-27T20:33:25+00:00",
+    "Name": "Console",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2023-09-11T08:28:20+00:00",
+    "Name": "Control Panel",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2024-12-17T02:09:29+00:00",
+    "Name": "Environment",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2023-07-13T01:07:29+00:00",
+    "Name": "EUDC",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2023-07-13T01:09:52+00:00",
+    "Name": "Keyboard Layout",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2023-07-13T01:07:28+00:00",
+    "Name": "Network",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2023-07-28T17:37:10+00:00",
+    "Name": "Printers",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2024-12-27T07:52:12+00:00",
+    "Name": "Software",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2023-07-13T01:09:40+00:00",
+    "Name": "System",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2023-07-13T02:30:46+00:00",
+    "Name": "Uninstall",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870349492224,
+    "Key": "\\??\\C:\\Users\\John Smith\\ntuser.dat",
+    "Last Write Time": "2024-12-27T07:52:15+00:00",
+    "Name": "Volatile Environment",
+    "Type": "Key",
+    "Volatile": true,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": "*",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".3fr",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".3g2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".3gp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".3gp2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".3gpp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".aac",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".ac3",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".adt",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".adts",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": ".agent",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".aiff",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:33+00:00",
+    "Name": ".all",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".amr",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:28+00:00",
+    "Name": ".appinstaller",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:28+00:00",
+    "Name": ".appx",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:28+00:00",
+    "Name": ".appxbundle",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".ari",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".arw",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".asf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:58+00:00",
+    "Name": ".avci",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".avi",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:58+00:00",
+    "Name": ".avif",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".bay",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".bmp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:06+00:00",
+    "Name": ".c5e2524a-ea46-4f67-841f-6a9465d9d515",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".cap",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".cda",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": ".copilot",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".cr2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".cr3",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".crw",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".dcr",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".dcs",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".dib",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".divx",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".dng",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".drf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".ec3",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".eip",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:58+00:00",
+    "Name": ".emf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:13+00:00",
+    "Name": ".eml",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".erf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".f4a",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".f4v",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": ".fbx",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".fff",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:18+00:00",
+    "Name": ".fh",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".flac",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": ".fluid",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".flv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".gif",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": ".glb",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": ".gltf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:58+00:00",
+    "Name": ".heic",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:58+00:00",
+    "Name": ".heif",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:58+00:00",
+    "Name": ".hif",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:39+00:00",
+    "Name": ".htm",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:39+00:00",
+    "Name": ".html",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".ico",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:13+00:00",
+    "Name": ".ics",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".iiq",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:02+00:00",
+    "Name": ".inf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:02+00:00",
+    "Name": ".ini",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".jfif",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".jpe",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".jpeg",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".jpg",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".jxr",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".k25",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".kdc",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:02+00:00",
+    "Name": ".log",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": ".loop",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".m1v",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".m2t",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".m2ts",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".m2v",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".m3u",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".m3u8",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".m4a",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".m4r",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".m4v",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".mdc",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".mef",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:37:07+00:00",
+    "Name": ".mk3d",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mka",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mkv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mod",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".mos",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mov",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".mp2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mp2v",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mp3",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mp4",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mp4v",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mpa",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mpe",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mpeg",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mpg",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mpg4",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".mpv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mpv2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".mrw",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:13+00:00",
+    "Name": ".ms-lockscreencomponent-primary",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:28+00:00",
+    "Name": ".msix",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:28+00:00",
+    "Name": ".msixbundle",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".mts",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".mxf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".nef",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": ".note",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".nrw",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".oga",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".ogg",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".ogm",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".ogv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".ogx",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".opus",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".orf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".ori",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": ".oxps",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:39+00:00",
+    "Name": ".pdf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".pef",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": ".ply",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".png",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:02+00:00",
+    "Name": ".ps1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:02+00:00",
+    "Name": ".psd1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:02+00:00",
+    "Name": ".psm1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".qt",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".R3D",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".raf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".raw",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:58+00:00",
+    "Name": ".rle",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".rm",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".rmv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".rmvb",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".rw2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".rwl",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".rwz",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:02+00:00",
+    "Name": ".scp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".sr2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".srf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".srw",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": ".stl",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:39+00:00",
+    "Name": ".svg",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".thumb",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".tif",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".tiff",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".tod",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".ts",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".tts",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:02+00:00",
+    "Name": ".txt",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:40+00:00",
+    "Name": ".vcf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".vob",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".wav",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": ".wdp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".webm",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:58+00:00",
+    "Name": ".webp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": ".whiteboard",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:38:17+00:00",
+    "Name": ".winget",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".wm",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".wma",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:58+00:00",
+    "Name": ".wmf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".wmv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".wpl",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": ".wsb",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:02+00:00",
+    "Name": ".wtx",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": ".x3f",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": ".xps",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".xvid",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": ".yuv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:59+00:00",
+    "Name": ".zpl",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "AppID",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:28+00:00",
+    "Name": "appinstaller.oauth2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:50+00:00",
+    "Name": "AppX0enk2acdsmv8ydhntbtea6yjp27223q6",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T01:11:38+00:00",
+    "Name": "AppX0jr688mrddhm2gsn5y1q8jpx5tfsxk7s",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:34:21+00:00",
+    "Name": "AppX0resaq7r5ermbh4b96ke39yqc1atfhjr",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-20T04:44:30+00:00",
+    "Name": "AppX0t69n30jztar4a12pv0h1xh91e8jsacr",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppX0yfn1fhybwjxhemdkvvy841hdgqqy4y4",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppX1akbsnxkswph8hkx1pb4f1s3d2rfbnyb",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T01:11:38+00:00",
+    "Name": "AppX1apmywg4z9t3tk3nrn9y8ntjc5cg9675",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:49:44+00:00",
+    "Name": "AppX1b0e9ytcwx0wcmvkdey0h6af04t1ta3z",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T04:13:49+00:00",
+    "Name": "AppX1qf4g0v6xcng3mzm2bnm7ektz6bfye6a",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T03:20:29+00:00",
+    "Name": "AppX1sy7rwrc20ggq97a6x1mgmjat0rthy51",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T01:15:47+00:00",
+    "Name": "AppX1yprbth8spa55n2rc6zbh6tc1kr1tf5h",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:08:35+00:00",
+    "Name": "AppX2b728y1f1nn5hvq8ww8qk030g07r87t9",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppX2hp19nyr9be41zhe1nb5bry5jf3bcc6q",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:08:37+00:00",
+    "Name": "AppX3p914qnpgw4hwj856jw2y286v7d4qnzh",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:08:37+00:00",
+    "Name": "AppX40nx3azkcssh7ybcbzzjpgf1mg561cyz",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppX43hnxtbyyps62jhe9sqpdzxn1790zetc",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:53+00:00",
+    "Name": "AppX4jbzrhvphxte25e0gxha6bq555nrgqzy",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T01:15:47+00:00",
+    "Name": "AppX4ra53nzs9xcdyxf1wgcp31xefscv1jnk",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-27T21:28:19+00:00",
+    "Name": "AppX4t3n6teewhtndzr4h5x7vg9jcjkedh7c",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:49:44+00:00",
+    "Name": "AppX4ztfk9wxr86nxmzzq47px0nh0e58b8fw",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T04:13:41+00:00",
+    "Name": "AppX5nebv0xjaxafmmr3cnptgjg9pdpqcg0h",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:44:36+00:00",
+    "Name": "AppX5sy1gww9q4g2gt941cdxxd7s07xe5vph",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "AppX6006hzyfsdm0v5mhzsyjgvyh29vvj9sp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:49:44+00:00",
+    "Name": "AppX6ae6b9t9aj303935n8rmz42zdtq3fe6r",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:54:52+00:00",
+    "Name": "AppX6eg8h5sxqq90pv53845wmnbewywdqq5h",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-20T04:44:30+00:00",
+    "Name": "AppX6hptmm8avg1gnv71j8jda9340qk79w89",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:54:52+00:00",
+    "Name": "AppX6w6n4f8xch1s3vzwf3af6bfe88qhxbza",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:43:09+00:00",
+    "Name": "AppX70hz8geay8nefwg2887gffr7tmedrrh2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T02:22:22+00:00",
+    "Name": "AppX77ghgzrbzwe6djbdyty6hp5e3z1qryqx",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppX7m6gnccfzpt1c1t2weraxv0a2sw4yzrn",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:06+00:00",
+    "Name": "AppX8mn6f6acw2d3hves535dpq0zqnxqkec7",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T01:37:07+00:00",
+    "Name": "AppX8zw7xct41bx2wrswqekb78rm243h02yh",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:48+00:00",
+    "Name": "AppX9kvz3rdv8t7twanaezbwfcdgrbg3bck0",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:52:28+00:00",
+    "Name": "AppX9vwggs9kbe3mn0w816545e7zs1x6vegr",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-20T04:45:47+00:00",
+    "Name": "AppXa4x21t18evxksm0kbe6znaz8jjrjvs9e",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T01:37:07+00:00",
+    "Name": "AppXajsqtzxc3swn530gvypre9jp1rp1d2tp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T01:11:38+00:00",
+    "Name": "AppXak1hygz1tpjjnxhr1pwtcgnkpr24r5e7",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-13T08:33:39+00:00",
+    "Name": "AppXamwwyj1f3ktjcdfctg7kctrcrvqd3z8p",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T04:13:41+00:00",
+    "Name": "AppXarc6g37bjvf299edhhmjx991tz75tcx9",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:08:35+00:00",
+    "Name": "AppXarrs62hke6epkgs4hz21rc31k0p4gqqq",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-27T18:14:56+00:00",
+    "Name": "AppXassm2k5er21ec9tqj99raa72bqdy59n1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T03:20:29+00:00",
+    "Name": "AppXb5yxv86nkhp530y0y50yxe69c1qwad1x",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "AppXbemgape21yns3k5pd4ah40jz06yq6xrk",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:40:07+00:00",
+    "Name": "AppXbfem27ddbf6ebrx72mc6gnaw2e3nkpza",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:36:01+00:00",
+    "Name": "AppXbqrd7zg39s227k5zy1mah67hhk0wgmw4",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "AppXbzdzkhgs0b1gj36jbm528tvp1fnha54j",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:08:35+00:00",
+    "Name": "AppXc9bt84rtp5qvmzkascgmn4pfe2g3hxeg",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:49:44+00:00",
+    "Name": "AppXc9vj55m1n3559gcjff0scsqeket80zp7",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:17+00:00",
+    "Name": "AppXcesbfs704v2mjbts9dkr42s9vmrhxbkj",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T02:22:22+00:00",
+    "Name": "AppXcr7ve1e6y7nx8n3y5qv7m7s9kzz18jx5",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "AppXctx73kz58pypptjf6jydwz2pgcks5mzk",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppXdmc2hnhd4vyje8zdrctd4j6e4wg4bawg",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-20T04:44:30+00:00",
+    "Name": "AppXdv25x4ndb8r51pbdf6srsknmbkfnkpaq",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T02:22:22+00:00",
+    "Name": "AppXdyw2j75xqd0y008p4bvtxhnxp3py2t2g",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:59+00:00",
+    "Name": "AppXe05qdnx2p14g0mw29139zqs9s5n3wcne",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-13T07:15:34+00:00",
+    "Name": "AppXegssybx65447k2q6prgacs1t5gzge8at",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:52:28+00:00",
+    "Name": "AppXejqz5dpvfxzdkq7rwbwmnn4gyqk3hhb9",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:50:07+00:00",
+    "Name": "AppXewfz11nnnd1v7scbs4vmxpc1svxc4r90",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "AppXf1qkdkw713dwwyym75mwhtyrm0vexpzf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:58:33+00:00",
+    "Name": "AppXfp6kkvw8823ptbxvr2be691hzfyrsazt",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:57:02+00:00",
+    "Name": "AppXft7fmpenyazgagwq2nbjdz0s5damf04j",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-20T04:44:30+00:00",
+    "Name": "AppXg280tzrpxnd0t559h02gpd27tgrma246",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "AppXg2ew71cpjznkcwmfttfpxzc075gc7c80",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppXg5znxfz1f45aw5f3sz0e41f2pwstgx5q",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:43:05+00:00",
+    "Name": "AppXghkdhgdax7j57pvsen8nhq2ngq8ny7e2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-20T04:44:30+00:00",
+    "Name": "AppXgwsb7drvvkp7jxvqdqst0ajpq6107yzv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:52+00:00",
+    "Name": "AppXhhkhyqrpsdn2kgtvr6qf6att22kmtadz",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-27T18:16:01+00:00",
+    "Name": "AppXhjvyd78k5bcxhrx7byfbgecnynt9at2v",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:49:44+00:00",
+    "Name": "AppXhk4des8gf2xat3wtyzc5q06ny78jhkqx",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-20T04:45:47+00:00",
+    "Name": "AppXhw73fxxd4pf1p5pm5r13y4m3vezj4v1b",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:57:01+00:00",
+    "Name": "AppXje1yfpbq840nvc3prwa53vknqsk55vha",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T02:22:22+00:00",
+    "Name": "AppXjmgntwab0zvv6ga5dkkwc34b7s4r55e9",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppXk0g4vb8gvt7b93tg50ybcy892pge6jmt",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-13T08:33:39+00:00",
+    "Name": "AppXkcg7y8nhftqvy2sxh5grnx46hbybnk39",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T02:18:00+00:00",
+    "Name": "AppXke6eh8a1ew0cqjwpdgcvg9rj36gxfss1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-13T07:08:58+00:00",
+    "Name": "AppXkmt99ynn1qvez84cxh13grbeahewhrx2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T02:22:22+00:00",
+    "Name": "AppXkn1qcbm5sq3zpckpgc0sr39rbdbentq3",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "AppXkndb5xvk0v1ka1efnjajnamxcd3sfae1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:49:44+00:00",
+    "Name": "AppXkv2jqn1pq8ajm0p5dhgqde7aafykkrrn",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T02:22:22+00:00",
+    "Name": "AppXkytm3hnq0vzg49fdp50v6n482apdb470",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:51:20+00:00",
+    "Name": "AppXm4fjth7rfv9b2vppk3w1gcpsf4gy9r3n",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-27T18:21:09+00:00",
+    "Name": "AppXm8fs0gj5h36ynw4kq0x3gqnz6ecr1kvy",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:51:20+00:00",
+    "Name": "AppXmrzewgswm3y60fdz9attr7pr39wrb9dt",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "AppXmv6rk8z9kbjr10t0fhrvkggh6psk9vm0",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppXn0drnw129455gh9wwzqwd80zj8nwmp2t",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:36:01+00:00",
+    "Name": "AppXn9ye6e6n1gjh4z5wxtr6x3fvreb2w0ta",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:12+00:00",
+    "Name": "AppXnn90p29wc108haje7ahczjhc00h3p5sf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:52:28+00:00",
+    "Name": "AppXnzh5v9w1s9pv2y889efv7t8bg0msmhca",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:36:27+00:00",
+    "Name": "AppXp5gtmd6zyj6es05cn6nsyhrpf75h6vcz",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:58:33+00:00",
+    "Name": "AppXp8e2ntvbtget7f2fw6qec3j54vhd14m4",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-13T07:15:34+00:00",
+    "Name": "AppXp9gkwccvk6fa6yyfq3tmsk8ws2nprk1p",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:34:21+00:00",
+    "Name": "AppXpb1vntage8kvnwpyg40aqz34j851h4p1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "AppXpjdwy3ckj5c1dr53c5epmrpbex5tg2g4",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T01:11:38+00:00",
+    "Name": "AppXpzkxgsbx9mzsg8kedsrg63eqxykxrtcx",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:08:35+00:00",
+    "Name": "AppXq0pwa73vfcn2qdexp8cexcc6qk87xh1r",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:55:04+00:00",
+    "Name": "AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-13T07:15:34+00:00",
+    "Name": "AppXqjyfmc5mk3hmghyt3yynbcb2jsdyp4fs",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:50+00:00",
+    "Name": "AppXqmt9n48kdgabchqtfjw3a4n5as0gk0vt",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "AppXqqxzfw12he3h63rdesxs3a7r2cs9sj4w",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-13T07:15:37+00:00",
+    "Name": "AppXqtq8nvmpnk53ew44f0dda8pzq81ge2bt",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:55:51+00:00",
+    "Name": "AppXr0k5v4yctd1tys9hmqksf0t2zqb0fqs4",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:51:20+00:00",
+    "Name": "AppXsbz2fdbdmn6pz7xyd3zc95j9syhcnyc2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:54:22+00:00",
+    "Name": "AppXsej0ym0z9bfhd049b1d9e60p08gss40d",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:55:51+00:00",
+    "Name": "AppXsr2355wnmpt66c2rh3s461vmsmqhe6r2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:57+00:00",
+    "Name": "AppXtdsvh5xwhxbaz7rbfsr3wak5hg0jmn1p",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:55:04+00:00",
+    "Name": "AppXtggqqtcfspt6ks3fjzyfppwc05yxwtwy",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:36:27+00:00",
+    "Name": "AppXthmv21qgybm1nfaqxqw8r9r6fttqrqev",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:51:19+00:00",
+    "Name": "AppXtmyvd154r75whynphdjyax5d711yvn0s",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-13T07:15:34+00:00",
+    "Name": "AppXtsmg3v4j4x76mctp0h8w9ykwqt07rr43",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "AppXve2j6k0pfr77f4q8penh0d5pgejsy932",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "AppXvh6wr5m8dahsamnz5bba3y539d92zdw0",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T02:22:22+00:00",
+    "Name": "AppXvqhb9dhb3dg0mpfydfbz4qp875kpspza",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:34:21+00:00",
+    "Name": "AppXvvr0sjtc34r6nk4mhn2e608s2xp2tezg",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-20T18:54:57+00:00",
+    "Name": "AppXvvwq6wxamf7qhxd0vn6wm1wwehyxrdd6",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:09:45+00:00",
+    "Name": "AppXw3nvmqt363p060ea53qg33er1a0782a8",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:08:35+00:00",
+    "Name": "AppXwrkgv3vjytw2z92anega8abb35xqdnqh",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:50:03+00:00",
+    "Name": "AppXws790r9w5rbb9w3p8p4qb2n97s5h6pc3",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:55:51+00:00",
+    "Name": "AppXxccb9186h1jcjtq5zf1a0mydqxz3dpgf",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:49:44+00:00",
+    "Name": "AppXxf01pj590w7z9mxmyv3nx0a9ewj3e51g",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-20T04:45:47+00:00",
+    "Name": "AppXxfctf2rqj6c7b4wrvys6zq1bskprrn19",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:56:39+00:00",
+    "Name": "AppXxfzmfpme06qpdmsvw8etc4vd5sb2fpth",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:55:04+00:00",
+    "Name": "AppXybm0hz3h6qr4z6wdaaefvpq136awdq2e",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-18T02:22:22+00:00",
+    "Name": "AppXydk58wgm44se4b399557yyyj1w7mbmvd",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:36:10+00:00",
+    "Name": "AppXyte1agk1gt765291prervr3pvygjqp1d",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-27T18:15:25+00:00",
+    "Name": "AppXz2d7qm1dmekjyt1p721ccpt9mfr1a0p2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-27T21:28:19+00:00",
+    "Name": "AppXz6twhm7e3a5swgrsmaax3zq4p7dmnynb",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:57:02+00:00",
+    "Name": "AppXz7mta8wty0t2m118za01e7gxdzdv6zm2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:43:09+00:00",
+    "Name": "AppXzc8ajeke9yt5s0y88h6hvwqd556b4bma",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:49:44+00:00",
+    "Name": "AppXzwr976v2e060wada4gabrk1x69h2dbwy",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-14T23:52:18+00:00",
+    "Name": "AppXzzr7tspjvevcy65rzzvw5kdmv270eghm",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "BannerNotificationHandler.BannerNotificationHandler",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "BannerNotificationHandler.BannerNotificationHandler.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": "bingmaps",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:32+00:00",
+    "Name": "bingnews",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:30+00:00",
+    "Name": "bingweather",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:29+00:00",
+    "Name": "calculator",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:09:29+00:00",
+    "Name": "CLSID",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:33+00:00",
+    "Name": "com.clipchamp.app",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": "Directory",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:01+00:00",
+    "Name": "Extensions",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:18+00:00",
+    "Name": "feedback-hub",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "FileSyncClient.AutoPlayHandler",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "FileSyncClient.AutoPlayHandler.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "FileSyncClient.FileSyncClient",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "FileSyncClient.FileSyncClient.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": "grvopen",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:39+00:00",
+    "Name": "http",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:39+00:00",
+    "Name": "https",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": "IE.AssocFile.URL",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:18+00:00",
+    "Name": "insiderhub",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T02:03:47+00:00",
+    "Name": "Installer",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "Interface",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": "lnkfile",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:11:11+00:00",
+    "Name": "Local Settings",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": "mailto",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": "microsoft-edge",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": "microsoft-edge-holographic",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:23+00:00",
+    "Name": "microsoft.windows.camera",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:23+00:00",
+    "Name": "microsoft.windows.camera.multipicker",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:23+00:00",
+    "Name": "microsoft.windows.camera.picker",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": "microsoft.windows.photos.crop",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": "microsoft.windows.photos.picker",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": "microsoft.windows.photos.videoedit",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-27T18:16:22+00:00",
+    "Name": "microsoftsolitairecollection",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:10:10+00:00",
+    "Name": "microsoftvideo",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:38+00:00",
+    "Name": "MIME",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:12+00:00",
+    "Name": "ms-aad-brokerplugin",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:27+00:00",
+    "Name": "ms-actioncenter",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:28+00:00",
+    "Name": "ms-appinstaller",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:48+00:00",
+    "Name": "ms-apprep",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:29+00:00",
+    "Name": "ms-calculator",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T03:57:02+00:00",
+    "Name": "ms-clipchamp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:14+00:00",
+    "Name": "ms-clock",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:25+00:00",
+    "Name": "ms-contact-support",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-13T07:15:37+00:00",
+    "Name": "ms-copilot",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:49+00:00",
+    "Name": "ms-cortana2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:26:32+00:00",
+    "Name": "ms-crossdevice-settings",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:06+00:00",
+    "Name": "ms-cxh",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:53+00:00",
+    "Name": "ms-default-location",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:06+00:00",
+    "Name": "ms-device-enrollment",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "ms-device-enrollment2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:53+00:00",
+    "Name": "ms-drive-to",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:07+00:00",
+    "Name": "ms-eyecontrolspeech",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:23+00:00",
+    "Name": "ms-family",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-27T18:16:04+00:00",
+    "Name": "ms-gamebar",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:44+00:00",
+    "Name": "ms-gamebarservices",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:16:38+00:00",
+    "Name": "ms-gamingoverlay",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:57+00:00",
+    "Name": "ms-get-started",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:50+00:00",
+    "Name": "ms-getoffice",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "ms-inputapp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:27+00:00",
+    "Name": "ms-insights",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "ms-lwh",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:22+00:00",
+    "Name": "ms-meetnow",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:27+00:00",
+    "Name": "ms-meetnowflyout",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-21T00:49:44+00:00",
+    "Name": "ms-notepad",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:50+00:00",
+    "Name": "ms-officeapp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:27+00:00",
+    "Name": "ms-penworkspace",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:40+00:00",
+    "Name": "ms-people",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:26+00:00",
+    "Name": "ms-phone",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": "ms-photos",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:00+00:00",
+    "Name": "ms-playto-audio",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:37+00:00",
+    "Name": "ms-powerautomate",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:50+00:00",
+    "Name": "ms-print-addprinter",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:50+00:00",
+    "Name": "ms-print-printjobs",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:57+00:00",
+    "Name": "ms-print-queue",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:22+00:00",
+    "Name": "ms-quick-assist",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": "ms-screenclip",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:54+00:00",
+    "Name": "ms-screensketch",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "ms-search",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "ms-stickereditor",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:28+00:00",
+    "Name": "ms-sttoverlay",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:22+00:00",
+    "Name": "ms-teams",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:21+00:00",
+    "Name": "ms-to-do",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:21+00:00",
+    "Name": "ms-todo",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:13+00:00",
+    "Name": "ms-unistore-email",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:53+00:00",
+    "Name": "ms-walk-to",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": "ms-wcrv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:38:53+00:00",
+    "Name": "ms-widgets",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:10:10+00:00",
+    "Name": "ms-windows-store",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:10:10+00:00",
+    "Name": "ms-windows-store-deskext",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:10:10+00:00",
+    "Name": "ms-windows-store2",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T05:08:35+00:00",
+    "Name": "ms-windowsbackup",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:59+00:00",
+    "Name": "ms-wpc",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:19+00:00",
+    "Name": "ms-wpdrmv",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:09:18+00:00",
+    "Name": "ms-wxh",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:31+00:00",
+    "Name": "ms-xbet-survey",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": "ms-xbl-3d8b930f",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:52+00:00",
+    "Name": "ms-xgpueject",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:26+00:00",
+    "Name": "msgamepass",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:26+00:00",
+    "Name": "msgamingapp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:32+00:00",
+    "Name": "msnews",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:32+00:00",
+    "Name": "msnnews",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:30+00:00",
+    "Name": "msnweather",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:10:09+00:00",
+    "Name": "mssharepointclient",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T02:30:44+00:00",
+    "Name": "msteams",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": "mswindowsmusic",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": "mswindowsvideo",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:20:26+00:00",
+    "Name": "msxbox",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-27T07:53:07+00:00",
+    "Name": "NotificationData",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "NucleusNativeMessaging.NucleusNativeMessaging",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "NucleusNativeMessaging.NucleusNativeMessaging.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "NucleusToastActivator.NucleusToastActivator",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "NucleusToastActivator.NucleusToastActivator.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "odopen",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:34:42+00:00",
+    "Name": "OneDrive.CameraRoll.Import",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "OOBERequestHandler.OOBERequestHandler",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "OOBERequestHandler.OOBERequestHandler.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:13+00:00",
+    "Name": "outlookaccounts",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:13+00:00",
+    "Name": "outlookcal",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:13+00:00",
+    "Name": "outlookmail",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:12:22+00:00",
+    "Name": "PackagedCom",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:17+00:00",
+    "Name": "Paint.Picture",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:17+00:00",
+    "Name": "PBrush",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T02:05:07+00:00",
+    "Name": "Python.File",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T02:05:07+00:00",
+    "Name": "Python.NoConFile",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:08:54+00:00",
+    "Name": "read",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "SyncEngineEnumeratorProvider.SyncEngineEnumeratorProvider",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "SyncEngineEnumeratorProvider.SyncEngineEnumeratorProvider.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "SyncEngineFileInfoProvider.SyncEngineFileInfoProvider",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "SyncEngineFileInfoProvider.SyncEngineFileInfoProvider.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "SyncEngineStorageProviderHandlerProxy.SyncEngineStorageProviderHandlerProxy",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "SyncEngineStorageProviderHandlerProxy.SyncEngineStorageProviderHandlerProxy.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T02:30:44+00:00",
+    "Name": "TeamsAddin.FastConnect",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T02:30:44+00:00",
+    "Name": "TeamsAddin.FastConnect.1",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:18:26+00:00",
+    "Name": "tel",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-17T02:08:46+00:00",
+    "Name": "TypeLib",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:18+00:00",
+    "Name": "windows-feedback",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:33+00:00",
+    "Name": "windowsdefender",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:13:23+00:00",
+    "Name": "WOW6432Node",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "xbox",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "xbox-friendfinder",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "xbox-gamehub",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "xbox-profile",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-09-11T04:00:31+00:00",
+    "Name": "xbox-settings",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:17:53+00:00",
+    "Name": "xbox-tcui",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2024-12-06T00:36:10+00:00",
+    "Name": "xboxidp",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:19:44+00:00",
+    "Name": "xboxliveapp-1297287741",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870355165184,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Microsoft\\Windows\\UsrClass.dat",
+    "Last Write Time": "2023-07-13T01:10:10+00:00",
+    "Name": "zune",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398357504,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.FileExp_1000.22700.1000.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:34+00:00",
+    "Name": "ActivatableClassId",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870398357504,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.FileExp_1000.22700.1000.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:34+00:00",
+    "Name": "Server",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870470635520,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.Core_1000.22700.1011.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:32+00:00",
+    "Name": "ActivatableClassId",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870470635520,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.Core_1000.22700.1011.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:32+00:00",
+    "Name": "Server",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870473269248,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.CBS_1000.22700.1041.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:28+00:00",
+    "Name": "ActivatableClassId",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870473269248,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.CBS_1000.22700.1041.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:28+00:00",
+    "Name": "Interfaces",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870473269248,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.CBS_1000.22700.1041.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:28+00:00",
+    "Name": "ProxyStubCLSIDs",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870473269248,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.CBS_1000.22700.1041.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:28+00:00",
+    "Name": "Server",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870353059840,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.WebExperience_524.30502.30.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T00:39:47+00:00",
+    "Name": "ActivatableClassId",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870353059840,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.WebExperience_524.30502.30.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T00:39:47+00:00",
+    "Name": "Interfaces",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870353059840,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\MicrosoftWindows.Client.WebExperience_524.30502.30.0_x64__cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T00:39:47+00:00",
+    "Name": "Server",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870353772544,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\Microsoft.Windows.StartMenuExperienceHost_10.0.22621.4249_neutral_neutral_cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:22+00:00",
+    "Name": "ActivatableClassId",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870353772544,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\Microsoft.Windows.StartMenuExperienceHost_10.0.22621.4249_neutral_neutral_cw5n1h2txyewy\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:22+00:00",
+    "Name": "Server",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870389714944,
+    "Key": "\\??\\C:\\ProgramData\\Microsoft\\Windows\\AppRepository\\Packages\\Microsoft.UI.Xaml.CBS_8.2404.3001.0_x64__8wekyb3d8bbwe\\ActivationStore.dat",
+    "Last Write Time": "2024-12-06T05:04:17+00:00",
+    "Name": "ActivatableClassId",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870418747392,
+    "Key": "\\??\\C:\\ProgramData\\Packages\\MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy\\S-1-5-21-2515051972-3704521753-3160219359-1001\\SystemAppData\\Helium\\Cache\\8c304d05383a2e00.dat",
+    "Last Write Time": "2024-12-06T01:04:26+00:00",
+    "Name": "Classes",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870412447744,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy\\SystemAppData\\Helium\\User.dat",
+    "Last Write Time": "2023-07-13T01:15:34+00:00",
+    "Name": "Software",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870389936128,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy\\SystemAppData\\Helium\\UserClasses.dat",
+    "Last Write Time": "2023-07-13T01:11:11+00:00",
+    "Name": "Local Settings",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870480871424,
+    "Key": "\\??\\C:\\ProgramData\\Packages\\MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy\\S-1-5-21-2515051972-3704521753-3160219359-1001\\SystemAppData\\Helium\\Cache\\8c304d05383a2e00.dat",
+    "Last Write Time": "2024-12-06T01:04:26+00:00",
+    "Name": "Classes",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870415986688,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\Settings\\settings.dat",
+    "Last Write Time": "2024-12-27T07:53:49+00:00",
+    "Name": "LocalState",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870415986688,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\Settings\\settings.dat",
+    "Last Write Time": "2012-05-22T00:00:13+00:00",
+    "Name": "RoamingState",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870426497024,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\Settings\\settings.dat",
+    "Last Write Time": "2024-12-27T07:53:23+00:00",
+    "Name": "LocalState",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870426497024,
+    "Key": "\\??\\C:\\Users\\John Smith\\AppData\\Local\\Packages\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\Settings\\settings.dat",
+    "Last Write Time": "2012-05-22T00:00:13+00:00",
+    "Name": "RoamingState",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  },
+  {
+    "Data": "",
+    "Hive Offset": 246870421549056,
+    "Key": "\\??\\C:\\Windows\\ServiceProfiles\\NetworkService\\AppData\\Local\\Microsoft\\Windows\\DeliveryOptimization\\State\\dosvcState.dat",
+    "Last Write Time": "2023-07-12T14:20:28+00:00",
+    "Name": "DeliveryOptimization",
+    "Type": "Key",
+    "Volatile": false,
+    "__children": []
+  }
+]

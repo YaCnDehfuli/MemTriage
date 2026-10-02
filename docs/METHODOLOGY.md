@@ -199,19 +199,22 @@ VAD regions into a grid — one patch per region, with tag/protection, windowed
 entropy and a Markov byte-transition table in the three channels — and classifies
 the grid with a Vision Transformer.
 
-**The trained weights are not distributed with this application.** By default
-MemTriage generates an architecturally identical *untrained* model so the
-pipeline runs end to end. When that is what produced a verdict, the family label
-is meaningless and is marked as such in three places (`placeholder: true`,
-`model_source: "placeholder"`, and an explicit note). See
-[MODEL_ACCESS.md](MODEL_ACCESS.md).
+MemTriage bundles the trained `Multi_32_224_6f_3u.pt` checkpoint and loads it
+into `vit_base_patch32_224` with a nine-output classification head. Evaluation
+uses a 224 × 224 RGB grid normalized with ImageNet mean and standard deviation.
+Classification probabilities, attention, and region rankings all use these weights.
+See [MODEL.md](MODEL.md).
 
-### What survives the placeholder
+The bundled `models/labels.json` names the outputs in the paper's confusion-matrix
+order: Backdoor, Benign, Exploit, HackTool, Hoax, Rootkit, Trojan, Virus, Worm.
+This agrees with the training loader's alphabetical folder ordering. Benign is
+index 1, and Backdoor is index 0. See [MODEL.md](MODEL.md) for mapping provenance.
 
-Attention is a property of the architecture and the input, not of training. The
-attention map, the ranking of regions it produces, and the whole low-level
-analysis built on that ranking describe real memory regardless of which weights
-are loaded. Only the class name depends on training.
+### Attention attribution
+
+The final transformer block's CLS-to-patch attention is averaged across its
+attention heads and mapped back to the grid's VAD regions. This ranks regions
+for inspection; attention alone does not establish malicious behavior.
 
 ### The low-level analysis
 

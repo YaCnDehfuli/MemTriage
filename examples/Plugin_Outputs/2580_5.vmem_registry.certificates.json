@@ -1,0 +1,416 @@
+
+[
+  {
+    "Certificate ID": "AutoUpdate",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "AutoUpdate",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "AutoUpdate",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "AutoUpdate",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "AutoUpdate",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "AutoUpdate",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "AutoUpdate",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "0563B8630D62D75ABBC8AB1E4BDFB5A899B24D43",
+    "Certificate name": "DigiCert",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "07E032E020B72C3F192F0628A2593A19A70F069E",
+    "Certificate name": "Certum Trusted Network CA",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "3679CA35668772304D30A5FB873B0FA77BB70D54",
+    "Certificate name": "VeriSign Universal Root Certification Authority",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "4EB6D578499B1CCF5F581EAD56BE3D9B6744A5E5",
+    "Certificate name": "VeriSign",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "5EEED86FA37C675230642F55C84DDBF67CD33C80",
+    "Certificate name": "DigiCert CS RSA4096 Root G5",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "5FB7EE0633E259DBAD0C4C9AE6D38F1A61C7DC25",
+    "Certificate name": "DigiCert",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "73A5E64A3BFF8316FF0EDCCC618A906E4EAE4D74",
+    "Certificate name": "Microsoft RSA Root Certificate Authority 2017",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "742C3192E607E424EB4549542BE1BBC53E6174E2",
+    "Certificate name": "VeriSign Class 3 Public Primary CA",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "7E04DE896A3E666D00E687D33FFAD93BE83D349E",
+    "Certificate name": "DigiCert Global Root G3",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "A8985D3A65E5E5C4B2D7D66D40C6DD2FB19C5436",
+    "Certificate name": "DigiCert",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "AD7E1C28B064EF8F6003402014C3D0E3370EB58A",
+    "Certificate name": "Starfield Class 2 Certification Authority",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "B1BC968BD4F49D622AA89A81F2150152A41D829C",
+    "Certificate name": "GlobalSign Root CA - R1",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "CABD2A79A1076A31F21D253635CB039D4329A5E8",
+    "Certificate name": "ISRG Root X1",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "D1EB23A46D17D68FD92564C2F1F1601764D8E349",
+    "Certificate name": "Sectigo (AAA)",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "D4DE20D05E66FC53FE1A50882C78DB2852CAE474",
+    "Certificate name": "DigiCert Baltimore Root",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "D69B561148F01C77C54578C10926DF5B856976AD",
+    "Certificate name": "GlobalSign Root CA - R3",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "DAC9024F54D8F6DF94935FB1732638CA6AD77C13",
+    "Certificate name": "DST Root CA X3",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "DDFB16CD4931C973A2037D3FC83A4D7D775D05E4",
+    "Certificate name": "DigiCert Trusted Root G4",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "DF3C24F9BFD666761B268073FE06D1CC8D4F82A4",
+    "Certificate name": "DigiCert Global Root G2",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "109F1CAED645BB78B3EA2B94C0697C740733031C",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "CA",
+    "__children": []
+  },
+  {
+    "Certificate ID": "D559A586669B08F46A30A133F8A9ED3D038E2EA8",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "CA",
+    "__children": []
+  },
+  {
+    "Certificate ID": "FEE449EE0E3965A5246F000E87FDE2A065FD89D4",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "CA",
+    "__children": []
+  },
+  {
+    "Certificate ID": "A377D1B1C0538833035211F4083D00FECC414DAB",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "CA",
+    "__children": []
+  },
+  {
+    "Certificate ID": "27748148BBE67A43CDBFEC6C3784862CE134E6EA",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "Disallowed",
+    "__children": []
+  },
+  {
+    "Certificate ID": "D73F0C22273FA4C717A3A735F7E992F31190F010",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "eSIM Certification Authorities",
+    "__children": []
+  },
+  {
+    "Certificate ID": "6CA22E5501CC80885FF281DD8B3338E89398EE18",
+    "Certificate name": "Microsoft ECC Development Root Certificate Authority 2018",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "FlightRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "F8DB7E1C16F1FFD4AAAD4AAD8DFF0F2445184AEB",
+    "Certificate name": "Microsoft Flighting Root 2014",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "FlightRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "51501FBFCE69189D609CFAF140C576755DCC1FDF",
+    "Certificate name": "Hotspot 2.0 Trust Root CA - 03",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "PasspointTrustedRoots",
+    "__children": []
+  },
+  {
+    "Certificate ID": "BB4924831847952BDB1A12B038EC5154ADCBDE43",
+    "Certificate name": "Hotspot2.0 Trust Root CA - 01",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "PasspointTrustedRoots",
+    "__children": []
+  },
+  {
+    "Certificate ID": "0119E81BE9A14CD8E22F40AC118C687ECBA3F4D8",
+    "Certificate name": "Microsoft Time Stamp Root Certificate Authority 2014",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "06F1AA330B927B753A40E68CDF22E34BCBEF3352",
+    "Certificate name": "Microsoft ECC Product Root Certificate Authority 2018",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "18F7C1FCC3090203FD5BAA2F861A754976C8DD25",
+    "Certificate name": "VeriSign Time Stamping CA",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "245C97DF7514E7CF2DF8BE72AE957B9E04741E85",
+    "Certificate name": "Microsoft Timestamp Root",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "31F9FC8BA3805986B721EA7295C65B3A44534274",
+    "Certificate name": "Microsoft ECC TS Root Certificate Authority 2018",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "3B1EFD3A66EA28B16697394703A72CA340A05BD5",
+    "Certificate name": "Microsoft Root Certificate Authority 2010",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "7F88CD7223F3C813818C994614A89C99FA3B5247",
+    "Certificate name": "Microsoft Authenticode(tm) Root",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "8F43288AD272F3103B6FB1428485EA3014C0BCFE",
+    "Certificate name": "Microsoft Root Certificate Authority 2011",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "92B46C76E13054E104F230517E6E504D43AB10B5",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "A43489159A520F0D93D032CCAF37E7FE20A8B419",
+    "Certificate name": "Microsoft Root Authority",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "BE36A4562FB2EE05DBB3D32323ADF445084ED656",
+    "Certificate name": "Thawte Timestamping CA",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "CDD4EEAE6000AC7F40C3802C171E30148030C072",
+    "Certificate name": "Microsoft Root Certificate Authority",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "ROOT",
+    "__children": []
+  },
+  {
+    "Certificate ID": "2BD63D28D7BCD0E251195AEB519243C13142EBC3",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "TestSignRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "8A334AA8052DD244A647306A76B8178FA215F344",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "TestSignRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "A4B37F4F6DE956922273D5CB8E7E0AAFB7033B90",
+    "Certificate name": "Microsoft ECC Testing Root Certificate Authority 2017",
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "TestSignRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "11194FAB14616ED8259FB94DCD17CE99DAB04CDD",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "TrustedAppRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "2C85006A1A028BCC349DF23C474724C055FDE8B6",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "Windows Live ID Token Issuer",
+    "__children": []
+  },
+  {
+    "Certificate ID": "B68D8F953E551914324E557E6164D68B9926650C",
+    "Certificate name": null,
+    "Certificate path": "Microsoft\\SystemCertificates",
+    "Certificate section": "Windows Live ID Token Issuer",
+    "__children": []
+  },
+  {
+    "Certificate ID": "C7ED7BF076120309F682577FE7B29A7593E9889C",
+    "Certificate name": null,
+    "Certificate path": "Software\\Microsoft\\SystemCertificates",
+    "Certificate section": "CA",
+    "__children": []
+  },
+  {
+    "Certificate ID": "ProtectedRoots",
+    "Certificate name": null,
+    "Certificate path": "Software\\Microsoft\\SystemCertificates",
+    "Certificate section": "Root",
+    "__children": []
+  },
+  {
+    "Certificate ID": "ProtectedRoots",
+    "Certificate name": null,
+    "Certificate path": "Software\\Microsoft\\SystemCertificates",
+    "Certificate section": "Root",
+    "__children": []
+  },
+  {
+    "Certificate ID": "AutoUpdate",
+    "Certificate name": null,
+    "Certificate path": "Software\\Microsoft\\SystemCertificates",
+    "Certificate section": "AuthRoot",
+    "__children": []
+  },
+  {
+    "Certificate ID": "ProtectedRoots",
+    "Certificate name": null,
+    "Certificate path": "Software\\Microsoft\\SystemCertificates",
+    "Certificate section": "Root",
+    "__children": []
+  }
+]

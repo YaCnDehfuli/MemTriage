@@ -104,6 +104,15 @@ body {
   border-radius: 6px;
 }
 
+/* Writing fields need an easy scroll target once a long note reaches its cap. */
+.note-textarea {
+  scrollbar-width: auto;
+  overscroll-behavior: contain;
+}
+.note-textarea::-webkit-scrollbar {
+  width: 14px;
+}
+
 /* A single, consistent keyboard-focus treatment. Uses box-shadow (not
    outline) so it still renders even where a component sets outline-none. */
 :focus-visible {
@@ -117,6 +126,16 @@ body {
 g.graph-node:focus-visible rect {
   stroke: rgb(var(--color-accent));
   stroke-width: 2.5px;
+}
+
+/* Indeterminate job progress — used when plugin-level completion is not yet known. */
+@keyframes meter-indeterminate {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(350%); }
+}
+.meter-indeterminate {
+  width: 35%;
+  animation: meter-indeterminate 1.4s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

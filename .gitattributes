@@ -1,0 +1,6 @@
+models/Multi_32_224_6f_3u.pt filter=lfs diff=lfs merge=lfs -text
+demo.mov filter=lfs diff=lfs merge=lfs -text
+report_demo.mp4 filter=lfs diff=lfs merge=lfs -text
+docs/reports/*.pdf binary
+# Preserve the supplied review notes, including their final blank line.
+docs/reports/*-notes.txt whitespace=-blank-at-eof

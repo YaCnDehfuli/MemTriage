@@ -7,6 +7,7 @@ import { DraftNarrativePanel } from "./DraftNarrativePanel";
 import { EvidenceToggle } from "./EvidenceToggle";
 import { FindingCard } from "./FindingCard";
 import { NarrativePanel } from "./NarrativePanel";
+import { NoteTextarea } from "./NoteTextarea";
 import { ReportPreview } from "./ReportPreview";
 
 const TABS = ["evidence", "narrative", "preview"] as const;
@@ -152,13 +153,14 @@ export function ReportBuilder() {
                         </span>
                       </div>
                       <p className="mt-1.5 text-[12px] text-ink-300">{region.headline}</p>
-                      <textarea
-                        className="mt-2 w-full rounded border border-surface-600 bg-surface-950 px-2 py-1.5 text-[12px] text-ink-200 placeholder:text-ink-400"
-                        rows={2}
-                        placeholder="What this region shows — the instructions, strings or entropy that make it evidence."
-                        value={evidenceByRef.get(region.ref)?.analyst_note ?? ""}
-                        onChange={(e) => setNote(region.ref, label, e.target.value)}
-                      />
+                      <div className="mt-3">
+                        <NoteTextarea
+                          label={`Note on ${region.addr}`}
+                          placeholder="What this region shows — the instructions, strings or entropy that make it evidence."
+                          value={evidenceByRef.get(region.ref)?.analyst_note ?? ""}
+                          onChange={(value) => setNote(region.ref, label, value)}
+                        />
+                      </div>
                     </div>
                   );
                 })}

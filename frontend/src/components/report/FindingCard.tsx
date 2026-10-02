@@ -1,5 +1,6 @@
 import { RiskBadge } from "../primitives";
 import { EvidenceToggle } from "./EvidenceToggle";
+import { NoteTextarea } from "./NoteTextarea";
 import {
   CONFIDENCE_LABEL,
   DISPOSITION_LABEL,
@@ -105,13 +106,14 @@ export function FindingCard({ finding }: { finding: ReportFinding }) {
         )}
       </div>
 
-      <textarea
-        className="mt-2 w-full rounded border border-surface-600 bg-surface-950 px-2 py-1.5 text-[12px] text-ink-200 placeholder:text-ink-400"
-        rows={note ? 3 : 2}
-        placeholder="What this means here — the parent process, whether it is expected on this host, what would confirm it."
-        value={note}
-        onChange={(e) => setNote(finding.ref, label, e.target.value)}
-      />
+      <div className="mt-3">
+        <NoteTextarea
+          label={`Note on ${label}`}
+          placeholder="Record the observation, its significance, and what supports or limits the interpretation."
+          value={note}
+          onChange={(value) => setNote(finding.ref, label, value)}
+        />
+      </div>
     </div>
   );
 }

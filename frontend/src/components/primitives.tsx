@@ -44,11 +44,13 @@ export function Meter({
   value,
   tone = "accent",
   progress = false,
+  indeterminate = false,
   label,
 }: {
   value: number;
   tone?: "accent" | "risk" | "neutral";
   progress?: boolean;
+  indeterminate?: boolean;
   label?: string;
 }) {
   const pctv = Math.max(0, Math.min(1, value)) * 100;
@@ -68,10 +70,13 @@ export function Meter({
       role={progress ? "progressbar" : undefined}
       aria-valuemin={progress ? 0 : undefined}
       aria-valuemax={progress ? 100 : undefined}
-      aria-valuenow={progress ? Math.round(pctv) : undefined}
+      aria-valuenow={progress && !indeterminate ? Math.round(pctv) : undefined}
       aria-label={progress ? label : undefined}
     >
-      <div className={`h-full rounded-full ${color}`} style={{ width: `${pctv}%` }} />
+      <div
+        className={`h-full rounded-full ${color} ${indeterminate ? "meter-indeterminate" : ""}`}
+        style={indeterminate ? undefined : { width: `${pctv}%` }}
+      />
     </div>
   );
 }

@@ -27,7 +27,7 @@ export function IngestView() {
         {triageProgress && (
           <Panel eyebrow="Progress" title="Triage">
             <div className="px-4 py-4">
-              <JobProgressBar job={triageProgress} />
+              <JobProgressBar job={triageProgress} volatility />
             </div>
           </Panel>
         )}

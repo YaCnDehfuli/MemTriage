@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "../../state/store";
 import type { QueueContext, TriageOptions } from "../../types";
-import { JobProgressBar } from "../JobProgressBar";
+import { JobProgressBar, currentPluginName, pluginCompletion } from "../JobProgressBar";
 import { PluginConsole } from "../plugins/PluginConsole";
 import { PluginPicker } from "../plugins/PluginPicker";
 import { PluginResults } from "../plugins/PluginResults";
@@ -173,7 +173,13 @@ function AutomatedTriageActivity() {
       <div className="flex flex-col gap-4 p-4 lg:h-[780px]">
         {triageProgress ? (
           <div className="shrink-0 space-y-4">
-            <JobProgressBar job={triageProgress} />
+            <JobProgressBar
+              job={triageProgress}
+              volatility
+              pluginsCompleted={pluginCompletion(events, requested)}
+              pluginsTotal={requested.length}
+              currentPlugin={running ? currentPluginName(events) : null}
+            />
             {stage === "queued" && triageProgress.queue && (
               <QueueNotice queue={triageProgress.queue} investigationId={triageProgress.investigation_id} />
             )}
@@ -355,8 +361,16 @@ function ManualSuiteActivity() {
             value={pluginRun.progress / 100}
             tone={pluginRun.status === "failed" || failedCount > 0 ? "risk" : "accent"}
             progress
+            indeterminate={running && pluginRun.progress < 1}
             label={pluginRun.message || "Manual plugin run"}
           />
+          {running && (
+            <p className="mt-2 text-[12px] text-ink-400">
+              Volatility can take several minutes. Progress is {pluginRun.requested_plugins.length} plugin
+              {pluginRun.requested_plugins.length === 1 ? "" : "s"} selected
+              {pluginRun.progress > 0 ? `, ${pluginRun.progress}% complete` : ", waiting for the first plugin to finish"}.
+            </p>
+          )}
         </div>
       </Panel>
 

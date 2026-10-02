@@ -1,12 +1,8 @@
-import { useState } from "react";
 import type { Verdict } from "../../types";
 import { pct } from "../../lib/format";
-import { ModelAccessForm } from "../ModelAccessForm";
 import { Meter, Panel } from "../primitives";
 
 export function VerdictPanel({ verdict }: { verdict: Verdict }) {
-  const [requesting, setRequesting] = useState(false);
-
   if (!verdict.model_loaded) {
     return (
       <Panel eyebrow="VADViT" title="Classification">
@@ -16,11 +12,7 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
             Model not loaded
           </div>
           <p className="mt-3 text-sm text-ink-400">{verdict.note}</p>
-          <button className="btn-ghost mt-3 text-[12px]" onClick={() => setRequesting(true)}>
-            Load or request weights
-          </button>
         </div>
-        {requesting && <ModelAccessForm onClose={() => setRequesting(false)} />}
       </Panel>
     );
   }
@@ -37,12 +29,6 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
               low-level analysis below are architectural — they describe real memory
               regardless of which weights are loaded.
             </p>
-            <button
-              className="btn-ghost mt-2 text-[11px]"
-              onClick={() => setRequesting(true)}
-            >
-              Load or request the trained weights
-            </button>
           </div>
         )}
         {verdict.model_source === "uploaded" && (
@@ -56,6 +42,12 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
           <div className="text-xl font-semibold text-ink-100">{verdict.family}</div>
           <div className="font-mono text-sm text-ink-300">{pct(verdict.confidence)}</div>
         </div>
+        {ranked.every(([name]) => /^class_\d+$/.test(name)) && (
+          <p className="mt-2 text-[12px] text-ink-400">
+            Class names are unavailable for this checkpoint. Outputs are shown
+            by index.
+          </p>
+        )}
         <div className="mt-4 space-y-2">
           {ranked.map(([fam, p], i) => (
             <div key={fam} className="grid grid-cols-[120px_1fr_44px] items-center gap-2">
@@ -71,7 +63,6 @@ export function VerdictPanel({ verdict }: { verdict: Verdict }) {
           ))}
         </div>
       </div>
-      {requesting && <ModelAccessForm onClose={() => setRequesting(false)} />}
     </Panel>
   );
 }

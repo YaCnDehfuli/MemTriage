@@ -1,0 +1,690 @@
+
+[
+  {
+    "Address": 140698842002960,
+    "ConsoleInfo": 140698842002960,
+    "Data": null,
+    "PID": 2352,
+    "Process": "conhost.exe",
+    "Property": "_CONSOLE_INFORMATION",
+    "__children": [
+      {
+        "Address": 140698842005360,
+        "ConsoleInfo": 140698842002960,
+        "Data": "120",
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ScreenX",
+        "__children": []
+      },
+      {
+        "Address": 140698842005362,
+        "ConsoleInfo": 140698842002960,
+        "Data": "9001",
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ScreenY",
+        "__children": []
+      },
+      {
+        "Address": 140698842005472,
+        "ConsoleInfo": 140698842002960,
+        "Data": "50",
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.CommandHistorySize",
+        "__children": []
+      },
+      {
+        "Address": 140698842013608,
+        "ConsoleInfo": 140698842002960,
+        "Data": "1",
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.HistoryBufferCount",
+        "__children": []
+      },
+      {
+        "Address": 140698842005476,
+        "ConsoleInfo": 140698842002960,
+        "Data": "4",
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.HistoryBufferMax",
+        "__children": []
+      },
+      {
+        "Address": 140698842005872,
+        "ConsoleInfo": 140698842002960,
+        "Data": "C:\\Program Files (x86)\\WinFsp\\SxS\\sxs.20230727T204718Z\\bin\\launcher-x64.exe",
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.Title",
+        "__children": []
+      },
+      {
+        "Address": 140698842005904,
+        "ConsoleInfo": 140698842002960,
+        "Data": "C:\\Program Files (x86)\\WinFsp\\SxS\\sxs.20230727T204718Z\\bin\\launcher-x64.exe",
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.OriginalTitle",
+        "__children": []
+      },
+      {
+        "Address": 140698842005576,
+        "ConsoleInfo": 140698842002960,
+        "Data": "1",
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ProcessCount",
+        "__children": []
+      },
+      {
+        "Address": 140698842005568,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ConsoleProcessList",
+        "__children": [
+          {
+            "Address": 3090069481360,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ConsoleProcessList.ConsoleProcess_0",
+            "__children": []
+          },
+          {
+            "Address": 3090069481388,
+            "ConsoleInfo": 140698842002960,
+            "Data": "2776",
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ConsoleProcessList.ConsoleProcess_0_ProcessId",
+            "__children": []
+          },
+          {
+            "Address": 3090069481408,
+            "ConsoleInfo": 140698842002960,
+            "Data": "0x108",
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ConsoleProcessList.ConsoleProcess_0_ProcessHandle",
+            "__children": []
+          }
+        ]
+      },
+      {
+        "Address": 140698842013512,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ExeAliasList",
+        "__children": []
+      },
+      {
+        "Address": 140698842013600,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.HistoryList",
+        "__children": [
+          {
+            "Address": 3090069607456,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0",
+            "__children": []
+          },
+          {
+            "Address": 3090069607504,
+            "ConsoleInfo": 140698842002960,
+            "Data": "launcher-x64.exe",
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_Application",
+            "__children": []
+          },
+          {
+            "Address": 3090069481408,
+            "ConsoleInfo": 140698842002960,
+            "Data": "0x108",
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_ProcessHandle",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_CommandCount",
+            "__children": []
+          },
+          {
+            "Address": 3090069607548,
+            "ConsoleInfo": 140698842002960,
+            "Data": "-1",
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_LastDisplayed",
+            "__children": []
+          }
+        ]
+      },
+      {
+        "Address": 140698842005592,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 2352,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.CurrentScreenBuffer",
+        "__children": [
+          {
+            "Address": 3090069502000,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": "120",
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0.ScreenX",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": "9000",
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0.ScreenY",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 2352,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0.Dump",
+            "__children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Address": 140698842002960,
+    "ConsoleInfo": 140698842002960,
+    "Data": null,
+    "PID": 1264,
+    "Process": "conhost.exe",
+    "Property": "_CONSOLE_INFORMATION",
+    "__children": [
+      {
+        "Address": 140698842005360,
+        "ConsoleInfo": 140698842002960,
+        "Data": "120",
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ScreenX",
+        "__children": []
+      },
+      {
+        "Address": 140698842005362,
+        "ConsoleInfo": 140698842002960,
+        "Data": "3000",
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ScreenY",
+        "__children": []
+      },
+      {
+        "Address": 140698842005472,
+        "ConsoleInfo": 140698842002960,
+        "Data": "50",
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.CommandHistorySize",
+        "__children": []
+      },
+      {
+        "Address": 140698842013608,
+        "ConsoleInfo": 140698842002960,
+        "Data": "1",
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.HistoryBufferCount",
+        "__children": []
+      },
+      {
+        "Address": 140698842005476,
+        "ConsoleInfo": 140698842002960,
+        "Data": "4",
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.HistoryBufferMax",
+        "__children": []
+      },
+      {
+        "Address": 140698842005872,
+        "ConsoleInfo": 140698842002960,
+        "Data": "Select Administrator: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE",
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.Title",
+        "__children": []
+      },
+      {
+        "Address": 140698842005904,
+        "ConsoleInfo": 140698842002960,
+        "Data": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE",
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.OriginalTitle",
+        "__children": []
+      },
+      {
+        "Address": 140698842005576,
+        "ConsoleInfo": 140698842002960,
+        "Data": "1",
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ProcessCount",
+        "__children": []
+      },
+      {
+        "Address": 140698842005568,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ConsoleProcessList",
+        "__children": [
+          {
+            "Address": 1308638665424,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ConsoleProcessList.ConsoleProcess_0",
+            "__children": []
+          },
+          {
+            "Address": 1308638665452,
+            "ConsoleInfo": 140698842002960,
+            "Data": "3768",
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ConsoleProcessList.ConsoleProcess_0_ProcessId",
+            "__children": []
+          },
+          {
+            "Address": 1308638665472,
+            "ConsoleInfo": 140698842002960,
+            "Data": "0x17c",
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ConsoleProcessList.ConsoleProcess_0_ProcessHandle",
+            "__children": []
+          }
+        ]
+      },
+      {
+        "Address": 140698842013512,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ExeAliasList",
+        "__children": []
+      },
+      {
+        "Address": 140698842013600,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.HistoryList",
+        "__children": [
+          {
+            "Address": 1308638715680,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0",
+            "__children": []
+          },
+          {
+            "Address": 1308638715728,
+            "ConsoleInfo": 140698842002960,
+            "Data": "PowerShell.EXE",
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_Application",
+            "__children": []
+          },
+          {
+            "Address": 1308638665472,
+            "ConsoleInfo": 140698842002960,
+            "Data": "0x17c",
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_ProcessHandle",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_CommandCount",
+            "__children": []
+          },
+          {
+            "Address": 1308638715772,
+            "ConsoleInfo": 140698842002960,
+            "Data": "-1",
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_LastDisplayed",
+            "__children": []
+          }
+        ]
+      },
+      {
+        "Address": 140698842005592,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 1264,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.CurrentScreenBuffer",
+        "__children": [
+          {
+            "Address": 1308638736624,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": "120",
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0.ScreenX",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": "2999",
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0.ScreenY",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 1264,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0.Dump",
+            "__children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Address": 140698842002960,
+    "ConsoleInfo": 140698842002960,
+    "Data": null,
+    "PID": 440,
+    "Process": "conhost.exe",
+    "Property": "_CONSOLE_INFORMATION",
+    "__children": [
+      {
+        "Address": 140698842005360,
+        "ConsoleInfo": 140698842002960,
+        "Data": "120",
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ScreenX",
+        "__children": []
+      },
+      {
+        "Address": 140698842005362,
+        "ConsoleInfo": 140698842002960,
+        "Data": "3000",
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ScreenY",
+        "__children": []
+      },
+      {
+        "Address": 140698842005472,
+        "ConsoleInfo": 140698842002960,
+        "Data": "50",
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.CommandHistorySize",
+        "__children": []
+      },
+      {
+        "Address": 140698842013608,
+        "ConsoleInfo": 140698842002960,
+        "Data": "1",
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.HistoryBufferCount",
+        "__children": []
+      },
+      {
+        "Address": 140698842005476,
+        "ConsoleInfo": 140698842002960,
+        "Data": "4",
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.HistoryBufferMax",
+        "__children": []
+      },
+      {
+        "Address": 140698842005872,
+        "ConsoleInfo": 140698842002960,
+        "Data": "Select Administrator: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE",
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.Title",
+        "__children": []
+      },
+      {
+        "Address": 140698842005904,
+        "ConsoleInfo": 140698842002960,
+        "Data": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE",
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.OriginalTitle",
+        "__children": []
+      },
+      {
+        "Address": 140698842005576,
+        "ConsoleInfo": 140698842002960,
+        "Data": "1",
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ProcessCount",
+        "__children": []
+      },
+      {
+        "Address": 140698842005568,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ConsoleProcessList",
+        "__children": [
+          {
+            "Address": 1939281174240,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ConsoleProcessList.ConsoleProcess_0",
+            "__children": []
+          },
+          {
+            "Address": 1939281174268,
+            "ConsoleInfo": 140698842002960,
+            "Data": "5088",
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ConsoleProcessList.ConsoleProcess_0_ProcessId",
+            "__children": []
+          },
+          {
+            "Address": 1939281174288,
+            "ConsoleInfo": 140698842002960,
+            "Data": "0x17c",
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ConsoleProcessList.ConsoleProcess_0_ProcessHandle",
+            "__children": []
+          }
+        ]
+      },
+      {
+        "Address": 140698842013512,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.ExeAliasList",
+        "__children": []
+      },
+      {
+        "Address": 140698842013600,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.HistoryList",
+        "__children": [
+          {
+            "Address": 1939281223792,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0",
+            "__children": []
+          },
+          {
+            "Address": 1939281223840,
+            "ConsoleInfo": 140698842002960,
+            "Data": "PowerShell.EXE",
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_Application",
+            "__children": []
+          },
+          {
+            "Address": 1939281174288,
+            "ConsoleInfo": 140698842002960,
+            "Data": "0x17c",
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_ProcessHandle",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_CommandCount",
+            "__children": []
+          },
+          {
+            "Address": 1939281223884,
+            "ConsoleInfo": 140698842002960,
+            "Data": "-1",
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.HistoryList.CommandHistory_0_LastDisplayed",
+            "__children": []
+          }
+        ]
+      },
+      {
+        "Address": 140698842005592,
+        "ConsoleInfo": 140698842002960,
+        "Data": null,
+        "PID": 440,
+        "Process": "conhost.exe",
+        "Property": "_CONSOLE_INFORMATION.CurrentScreenBuffer",
+        "__children": [
+          {
+            "Address": 1939281244400,
+            "ConsoleInfo": 140698842002960,
+            "Data": null,
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": "120",
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0.ScreenX",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": "2999",
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0.ScreenY",
+            "__children": []
+          },
+          {
+            "Address": null,
+            "ConsoleInfo": 140698842002960,
+            "Data": "2024-12-26 23:54:48 - Starting log export process. Logs will be copied every 10 seconds...\n2024-12-26 23:54:48 - Beginning log copy iteration...\n2024-12-26 23:54:48 - Copied Security log to Z:\\Security.evtx\n2024-12-26 23:54:49 - Copied Sysmon log to Z:\\Sysmon.evtx\n2024-12-26 23:54:49 - Copied System log to Z:\\System.evtx\n2024-12-26 23:54:49 - Copied Application log to Z:\\Application.evtx\n2024-12-26 23:54:49 - Log copy iteration completed. Waiting for 10 seconds...\n2024-12-26 23:54:59 - Beginning log copy iteration...\n2024-12-26 23:54:59 - Copied Security log to Z:\\Security.evtx",
+            "PID": 440,
+            "Process": "conhost.exe",
+            "Property": "_CONSOLE_INFORMATION.ScreenBuffer_0.Dump",
+            "__children": []
+          }
+        ]
+      }
+    ]
+  }
+]

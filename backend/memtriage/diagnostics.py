@@ -143,19 +143,13 @@ def check_symbols() -> Check:
 def check_model() -> Check:
     settings = get_settings()
     checkpoint = Path(settings.model_checkpoint_path)
-    if checkpoint.exists():
+    from .pipeline.vadvit_model import get_classifier
+
+    if get_classifier().trained_checkpoint_present:
         return Check("VADViT checkpoint", OK, f"trained weights at {checkpoint}")
-    cached = Path(settings.model_cache_dir) / checkpoint.name
-    if cached.exists():
-        return Check("VADViT checkpoint", DEGRADED,
-                     "untrained structural placeholder in use",
-                     f"Request the trained weights from {settings.model_contact}.")
-    if settings.model_auto_placeholder:
-        return Check("VADViT checkpoint", DEGRADED,
-                     "no checkpoint yet; a structural placeholder is generated on first use",
-                     f"Request the trained weights from {settings.model_contact}.")
     return Check("VADViT checkpoint", MISSING, f"nothing at {checkpoint}",
-                 "Mount trained weights, or set MEMTRIAGE_MODEL_AUTO_PLACEHOLDER=true.")
+                 "Run git lfs pull to restore the bundled checkpoint and verify "
+                 "the models/ mount in deploy/docker-compose.yml.")
 
 
 def check_database() -> Check:

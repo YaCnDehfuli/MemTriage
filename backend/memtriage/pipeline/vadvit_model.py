@@ -13,11 +13,9 @@ Design goals:
 * **Honest about placeholders.** A structural placeholder checkpoint carries a
   ``model_meta.json`` marker; the verdict is flagged ``placeholder`` so the UI can
   make clear the class is not a real detection.
-* **Always something to explain.** The trained weights are not distributed with
-  the project. When they are absent, a seeded placeholder is generated once into
-  ``model_cache_dir`` so rendering, classification, the attention map and the
-  region deep-dive that hangs off it all still run — labelled, throughout, as a
-  non-detection.
+* **Bundled inference.** The repository includes the trained nine-output
+  checkpoint. Missing or invalid weights disable classification explicitly;
+  random weights are only available through an opt-in legacy test setting.
 
 Preprocessing matches VADViT's evaluation path (``dataset_loader`` → ``val_transform``):
 Resize(224) → ToTensor → Normalize(ImageNet). torch/timm/torchvision are imported
@@ -90,9 +88,8 @@ def build_model(model_name: str, num_classes: int, *, pretrained: bool = False):
     """Reproduce VADViT's ``ViTForImages`` (no config coupling).
 
     Same submodule layout as the published model, so a trained state_dict loads
-    unchanged. ``pretrained=False`` by default: for the placeholder we want random
-    init, and when loading a real checkpoint the state_dict overwrites the weights
-    anyway (and avoids a network fetch of ImageNet weights). Frozen-layer
+    unchanged. ``pretrained=False`` avoids a network fetch of ImageNet weights:
+    the bundled state_dict supplies every weight. Frozen-layer
     bookkeeping is training-only and intentionally omitted.
     """
     import torch.nn as nn
@@ -189,7 +186,15 @@ class VADViTClassifier:
 
     @property
     def trained_checkpoint_present(self) -> bool:
-        return self.checkpoint_path.exists()
+        try:
+            with self.checkpoint_path.open("rb") as handle:
+                # An unhydrated Git LFS pointer is not a checkpoint.
+                header = handle.read(128)
+                return bool(header) and not header.startswith(
+                    b"version https://git-lfs.github.com/spec/v1",
+                )
+        except OSError:
+            return False
 
     @property
     def uploaded_checkpoint_path(self) -> Path | None:
@@ -213,7 +218,7 @@ class VADViTClassifier:
         if self.trained_checkpoint_present or self.uploaded_checkpoint_present:
             return True
         cached = self.cached_placeholder_path
-        if cached is not None and cached.exists():
+        if self.auto_placeholder and cached is not None and cached.exists():
             return True
         return bool(self.auto_placeholder and self.cache_dir is not None)
 
@@ -223,7 +228,8 @@ class VADViTClassifier:
         return self._checkpoint_obtainable() and (
             self.trained_checkpoint_present
             or self.uploaded_checkpoint_present
-            or (self.cached_placeholder_path or Path()).exists()
+            or (self.auto_placeholder and self.cached_placeholder_path is not None
+                and self.cached_placeholder_path.exists())
             or torch_available()
         )
 
@@ -232,10 +238,13 @@ class VADViTClassifier:
 
     def resolve_labels_path(self) -> Path:
         """Labels beside the weights that are actually in use."""
+        # Mounted weights win over uploads; their labels must win as well.
+        if self.trained_checkpoint_present:
+            return self.labels_path
         candidates = [self.labels_path]
         if self.upload_dir is not None:
             candidates.insert(0, self.upload_dir / self.labels_path.name)
-        if self.cache_dir is not None:
+        if self.auto_placeholder and self.cache_dir is not None:
             candidates.append(self.cache_dir / self.labels_path.name)
         # Uploaded labels only apply while uploaded weights are the ones loaded;
         # otherwise a stale upload would rename the placeholder's classes.
@@ -277,12 +286,12 @@ class VADViTClassifier:
             return uploaded
 
         cached = self.cached_placeholder_path
-        if cached is None:
+        if cached is None or not self.auto_placeholder:
             return None
         if cached.exists():
             self._resolved = cached
             return cached
-        if not self.auto_placeholder or not torch_available():
+        if not torch_available():
             return None
 
         with self._lock:
@@ -335,7 +344,7 @@ class VADViTClassifier:
         import torch
 
         model = build_model(self.model_name, self.num_classes, pretrained=False)
-        # Local .pt we placed (research-facility or generated placeholder).
+        # Local checkpoint; loaded as tensor data rather than pickled code.
         # weights_only rejects pickled objects; Bandit still flags the API.
         state = torch.load(  # nosec B614
             str(checkpoint), map_location=self.device, weights_only=True,
@@ -427,9 +436,12 @@ class VADViTClassifier:
             captured: dict = {}
 
             def _hook(module, inp, output):
-                qkv = module.qkv(inp[0])
-                q, k, _ = qkv.chunk(3, dim=-1)
-                scores = (q @ k.transpose(-2, -1)) / (q.shape[-1] ** 0.5)
+                batch, tokens, channels = inp[0].shape
+                qkv = module.qkv(inp[0]).reshape(
+                    batch, tokens, 3, module.num_heads, channels // module.num_heads,
+                ).permute(2, 0, 3, 1, 4)
+                q, k, _ = qkv.unbind(0)
+                scores = (q @ k.transpose(-2, -1)) * module.scale
                 captured["attn"] = scores.softmax(dim=-1).detach().cpu()
                 return output
 
@@ -446,7 +458,7 @@ class VADViTClassifier:
             attn = captured.get("attn")
             if attn is None:
                 return None
-            cls_attention = attn[:, 0, 1:].mean(dim=0)  # CLS → patches
+            cls_attention = attn[:, :, 0, 1:].mean(dim=(0, 1))  # CLS → patches
             return [float(v) for v in cls_attention.tolist()]
         except Exception:
             return None
@@ -477,13 +489,19 @@ def model_status() -> dict:
     trained = clf.trained_checkpoint_present
     uploaded = clf.uploaded_checkpoint_present
     cached = clf.cached_placeholder_path
-    active = "trained" if trained else ("uploaded" if uploaded else "placeholder")
+    placeholder = clf.auto_placeholder and (
+        bool(cached and cached.exists()) or clf._checkpoint_obtainable()
+    )
+    active = "trained" if trained else (
+        "uploaded" if uploaded else "placeholder" if placeholder else "none"
+    )
     notes = {
-        "trained": "Trained VADViT weights in use.",
+        "trained": "Bundled trained VADViT checkpoint available for process analysis.",
         "uploaded": ("Operator-supplied weights in use. Provenance is the "
                      "uploader's to vouch for; this deployment did not train "
                      "or verify them."),
         "placeholder": PLACEHOLDER_VERDICT_NOTE,
+        "none": "Bundled VADViT checkpoint missing — classification unavailable.",
     }
     uploaded_path = clf.uploaded_checkpoint_path
     detail = None
@@ -506,11 +524,10 @@ def model_status() -> dict:
         "uploaded_weights": detail,
         "placeholder_active": active == "placeholder",
         "placeholder_cached": bool(cached and cached.exists()),
-        "auto_placeholder": s.model_auto_placeholder,
+        "auto_placeholder": clf.auto_placeholder,
         "runtime_available": torch_available(),
         "labels": clf.labels,
         "max_upload_bytes": s.max_model_upload_bytes,
         "expected_filename": clf.checkpoint_path.name,
-        "contact": s.model_contact,
         "note": notes[active],
     }

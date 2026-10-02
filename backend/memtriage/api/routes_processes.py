@@ -22,7 +22,7 @@ from ..models import (
 )
 from ..schemas import AnalysisState, AnalyzeProcessRequest, ProcessListItem
 from ..security.sanitize import sanitize_obj, sanitize_text
-from ..storage import InvestigationPaths
+from ..storage import InvestigationPaths, ProcessPaths
 from ..workers.celery_app import celery_app
 
 router = APIRouter(prefix="/api", tags=["processes"])
@@ -48,6 +48,26 @@ def _load_inventory(investigation_id: str) -> list[dict]:
         return []
     # Sanitize on read too: process names come from an untrusted memory image.
     return sanitize_obj(rows)
+
+
+def _completed_analysis_uses_trained_model(analysis: ProcessAnalysis) -> bool:
+    """Reuse a trained verdict only when it matches the current class mapping."""
+    from ..pipeline.vadvit_model import get_classifier
+
+    classifier = get_classifier()
+    if not classifier.trained_checkpoint_present or not analysis.region_count:
+        return True
+    result = ProcessPaths(analysis.investigation_id, analysis.pid).result
+    try:
+        verdict = json.loads(result.read_text()).get("verdict", {})
+        return bool(
+            verdict.get("model_loaded")
+            and verdict.get("model_source") == "trained"
+            and not verdict.get("placeholder")
+            and set(verdict.get("probabilities", {})) == set(classifier.labels)
+        )
+    except (OSError, ValueError, AttributeError, TypeError):
+        return False
 
 
 @router.get("/investigations/{investigation_id}/processes", response_model=list[ProcessListItem])
@@ -103,7 +123,10 @@ def analyze_process(
         ]))
         .order_by(ProcessAnalysis.created_at.desc())
     ).first()
-    if inflight is not None:
+    if inflight is not None and (
+        inflight.status != AnalysisStatus.DONE
+        or _completed_analysis_uses_trained_model(inflight)
+    ):
         return AnalysisState.from_orm_obj(inflight)
 
     analysis = ProcessAnalysis(

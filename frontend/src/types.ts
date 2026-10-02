@@ -567,17 +567,9 @@ export interface PluginOutputPreview {
   total?: number;
 }
 
-export interface ModelAccessPolicy {
-  contact: string;
-  intended_use_options: { value: string; label: string }[];
-  policy: string;
-  terms: string;
-  model: ModelState;
-}
-
 /** Which weights this deployment is actually running, and what an upload needs. */
 export interface ModelState {
-  active_source: "trained" | "uploaded" | "placeholder";
+  active_source: "trained" | "uploaded" | "placeholder" | "none";
   trained_weights_present: boolean;
   uploaded_weights_present: boolean;
   uploaded_weights: {
@@ -595,7 +587,6 @@ export interface ModelState {
   labels: string[];
   max_upload_bytes: number;
   expected_filename: string;
-  contact: string;
   note: string;
 }
 
@@ -604,28 +595,6 @@ export interface ModelUploadResult {
   size_bytes: number;
   labels_stored: boolean;
   model: ModelState;
-}
-
-export interface ModelAccessRequest {
-  full_name: string;
-  email: string;
-  organization: string;
-  role: string;
-  country: string;
-  intended_use: string;
-  project_description: string;
-  expected_publication: string;
-  agrees_to_terms: boolean;
-}
-
-export interface ModelAccessResponse {
-  request_id: string;
-  submitted_at: string;
-  contact: string;
-  email_subject: string;
-  email_body: string;
-  mailto: string;
-  note: string;
 }
 
 // --- Report / evidence curation -------------------------------------------

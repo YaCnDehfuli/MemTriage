@@ -1,5 +1,6 @@
 import { useApp } from "../../state/store";
 import { EmptyState, Panel } from "../primitives";
+import { ModelStatusPanel } from "../ModelStatusPanel";
 import { ExtractionNotice } from "../triage/ExtractionNotice";
 import { FeatureExplorer } from "../triage/FeatureExplorer";
 import { IoCTable } from "../triage/IoCTable";
@@ -14,7 +15,7 @@ export function TriageView() {
 
   return (
     <div className="space-y-5">
-      <header className="flex items-end justify-between">
+      <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="eyebrow">Phase 1 · VolMemLyzer</div>
           <h1 className="text-lg font-semibold text-ink-100">VolMemLyzer workbench</h1>
@@ -24,6 +25,8 @@ export function TriageView() {
           </p>
         </div>
       </header>
+
+      <ModelStatusPanel />
 
       <VolatilityWorkbench />
 
