@@ -1,3 +1,4 @@
+<div align="center">
 # MemTriage
 
 MemTriage is a local workspace for investigating captured Windows memory: a
@@ -11,6 +12,8 @@ and an assessment you can check against the evidence.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 [![CI](https://github.com/YaCnDehfuli/MemTriage/actions/workflows/ci.yml/badge.svg)](https://github.com/YaCnDehfuli/MemTriage/actions/workflows/ci.yml)
+</div>
+
 
 ## Demos
 
