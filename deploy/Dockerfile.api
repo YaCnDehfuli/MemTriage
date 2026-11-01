@@ -4,7 +4,7 @@
 # needs none of the worker's ML dependencies. It does install VolMemLyzer: live
 # re-scoring must use the same bounded scorer triage used, or moving the
 # sensitivity preset reads scores on a different scale. It never runs Volatility.
-FROM python:3.11-slim AS base
+FROM python:3.15-slim AS base
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
